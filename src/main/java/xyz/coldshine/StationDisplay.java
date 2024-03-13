@@ -1,6 +1,5 @@
 package xyz.coldshine;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,9 +27,6 @@ public class StationDisplay extends JFrame {
             e.printStackTrace();
         }
         initializeUI(stationBackgroundFile);
-    }
-
-    public StationDisplay() {
     }
 
     private void initializeUI(String stationBackgroundFile) {
