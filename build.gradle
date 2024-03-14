@@ -1,6 +1,8 @@
 plugins {
-    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
+
+apply plugin: 'java'
 
 group = 'xyz.coldshine'
 version = '1.0-SNAPSHOT'
@@ -22,6 +24,19 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+
+shadowJar {
+    archiveBaseName = 'MetroLCDMaker'
+    mergeServiceFiles()
+    exclude 'META-INF/*.DSA', 'META-INF/*.SF', 'META-INF/*.RSA'
+    manifest {
+        attributes "Manifest-Version": 1.0,
+                'Main-Class': 'xyz.coldshine.Main'
+    }
+}
+
+assemble.dependsOn(shadowJar)
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
