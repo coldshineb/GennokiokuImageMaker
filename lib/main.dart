@@ -175,21 +175,62 @@ class HomePageState extends State<HomePage> {
               children: [
                 _imageFile != null
                     ? Image.file(_imageFile!, fit: BoxFit.fitWidth)
-                    : const Text(
-                        '导入图片',
-                        style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont",
-                        ),
-                      ),
+                    : const SizedBox(),
                 Container(
                   padding: EdgeInsets.fromLTRB(190, 165, 0, 0),
                   child: showStationName(stations),
                 ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(190, 200, 0, 0),
+                  child: showStationIcon(stations),
+                )
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  Stack showStationIcon(List<Station> station) {
+    List<Container> tempList = [];
+    double count = 0;
+    for (int i = 0; i < station.length; i++) {
+      // tempList.add(Container(
+      //   padding: EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
+      //   child: ClipOval(
+      //       child: Container(
+      //     width: 30.0, // 圆的直径
+      //     height: 30.0, // 圆的直径
+      //     decoration: BoxDecoration(
+      //       shape: BoxShape.circle, // 指定为圆形
+      //       color: Colors.blue, // 设置圆的背景颜色
+      //     ),
+      //   )),
+      // ));
+      // tempList.add(Container(
+      //   padding: EdgeInsets.fromLTRB(4+(1400 / (station.length - 1)) * count, 4, 0, 0),
+      //   child: ClipOval(
+      //       child: Container(
+      //         width: 22.0, // 圆的直径
+      //         height: 22.0, // 圆的直径
+      //         decoration: BoxDecoration(
+      //           shape: BoxShape.circle, // 指定为圆形
+      //           color: Colors.blue[200], // 设置圆的背景颜色
+      //         ),
+      //       )),
+      // ));
+      tempList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10+(1400 / (station.length - 1)) * count, 0, 0, 0),
+          child: CustomPaint(
+            painter: ConcentricCirclesPainter(
+                outerColor: Colors.blue, middleColor: Colors.blue[200]),
+          )));
+      count++;
+    }
+    return Stack(
+      children: tempList,
     );
   }
 
@@ -214,8 +255,8 @@ class HomePageState extends State<HomePage> {
         ),
       ));
       tempList.add(Container(
-        padding:
-        EdgeInsets.fromLTRB(15+(1400 / (station.length - 1)) * count, 10, 0, 0),
+        padding: EdgeInsets.fromLTRB(
+            15 + (1400 / (station.length - 1)) * count, 10, 0, 0),
         child: Container(
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
@@ -233,5 +274,41 @@ class HomePageState extends State<HomePage> {
     return Stack(
       children: tempList,
     );
+  }
+}
+
+class ConcentricCirclesPainter extends CustomPainter {
+  final Color? outerColor;
+  final Color? middleColor;
+
+  ConcentricCirclesPainter({required this.outerColor, required this.middleColor});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint outerPaint = Paint()
+      ..color = outerColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint middlePaint = Paint()
+      ..color = middleColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint innerPaint = Paint()
+      ..color = outerColor!
+      ..style = PaintingStyle.fill;
+
+    // 外圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, outerPaint);
+
+    // 中圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 12, middlePaint);
+
+    // 内圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 8.5, innerPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
