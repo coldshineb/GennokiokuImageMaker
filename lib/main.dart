@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:main/station.dart';
-import 'dart:math';
 
 void main() {
   runApp(GennokiokuMetroLCDMaker());
@@ -31,11 +27,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
   File? _imageFile;
   List<Station> stations = [];
   String jsonFileName = "";
-
+  late Color lineColor;
+  late Color lineVariantColor;
   void _pickImage() async {
     FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -51,6 +48,7 @@ class HomePageState extends State<HomePage> {
 
   void _importStationName() async {
     stations = [];
+    List<dynamic> jsonList = [];
     // 用户选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -63,9 +61,12 @@ class HomePageState extends State<HomePage> {
         // 读取 JSON 文件内容
         String jsonString = await file.readAsString();
         // 解析 JSON 数据
-        List<dynamic> jsonList = json.decode(jsonString);
+        jsonList = json.decode(jsonString);
         // 遍历 JSON 数据，提取站点信息
-
+      } catch (e) {
+        print('读取文件失败: $e');
+      }
+      if (jsonList.length >= 2) {
         for (var item in jsonList) {
           Station station = Station(
             stationNameCN: item['stationNameCN'],
@@ -73,10 +74,28 @@ class HomePageState extends State<HomePage> {
           );
           stations.add(station);
         }
-      } catch (e) {
-        print('读取文件失败: $e');
+        setState(() {});
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("错误",
+                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                content: const Text("站点数量不能小于 2",
+                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("好",
+                        style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                  )
+                ],
+              );
+            });
       }
-      setState(() {});
     }
   }
 
@@ -106,13 +125,13 @@ class HomePageState extends State<HomePage> {
                 title: const Text('图片已导出',
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
                 content: Text('图片已成功保存至: $path',
-                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                    style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('确定'),
+                    child: const Text('好'),
                   ),
                 ],
               );
@@ -169,66 +188,55 @@ class HomePageState extends State<HomePage> {
               ]),
             ],
           ),
-          Container(
-            color: Colors.red,
-            child: Stack(
-              children: [
-                _imageFile != null
-                    ? Image.file(_imageFile!, fit: BoxFit.fitWidth)
-                    : const SizedBox(),
-                Container(
-                  padding: EdgeInsets.fromLTRB(190, 165, 0, 0),
-                  child: showStationName(stations),
+          RepaintBoundary(
+              key: _globalKey,
+              child: Container(
+                color: Colors.red,
+                child: Stack(
+                  children: [
+                    _imageFile != null
+                        ? Image.file(_imageFile!, fit: BoxFit.fitWidth)
+                        : const SizedBox(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
+                      child: showStationName(stations),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                      child: showRouteLine(Colors.blue),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                      child: showRouteIcon(stations),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(190, 200, 0, 0),
-                  child: showStationIcon(stations),
-                )
-              ],
-            ),
-          )
+              ))
         ],
       ),
     );
   }
 
-  Stack showStationIcon(List<Station> station) {
+  Container showRouteLine(Color color) {
+    return Container(
+      width: 1400,
+      height: 15,
+      color: color,
+    );
+  }
+
+  Stack showRouteIcon(List<Station> station) {
     List<Container> tempList = [];
-    double count = 0;
     for (int i = 0; i < station.length; i++) {
-      // tempList.add(Container(
-      //   padding: EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
-      //   child: ClipOval(
-      //       child: Container(
-      //     width: 30.0, // 圆的直径
-      //     height: 30.0, // 圆的直径
-      //     decoration: BoxDecoration(
-      //       shape: BoxShape.circle, // 指定为圆形
-      //       color: Colors.blue, // 设置圆的背景颜色
-      //     ),
-      //   )),
-      // ));
-      // tempList.add(Container(
-      //   padding: EdgeInsets.fromLTRB(4+(1400 / (station.length - 1)) * count, 4, 0, 0),
-      //   child: ClipOval(
-      //       child: Container(
-      //         width: 22.0, // 圆的直径
-      //         height: 22.0, // 圆的直径
-      //         decoration: BoxDecoration(
-      //           shape: BoxShape.circle, // 指定为圆形
-      //           color: Colors.blue[200], // 设置圆的背景颜色
-      //         ),
-      //       )),
-      // ));
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10+(1400 / (station.length - 1)) * count, 0, 0, 0),
+              10 + (1400 / (station.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: ConcentricCirclesPainter(
-                outerColor: Colors.blue, middleColor: Colors.blue[200]),
+            painter: StationIconPainter(
+                lineColor: Colors.blue, lineVariantColor: Colors.blue[200]),
           )));
-      count++;
     }
+
     return Stack(
       children: tempList,
     );
@@ -277,34 +285,31 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-class ConcentricCirclesPainter extends CustomPainter {
-  final Color? outerColor;
-  final Color? middleColor;
+class StationIconPainter extends CustomPainter {
+  final Color? lineColor; //线路主颜色
+  final Color? lineVariantColor; //线路主颜色变体
 
-  ConcentricCirclesPainter({required this.outerColor, required this.middleColor});
+  StationIconPainter({required this.lineColor, required this.lineVariantColor});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint outerPaint = Paint()
-      ..color = outerColor!
+    final Paint linePaint = Paint()
+      ..color = lineColor!
       ..style = PaintingStyle.fill;
 
-    final Paint middlePaint = Paint()
-      ..color = middleColor!
-      ..style = PaintingStyle.fill;
-
-    final Paint innerPaint = Paint()
-      ..color = outerColor!
+    final Paint lineVariantsPaint = Paint()
+      ..color = lineVariantColor!
       ..style = PaintingStyle.fill;
 
     // 外圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, outerPaint);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, linePaint);
 
     // 中圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 12, middlePaint);
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2), 12, lineVariantsPaint);
 
     // 内圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 8.5, innerPaint);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 8.5, linePaint);
   }
 
   @override
