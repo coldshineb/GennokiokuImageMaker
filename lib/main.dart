@@ -39,7 +39,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _mainImageKey = GlobalKey();
+  final GlobalKey _passedImageKey = GlobalKey();
   Uint8List? _imageBytes;
   List<Station> stations = [];
   String jsonFileName = "";
@@ -145,9 +146,57 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _exportImage() async {
     try {
-      RenderRepaintBoundary boundary = _globalKey.currentContext!
+      RenderRepaintBoundary boundary = _mainImageKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 1.5);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+      String? saveFile = await FilePicker.platform.saveFile(
+          dialogTitle: "Select saving folder",
+          fileName: "运行中 + 站名.png",
+          type: FileType.image,
+          allowedExtensions: ["PNG"]);
+      final String path = '$saveFile';
+      File imgFile = File(path);
+
+      if (path != "null") {
+        await imgFile.writeAsBytes(pngBytes);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('图片已导出',
+                  style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+              content: Text('图片已成功保存至: $path',
+                  style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('好'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("取消导出"),
+        ));
+      }
+    } catch (e) {
+      print('导出图片失败: $e');
+    }
+  }
+
+  Future<void> _exportPassedImage() async {
+    try {
+      RenderRepaintBoundary boundary = _passedImageKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 1);
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -199,107 +248,150 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(fontFamily: "GennokiokuLCDFont")),
         elevation: 4,
       ),
-      body: ListView(
-        children: [
-          Row(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
             children: [
-              MenuBar(children: [
-                MenuItemButton(
-                  onPressed: _importImage,
-                  child: const Text(
-                    "导入图片",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                  ),
-                ),
-                MenuItemButton(
-                  onPressed: _importLineJson,
-                  child: const Text(
-                    "导入站名",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                  ),
-                ),
-                MenuItemButton(
-                  onPressed: _exportImage,
-                  child: const Text(
-                    "导出图片",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                  ),
-                ),
-                Text(
-                  "下一站",
-                  style: TextStyle(
-                      fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                ),
-              ]),
-            ],
-          ),
-          RepaintBoundary(
-              key: _globalKey,
-              child: Container(
+              Row(
+                children: [
+                  MenuBar(children: [
+                    MenuItemButton(
+                      onPressed: _importImage,
+                      child: const Text(
+                        "导入图片",
+                        style: TextStyle(
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.black),
+                      ),
+                    ),
+                    MenuItemButton(
+                      onPressed: _importLineJson,
+                      child: const Text(
+                        "导入站名",
+                        style: TextStyle(
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.black),
+                      ),
+                    ),
+                    MenuItemButton(
+                      onPressed: _exportImage,
+                      child: const Text(
+                        "导出主线路图",
+                        style: TextStyle(
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.black),
+                      ),
+                    ),
+                    MenuItemButton(
+                      onPressed: _exportPassedImage,
+                      child: const Text(
+                        "导出已过站图",
+                        style: TextStyle(
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.black),
+                      ),
+                    ),
+                    Text(
+                      "下一站",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ]),
+                ],
+              ),
+              RepaintBoundary(
+                  key: _mainImageKey,
+                  child: SizedBox(
+                    height: 340,
+                    child: Stack(
+                      children: [
+                        _imageBytes != null
+                            ? Image.memory(
+                                _imageBytes!,
+                              )
+                            : const SizedBox(),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(22, 15.5, 0, 0),
+                          child: Image.asset(
+                            "assets/image/gennokioku_railway_transit_logo.png",
+                            scale: 1.5,
+                          ),
+                        ),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(521, 8, 0, 0),
+                            child: Text(
+                              "下一站",
+                              style: TextStyle(
+                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(524, 41, 0, 0),
+                            child: Text(
+                              "Next station",
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(909, 8, 0, 0),
+                            child: Text(
+                              "终点站",
+                              style: TextStyle(
+                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(922, 41, 0, 0),
+                            child: Text(
+                              "Terminus",
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
+                          child: showStationName(stations),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                          child: showRouteLine(lineColor!),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                          child: showRouteIcon(stations),
+                        ),
+                      ],
+                    ),
+                  )),
+              //已过站图
+              RepaintBoundary(
+                key: _passedImageKey,
                 child: Stack(
                   children: [
-                    _imageBytes != null
-                        ? Image.memory(_imageBytes!, fit: BoxFit.fitWidth)
-                        : const SizedBox(),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(22, 15.5, 0, 0),
-                      child: Image.asset("assets/image/gennokioku_railway_transit_logo.png",scale: 1.5,),
-                    ),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(521, 8, 0, 0),
-                        child: Text(
-                          "下一站",
-                          style: TextStyle(
-                              fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(524, 41, 0, 0),
-                        child: Text(
-                          "Next station",
-                          style: TextStyle(
-                              fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(909, 8, 0, 0),
-                        child: Text(
-                          "终点站",
-                          style: TextStyle(
-                              fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(922, 41, 0, 0),
-                        child: Text(
-                          "Terminus",
-                          style: TextStyle(
-                              fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
-                      child: showStationName(stations),
-                    ),
+                    SizedBox(
+                      height: 334,
+                    ), //调好的尺寸，正好能占位500高度
                     Container(
                       padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                      child: showRouteLine(lineColor!),
+                      child: showRouteLine(Util.hexToColor("89898A")),
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                      child: showRouteIcon(stations),
+                      child: showPassedRouteIcon(stations),
                     ),
                   ],
                 ),
-              ))
-        ],
+              )
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -315,20 +407,20 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  List<DropdownMenuItem> showNextStationList(List<Station> stations) {
-    List<DropdownMenuItem> tempList = [];
-    for (var value in stations) {
-      value.stationNameCN;
-      tempList.add(DropdownMenuItem(
-        child: Text(
-          value.stationNameCN,
-          style: TextStyle(fontFamily: "GennokiokuLCDFont"),
-        ),
-        value: value.stationNameCN,
-      ));
-    }
-    return tempList;
-  }
+  // List<DropdownMenuItem> showNextStationList(List<Station> stations) {
+  //   List<DropdownMenuItem> tempList = [];
+  //   for (var value in stations) {
+  //     value.stationNameCN;
+  //     tempList.add(DropdownMenuItem(
+  //       child: Text(
+  //         value.stationNameCN,
+  //         style: TextStyle(fontFamily: "GennokiokuLCDFont"),
+  //       ),
+  //       value: value.stationNameCN,
+  //     ));
+  //   }
+  //   return tempList;
+  // }
 
   //显示线路中线
   Container showRouteLine(Color color) {
@@ -349,6 +441,23 @@ class HomePageState extends State<HomePage> {
           child: CustomPaint(
             painter: StationIconPainter(
                 lineColor: lineColor, lineVariantColor: lineVariantColor),
+          )));
+    }
+    return Stack(
+      children: tempList,
+    );
+  }
+
+  Stack showPassedRouteIcon(List<Station> station) {
+    List<Container> tempList = [];
+    for (int i = 0; i < station.length; i++) {
+      tempList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10 + (1400 / (station.length - 1)) * i, 0, 0, 0),
+          child: CustomPaint(
+            painter: StationIconPainter(
+                lineColor: Util.hexToColor("89898A"),
+                lineVariantColor: Util.hexToColor("9E9E9F")),
           )));
     }
     return Stack(
