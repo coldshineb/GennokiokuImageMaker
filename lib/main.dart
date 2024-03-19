@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:main/Object/Station.dart';
 import 'Util.dart';
 import 'Util/CustomPainter.dart';
@@ -43,6 +47,7 @@ class HomePageState extends State<HomePage> {
   String jsonFileName = "";
   Color? lineColor = Colors.transparent;
   Color? lineVariantColor = Colors.transparent;
+  String? _selectedValue;
 
   void _importImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -121,7 +126,8 @@ class HomePageState extends State<HomePage> {
               return AlertDialog(
                 title: const Text("错误",
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                content: const Text("选择的文件格式错误，或文件内容格式未遵循规范",
+                content: const Text(
+                    "选择的文件格式错误，或文件内容格式未遵循规范",
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
                 actions: [
                   TextButton(
@@ -145,7 +151,7 @@ class HomePageState extends State<HomePage> {
             .findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage(pixelRatio: 1.5);
         ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
+        await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();
 
         var saveFile = await FilePicker.platform.saveFile(
@@ -223,8 +229,27 @@ class HomePageState extends State<HomePage> {
                     style: TextStyle(
                         fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
-                )
+                ),
+                Text(
+                  "下一站",
+                  style: TextStyle(
+                      fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                ),
+
               ]),
+            ],
+          ),
+          Row(
+            children: [ DropdownButton(
+              items: showNextStationList(stations),
+              value: _selectedValue,
+              onChanged: (value) {
+                /// 当用户从下拉菜单中选中某项后触发的事件
+                setState(() {
+                  _selectedValue = value;
+                });
+              },
+            ),
             ],
           ),
           RepaintBoundary(
@@ -235,6 +260,15 @@ class HomePageState extends State<HomePage> {
                     _imageFile != null
                         ? Image.file(_imageFile!, fit: BoxFit.fitWidth)
                         : const SizedBox(),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(521, 10, 0, 0),
+                        child: Text(
+                          "下一站",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                     Container(
                       padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
                       child: showStationName(stations),
@@ -264,6 +298,19 @@ class HomePageState extends State<HomePage> {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  List<DropdownMenuItem> showNextStationList(List<Station> stations) {
+    List<DropdownMenuItem> tempList = [];
+    for (var value in stations) {
+      value.stationNameCN;
+      tempList.add(DropdownMenuItem(
+        child: Text(value.stationNameCN,
+          style: TextStyle(fontFamily: "GennokiokuLCDFont"),),
+        value: value.stationNameCN,
+      ));
+    }
+    return tempList;
   }
 
   //显示线路中线
@@ -300,13 +347,14 @@ class HomePageState extends State<HomePage> {
     for (var value in station) {
       tempList.add(Container(
         padding:
-            EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
+        EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
         child: Container(
           //逆时针45度
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
             value.stationNameCN,
             style: const TextStyle(
+              fontWeight: FontWeight.bold,
               fontSize: 14,
               fontFamily: "GennokiokuLCDFont",
               color: Colors.black,
@@ -317,12 +365,16 @@ class HomePageState extends State<HomePage> {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
           //英文站名做适当偏移
-            15 + (1400 / (station.length - 1)) * count, 10, 0, 0),
+            15 + (1400 / (station.length - 1)) * count,
+            10,
+            0,
+            0),
         child: Container(
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
             value.stationNameEN,
             style: const TextStyle(
+              fontWeight: FontWeight.bold,
               fontSize: 12,
               fontFamily: "GennokiokuLCDFont",
               color: Colors.black,
