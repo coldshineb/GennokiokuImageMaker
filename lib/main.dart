@@ -5,8 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:main/station.dart';
+import 'package:main/Object/Station.dart';
 import 'Util.dart';
+import 'Util/CustomPainter.dart';
 
 void main() {
   runApp(GennokiokuMetroLCDMaker());
@@ -17,6 +18,14 @@ class GennokiokuMetroLCDMaker extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Gennokioku Metro LCD Maker',
+      theme: ThemeData(
+        tooltipTheme: const TooltipThemeData(
+          textStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: 'GennokiokuLCDFont', // 设置字体样式
+          ),
+        ),
+      ),
       home: HomePage(),
     );
   }
@@ -32,8 +41,8 @@ class HomePageState extends State<HomePage> {
   File? _imageFile;
   List<Station> stations = [];
   String jsonFileName = "";
-  Color? lineColor = Colors.blue;
-  Color? lineVariantColor = Colors.blue[200];
+  Color? lineColor = Colors.transparent;
+  Color? lineVariantColor = Colors.transparent;
 
   void _importImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -243,9 +252,21 @@ class HomePageState extends State<HomePage> {
               ))
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _imageFile = null;
+          stations = [];
+          lineColor = Colors.transparent;
+          lineVariantColor = Colors.transparent;
+          setState(() {});
+        },
+        tooltip: '重置',
+        child: const Icon(Icons.refresh),
+      ),
     );
   }
 
+  //显示线路中线
   Container showRouteLine(Color color) {
     return Container(
       width: 1400,
@@ -254,6 +275,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  //显示站点图标
   Stack showRouteIcon(List<Station> station) {
     List<Container> tempList = [];
     for (int i = 0; i < station.length; i++) {
@@ -265,12 +287,12 @@ class HomePageState extends State<HomePage> {
                 lineColor: lineColor, lineVariantColor: lineVariantColor),
           )));
     }
-
     return Stack(
       children: tempList,
     );
   }
 
+  //显示站名
   Stack showStationName(List<Station> station) {
     //TODO 文字大小随窗口改变适应
     List<Container> tempList = [];
@@ -280,6 +302,7 @@ class HomePageState extends State<HomePage> {
         padding:
             EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
         child: Container(
+          //逆时针45度
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
             value.stationNameCN,
@@ -293,6 +316,7 @@ class HomePageState extends State<HomePage> {
       ));
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
+          //英文站名做适当偏移
             15 + (1400 / (station.length - 1)) * count, 10, 0, 0),
         child: Container(
           transform: Matrix4.rotationZ(-0.75),
@@ -311,38 +335,5 @@ class HomePageState extends State<HomePage> {
     return Stack(
       children: tempList,
     );
-  }
-}
-
-class StationIconPainter extends CustomPainter {
-  final Color? lineColor; //线路主颜色
-  final Color? lineVariantColor; //线路主颜色变体
-
-  StationIconPainter({required this.lineColor, required this.lineVariantColor});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint linePaint = Paint()
-      ..color = lineColor!
-      ..style = PaintingStyle.fill;
-
-    final Paint lineVariantsPaint = Paint()
-      ..color = lineVariantColor!
-      ..style = PaintingStyle.fill;
-
-    // 外圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, linePaint);
-
-    // 中圈圆
-    canvas.drawCircle(
-        Offset(size.width / 2, size.height / 2), 12, lineVariantsPaint);
-
-    // 内圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 8.5, linePaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
   }
 }
