@@ -98,50 +98,38 @@ class HomePageState extends State<HomePage> {
           }
           // 刷新页面状态
           setState(() {});
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("错误",
-                      style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                  content: const Text("站点数量不能小于 2 或大于 33",
-                      style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("好",
-                          style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                    )
-                  ],
-                );
-              });
+        } else if (stationsFromJson.length < 2) {
+          showAlertDialog("错误", "站点数量不能小于 2");
+        } else if (stationsFromJson.length > 32) {
+          showAlertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("错误",
-                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                content: const Text("选择的文件格式错误，或文件内容格式未遵循规范",
-                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("好",
-                        style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                  )
-                ],
-              );
-            });
+        showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
+  }
+
+  void showAlertDialog(String title, String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title,
+                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+            content: Text(content,
+                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("好",
+                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+              )
+            ],
+          );
+        });
   }
 
   Future<void> _exportImage() async {
@@ -163,25 +151,7 @@ class HomePageState extends State<HomePage> {
 
       if (path != "null") {
         await imgFile.writeAsBytes(pngBytes);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('图片已导出',
-                  style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-              content: Text('图片已成功保存至: $path',
-                  style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('好'),
-                ),
-              ],
-            );
-          },
-        );
+        showAlertDialog("图片已导出", "图片已成功保存至: $path");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("取消导出"),
@@ -211,25 +181,7 @@ class HomePageState extends State<HomePage> {
 
       if (path != "null") {
         await imgFile.writeAsBytes(pngBytes);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('图片已导出',
-                  style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-              content: Text('图片已成功保存至: $path',
-                  style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('好'),
-                ),
-              ],
-            );
-          },
-        );
+        showAlertDialog("图片已导出", "图片已成功保存至: $path");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("取消导出"),
