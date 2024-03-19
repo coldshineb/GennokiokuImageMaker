@@ -87,7 +87,7 @@ class HomePageState extends State<HomePage> {
         lineColor = Util.hexToColor(jsonData['lineColor']);
         lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
         // 站点不能少于 2
-        if (stationsFromJson.length >= 2) {
+        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
           // 遍历 JSON 数据，提取站点信息，保存到 stations 集合中
           for (var item in stationsFromJson) {
             Station station = Station(
@@ -105,7 +105,7 @@ class HomePageState extends State<HomePage> {
                 return AlertDialog(
                   title: const Text("错误",
                       style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                  content: const Text("站点数量不能小于 2",
+                  content: const Text("站点数量不能小于 2 或大于 32",
                       style: TextStyle(fontFamily: "GennokiokuLCDFont")),
                   actions: [
                     TextButton(
@@ -248,7 +248,7 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(fontFamily: "GennokiokuLCDFont")),
         elevation: 4,
       ),
-      body: ListView(
+      body: Column(
         children: [
           Row(
             children: [
@@ -290,94 +290,109 @@ class HomePageState extends State<HomePage> {
                   style: TextStyle(
                       fontFamily: "GennokiokuLCDFont", color: Colors.black),
                 ),
+                DropdownButton(
+                    items: showNextStationList(stations),
+                    onChanged: null,
+                    value: null)
               ]),
             ],
           ),
-          RepaintBoundary(
-              key: _mainImageKey,
-              child: SizedBox(
-                height: 340,
-                child: Stack(
-                  children: [
-                    _imageBytes != null
-                        ? Image.memory(_imageBytes!,)
-                        : const SizedBox(),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(22, 15.5, 0, 0),
-                      child: Image.asset(
-                        "assets/image/gennokioku_railway_transit_logo.png",
-                        scale: 1.5,
-                      ),
-                    ),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(521, 8, 0, 0),
-                        child: Text(
-                          "下一站",
-                          style: TextStyle(
-                              fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(524, 41, 0, 0),
-                        child: Text(
-                          "Next station",
-                          style: TextStyle(
-                              fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(909, 8, 0, 0),
-                        child: Text(
-                          "终点站",
-                          style: TextStyle(
-                              fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(922, 41, 0, 0),
-                        child: Text(
-                          "Terminus",
-                          style: TextStyle(
-                              fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        )),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
-                      child: showStationName(stations),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                      child: showRouteLine(lineColor!),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                      child: showRouteIcon(stations),
-                    ),
-                  ],
-                ),
-              )),
-          Divider(),
-          //已过站图
-          RepaintBoundary(
-            key: _passedImageKey,
-            child: Stack(
+          Expanded(
+            child: ListView(
               children: [
-                SizedBox(height: 334,),//调好的尺寸，正好能占位500高度
-                Container(
-                  padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                  child: showRouteLine(Util.hexToColor("89898A")),
+                RepaintBoundary(
+                  key: _mainImageKey,
+                  child: SizedBox(
+                    height: 340,
+                    child: Stack(
+                      children: [
+                        _imageBytes != null
+                            ? Image.memory(
+                                _imageBytes!,
+                              )
+                            : const SizedBox(),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(22, 15.5, 0, 0),
+                          child: Image.asset(
+                            "assets/image/gennokioku_railway_transit_logo.png",
+                            scale: 1.5,
+                          ),
+                        ),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(521, 8, 0, 0),
+                            child: Text(
+                              "下一站",
+                              style: TextStyle(
+                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(524, 41, 0, 0),
+                            child: Text(
+                              "Next station",
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(909, 8, 0, 0),
+                            child: Text(
+                              "终点站",
+                              style: TextStyle(
+                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(922, 41, 0, 0),
+                            child: Text(
+                              "Terminus",
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
+                          child: showStationName(stations),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                          child: showRouteLine(lineColor!),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                          child: showRouteIcon(stations),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                  child: showPassedRouteIcon(stations),
-                ),
+                Divider(),
+                //已过站图
+                RepaintBoundary(
+                  key: _passedImageKey,
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        height: 334,
+                      ), //调好的尺寸，正好能占位500高度
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                        child: showRouteLine(Util.hexToColor("89898A")),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                        child: showPassedRouteIcon(stations),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -394,20 +409,20 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  // List<DropdownMenuItem> showNextStationList(List<Station> stations) {
-  //   List<DropdownMenuItem> tempList = [];
-  //   for (var value in stations) {
-  //     value.stationNameCN;
-  //     tempList.add(DropdownMenuItem(
-  //       child: Text(
-  //         value.stationNameCN,
-  //         style: TextStyle(fontFamily: "GennokiokuLCDFont"),
-  //       ),
-  //       value: value.stationNameCN,
-  //     ));
-  //   }
-  //   return tempList;
-  // }
+  List<DropdownMenuItem> showNextStationList(List<Station> stations) {
+    List<DropdownMenuItem> tempList = [];
+    for (var value in stations) {
+      value.stationNameCN;
+      tempList.add(DropdownMenuItem(
+        child: Text(
+          value.stationNameCN,
+          style: TextStyle(fontFamily: "GennokiokuLCDFont"),
+        ),
+        value: value.stationNameCN,
+      ));
+    }
+    return tempList;
+  }
 
   //显示线路中线
   Container showRouteLine(Color color) {
