@@ -105,7 +105,7 @@ class HomePageState extends State<HomePage> {
                 return AlertDialog(
                   title: const Text("错误",
                       style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                  content: const Text("站点数量不能小于 2 或大于 32",
+                  content: const Text("站点数量不能小于 2 或大于 33",
                       style: TextStyle(fontFamily: "GennokiokuLCDFont")),
                   actions: [
                     TextButton(
