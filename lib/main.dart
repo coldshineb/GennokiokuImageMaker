@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage> {
     try {
       RenderRepaintBoundary boundary = _mainImageKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 1.5);
+      ui.Image image = await boundary.toImage(pixelRatio: 2560/1710);
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -254,8 +254,9 @@ class HomePageState extends State<HomePage> {
               children: [
                 RepaintBoundary(
                   key: _mainImageKey,
-                  child: SizedBox(
-                    height: 340,
+                  child: Container(
+                    color: Util.hexToColor("c8c9ca"),
+                    height: 335,
                     child: Stack(
                       children: [
                         _imageBytes != null
@@ -326,20 +327,23 @@ class HomePageState extends State<HomePage> {
                 //已过站图
                 RepaintBoundary(
                   key: _passedImageKey,
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: 334,
-                      ), //调好的尺寸，正好能占位500高度
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                        child: showRouteLine(Util.hexToColor("89898A")),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                        child: showPassedRouteIcon(stations),
-                      ),
-                    ],
+                  child: Container(
+                    height: 335,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: 334,
+                        ), //调好的尺寸，正好能占位500高度
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                          child: showRouteLine(Util.hexToColor("89898A")),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                          child: showPassedRouteIcon(stations),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
