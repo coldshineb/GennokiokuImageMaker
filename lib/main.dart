@@ -1,23 +1,21 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:main/Object/Station.dart';
 import 'Util.dart';
 import 'Util/CustomPainter.dart';
 
 void main() {
-  runApp(GennokiokuMetroLCDMaker());
+  runApp(const GennokiokuMetroLCDMaker());
 }
 
 class GennokiokuMetroLCDMaker extends StatelessWidget {
+  const GennokiokuMetroLCDMaker({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,22 +40,23 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final GlobalKey _globalKey = GlobalKey();
-  File? _imageFile;
+  Uint8List? _imageBytes;
   List<Station> stations = [];
   String jsonFileName = "";
   Color? lineColor = Colors.transparent;
   Color? lineVariantColor = Colors.transparent;
-  String? _selectedValue;
 
   void _importImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
+      withData: true,
       allowedExtensions: ['png'],
       dialogTitle: '选择背景图片文件',
     );
     if (result != null) {
+      Uint8List? bytes = result.files.single.bytes;
       setState(() {
-        _imageFile = File(result.files.single.path!);
+        _imageBytes = bytes;
       });
     }
   }
@@ -70,14 +69,15 @@ class HomePageState extends State<HomePage> {
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
+      withData: true,
       allowedExtensions: ['json'],
       dialogTitle: '选择线路 JSON 文件',
     );
     if (result != null) {
-      File file = File(result.files.single.path!);
+      Uint8List bytes = result.files.single.bytes!;
       try {
         // 读取 JSON 文件内容
-        String jsonString = await file.readAsString();
+        String jsonString = utf8.decode(bytes);
         // 解析 JSON 数据，保存到键值对中
         jsonData = json.decode(jsonString);
         // 将站点保存到集合中
@@ -126,8 +126,7 @@ class HomePageState extends State<HomePage> {
               return AlertDialog(
                 title: const Text("错误",
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                content: const Text(
-                    "选择的文件格式错误，或文件内容格式未遵循规范",
+                content: const Text("选择的文件格式错误，或文件内容格式未遵循规范",
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
                 actions: [
                   TextButton(
@@ -145,51 +144,50 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _exportImage() async {
-    if (_imageFile != null) {
-      try {
-        RenderRepaintBoundary boundary = _globalKey.currentContext!
-            .findRenderObject() as RenderRepaintBoundary;
-        ui.Image image = await boundary.toImage(pixelRatio: 1.5);
-        ByteData? byteData =
-        await image.toByteData(format: ui.ImageByteFormat.png);
-        Uint8List pngBytes = byteData!.buffer.asUint8List();
+    try {
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 1.5);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-        var saveFile = await FilePicker.platform.saveFile(
-            dialogTitle: "Select saving folder",
-            fileName: "运行中 + 站名.png",
-            type: FileType.image,
-            allowedExtensions: ["PNG"]);
-        final String path = '$saveFile';
-        File imgFile = File(path);
-        if (path != "null") {
-          await imgFile.writeAsBytes(pngBytes);
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('图片已导出',
-                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                content: Text('图片已成功保存至: $path',
-                    style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('好'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("取消导出"),
-          ));
-        }
-      } catch (e) {
-        print('导出图片失败: $e');
+      String? saveFile = await FilePicker.platform.saveFile(
+          dialogTitle: "Select saving folder",
+          fileName: "运行中 + 站名.png",
+          type: FileType.image,
+          allowedExtensions: ["PNG"]);
+      final String path = '$saveFile';
+      File imgFile = File(path);
+
+      if (path != "null") {
+        await imgFile.writeAsBytes(pngBytes);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('图片已导出',
+                  style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+              content: Text('图片已成功保存至: $path',
+                  style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('好'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("取消导出"),
+        ));
       }
+    } catch (e) {
+      print('导出图片失败: $e');
     }
   }
 
@@ -235,21 +233,7 @@ class HomePageState extends State<HomePage> {
                   style: TextStyle(
                       fontFamily: "GennokiokuLCDFont", color: Colors.black),
                 ),
-
               ]),
-            ],
-          ),
-          Row(
-            children: [ DropdownButton(
-              items: showNextStationList(stations),
-              value: _selectedValue,
-              onChanged: (value) {
-                /// 当用户从下拉菜单中选中某项后触发的事件
-                setState(() {
-                  _selectedValue = value;
-                });
-              },
-            ),
             ],
           ),
           RepaintBoundary(
@@ -257,17 +241,48 @@ class HomePageState extends State<HomePage> {
               child: Container(
                 child: Stack(
                   children: [
-                    _imageFile != null
-                        ? Image.file(_imageFile!, fit: BoxFit.fitWidth)
+                    _imageBytes != null
+                        ? Image.memory(_imageBytes!, fit: BoxFit.fitWidth)
                         : const SizedBox(),
                     Container(
-                        padding: EdgeInsets.fromLTRB(521, 10, 0, 0),
+                      padding: EdgeInsets.fromLTRB(22, 15.5, 0, 0),
+                      child: Image.asset("assets/image/gennokioku_railway_transit_logo.png",scale: 1.5,),
+                    ),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(521, 8, 0, 0),
                         child: Text(
                           "下一站",
                           style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                              //fontWeight: FontWeight.bold,
+                              ),
+                        )),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(524, 41, 0, 0),
+                        child: Text(
+                          "Next station",
+                          style: TextStyle(
+                              fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                              //fontWeight: FontWeight.bold,
+                              ),
+                        )),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(909, 8, 0, 0),
+                        child: Text(
+                          "终点站",
+                          style: TextStyle(
+                              fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                              //fontWeight: FontWeight.bold,
+                              ),
+                        )),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(922, 41, 0, 0),
+                        child: Text(
+                          "Terminus",
+                          style: TextStyle(
+                              fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                              //fontWeight: FontWeight.bold,
+                              ),
                         )),
                     Container(
                       padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
@@ -288,7 +303,7 @@ class HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _imageFile = null;
+          _imageBytes = null;
           stations = [];
           lineColor = Colors.transparent;
           lineVariantColor = Colors.transparent;
@@ -305,8 +320,10 @@ class HomePageState extends State<HomePage> {
     for (var value in stations) {
       value.stationNameCN;
       tempList.add(DropdownMenuItem(
-        child: Text(value.stationNameCN,
-          style: TextStyle(fontFamily: "GennokiokuLCDFont"),),
+        child: Text(
+          value.stationNameCN,
+          style: TextStyle(fontFamily: "GennokiokuLCDFont"),
+        ),
         value: value.stationNameCN,
       ));
     }
@@ -347,14 +364,14 @@ class HomePageState extends State<HomePage> {
     for (var value in station) {
       tempList.add(Container(
         padding:
-        EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
+            EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
         child: Container(
           //逆时针45度
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
             value.stationNameCN,
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
+              //fontWeight: FontWeight.bold,
               fontSize: 14,
               fontFamily: "GennokiokuLCDFont",
               color: Colors.black,
@@ -364,7 +381,7 @@ class HomePageState extends State<HomePage> {
       ));
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
-          //英文站名做适当偏移
+            //英文站名做适当偏移
             15 + (1400 / (station.length - 1)) * count,
             10,
             0,
@@ -374,7 +391,7 @@ class HomePageState extends State<HomePage> {
           child: Text(
             value.stationNameEN,
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
+              //fontWeight: FontWeight.bold,
               fontSize: 12,
               fontFamily: "GennokiokuLCDFont",
               color: Colors.black,

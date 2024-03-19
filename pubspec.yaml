@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   image_picker: ^1.0.7
   path_provider: ^2.1.2
-  #file_saver: ^0.2.12
+  file_saver: ^0.2.12
   image_cropper: ^5.0.1
   flutter_image_compress: ^2.2.0
   file_picker: ^6.2.0
@@ -66,8 +66,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+     - assets/image/gennokioku_railway_transit_logo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
