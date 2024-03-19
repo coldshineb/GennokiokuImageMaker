@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:main/station.dart';
+import 'Util.dart';
 
 void main() {
   runApp(GennokiokuMetroLCDMaker());
@@ -31,58 +32,87 @@ class HomePageState extends State<HomePage> {
   File? _imageFile;
   List<Station> stations = [];
   String jsonFileName = "";
-  late Color lineColor;
-  late Color lineVariantColor;
-  void _pickImage() async {
-    FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(
+  Color? lineColor = Colors.blue;
+  Color? lineVariantColor = Colors.blue[200];
+
+  void _importImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['png'],
       dialogTitle: '选择背景图片文件',
     );
-    if (pickedFile != null) {
+    if (result != null) {
       setState(() {
-        _imageFile = File(pickedFile.files.single.path!);
+        _imageFile = File(result.files.single.path!);
       });
     }
   }
 
-  void _importStationName() async {
+  void _importLineJson() async {
     stations = [];
-    List<dynamic> jsonList = [];
-    // 用户选择 JSON 文件
+    List<dynamic> stationsFromJson = [];
+    Map<String, dynamic> jsonData;
+
+    // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
-      dialogTitle: '选择站名 JSON 文件',
+      dialogTitle: '选择线路 JSON 文件',
     );
     if (result != null) {
       File file = File(result.files.single.path!);
       try {
         // 读取 JSON 文件内容
         String jsonString = await file.readAsString();
-        // 解析 JSON 数据
-        jsonList = json.decode(jsonString);
-        // 遍历 JSON 数据，提取站点信息
+        // 解析 JSON 数据，保存到键值对中
+        jsonData = json.decode(jsonString);
+        // 将站点保存到集合中
+        stationsFromJson = jsonData['stations'];
+        // 设置线路颜色和颜色变种
+        lineColor = Util.hexToColor(jsonData['lineColor']);
+        lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
+        // 站点不能少于 2
+        if (stationsFromJson.length >= 2) {
+          // 遍历 JSON 数据，提取站点信息，保存到 stations 集合中
+          for (var item in stationsFromJson) {
+            Station station = Station(
+              stationNameCN: item['stationNameCN'],
+              stationNameEN: item['stationNameEN'],
+            );
+            stations.add(station);
+          }
+          // 刷新页面状态
+          setState(() {});
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text("错误",
+                      style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                  content: const Text("站点数量不能小于 2",
+                      style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("好",
+                          style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                    )
+                  ],
+                );
+              });
+        }
       } catch (e) {
         print('读取文件失败: $e');
-      }
-      if (jsonList.length >= 2) {
-        for (var item in jsonList) {
-          Station station = Station(
-            stationNameCN: item['stationNameCN'],
-            stationNameEN: item['stationNameEN'],
-          );
-          stations.add(station);
-        }
-        setState(() {});
-      } else {
         showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text("错误",
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-                content: const Text("站点数量不能小于 2",
+                content: const Text("选择的文件格式错误，或文件内容格式未遵循规范",
                     style: TextStyle(fontFamily: "GennokiokuLCDFont")),
                 actions: [
                   TextButton(
@@ -162,7 +192,7 @@ class HomePageState extends State<HomePage> {
             children: [
               MenuBar(children: [
                 MenuItemButton(
-                  onPressed: _pickImage,
+                  onPressed: _importImage,
                   child: const Text(
                     "导入图片",
                     style: TextStyle(
@@ -170,7 +200,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 MenuItemButton(
-                  onPressed: _importStationName,
+                  onPressed: _importLineJson,
                   child: const Text(
                     "导入站名",
                     style: TextStyle(
@@ -191,7 +221,6 @@ class HomePageState extends State<HomePage> {
           RepaintBoundary(
               key: _globalKey,
               child: Container(
-                color: Colors.red,
                 child: Stack(
                   children: [
                     _imageFile != null
@@ -203,7 +232,7 @@ class HomePageState extends State<HomePage> {
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                      child: showRouteLine(Colors.blue),
+                      child: showRouteLine(lineColor!),
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
@@ -233,7 +262,7 @@ class HomePageState extends State<HomePage> {
               10 + (1400 / (station.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: StationIconPainter(
-                lineColor: Colors.blue, lineVariantColor: Colors.blue[200]),
+                lineColor: lineColor, lineVariantColor: lineVariantColor),
           )));
     }
 
