@@ -76,8 +76,8 @@ class HomePageState extends State<HomePage> {
 
     //清空或重置可能空或导致显示异常的变量
     stations = [];
-    nextStationListIndex=0;//会导致显示的是前一个索引对应的站点
-    terminusListIndex=0;
+    nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
+    terminusListIndex = 0;
 
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -120,52 +120,38 @@ class HomePageState extends State<HomePage> {
         showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
-    nextStationListValue=stations[0].stationNameCN;
-    terminusListValue=stations[0].stationNameCN;
+    nextStationListValue = stations[0].stationNameCN;
+    terminusListValue = stations[0].stationNameCN;
   }
 
-  Future<void> _exportImage() async {
+  void exportMainImage() {
+    exportImage(_mainImageKey, "保存",
+        "运行中 $nextStationListValue, $terminusListValue方向.png");
+  }
+
+  void exportPassedImage() {
+    exportImage(_passedImageKey, "保存", "已过站.png");
+  }
+
+  Future<void> exportImage(
+      GlobalKey key, String dialogTitle, String fileName) async {
     try {
-      RenderRepaintBoundary boundary = _mainImageKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 2560 / 1710);
+      //获取 stack
+      RenderBox findRenderObject =
+          key.currentContext?.findRenderObject() as RenderBox;
+
+      RenderRepaintBoundary boundary =
+          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(
+          pixelRatio:
+              2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
       String? saveFile = await FilePicker.platform.saveFile(
-          dialogTitle: "Select saving folder",
-          fileName: "运行中 + 站名.png",
-          type: FileType.image,
-          allowedExtensions: ["PNG"]);
-      final String path = '$saveFile';
-      File imgFile = File(path);
-
-      if (path != "null") {
-        await imgFile.writeAsBytes(pngBytes);
-        showAlertDialog("图片已导出", "图片已成功保存至: $path");
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("取消导出"),
-        ));
-      }
-    } catch (e) {
-      print('导出图片失败: $e');
-    }
-  }
-
-  Future<void> _exportPassedImage() async {
-    try {
-      RenderRepaintBoundary boundary = _passedImageKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 1.5);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      String? saveFile = await FilePicker.platform.saveFile(
-          dialogTitle: "Select saving folder",
-          fileName: "运行中 + 站名.png",
+          dialogTitle: dialogTitle,
+          fileName: fileName,
           type: FileType.image,
           allowedExtensions: ["PNG"]);
       final String path = '$saveFile';
@@ -214,7 +200,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 MenuItemButton(
-                  onPressed: _exportImage,
+                  onPressed: exportMainImage,
                   child: const Text(
                     "导出主线路图",
                     style: TextStyle(
@@ -222,7 +208,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 MenuItemButton(
-                  onPressed: _exportPassedImage,
+                  onPressed: exportPassedImage,
                   child: const Text(
                     "导出已过站图",
                     style: TextStyle(
@@ -238,7 +224,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 DropdownButton(
-                  items: showNextStationList(stations),
+                  items: showNextStationList(),
                   onChanged: (value) {
                     nextStationListIndex = stations.indexWhere(
                         (element) => element.stationNameCN == value);
@@ -256,7 +242,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 DropdownButton(
-                  items: showNextStationList(stations),
+                  items: showNextStationList(),
                   onChanged: (value) {
                     terminusListIndex = stations.indexWhere(
                         (element) => element.stationNameCN == value);
@@ -374,7 +360,7 @@ class HomePageState extends State<HomePage> {
                             )),
                         Container(
                           padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
-                          child: showStationName(stations),
+                          child: showStationName(),
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
@@ -382,7 +368,7 @@ class HomePageState extends State<HomePage> {
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                          child: showRouteIcon(stations),
+                          child: showRouteIcon(),
                         ),
                       ],
                     ),
@@ -405,7 +391,7 @@ class HomePageState extends State<HomePage> {
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                          child: showPassedRouteIcon(stations),
+                          child: showPassedRouteIcon(),
                         ),
                       ],
                     ),
@@ -424,6 +410,8 @@ class HomePageState extends State<HomePage> {
           lineVariantColor = Colors.transparent;
           nextStationListIndex = null;
           terminusListIndex = null;
+          nextStationListValue = null;
+          terminusListValue = null;
           setState(() {});
         },
         tooltip: '重置',
@@ -432,7 +420,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  List<DropdownMenuItem> showNextStationList(List<Station> stations) {
+  List<DropdownMenuItem> showNextStationList() {
     List<DropdownMenuItem> tempList = [];
     for (var value in stations) {
       value.stationNameCN;
@@ -457,12 +445,12 @@ class HomePageState extends State<HomePage> {
   }
 
   //显示站点图标
-  Stack showRouteIcon(List<Station> station) {
+  Stack showRouteIcon() {
     List<Container> tempList = [];
-    for (int i = 0; i < station.length; i++) {
+    for (int i = 0; i < stations.length; i++) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (station.length - 1)) * i, 0, 0, 0),
+              10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: StationIconPainter(
                 lineColor: lineColor, lineVariantColor: lineVariantColor),
@@ -473,12 +461,12 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Stack showPassedRouteIcon(List<Station> station) {
+  Stack showPassedRouteIcon() {
     List<Container> tempList = [];
-    for (int i = 0; i < station.length; i++) {
+    for (int i = 0; i < stations.length; i++) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (station.length - 1)) * i, 0, 0, 0),
+              10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: StationIconPainter(
                 lineColor: Util.hexToColor("89898A"),
@@ -491,14 +479,14 @@ class HomePageState extends State<HomePage> {
   }
 
   //显示站名
-  Stack showStationName(List<Station> station) {
+  Stack showStationName() {
     //TODO 文字大小随窗口改变适应
     List<Container> tempList = [];
     double count = 0;
-    for (var value in station) {
+    for (var value in stations) {
       tempList.add(Container(
-        padding:
-            EdgeInsets.fromLTRB((1400 / (station.length - 1)) * count, 0, 0, 0),
+        padding: EdgeInsets.fromLTRB(
+            (1400 / (stations.length - 1)) * count, 0, 0, 0),
         child: Container(
           //逆时针45度
           transform: Matrix4.rotationZ(-0.75),
@@ -516,7 +504,7 @@ class HomePageState extends State<HomePage> {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
             //英文站名做适当偏移
-            15 + (1400 / (station.length - 1)) * count,
+            15 + (1400 / (stations.length - 1)) * count,
             10,
             0,
             0),
