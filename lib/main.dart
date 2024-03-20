@@ -50,7 +50,7 @@ class HomePageState extends State<HomePage> {
   int? nextStationListIndex;
   String? terminusListValue;
   int? terminusListIndex;
-
+  String backgroundColor = "c8c9ca";
   // String checkNullIndex(int index) {
   //   return index == 0 ? "" : stations[index].stationNameCN;
   // }
@@ -260,7 +260,7 @@ class HomePageState extends State<HomePage> {
                 RepaintBoundary(
                   key: _mainImageKey,
                   child: Container(
-                    color: Util.hexToColor("c8c9ca"),
+                    color: Util.hexToColor(backgroundColor),
                     height: 335,
                     child: Stack(
                       children: [
