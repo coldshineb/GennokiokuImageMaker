@@ -51,6 +51,7 @@ class HomePageState extends State<HomePage> {
   String? terminusListValue;
   int? terminusListIndex;
   String backgroundColor = "c8c9ca";
+
   // String checkNullIndex(int index) {
   //   return index == 0 ? "" : stations[index].stationNameCN;
   // }
@@ -255,149 +256,182 @@ class HomePageState extends State<HomePage> {
             ],
           ),
           Expanded(
-            child: ListView(
-              children: [
-                RepaintBoundary(
-                  key: _mainImageKey,
-                  child: Container(
-                    color: Util.hexToColor(backgroundColor),
-                    height: 335,
-                    child: Stack(
-                      children: [
-                        _imageBytes != null
-                            ? Image.memory(
-                                _imageBytes!,
-                              )
-                            : const SizedBox(),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(22, 15.5, 0, 0),
-                          child: Image.asset(
-                            "assets/image/gennokioku_railway_transit_logo.png",
-                            scale: 1.5,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    children: [
+                      RepaintBoundary(
+                        key: _mainImageKey,
+                        child: Container(
+                          color: Util.hexToColor(backgroundColor),
+                          child: Stack(
+                            children: [
+                              const SizedBox(
+                                width: 1715.2,
+                                height: 335,
+                              ),
+                              _imageBytes != null
+                                  ? Image.memory(
+                                      _imageBytes!,
+                                    )
+                                  : const SizedBox(),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(22, 15.5, 0, 0),
+                                child: Image.asset(
+                                  "assets/image/gennokioku_railway_transit_logo.png",
+                                  scale: 1.5,
+                                ),
+                              ),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(521, 8, 0, 0),
+                                  child: const Text(
+                                    "下一站",
+                                    style: TextStyle(
+                                        fontSize: 28,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(524, 41, 0, 0),
+                                  child: const Text(
+                                    "Next station",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(909, 8, 0, 0),
+                                  child: const Text(
+                                    "终点站",
+                                    style: TextStyle(
+                                        fontSize: 28,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(922, 41, 0, 0),
+                                  child: const Text(
+                                    "Terminus",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(617, 8, 0, 0),
+                                  child: Text(
+                                    nextStationListIndex == null
+                                        ? ""
+                                        : stations[nextStationListIndex!]
+                                            .stationNameCN,
+                                    style: const TextStyle(
+                                        fontSize: 28,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(1007, 8, 0, 0),
+                                  child: Text(
+                                    terminusListIndex == null
+                                        ? ""
+                                        : stations[terminusListIndex!]
+                                            .stationNameCN,
+                                    style: const TextStyle(
+                                        fontSize: 28,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(617, 41, 0, 0),
+                                  child: Text(
+                                    nextStationListIndex == null
+                                        ? ""
+                                        : stations[nextStationListIndex!]
+                                            .stationNameEN,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(1007, 41, 0, 0),
+                                  child: Text(
+                                    terminusListIndex == null
+                                        ? ""
+                                        : stations[terminusListIndex!]
+                                            .stationNameEN,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "GennokiokuLCDFont"
+                                        //fontWeight: FontWeight.bold,
+                                        ),
+                                  )),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 165, 0, 0),
+                                child: showStationName(),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                                child: showRouteLine(lineColor!),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                child: showRouteIcon(),
+                              ),
+                            ],
                           ),
                         ),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(521, 8, 0, 0),
-                            child: const Text(
-                              "下一站",
-                              style: TextStyle(
-                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(524, 41, 0, 0),
-                            child: const Text(
-                              "Next station",
-                              style: TextStyle(
-                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(909, 8, 0, 0),
-                            child: const Text(
-                              "终点站",
-                              style: TextStyle(
-                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(922, 41, 0, 0),
-                            child: const Text(
-                              "Terminus",
-                              style: TextStyle(
-                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(617, 8, 0, 0),
-                            child: Text(
-                              nextStationListIndex == null
-                                  ? ""
-                                  : stations[nextStationListIndex!]
-                                      .stationNameCN,
-                              style: const TextStyle(
-                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(1007, 8, 0, 0),
-                            child: Text(
-                              terminusListIndex == null
-                                  ? ""
-                                  : stations[terminusListIndex!].stationNameCN,
-                              style: const TextStyle(
-                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(617, 41, 0, 0),
-                            child: Text(
-                              nextStationListIndex == null
-                                  ? ""
-                                  : stations[nextStationListIndex!]
-                                      .stationNameEN,
-                              style: const TextStyle(
-                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.fromLTRB(1007, 41, 0, 0),
-                            child: Text(
-                              terminusListIndex == null
-                                  ? ""
-                                  : stations[terminusListIndex!].stationNameEN,
-                              style: const TextStyle(
-                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
-                                  //fontWeight: FontWeight.bold,
-                                  ),
-                            )),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(190, 165, 0, 0),
-                          child: showStationName(),
+                      ),
+                      const Divider(),
+                      //已过站图
+                      RepaintBoundary(
+                        key: _passedImageKey,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: [
+                              const SizedBox(
+                                width: 1715.2,
+                                height: 335,
+                              ), //调好的尺寸，正好能占位500高度
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 195, 0, 0),
+                                child: showRouteLine(Util.hexToColor("89898A")),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                child: showPassedRouteIcon(),
+                              ),
+                            ],
+                          ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                          child: showRouteLine(lineColor!),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                          child: showRouteIcon(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Divider(),
-                //已过站图
-                RepaintBoundary(
-                  key: _passedImageKey,
-                  child: Container(
-                    height: 335,
-                    child: Stack(
-                      children: [
-                        const SizedBox(
-                          height: 334,
-                        ), //调好的尺寸，正好能占位500高度
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                          child: showRouteLine(Util.hexToColor("89898A")),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                          child: showPassedRouteIcon(),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
+                      ),
+                    ],
+                  )),
             ),
           ),
         ],
