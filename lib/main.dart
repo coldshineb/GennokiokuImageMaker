@@ -167,8 +167,8 @@ class HomePageState extends State<HomePage> {
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("取消导出",
-              style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+          content:
+              Text("取消导出", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
         ));
       }
     } catch (e) {
@@ -189,40 +189,52 @@ class HomePageState extends State<HomePage> {
           Row(
             children: [
               MenuBar(children: [
-                MenuItemButton(
-                  onPressed: _importImage,
-                  child: const Text(
-                    "导入图片",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                  ),
-                ),
-                MenuItemButton(
-                  onPressed: _importLineJson,
-                  child: const Text(
-                    "导入站名",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                  ),
-                ),
-                MenuItemButton(
-                  onPressed: exportMainImage,
-                  child: const Text(
-                    "导出主线路图",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                  ),
-                ),
-                MenuItemButton(
-                  onPressed: exportPassedImage,
-                  child: const Text(
-                    "导出已过站图",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                SizedBox(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: _importImage,
+                    child: const Text(
+                      "导入图片",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(top: 10),
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: _importLineJson,
+                    child: const Text(
+                      "导入站名",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: exportMainImage,
+                    child: const Text(
+                      "导出主线路图",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: exportPassedImage,
+                    child: const Text(
+                      "导出已过站图",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "下一站",
                     style: TextStyle(
@@ -230,6 +242,13 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 DropdownButton(
+                  disabledHint: const Text(
+                    "下一站",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont",
+                        color: Colors.grey,
+                        fontSize: 14),
+                  ),
                   items: showNextStationList(),
                   onChanged: (value) {
                     nextStationListIndex = stations.indexWhere(
@@ -240,7 +259,7 @@ class HomePageState extends State<HomePage> {
                   value: nextStationListValue,
                 ),
                 Container(
-                  padding: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "终点站",
                     style: TextStyle(
@@ -248,6 +267,13 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 DropdownButton(
+                  disabledHint: const Text(
+                    "终点站",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont",
+                        color: Colors.grey,
+                        fontSize: 14),
+                  ),
                   items: showNextStationList(),
                   onChanged: (value) {
                     terminusListIndex = stations.indexWhere(
