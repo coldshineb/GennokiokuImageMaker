@@ -75,11 +75,6 @@ class HomePageState extends State<HomePage> {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
 
-    //清空或重置可能空或导致显示异常的变量
-    stations = [];
-    nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
-    terminusListIndex = 0;
-
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -89,6 +84,7 @@ class HomePageState extends State<HomePage> {
     );
     if (result != null) {
       Uint8List bytes = result.files.single.bytes!;
+      //尝试读取文件
       try {
         // 读取 JSON 文件内容
         String jsonString = utf8.decode(bytes);
@@ -101,8 +97,13 @@ class HomePageState extends State<HomePage> {
         lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
         // 站点不能少于 2
         if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
+          //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
+          stations.clear();
+          nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
+          terminusListIndex = 0;
+
           // 遍历 JSON 数据，提取站点信息，保存到 stations 集合中
-          for (var item in stationsFromJson) {
+          for (dynamic item in stationsFromJson) {
             Station station = Station(
               stationNameCN: item['stationNameCN'],
               stationNameEN: item['stationNameEN'],
@@ -120,9 +121,9 @@ class HomePageState extends State<HomePage> {
         print('读取文件失败: $e');
         showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
+      nextStationListValue = stations[0].stationNameCN;
+      terminusListValue = stations[0].stationNameCN;
     }
-    nextStationListValue = stations[0].stationNameCN;
-    terminusListValue = stations[0].stationNameCN;
   }
 
   void exportMainImage() {
@@ -439,7 +440,7 @@ class HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _imageBytes = null;
-          stations = [];
+          stations.clear();
           lineColor = Colors.transparent;
           lineVariantColor = Colors.transparent;
           nextStationListIndex = null;
@@ -456,7 +457,7 @@ class HomePageState extends State<HomePage> {
 
   List<DropdownMenuItem> showNextStationList() {
     List<DropdownMenuItem> tempList = [];
-    for (var value in stations) {
+    for (Station value in stations) {
       value.stationNameCN;
       tempList.add(DropdownMenuItem(
         child: Text(
@@ -517,7 +518,7 @@ class HomePageState extends State<HomePage> {
     //TODO 文字大小随窗口改变适应
     List<Container> tempList = [];
     double count = 0;
-    for (var value in stations) {
+    for (Station value in stations) {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
             (1400 / (stations.length - 1)) * count, 0, 0, 0),
