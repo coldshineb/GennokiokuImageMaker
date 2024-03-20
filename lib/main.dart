@@ -46,6 +46,14 @@ class HomePageState extends State<HomePage> {
   String jsonFileName = "";
   Color? lineColor = Colors.transparent;
   Color? lineVariantColor = Colors.transparent;
+  String? nextStationListValue;
+  int? nextStationListIndex;
+  String? terminusListValue;
+  int? terminusListIndex;
+
+  // String checkNullIndex(int index) {
+  //   return index == 0 ? "" : stations[index].stationNameCN;
+  // }
 
   void _importImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -63,9 +71,13 @@ class HomePageState extends State<HomePage> {
   }
 
   void _importLineJson() async {
-    stations = [];
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
+
+    //清空或重置可能空或导致显示异常的变量
+    stations = [];
+    nextStationListIndex=0;//会导致显示的是前一个索引对应的站点
+    terminusListIndex=0;
 
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -108,35 +120,15 @@ class HomePageState extends State<HomePage> {
         showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
-  }
-
-  void showAlertDialog(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title,
-                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-            content: Text(content,
-                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("好",
-                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-              )
-            ],
-          );
-        });
+    nextStationListValue=stations[0].stationNameCN;
+    terminusListValue=stations[0].stationNameCN;
   }
 
   Future<void> _exportImage() async {
     try {
       RenderRepaintBoundary boundary = _mainImageKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 2560/1710);
+      ui.Image image = await boundary.toImage(pixelRatio: 2560 / 1710);
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -237,15 +229,42 @@ class HomePageState extends State<HomePage> {
                         fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
-                Text(
-                  "下一站",
-                  style: TextStyle(
-                      fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: const Text(
+                    "下一站",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                  ),
                 ),
                 DropdownButton(
-                    items: showNextStationList(stations),
-                    onChanged: null,
-                    value: null)
+                  items: showNextStationList(stations),
+                  onChanged: (value) {
+                    nextStationListIndex = stations.indexWhere(
+                        (element) => element.stationNameCN == value);
+                    nextStationListValue = value;
+                    setState(() {});
+                  },
+                  value: nextStationListValue,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: const Text(
+                    "终点站",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                  ),
+                ),
+                DropdownButton(
+                  items: showNextStationList(stations),
+                  onChanged: (value) {
+                    terminusListIndex = stations.indexWhere(
+                        (element) => element.stationNameCN == value);
+                    terminusListValue = value;
+                    setState(() {});
+                  },
+                  value: terminusListValue,
+                )
               ]),
             ],
           ),
@@ -265,15 +284,15 @@ class HomePageState extends State<HomePage> {
                               )
                             : const SizedBox(),
                         Container(
-                          padding: EdgeInsets.fromLTRB(22, 15.5, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(22, 15.5, 0, 0),
                           child: Image.asset(
                             "assets/image/gennokioku_railway_transit_logo.png",
                             scale: 1.5,
                           ),
                         ),
                         Container(
-                            padding: EdgeInsets.fromLTRB(521, 8, 0, 0),
-                            child: Text(
+                            padding: const EdgeInsets.fromLTRB(521, 8, 0, 0),
+                            child: const Text(
                               "下一站",
                               style: TextStyle(
                                   fontSize: 28, fontFamily: "GennokiokuLCDFont"
@@ -281,8 +300,8 @@ class HomePageState extends State<HomePage> {
                                   ),
                             )),
                         Container(
-                            padding: EdgeInsets.fromLTRB(524, 41, 0, 0),
-                            child: Text(
+                            padding: const EdgeInsets.fromLTRB(524, 41, 0, 0),
+                            child: const Text(
                               "Next station",
                               style: TextStyle(
                                   fontSize: 14, fontFamily: "GennokiokuLCDFont"
@@ -290,8 +309,8 @@ class HomePageState extends State<HomePage> {
                                   ),
                             )),
                         Container(
-                            padding: EdgeInsets.fromLTRB(909, 8, 0, 0),
-                            child: Text(
+                            padding: const EdgeInsets.fromLTRB(909, 8, 0, 0),
+                            child: const Text(
                               "终点站",
                               style: TextStyle(
                                   fontSize: 28, fontFamily: "GennokiokuLCDFont"
@@ -299,10 +318,56 @@ class HomePageState extends State<HomePage> {
                                   ),
                             )),
                         Container(
-                            padding: EdgeInsets.fromLTRB(922, 41, 0, 0),
-                            child: Text(
+                            padding: const EdgeInsets.fromLTRB(922, 41, 0, 0),
+                            child: const Text(
                               "Terminus",
                               style: TextStyle(
+                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.fromLTRB(617, 8, 0, 0),
+                            child: Text(
+                              nextStationListIndex == null
+                                  ? ""
+                                  : stations[nextStationListIndex!]
+                                      .stationNameCN,
+                              style: const TextStyle(
+                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.fromLTRB(1007, 8, 0, 0),
+                            child: Text(
+                              terminusListIndex == null
+                                  ? ""
+                                  : stations[terminusListIndex!].stationNameCN,
+                              style: const TextStyle(
+                                  fontSize: 28, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.fromLTRB(617, 41, 0, 0),
+                            child: Text(
+                              nextStationListIndex == null
+                                  ? ""
+                                  : stations[nextStationListIndex!]
+                                      .stationNameEN,
+                              style: const TextStyle(
+                                  fontSize: 14, fontFamily: "GennokiokuLCDFont"
+                                  //fontWeight: FontWeight.bold,
+                                  ),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.fromLTRB(1007, 41, 0, 0),
+                            child: Text(
+                              terminusListIndex == null
+                                  ? ""
+                                  : stations[terminusListIndex!].stationNameEN,
+                              style: const TextStyle(
                                   fontSize: 14, fontFamily: "GennokiokuLCDFont"
                                   //fontWeight: FontWeight.bold,
                                   ),
@@ -323,7 +388,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 //已过站图
                 RepaintBoundary(
                   key: _passedImageKey,
@@ -331,7 +396,7 @@ class HomePageState extends State<HomePage> {
                     height: 335,
                     child: Stack(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 334,
                         ), //调好的尺寸，正好能占位500高度
                         Container(
@@ -357,6 +422,8 @@ class HomePageState extends State<HomePage> {
           stations = [];
           lineColor = Colors.transparent;
           lineVariantColor = Colors.transparent;
+          nextStationListIndex = null;
+          terminusListIndex = null;
           setState(() {});
         },
         tooltip: '重置',
@@ -372,7 +439,7 @@ class HomePageState extends State<HomePage> {
       tempList.add(DropdownMenuItem(
         child: Text(
           value.stationNameCN,
-          style: TextStyle(fontFamily: "GennokiokuLCDFont"),
+          style: const TextStyle(fontFamily: "GennokiokuLCDFont"),
         ),
         value: value.stationNameCN,
       ));
@@ -471,5 +538,27 @@ class HomePageState extends State<HomePage> {
     return Stack(
       children: tempList,
     );
+  }
+
+  void showAlertDialog(String title, String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title,
+                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+            content: Text(content,
+                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("好",
+                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+              )
+            ],
+          );
+        });
   }
 }
