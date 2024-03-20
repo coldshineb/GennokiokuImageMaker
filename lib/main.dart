@@ -161,10 +161,14 @@ class HomePageState extends State<HomePage> {
 
       if (path != "null") {
         await imgFile.writeAsBytes(pngBytes);
-        showAlertDialog("图片已导出", "图片已成功保存至: $path");
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("图片已成功保存至: $path",
+              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+        ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("取消导出"),
+          content: Text("取消导出",
+              style: TextStyle(fontFamily: "GennokiokuLCDFont")),
         ));
       }
     } catch (e) {
