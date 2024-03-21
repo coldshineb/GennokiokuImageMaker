@@ -52,19 +52,7 @@ class ShadowIconPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     //边缘阴影
-    canvas.drawShadow(
-        Path()
-          ..addRRect(
-            RRect.fromRectAndRadius(
-                Rect.fromCircle(
-                  center: const Offset(0, -4),
-                  radius: 20,
-                ),
-                const Radius.circular(10000)),
-          ),
-        Colors.black,
-        15,
-        true);
+    linePaint.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
     // 外圈圆
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, linePaint);
     // 中圈圆
