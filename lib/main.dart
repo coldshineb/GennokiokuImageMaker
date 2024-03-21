@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -139,29 +140,43 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> exportAllImage() async {
+    await exportMainImage();
+    await exportPassedIconImage();
+    await exportPassedLineImage();
+    await exportPassingImage();
+    await exportShadowImage();
+  }
+
+  Future<void> exportDynamicImage() async {
+    await exportMainImage();
+    await exportPassingImage();
+  }
+
   //导出主线路图
-  void exportMainImage() {
-    exportImage(_mainImageKey, "保存",
+  Future<void> exportMainImage() async {
+    await exportImage(_mainImageKey, "保存",
         "运行中 $nextStationListValue, $terminusListValue方向.png");
   }
 
   //导出已过站点图
-  void exportPassedIconImage() {
-    exportImage(_passedIconImageKey, "保存", "已过站点.png");
+  Future<void> exportPassedIconImage() async {
+    await exportImage(_passedIconImageKey, "保存", "已过站点.png");
   }
 
   //导出已过站线图
-  void exportPassedLineImage() {
-    exportImage(_passedLineImageKey, "保存", "已过站线.png");
+  Future<void> exportPassedLineImage() async {
+    await exportImage(_passedLineImageKey, "保存", "已过站线.png");
   }
+
   //导出下一站图
-  void exportPassingImage() {
-    exportImage(_passingImageKey, "保存", "下一站 $nextStationListValue.png");
+  Future<void> exportPassingImage() async {
+    await exportImage(_passingImageKey, "保存", "下一站 $nextStationListValue.png");
   }
 
   //导出阴影图
-  void exportShadowImage() {
-    exportImage(_shadowImageKey, "保存", "阴影.png");
+  Future<void> exportShadowImage() async {
+    await exportImage(_shadowImageKey, "保存", "阴影.png");
   }
 
   @override
@@ -173,12 +188,13 @@ class HomePageState extends State<HomePage> {
         elevation: 4,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MenuBar(children: [
                 SizedBox(
-                  height: 48, //确保顶部功能行在站名下拉菜单加载时高度不变
                   child: MenuItemButton(
                     onPressed: _importImage,
                     child: const Text(
@@ -189,7 +205,6 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 48,
                   child: MenuItemButton(
                     onPressed: _importLineJson,
                     child: const Text(
@@ -199,8 +214,30 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                const VerticalDivider(),
+                const VerticalDivider(),
                 SizedBox(
-                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: exportAllImage,
+                    child: const Text(
+                      "导出全部",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: MenuItemButton(
+                    onPressed: exportDynamicImage,
+                    child: const Text(
+                      "导出动态图",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                const VerticalDivider(),
+                SizedBox(
                   child: MenuItemButton(
                     onPressed: exportMainImage,
                     child: const Text(
@@ -211,7 +248,6 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 48,
                   child: MenuItemButton(
                     onPressed: exportPassedLineImage,
                     child: const Text(
@@ -222,7 +258,6 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 48,
                   child: MenuItemButton(
                     onPressed: exportPassedIconImage,
                     child: const Text(
@@ -233,7 +268,6 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 48,
                   child: MenuItemButton(
                     onPressed: exportPassingImage,
                     child: const Text(
@@ -244,7 +278,6 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 48,
                   child: MenuItemButton(
                     onPressed: exportShadowImage,
                     child: const Text(
@@ -254,6 +287,8 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+              ]),
+              MenuBar(children: [
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
@@ -273,7 +308,7 @@ class HomePageState extends State<HomePage> {
                   items: showStationList(),
                   onChanged: (value) {
                     nextStationListIndex = stations.indexWhere((element) =>
-                        element.stationNameCN == value); //根据选择的站名，找到站名集合中对应的索引
+                    element.stationNameCN == value); //根据选择的站名，找到站名集合中对应的索引
                     nextStationListValue = value;
                     setState(() {});
                   },
@@ -298,13 +333,12 @@ class HomePageState extends State<HomePage> {
                   items: showStationList(),
                   onChanged: (value) {
                     terminusListIndex = stations.indexWhere(
-                        (element) => element.stationNameCN == value);
+                            (element) => element.stationNameCN == value);
                     terminusListValue = value;
                     setState(() {});
                   },
                   value: terminusListValue,
-                )
-              ]),
+                )])
             ],
           ),
           Expanded(
@@ -634,16 +668,19 @@ class HomePageState extends State<HomePage> {
   //显示正在过站图标
   Stack showPassingRouteIcon() {
     List<Container> tempList = [];
-    if (nextStationListIndex!=null) {
+    if (nextStationListIndex != null) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (stations.length - 1)) * nextStationListIndex!, 0, 0, 0),
+              10 + (1400 / (stations.length - 1)) * nextStationListIndex!,
+              0,
+              0,
+              0),
           child: CustomPaint(
               painter: StationIconPainter(
-                lineColor: Util.hexToColor(CustomColors.passingStation),
-                lineVariantColor:
+            lineColor: Util.hexToColor(CustomColors.passingStation),
+            lineVariantColor:
                 Util.hexToColor(CustomColors.passingStationVariant),
-              ))));
+          ))));
     }
     return Stack(
       children: tempList,
