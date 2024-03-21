@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -519,10 +521,10 @@ class HomePageState extends State<HomePage> {
     //根据选择的下一站和终点站，替换已过站为未过站
     //TODO 下一站与终点站相同时怎么处理？加个左行右行开关？
     if (nextStationListIndex != null && terminusListIndex != null) {
+      List<Container> replaceList = [];
       //非空判断
       //下一站在终点站左侧
       if (nextStationListIndex! < terminusListIndex!) {
-        List<Container> replaceList = [];
         //下一站不为起始站
         if (nextStationListIndex != 0) {
           for (int i = nextStationListIndex! - 1; i < terminusListIndex!; i++) {
@@ -544,7 +546,6 @@ class HomePageState extends State<HomePage> {
       }
       //下一站在终点站右侧
       else if (nextStationListIndex! > terminusListIndex!) {
-        List<Container> replaceList = [];
         //下一站不为终点站
         if (nextStationListIndex != stations.length - 1) {
           for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
@@ -561,6 +562,30 @@ class HomePageState extends State<HomePage> {
           lineList.replaceRange(
               terminusListIndex!, nextStationListIndex!, replaceList);
         }
+      } else {
+        if (nextStationListIndex == 0) {
+          replaceList.add(Container(
+            //最左侧，不用间隔
+            height: 15,
+            child: Container(
+              width: (1400 / (stations.length - 1)),
+              color: lineColor,
+            ),
+          ));
+          lineList.replaceRange(0, 1, replaceList);
+        } else if (nextStationListIndex == stations.length - 1) {
+          replaceList.add(Container(
+            padding: EdgeInsets.only(
+                left: (1400 / (stations.length - 1)) * (stations.length - 2)),//最右侧
+            height: 15,
+            child: Container(
+              width: (1400 / (stations.length - 1)),
+              color: lineColor,
+            ),
+          ));
+          lineList.replaceRange(
+              stations.length - 2, stations.length - 1, replaceList);
+        }
       }
     }
     return Stack(
@@ -570,7 +595,7 @@ class HomePageState extends State<HomePage> {
 
   Container routeLine(int i, Color color) {
     return Container(
-      padding: EdgeInsets.only(left: (1400 / (stations.length - 1)) * i),
+      padding: EdgeInsets.only(left: (1400 / (stations.length - 1)) * i), //间隔
       height: 15,
       child: Container(
         width: (1400 / (stations.length - 1)), //每个站与站之间线条的宽度
