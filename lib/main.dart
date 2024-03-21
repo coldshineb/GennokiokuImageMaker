@@ -43,7 +43,10 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
-  final GlobalKey _passedImageKey = GlobalKey();
+  final GlobalKey _passedIconImageKey = GlobalKey();
+  final GlobalKey _passedLineImageKey = GlobalKey();
+  final GlobalKey _passingImageKey = GlobalKey();
+  final GlobalKey _shadowImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
@@ -142,16 +145,30 @@ class HomePageState extends State<HomePage> {
         "运行中 $nextStationListValue, $terminusListValue方向.png");
   }
 
-  //导出已过站图
-  void exportPassedImage() {
-    exportImage(_passedImageKey, "保存", "已过站.png");
+  //导出已过站点图
+  void exportPassedIconImage() {
+    exportImage(_passedIconImageKey, "保存", "已过站点.png");
+  }
+
+  //导出已过站线图
+  void exportPassedLineImage() {
+    exportImage(_passedLineImageKey, "保存", "已过站线.png");
+  }
+  //导出下一站图
+  void exportPassingImage() {
+    exportImage(_passingImageKey, "保存", "下一站 $nextStationListValue.png");
+  }
+
+  //导出阴影图
+  void exportShadowImage() {
+    exportImage(_shadowImageKey, "保存", "阴影.png");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('原忆轨道交通 LCD 生成器',
+        title: const Text('直线型线路图 运行中',
             style: TextStyle(fontFamily: "GennokiokuLCDFont")),
         elevation: 4,
       ),
@@ -196,9 +213,42 @@ class HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 48,
                   child: MenuItemButton(
-                    onPressed: exportPassedImage,
+                    onPressed: exportPassedLineImage,
                     child: const Text(
-                      "导出已过站图",
+                      "导出已过站线图",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: exportPassedIconImage,
+                    child: const Text(
+                      "导出已过站点图",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: exportPassingImage,
+                    child: const Text(
+                      "导出下一站图",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: exportShadowImage,
+                    child: const Text(
+                      "导出阴影图",
                       style: TextStyle(
                           fontFamily: "GennokiokuLCDFont", color: Colors.black),
                     ),
@@ -412,10 +462,29 @@ class HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      const Divider(),
-                      //已过站图
+                      //已过站点图
                       RepaintBoundary(
-                        key: _passedImageKey,
+                        key: _passedIconImageKey,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: [
+                              const SizedBox(
+                                width: 1715.2,
+                                height: 334.5,
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                child: showPassedRouteIcon(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      //已过站线图
+                      RepaintBoundary(
+                        key: _passedLineImageKey,
                         child: Container(
                           color: Colors.transparent,
                           child: Stack(
@@ -430,10 +499,45 @@ class HomePageState extends State<HomePage> {
                                 child: showRouteLine(Util.hexToColor(
                                     CustomColors.passedStation)),
                               ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      //下一站图
+                      RepaintBoundary(
+                        key: _passingImageKey,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: [
+                              const SizedBox(
+                                width: 1715.2,
+                                height: 334.5,
+                              ),
                               Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                                child: showPassedRouteIcon(),
+                                child: showPassingRouteIcon(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      //阴影图
+                      RepaintBoundary(
+                        key: _shadowImageKey,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: [
+                              const SizedBox(
+                                width: 1715.2,
+                                height: 334.5,
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                child: showShadowIcon(),
                               ),
                             ],
                           ),
@@ -509,6 +613,7 @@ class HomePageState extends State<HomePage> {
 
   //显示已过站图标
   Stack showPassedRouteIcon() {
+    //TODO:根据选择的下一站动态显示已过站，需要考虑小交线时，下一站在终点站前后，在前则下一站前和终点站后已过；在后则下一站后和终点站前已过（考虑小交线时已经包括了跑全程的情况，因为全程时，终点站前后不会有其他站）
     List<Container> tempList = [];
     for (int i = 0; i < stations.length; i++) {
       tempList.add(Container(
@@ -520,6 +625,43 @@ class HomePageState extends State<HomePage> {
                 lineVariantColor:
                     Util.hexToColor(CustomColors.passedStationVariant)),
           )));
+    }
+    return Stack(
+      children: tempList,
+    );
+  }
+
+  //显示正在过站图标
+  Stack showPassingRouteIcon() {
+    List<Container> tempList = [];
+    if (nextStationListIndex!=null) {
+      tempList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10 + (1400 / (stations.length - 1)) * nextStationListIndex!, 0, 0, 0),
+          child: CustomPaint(
+              painter: StationIconPainter(
+                lineColor: Util.hexToColor(CustomColors.passingStation),
+                lineVariantColor:
+                Util.hexToColor(CustomColors.passingStationVariant),
+              ))));
+    }
+    return Stack(
+      children: tempList,
+    );
+  }
+
+  //显示阴影
+  Stack showShadowIcon() {
+    List<Container> tempList = [];
+    for (int i = 0; i < stations.length; i++) {
+      tempList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
+          child: CustomPaint(
+              painter: ShadowIconPainter(
+            lineColor: lineColor,
+            lineVariantColor: lineVariantColor,
+          ))));
     }
     return Stack(
       children: tempList,
