@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
 import 'Util.dart';
+import 'Util/CustomColors.dart';
 import 'Util/CustomPainter.dart';
 
 void main() {
@@ -28,7 +29,7 @@ class GennokiokuMetroLCDMaker extends StatelessWidget {
           ),
         ),
       ),
-      scrollBehavior: CustomScrollBehavior(),
+      scrollBehavior: CustomScrollBehavior(), //设置鼠标拖动滑动
       home: HomePage(),
     );
   }
@@ -40,23 +41,29 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
   final GlobalKey _passedImageKey = GlobalKey();
+
+  //背景图片字节数据
   Uint8List? _imageBytes;
+
+  //站名集合
   List<Station> stations = [];
-  String jsonFileName = "";
+
+  //线路颜色和颜色变体，默认透明，导入文件时赋值
   Color? lineColor = Colors.transparent;
   Color? lineVariantColor = Colors.transparent;
+
+  //站名下拉菜单默认值，设空，导入文件时赋值
   String? nextStationListValue;
-  int? nextStationListIndex;
   String? terminusListValue;
+
+  //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
+  int? nextStationListIndex;
   int? terminusListIndex;
-  String backgroundColor = "c8c9ca";
 
-  // String checkNullIndex(int index) {
-  //   return index == 0 ? "" : stations[index].stationNameCN;
-  // }
-
+  //TODO:导入背景图片，待完整复刻样式后删除
   void _importImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -72,6 +79,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  //导入线路文件
   void _importLineJson() async {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
@@ -91,19 +99,19 @@ class HomePageState extends State<HomePage> {
         String jsonString = utf8.decode(bytes);
         // 解析 JSON 数据，保存到键值对中
         jsonData = json.decode(jsonString);
-        // 将站点保存到集合中
+        // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 设置线路颜色和颜色变种
+        // 设置线路颜色和颜色变体
         lineColor = Util.hexToColor(jsonData['lineColor']);
         lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
-        // 站点不能少于 2
+        // 站点不能少于 2 或大于 32
         if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stations.clear();
           nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
           terminusListIndex = 0;
 
-          // 遍历 JSON 数据，提取站点信息，保存到 stations 集合中
+          // 遍历临时集合，获取站点信息，保存到 stations 集合中
           for (dynamic item in stationsFromJson) {
             Station station = Station(
               stationNameCN: item['stationNameCN'],
@@ -122,59 +130,21 @@ class HomePageState extends State<HomePage> {
         print('读取文件失败: $e');
         showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
+      //文件成功导入后将下拉菜单默认值设为第一站
       nextStationListValue = stations[0].stationNameCN;
       terminusListValue = stations[0].stationNameCN;
     }
   }
 
+  //导出主线路图
   void exportMainImage() {
     exportImage(_mainImageKey, "保存",
         "运行中 $nextStationListValue, $terminusListValue方向.png");
   }
 
+  //导出已过站图
   void exportPassedImage() {
     exportImage(_passedImageKey, "保存", "已过站.png");
-  }
-
-  Future<void> exportImage(
-      GlobalKey key, String dialogTitle, String fileName) async {
-    try {
-      //获取 stack
-      RenderBox findRenderObject =
-          key.currentContext?.findRenderObject() as RenderBox;
-
-      RenderRepaintBoundary boundary =
-          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(
-          pixelRatio:
-              2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      String? saveFile = await FilePicker.platform.saveFile(
-          dialogTitle: dialogTitle,
-          fileName: fileName,
-          type: FileType.image,
-          allowedExtensions: ["PNG"]);
-      final String path = '$saveFile';
-      File imgFile = File(path);
-
-      if (path != "null") {
-        await imgFile.writeAsBytes(pngBytes);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path",
-              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-        ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content:
-              Text("取消导出", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-        ));
-      }
-    } catch (e) {
-      print('导出图片失败: $e');
-    }
   }
 
   @override
@@ -191,7 +161,7 @@ class HomePageState extends State<HomePage> {
             children: [
               MenuBar(children: [
                 SizedBox(
-                  height: 48,
+                  height: 48, //确保顶部功能行在站名下拉菜单加载时高度不变
                   child: MenuItemButton(
                     onPressed: _importImage,
                     child: const Text(
@@ -201,7 +171,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 48,
                   child: MenuItemButton(
                     onPressed: _importLineJson,
@@ -212,7 +182,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 48,
                   child: MenuItemButton(
                     onPressed: exportMainImage,
@@ -223,7 +193,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 48,
                   child: MenuItemButton(
                     onPressed: exportPassedImage,
@@ -249,11 +219,11 @@ class HomePageState extends State<HomePage> {
                         fontFamily: "GennokiokuLCDFont",
                         color: Colors.grey,
                         fontSize: 14),
-                  ),
-                  items: showNextStationList(),
+                  ), //设置空时的提示文字
+                  items: showStationList(),
                   onChanged: (value) {
-                    nextStationListIndex = stations.indexWhere(
-                        (element) => element.stationNameCN == value);
+                    nextStationListIndex = stations.indexWhere((element) =>
+                        element.stationNameCN == value); //根据选择的站名，找到站名集合中对应的索引
                     nextStationListValue = value;
                     setState(() {});
                   },
@@ -275,7 +245,7 @@ class HomePageState extends State<HomePage> {
                         color: Colors.grey,
                         fontSize: 14),
                   ),
-                  items: showNextStationList(),
+                  items: showStationList(),
                   onChanged: (value) {
                     terminusListIndex = stations.indexWhere(
                         (element) => element.stationNameCN == value);
@@ -291,26 +261,28 @@ class HomePageState extends State<HomePage> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
                   child: Column(
                     children: [
+                      //主线路图
                       RepaintBoundary(
                         key: _mainImageKey,
                         child: Container(
-                          color: Util.hexToColor(backgroundColor),
+                          color: Util.hexToColor(CustomColors.backgroundColor),
                           child: Stack(
                             children: [
                               const SizedBox(
+                                //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
                                 width: 1715.2,
                                 height: 334.5,
                               ),
                               _imageBytes != null
-                                  ? Container(
-                                height: 334.5,
-                                    child: Image.memory(
+                                  ? SizedBox(
+                                      height: 334.5,
+                                      child: Image.memory(
                                         _imageBytes!,
                                       ),
-                                  )
+                                    )
                                   : const SizedBox(),
                               Container(
                                 padding:
@@ -319,7 +291,7 @@ class HomePageState extends State<HomePage> {
                                   "assets/image/gennokioku_railway_transit_logo.png",
                                   scale: 1.5,
                                 ),
-                              ),
+                              ), //TODO:图片logo换为svg等方式绘制，避免模糊
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(521, 8, 0, 0),
@@ -372,6 +344,7 @@ class HomePageState extends State<HomePage> {
                                         ? ""
                                         : stations[nextStationListIndex!]
                                             .stationNameCN,
+                                    //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                                     style: const TextStyle(
                                         fontSize: 28,
                                         fontFamily: "GennokiokuLCDFont"
@@ -450,11 +423,12 @@ class HomePageState extends State<HomePage> {
                               const SizedBox(
                                 width: 1715.2,
                                 height: 334.5,
-                              ), //调好的尺寸，正好能占位500高度
+                              ),
                               Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(190, 195, 0, 0),
-                                child: showRouteLine(Util.hexToColor("89898A")),
+                                child: showRouteLine(Util.hexToColor(
+                                    CustomColors.passedStation)),
                               ),
                               Container(
                                 padding:
@@ -471,8 +445,10 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      //重置按钮
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          //重置所有变量
           _imageBytes = null;
           stations.clear();
           lineColor = Colors.transparent;
@@ -489,16 +465,17 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  List<DropdownMenuItem> showNextStationList() {
+  //显示下一站/终点站下拉菜单内容
+  List<DropdownMenuItem> showStationList() {
     List<DropdownMenuItem> tempList = [];
     for (Station value in stations) {
       value.stationNameCN;
       tempList.add(DropdownMenuItem(
+        value: value.stationNameCN,
         child: Text(
           value.stationNameCN,
           style: const TextStyle(fontFamily: "GennokiokuLCDFont"),
         ),
-        value: value.stationNameCN,
       ));
     }
     return tempList;
@@ -530,6 +507,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  //显示已过站图标
   Stack showPassedRouteIcon() {
     List<Container> tempList = [];
     for (int i = 0; i < stations.length; i++) {
@@ -538,8 +516,9 @@ class HomePageState extends State<HomePage> {
               10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: StationIconPainter(
-                lineColor: Util.hexToColor("89898A"),
-                lineVariantColor: Util.hexToColor("9E9E9F")),
+                lineColor: Util.hexToColor(CustomColors.passedStation),
+                lineVariantColor:
+                    Util.hexToColor(CustomColors.passedStationVariant)),
           )));
     }
     return Stack(
@@ -549,7 +528,6 @@ class HomePageState extends State<HomePage> {
 
   //显示站名
   Stack showStationName() {
-    //TODO 文字大小随窗口改变适应
     List<Container> tempList = [];
     double count = 0;
     for (Station value in stations) {
@@ -597,6 +575,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  //通用提示对话框方法
   void showAlertDialog(String title, String content) {
     showDialog(
         context: context,
@@ -617,5 +596,49 @@ class HomePageState extends State<HomePage> {
             ],
           );
         });
+  }
+
+  //通用导出方法
+  Future<void> exportImage(
+      GlobalKey key, String dialogTitle, String fileName) async {
+    try {
+      //获取 key 对应的 stack 用于获取宽度
+      RenderBox findRenderObject =
+          key.currentContext!.findRenderObject() as RenderBox;
+
+      //获取 key 对应的 stack 用于获取图片
+      RenderRepaintBoundary boundary =
+          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(
+          pixelRatio:
+              2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+      String? saveFile = await FilePicker.platform.saveFile(
+          dialogTitle: dialogTitle,
+          fileName: fileName,
+          type: FileType.image,
+          allowedExtensions: ["PNG"]);
+      final String path = '$saveFile';
+      File imgFile = File(path);
+
+      if (path != "null") {
+        //路径有效，保存
+        await imgFile.writeAsBytes(pngBytes);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("图片已成功保存至: $path",
+              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content:
+              Text("取消导出", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+        ));
+      }
+    } catch (e) {
+      print('导出图片失败: $e');
+    }
   }
 }
