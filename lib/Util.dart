@@ -21,3 +21,13 @@ class Util{
     return Color.fromRGBO(red, green, blue, 1.0);
   }
 }
+
+class CustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.unknown,
+  };
+}

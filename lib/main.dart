@@ -28,6 +28,7 @@ class GennokiokuMetroLCDMaker extends StatelessWidget {
           ),
         ),
       ),
+      scrollBehavior: CustomScrollBehavior(),
       home: HomePage(),
     );
   }
@@ -301,12 +302,15 @@ class HomePageState extends State<HomePage> {
                             children: [
                               const SizedBox(
                                 width: 1715.2,
-                                height: 335,
+                                height: 334.5,
                               ),
                               _imageBytes != null
-                                  ? Image.memory(
-                                      _imageBytes!,
-                                    )
+                                  ? Container(
+                                height: 334.5,
+                                    child: Image.memory(
+                                        _imageBytes!,
+                                      ),
+                                  )
                                   : const SizedBox(),
                               Container(
                                 padding:
@@ -329,7 +333,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(524, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(525, 41, 0, 0),
                                   child: const Text(
                                     "Next station",
                                     style: TextStyle(
@@ -340,7 +344,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(909, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(910, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
                                     style: TextStyle(
@@ -351,7 +355,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(922, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(924, 41, 0, 0),
                                   child: const Text(
                                     "Terminus",
                                     style: TextStyle(
@@ -362,7 +366,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(617, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(618, 8, 0, 0),
                                   child: Text(
                                     nextStationListIndex == null
                                         ? ""
@@ -376,7 +380,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(1007, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(1009, 8, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -390,7 +394,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(617, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(618, 41, 0, 0),
                                   child: Text(
                                     nextStationListIndex == null
                                         ? ""
@@ -404,7 +408,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(1007, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(1009, 41, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -445,7 +449,7 @@ class HomePageState extends State<HomePage> {
                             children: [
                               const SizedBox(
                                 width: 1715.2,
-                                height: 335,
+                                height: 334.5,
                               ), //调好的尺寸，正好能占位500高度
                               Container(
                                 padding:
