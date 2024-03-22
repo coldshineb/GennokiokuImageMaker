@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -89,11 +88,11 @@ class HomePageState extends State<HomePage> {
 
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      withData: true,
-      allowedExtensions: ['json'],
-      dialogTitle: '选择线路 JSON 文件',
-    );
+        type: FileType.custom,
+        withData: true,
+        allowedExtensions: ['json'],
+        dialogTitle: '选择线路 JSON 文件',
+        lockParentWindow: true);
     if (result != null) {
       Uint8List bytes = result.files.single.bytes!;
       //尝试读取文件
@@ -139,26 +138,92 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> exportAllImage() async {
-    await exportMainImage();
-    await exportPassingImage();
+  //导出全部图
+  void exportAllImage() async {
+    if (stations.isNotEmpty) {
+      String? path = await FilePicker.platform.getDirectoryPath();
+      if (path != null) {
+        if (nextStationListIndex! < terminusListIndex!) {
+          for (int i = 0; i < terminusListIndex! + 1; i++) {
+            nextStationListIndex = i;
+            setState(() {});
+            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _mainImageKey,
+                "$path\\运行中 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                false);
+          }
+        } else if (nextStationListIndex! > terminusListIndex!) {
+          for (int i = terminusListIndex!; i < stations.length; i++) {
+            nextStationListIndex = i;
+            setState(() {});
+            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _mainImageKey,
+                "$path\\运行中 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                false);
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("图片已成功保存至: $path",
+              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+        ));
+      }
+    } else {
+      noStationsSnackbar();
+    }
   }
 
+  //导出当前站全部图
   Future<void> exportDynamicImage() async {
-    await exportMainImage();
-    await exportPassingImage();
+    if (stations.isNotEmpty) {
+      await exportMainImage();
+      await exportPassingImage();
+    } else {
+      noStationsSnackbar();
+    }
   }
 
   //导出主线路图
   Future<void> exportMainImage() async {
-    await exportImage(_mainImageKey, "保存",
-        "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png");
+    if (stations.isNotEmpty) {
+      await exportImage(
+          _mainImageKey,
+          await getExportPath("保存",
+              "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png"),
+          true);
+    } else {
+      noStationsSnackbar();
+    }
   }
 
   //导出下一站图
   Future<void> exportPassingImage() async {
-    await exportImage(_passingImageKey, "保存",
-        "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png");
+    if (stations.isNotEmpty) {
+      await exportImage(
+          _passingImageKey,
+          await getExportPath("保存",
+              "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png"),
+          true);
+    } else {
+      noStationsSnackbar();
+    }
   }
 
   @override
@@ -190,7 +255,7 @@ class HomePageState extends State<HomePage> {
                   child: MenuItemButton(
                     onPressed: _importLineJson,
                     child: const Text(
-                      "导入站名",
+                      "导入线路",
                       style: TextStyle(
                           fontFamily: "GennokiokuLCDFont", color: Colors.black),
                     ),
@@ -202,7 +267,7 @@ class HomePageState extends State<HomePage> {
                   child: MenuItemButton(
                     onPressed: exportAllImage,
                     child: const Text(
-                      "导出全部",
+                      "导出全部图",
                       style: TextStyle(
                           fontFamily: "GennokiokuLCDFont", color: Colors.black),
                     ),
@@ -212,7 +277,7 @@ class HomePageState extends State<HomePage> {
                   child: MenuItemButton(
                     onPressed: exportDynamicImage,
                     child: const Text(
-                      "导出动态图",
+                      "导出当前站全部图",
                       style: TextStyle(
                           fontFamily: "GennokiokuLCDFont", color: Colors.black),
                     ),
@@ -323,7 +388,7 @@ class HomePageState extends State<HomePage> {
                                   : const SizedBox(),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(22, 15.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(22.5, 16, 0, 0),
                                 child: Image.asset(
                                   "assets/image/gennokioku_railway_transit_logo.png",
                                   scale: 1.5,
@@ -519,7 +584,6 @@ class HomePageState extends State<HomePage> {
       lineList.add((routeLine(i, Util.hexToColor(CustomColors.passedStation))));
     }
     //根据选择的下一站和终点站，替换已过站为未过站
-    //TODO 下一站与终点站相同时怎么处理？加个左行右行开关？
     if (nextStationListIndex != null && terminusListIndex != null) {
       List<Container> replaceList = [];
       //非空判断
@@ -576,7 +640,8 @@ class HomePageState extends State<HomePage> {
         } else if (nextStationListIndex == stations.length - 1) {
           replaceList.add(Container(
             padding: EdgeInsets.only(
-                left: (1400 / (stations.length - 1)) * (stations.length - 2)),//最右侧
+                left: (1400 / (stations.length - 1)) * (stations.length - 2)),
+            //最右侧
             height: 15,
             child: Container(
               width: (1400 / (stations.length - 1)),
@@ -585,6 +650,8 @@ class HomePageState extends State<HomePage> {
           ));
           lineList.replaceRange(
               stations.length - 2, stations.length - 1, replaceList);
+        } else {
+          //TODO 下一站与终点站相同时（不为首尾站）怎么处理？加个左行右行开关？
         }
       }
     }
@@ -593,6 +660,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  //线路
   Container routeLine(int i, Color color) {
     return Container(
       padding: EdgeInsets.only(left: (1400 / (stations.length - 1)) * i), //间隔
@@ -604,7 +672,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  //显示站点图标
+  //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
     for (int i = 0; i < stations.length; i++) {
@@ -612,10 +680,11 @@ class HomePageState extends State<HomePage> {
           padding: EdgeInsets.fromLTRB(
               10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: ShadowIconPainter(
+            painter: StationIconPainter(
                 lineColor: Util.hexToColor(CustomColors.passedStation),
                 lineVariantColor:
-                    Util.hexToColor(CustomColors.passedStationVariant)),
+                    Util.hexToColor(CustomColors.passedStationVariant),
+                shadow: true),
           )));
     }
     if (nextStationListIndex != null && terminusListIndex != null) {
@@ -626,8 +695,10 @@ class HomePageState extends State<HomePage> {
               padding: EdgeInsets.fromLTRB(
                   10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
-                painter: ShadowIconPainter(
-                    lineColor: lineColor, lineVariantColor: lineVariantColor),
+                painter: StationIconPainter(
+                    lineColor: lineColor,
+                    lineVariantColor: lineVariantColor,
+                    shadow: true),
               )));
         }
         iconList.replaceRange(
@@ -639,8 +710,10 @@ class HomePageState extends State<HomePage> {
               padding: EdgeInsets.fromLTRB(
                   10 + (1400 / (stations.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
-                painter: ShadowIconPainter(
-                    lineColor: lineColor, lineVariantColor: lineVariantColor),
+                painter: StationIconPainter(
+                    lineColor: lineColor,
+                    lineVariantColor: lineVariantColor,
+                    shadow: true),
               )));
         }
         iconList.replaceRange(
@@ -664,10 +737,10 @@ class HomePageState extends State<HomePage> {
               0),
           child: CustomPaint(
               painter: StationIconPainter(
-            lineColor: Util.hexToColor(CustomColors.passingStation),
-            lineVariantColor:
-                Util.hexToColor(CustomColors.passingStationVariant),
-          ))));
+                  lineColor: Util.hexToColor(CustomColors.passingStation),
+                  lineVariantColor:
+                      Util.hexToColor(CustomColors.passingStationVariant),
+                  shadow: false))));
     }
     return Stack(
       children: tempList,
@@ -746,47 +819,62 @@ class HomePageState extends State<HomePage> {
         });
   }
 
+  //无线路信息 snackbar
+  void noStationsSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("无线路信息", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+    ));
+  }
+
   //通用导出方法
   Future<void> exportImage(
-      GlobalKey key, String dialogTitle, String fileName) async {
-    try {
-      //获取 key 对应的 stack 用于获取宽度
-      RenderBox findRenderObject =
-          key.currentContext!.findRenderObject() as RenderBox;
+      GlobalKey key, String? path, bool showSnackbar) async {
+    //路径检验有效，保存
+    if (path != null) {
+      try {
+        //获取 key 对应的 stack 用于获取宽度
+        RenderBox findRenderObject =
+            key.currentContext!.findRenderObject() as RenderBox;
 
-      //获取 key 对应的 stack 用于获取图片
-      RenderRepaintBoundary boundary =
-          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(
-          pixelRatio:
-              2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
+        //获取 key 对应的 stack 用于获取图片
+        RenderRepaintBoundary boundary =
+            key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        ui.Image image = await boundary.toImage(
+            pixelRatio:
+                2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
+        Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-      String? saveFile = await FilePicker.platform.saveFile(
-          dialogTitle: dialogTitle,
-          fileName: fileName,
-          type: FileType.image,
-          allowedExtensions: ["PNG"]);
-      final String path = '$saveFile';
-      File imgFile = File(path);
-
-      if (path != "null") {
-        //路径有效，保存
+        File imgFile = File(path);
         await imgFile.writeAsBytes(pngBytes);
+      } catch (e) {
+        print('导出图片失败: $e');
+      }
+      if (showSnackbar) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("图片已成功保存至: $path",
               style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
         ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content:
-              Text("取消导出", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-        ));
       }
-    } catch (e) {
-      print('导出图片失败: $e');
+    }
+  }
+
+  Future<String?> getExportPath(String dialogTitle, String fileName) async {
+    String? path = await FilePicker.platform.saveFile(
+        dialogTitle: dialogTitle,
+        fileName: fileName,
+        type: FileType.image,
+        allowedExtensions: ["PNG"],
+        lockParentWindow: true);
+    if (path != null) {
+      return path;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content:
+            Text("取消导出", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+      ));
+      return null;
     }
   }
 }
