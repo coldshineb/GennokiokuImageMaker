@@ -12,6 +12,7 @@ import 'package:main/Object/Station.dart';
 import 'Util.dart';
 import 'Util/CustomColors.dart';
 import 'Util/CustomPainter.dart';
+import 'Util/CustomScrollBehavior.dart';
 
 void main() {
   runApp(const GennokiokuMetroLCDMaker());
@@ -115,9 +116,6 @@ class HomePageState extends State<HomePage> {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 设置线路颜色和颜色变体
-        lineColor = Util.hexToColor(jsonData['lineColor']);
-        lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
         // 站点不能少于 2 或大于 32
         if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
@@ -125,6 +123,9 @@ class HomePageState extends State<HomePage> {
           nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
           terminusListIndex = 0;
 
+          // 设置线路颜色和颜色变体
+          lineColor = Util.hexToColor(jsonData['lineColor']);
+          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
           for (dynamic item in stationsFromJson) {
             Station station = Station(
@@ -133,6 +134,10 @@ class HomePageState extends State<HomePage> {
             );
             stations.add(station);
           }
+
+          //文件成功导入后将下拉菜单默认值设为第一站
+          nextStationListValue = stations[0].stationNameCN;
+          terminusListValue = stations[0].stationNameCN;
           // 刷新页面状态
           setState(() {});
         } else if (stationsFromJson.length < 2) {
@@ -144,9 +149,6 @@ class HomePageState extends State<HomePage> {
         print('读取文件失败: $e');
         showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
-      //文件成功导入后将下拉菜单默认值设为第一站
-      nextStationListValue = stations[0].stationNameCN;
-      terminusListValue = stations[0].stationNameCN;
     }
   }
 
@@ -336,10 +338,14 @@ class HomePageState extends State<HomePage> {
                   ), //设置空时的提示文字
                   items: showStationList(),
                   onChanged: (value) {
-                    nextStationListIndex = stations.indexWhere((element) =>
-                        element.stationNameCN == value); //根据选择的站名，找到站名集合中对应的索引
-                    nextStationListValue = value;
-                    setState(() {});
+                    try {
+                      nextStationListIndex = stations.indexWhere((element) =>
+                          element.stationNameCN == value); //根据选择的站名，找到站名集合中对应的索引
+                      nextStationListValue = value;
+                      setState(() {});
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   value: nextStationListValue,
                 ),
@@ -361,10 +367,14 @@ class HomePageState extends State<HomePage> {
                   ),
                   items: showStationList(),
                   onChanged: (value) {
-                    terminusListIndex = stations.indexWhere(
-                        (element) => element.stationNameCN == value);
-                    terminusListValue = value;
-                    setState(() {});
+                    try {
+                      terminusListIndex = stations.indexWhere(
+                          (element) => element.stationNameCN == value);
+                      terminusListValue = value;
+                      setState(() {});
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   value: terminusListValue,
                 )
@@ -575,15 +585,19 @@ class HomePageState extends State<HomePage> {
   //显示下一站/终点站下拉菜单内容
   List<DropdownMenuItem> showStationList() {
     List<DropdownMenuItem> tempList = [];
-    for (Station value in stations) {
-      value.stationNameCN;
-      tempList.add(DropdownMenuItem(
-        value: value.stationNameCN,
-        child: Text(
-          value.stationNameCN,
-          style: const TextStyle(fontFamily: "GennokiokuLCDFont"),
-        ),
-      ));
+    try {
+      for (Station value in stations) {
+        value.stationNameCN;
+        tempList.add(DropdownMenuItem(
+          value: value.stationNameCN,
+          child: Text(
+            value.stationNameCN,
+            style: const TextStyle(fontFamily: "GennokiokuLCDFont"),
+          ),
+        ));
+      }
+    } on Exception catch (e) {
+      print(e);
     }
     return tempList;
   }

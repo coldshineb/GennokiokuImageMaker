@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-class Util{
-  static const String railwayTransitLogo='''
+class Util {
+  static const String railwayTransitLogo = '''
   <?xml version="1.0" encoding="UTF-8"?>
 <svg id="_图层_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 377.01 71.72">
     <g id="_图层_1-2">
@@ -27,6 +25,7 @@ class Util{
     </g>
 </svg>
   ''';
+
   static Color hexToColor(String hexColor) {
     // 移除可能包含的 '#' 符号
     hexColor = hexColor.replaceAll('#', '');
@@ -44,14 +43,4 @@ class Util{
     // 返回对应的Color对象
     return Color.fromRGBO(red, green, blue, 1.0);
   }
-}
-
-class CustomScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    PointerDeviceKind.stylus,
-    PointerDeviceKind.unknown,
-  };
 }
