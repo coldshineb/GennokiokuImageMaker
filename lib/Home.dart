@@ -5,6 +5,12 @@ import 'main.dart';
 
 void main() {
   runApp(MaterialApp(
+    theme: ThemeData(
+      fontFamily: "GennokiokuLCDFont",
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.pink,
+      ),
+    ),
     scrollBehavior: CustomScrollBehavior(),//设置鼠标拖动滑动
     home: const Home(),
   ));
@@ -23,12 +29,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title:
-            const Text('欢迎使用原忆轨道交通 LCD 生成器', style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+            const Text('欢迎使用原忆轨道交通 LCD 生成器'),
       ),
       body: Center(
         child: ElevatedButton(
-            child: const Text('直线型线路图 运行中',
-                style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+            child: const Text('直线型线路图 运行中'),
             onPressed: () {
               Navigator.push(
                 context,

@@ -12,9 +12,7 @@ import 'package:main/Object/Station.dart';
 import 'Util.dart';
 import 'Util/CustomColors.dart';
 import 'Util/CustomPainter.dart';
-import 'Util/CustomScrollBehavior.dart';
 import 'Util/Widgets.dart';
-
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -37,7 +35,6 @@ class GennokiokuMetroLCDMaker extends StatelessWidget {
         tooltipTheme: const TooltipThemeData(
           textStyle: TextStyle(
             color: Colors.white,
-            fontFamily: 'GennokiokuLCDFont', // 设置字体样式
           ),
         ),
       ),
@@ -91,9 +88,8 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('直线型线路图 运行中',
-            style: TextStyle(fontFamily: "GennokiokuLCDFont")),
-        elevation: 4,
+        title: const Text('直线型线路图 运行中'),
+        elevation: 20,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,8 +104,7 @@ class HomePageState extends State<HomePage> {
                     onPressed: _importImage,
                     child: const Text(
                       "导入图片",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -119,8 +114,7 @@ class HomePageState extends State<HomePage> {
                     onPressed: _importLineJson,
                     child: const Text(
                       "导入线路",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -132,8 +126,7 @@ class HomePageState extends State<HomePage> {
                     onPressed: exportAllImage,
                     child: const Text(
                       "导出全部图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -143,8 +136,7 @@ class HomePageState extends State<HomePage> {
                     onPressed: exportDynamicImage,
                     child: const Text(
                       "导出当前站全部图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -155,8 +147,7 @@ class HomePageState extends State<HomePage> {
                     onPressed: exportMainImage,
                     child: const Text(
                       "导出主线路图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -166,8 +157,7 @@ class HomePageState extends State<HomePage> {
                     onPressed: exportPassingImage,
                     child: const Text(
                       "导出下一站图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -175,8 +165,7 @@ class HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "导出分辨率",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
                 DropdownButton(
@@ -194,16 +183,14 @@ class HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
                     "小交线路设置：",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "运行方向",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
                 Container(
@@ -218,9 +205,7 @@ class HomePageState extends State<HomePage> {
                       },
                       child: const Text(
                         "向左行",
-                        style: TextStyle(
-                            fontFamily: "GennokiokuLCDFont",
-                            color: Colors.black),
+                        style: TextStyle(color: Colors.black),
                       )),
                 ),
                 Container(
@@ -235,9 +220,7 @@ class HomePageState extends State<HomePage> {
                       },
                       child: const Text(
                         "向右行",
-                        style: TextStyle(
-                            fontFamily: "GennokiokuLCDFont",
-                            color: Colors.black),
+                        style: TextStyle(color: Colors.black),
                       )),
                 )
               ]),
@@ -246,17 +229,13 @@ class HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
                     "下一站",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
                 DropdownButton(
                   disabledHint: const Text(
                     "下一站",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont",
-                        color: Colors.grey,
-                        fontSize: 14),
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ), //设置空时的提示文字
                   items: showStationList(),
                   onChanged: (value) {
@@ -276,17 +255,13 @@ class HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "终点站",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
                 DropdownButton(
                   disabledHint: const Text(
                     "终点站",
-                    style: TextStyle(
-                        fontFamily: "GennokiokuLCDFont",
-                        color: Colors.grey,
-                        fontSize: 14),
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                   items: showStationList(),
                   onChanged: (value) {
@@ -350,9 +325,7 @@ class HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(522.5, 8, 0, 0),
                                   child: const Text(
                                     "下一站",
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: TextStyle(fontSize: 28
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -361,9 +334,7 @@ class HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(526, 41, 0, 0),
                                   child: const Text(
                                     "Next station",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: TextStyle(fontSize: 14
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -372,9 +343,7 @@ class HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(911.5, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: TextStyle(fontSize: 28
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -383,9 +352,7 @@ class HomePageState extends State<HomePage> {
                                       924.5, 41, 0, 0),
                                   child: const Text(
                                     "Terminus",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: TextStyle(fontSize: 14
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -398,9 +365,7 @@ class HomePageState extends State<HomePage> {
                                         : stations[nextStationListIndex!]
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style: const TextStyle(
-                                        fontSize: 28,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: const TextStyle(fontSize: 28
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -412,9 +377,7 @@ class HomePageState extends State<HomePage> {
                                         ? ""
                                         : stations[terminusListIndex!]
                                             .stationNameCN,
-                                    style: const TextStyle(
-                                        fontSize: 28,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: const TextStyle(fontSize: 28
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -426,9 +389,7 @@ class HomePageState extends State<HomePage> {
                                         ? ""
                                         : stations[nextStationListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: const TextStyle(fontSize: 14
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -440,9 +401,7 @@ class HomePageState extends State<HomePage> {
                                         ? ""
                                         : stations[terminusListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "GennokiokuLCDFont"
+                                    style: const TextStyle(fontSize: 14
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
@@ -521,10 +480,7 @@ class HomePageState extends State<HomePage> {
         value.stationNameCN;
         tempList.add(DropdownMenuItem(
           value: value.stationNameCN,
-          child: Text(
-            value.stationNameCN,
-            style: const TextStyle(fontFamily: "GennokiokuLCDFont"),
-          ),
+          child: Text(value.stationNameCN),
         ));
       }
     } on Exception catch (e) {
@@ -754,7 +710,7 @@ class HomePageState extends State<HomePage> {
             style: const TextStyle(
               //fontWeight: FontWeight.bold,
               fontSize: 14,
-              fontFamily: "GennokiokuLCDFont",
+
               color: Colors.black,
             ),
           ),
@@ -774,7 +730,7 @@ class HomePageState extends State<HomePage> {
             style: const TextStyle(
               //fontWeight: FontWeight.bold,
               fontSize: 12,
-              fontFamily: "GennokiokuLCDFont",
+
               color: Colors.black,
             ),
           ),
@@ -906,8 +862,7 @@ class HomePageState extends State<HomePage> {
           }
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path",
-              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+          content: Text("图片已成功保存至: $path"),
         ));
       }
     } else {
@@ -957,17 +912,14 @@ class HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(title,
-                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-            content: Text(content,
-                style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+            title: Text(title),
+            content: Text(content),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text("好",
-                    style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+                child: const Text("好"),
               )
             ],
           );
@@ -977,7 +929,7 @@ class HomePageState extends State<HomePage> {
   //无线路信息 snackbar
   void noStationsSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无线路信息", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+      content: Text("无线路信息"),
     ));
   }
 
@@ -1009,8 +961,7 @@ class HomePageState extends State<HomePage> {
       }
       if (showSnackbar) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path",
-              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+          content: Text("图片已成功保存至: $path"),
         ));
       }
     }
@@ -1027,8 +978,7 @@ class HomePageState extends State<HomePage> {
       return path;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content:
-            Text("取消导出", style: TextStyle(fontFamily: "GennokiokuLCDFont")),
+        content: Text("取消导出"),
       ));
       return null;
     }
