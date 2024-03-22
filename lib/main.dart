@@ -4,12 +4,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'Util.dart';
@@ -59,6 +56,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
+  //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
+  static const double imageHeight=335;
+  static const double imageWidth=1715.2;
+
+
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
   final GlobalKey _passingImageKey = GlobalKey();
@@ -240,13 +243,12 @@ class HomePageState extends State<HomePage> {
                           child: Stack(
                             children: [
                               const SizedBox(
-                                //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
-                                width: 1715.2,
-                                height: 334.5,
+                                width: imageWidth,
+                                height: imageHeight,
                               ),
                               _imageBytes != null
                                   ? SizedBox(
-                                      height: 334.5,
+                                      height: imageHeight,
                                       child: Image.memory(
                                         _imageBytes!,
                                       ),
@@ -268,7 +270,7 @@ class HomePageState extends State<HomePage> {
                               ),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(521, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(522.5, 8, 0, 0),
                                   child: const Text(
                                     "下一站",
                                     style: TextStyle(
@@ -279,7 +281,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(525, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(526, 41, 0, 0),
                                   child: const Text(
                                     "Next station",
                                     style: TextStyle(
@@ -290,7 +292,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(910, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(911.5, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
                                     style: TextStyle(
@@ -301,7 +303,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(924, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(924.5, 41, 0, 0),
                                   child: const Text(
                                     "Terminus",
                                     style: TextStyle(
@@ -312,7 +314,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(618, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(619, 8, 0, 0),
                                   child: Text(
                                     nextStationListIndex == null
                                         ? ""
@@ -327,7 +329,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(1009, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(1010.5, 8, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -341,7 +343,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(618, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(619.5, 41, 0, 0),
                                   child: Text(
                                     nextStationListIndex == null
                                         ? ""
@@ -355,7 +357,7 @@ class HomePageState extends State<HomePage> {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(1009, 41, 0, 0),
+                                      const EdgeInsets.fromLTRB(1010.5, 41, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -394,8 +396,8 @@ class HomePageState extends State<HomePage> {
                           child: Stack(
                             children: [
                               const SizedBox(
-                                width: 1715.2,
-                                height: 334.5,
+                                width: imageWidth,
+                                height: imageHeight,
                               ),
                               Container(
                                 padding:
@@ -924,7 +926,7 @@ class HomePageState extends State<HomePage> {
             key.currentContext!.findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage(
             pixelRatio:
-                2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500
+                2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500//TODO:菜单加个自选清晰度，默认2560
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();
