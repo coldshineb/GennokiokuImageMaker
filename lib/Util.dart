@@ -46,10 +46,7 @@ class Util {
 
   static Color getTextColorForBackground(Color backgroundColor) {
     // 计算颜色的亮度
-    final double luminance =
-        (0.299 * backgroundColor.red + 0.587 * backgroundColor.green + 0.114 * backgroundColor.blue) /
-            255;
-
+    double luminance = backgroundColor.computeLuminance();
     // 根据亮度值返回合适的文本颜色
     return luminance > 0.5 ? Colors.black : Colors.white;
   }

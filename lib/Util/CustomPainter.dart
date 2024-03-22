@@ -56,13 +56,13 @@ class LineIconPainter extends CustomPainter {
 
     Rect rect = Offset.zero & size;
     canvas.drawRRect(
-        RRect.fromRectAndRadius(rect, Radius.circular(15.0)), paint);
+        RRect.fromRectAndRadius(rect, const Radius.circular(15.0)), paint);
 
     // 绘制数字
     TextPainter numberPainter = TextPainter(
       text: TextSpan(
         text: number,
-        style: TextStyle(fontSize: 40, color: Colors.white),
+        style: const TextStyle(fontSize: 40, color: Colors.white),
       ),
       textDirection: TextDirection.ltr,
     );
@@ -74,7 +74,7 @@ class LineIconPainter extends CustomPainter {
     TextPainter chinesePainter = TextPainter(
       text: TextSpan(
         text: chineseText,
-        style: TextStyle(fontSize: 18, color: Colors.white),
+        style: const TextStyle(fontSize: 18, color: Colors.white),
       ),
       textDirection: TextDirection.ltr,
     );
@@ -88,7 +88,7 @@ class LineIconPainter extends CustomPainter {
     TextPainter englishPainter = TextPainter(
       text: TextSpan(
         text: englishText,
-        style: TextStyle(fontSize: 14, color: Colors.white),
+        style: const TextStyle(fontSize: 14, color: Colors.white),
       ),
       textDirection: TextDirection.ltr,
     );
