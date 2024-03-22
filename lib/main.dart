@@ -15,9 +15,6 @@ import 'Util/CustomPainter.dart';
 import 'Util/CustomScrollBehavior.dart';
 import 'Util/Widgets.dart';
 
-void main() {
-  runApp(const GennokiokuMetroLCDMaker());
-}
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -36,7 +33,6 @@ class GennokiokuMetroLCDMaker extends StatelessWidget {
   Widget build(BuildContext context) {
     loadFont();
     return MaterialApp(
-      title: 'Gennokioku Metro LCD Maker',
       theme: ThemeData(
         tooltipTheme: const TooltipThemeData(
           textStyle: TextStyle(
@@ -45,7 +41,6 @@ class GennokiokuMetroLCDMaker extends StatelessWidget {
           ),
         ),
       ),
-      scrollBehavior: CustomScrollBehavior(), //设置鼠标拖动滑动
       home: HomePage(),
     );
   }
