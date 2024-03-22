@@ -86,7 +86,10 @@ class HomePageState extends State<HomePage> {
   int? nextStationListIndex;
   int? terminusListIndex;
 
-  String trainDirectionValue = "向右行";
+  //运行方向，用于处理下一站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
+  int trainDirectionValue = 1;
+
+  //默认导出宽度
   int exportWidthValue = 2560;
 
   @override
@@ -190,12 +193,28 @@ class HomePageState extends State<HomePage> {
                   },
                   value: exportWidthValue,
                 ),
-                const VerticalDivider(),
-                const VerticalDivider(),
+              ]),
+              MenuBar(children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 14, left: 7),
+                  child: const Text(
+                    "小交线路设置：",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: const Text(
+                    "运行方向",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                  ),
+                ),
                 Container(
                   height: 48,
                   child: RadioMenuButton(
-                      value: "向左行",
+                      value: 0,
                       groupValue: trainDirectionValue,
                       onChanged: (v) {
                         setState(() {
@@ -212,7 +231,7 @@ class HomePageState extends State<HomePage> {
                 Container(
                   height: 48,
                   child: RadioMenuButton(
-                      value: "向右行",
+                      value: 1,
                       groupValue: trainDirectionValue,
                       onChanged: (v) {
                         setState(() {
@@ -229,7 +248,7 @@ class HomePageState extends State<HomePage> {
               ]),
               MenuBar(children: [
                 Container(
-                  padding: const EdgeInsets.only(top: 14),
+                  padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
                     "下一站",
                     style: TextStyle(
@@ -570,6 +589,7 @@ class HomePageState extends State<HomePage> {
               terminusListIndex!, nextStationListIndex!, replaceList);
         }
       } else {
+        //下一站为首站
         if (nextStationListIndex == 0) {
           replaceList.add(Container(
             //最左侧，不用间隔
@@ -580,7 +600,9 @@ class HomePageState extends State<HomePage> {
             ),
           ));
           lineList.replaceRange(0, 1, replaceList);
-        } else if (nextStationListIndex == stations.length - 1) {
+        }
+        //下一站为尾站
+        else if (nextStationListIndex == stations.length - 1) {
           replaceList.add(Container(
             padding: EdgeInsets.only(
                 left: (1400 / (stations.length - 1)) * (stations.length - 2)),
@@ -593,8 +615,39 @@ class HomePageState extends State<HomePage> {
           ));
           lineList.replaceRange(
               stations.length - 2, stations.length - 1, replaceList);
-        } else {
+        }
+        //下一站与终点站相同，但不为首尾站
+        else {
           //TODO 下一站与终点站相同时（不为首尾站）怎么处理？加个左行右行开关？
+          //向左行
+          if (trainDirectionValue == 0) {
+            replaceList.add(Container(
+              padding: EdgeInsets.only(
+                  left: (1400 / (stations.length - 1)) * nextStationListIndex!),
+              //最左侧，不用间隔
+              height: 15,
+              child: Container(
+                width: (1400 / (stations.length - 1)),
+                color: lineColor,
+              ),
+            ));
+            lineList.replaceRange(
+                nextStationListIndex!, nextStationListIndex! + 1, replaceList);
+          } else {
+            replaceList.add(Container(
+              padding: EdgeInsets.only(
+                  left: (1400 / (stations.length - 1)) *
+                      (nextStationListIndex! - 1)),
+              //最左侧，不用间隔
+              height: 15,
+              child: Container(
+                width: (1400 / (stations.length - 1)),
+                color: lineColor,
+              ),
+            ));
+            lineList.replaceRange(
+                nextStationListIndex! - 1, nextStationListIndex!, replaceList);
+          }
         }
       }
     }
@@ -804,13 +857,13 @@ class HomePageState extends State<HomePage> {
           // 刷新页面状态
           setState(() {});
         } else if (stationsFromJson.length < 2) {
-          showAlertDialog("错误", "站点数量不能小于 2");
+          alertDialog("错误", "站点数量不能小于 2");
         } else if (stationsFromJson.length > 32) {
-          showAlertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
+          alertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');
-        showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
+        alertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
   }
@@ -904,7 +957,7 @@ class HomePageState extends State<HomePage> {
   }
 
   //通用提示对话框方法
-  void showAlertDialog(String title, String content) {
+  void alertDialog(String title, String content) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
