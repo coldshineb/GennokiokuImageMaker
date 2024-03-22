@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title:
-            const Text('欢迎使用原忆轨道交通 LCD 生成器'),
+            const Text('原忆轨道交通 LCD 生成器'),
       ),
       body: Center(
         child: ElevatedButton(

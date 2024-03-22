@@ -88,6 +88,11 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+          tooltip: '返回',
+        ),
         title: const Text('直线型线路图 运行中'),
         elevation: 20,
       ),
