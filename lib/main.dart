@@ -56,11 +56,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
-  static const double imageHeight=335;
-  static const double imageWidth=1715.2;
-
+  static const double imageHeight = 335;
+  static const double imageWidth = 1715.2;
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
@@ -73,10 +71,11 @@ class HomePageState extends State<HomePage> {
   List<Station> stations = [];
 
   String lineNumber = "";
+  String lineNumberEN = "";
 
   //线路颜色和颜色变体，默认透明，导入文件时赋值
-  Color? lineColor = Colors.transparent;
-  Color? lineVariantColor = Colors.transparent;
+  Color lineColor = Colors.transparent;
+  Color lineVariantColor = Colors.transparent;
 
   //站名下拉菜单默认值，设空，导入文件时赋值
   String? nextStationListValue;
@@ -266,7 +265,7 @@ class HomePageState extends State<HomePage> {
                               Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(270, 16, 0, 0),
-                                child: showLineNumber(),
+                                child: showLineNumber(lineColor),
                               ),
                               Container(
                                   padding:
@@ -302,8 +301,8 @@ class HomePageState extends State<HomePage> {
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(924.5, 41, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      924.5, 41, 0, 0),
                                   child: const Text(
                                     "Terminus",
                                     style: TextStyle(
@@ -328,8 +327,8 @@ class HomePageState extends State<HomePage> {
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(1010.5, 8, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      1010.5, 8, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -342,8 +341,8 @@ class HomePageState extends State<HomePage> {
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(619.5, 41, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      619.5, 41, 0, 0),
                                   child: Text(
                                     nextStationListIndex == null
                                         ? ""
@@ -356,8 +355,8 @@ class HomePageState extends State<HomePage> {
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(1010.5, 41, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      1010.5, 41, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -426,6 +425,8 @@ class HomePageState extends State<HomePage> {
           terminusListIndex = null;
           nextStationListValue = null;
           terminusListValue = null;
+          lineNumber = "";
+          lineNumberEN = "";
           setState(() {});
         },
         tooltip: '重置',
@@ -434,48 +435,191 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Container showLineNumber() {
-    return Container(
-        width: 75,
-        height: 45,
-        decoration: BoxDecoration(
-          color: lineColor,
-          borderRadius: BorderRadius.circular(7.0),
-        ),
-        child: Stack(children: [
-          Positioned(
-            bottom: -2,
-            left: 5,
-            child: Text(
-              lineNumber,
-              style: TextStyle(
-                  fontSize: 40,
-                  fontFamily: "GennokiokuLCDFont",
-                  color: Util.getTextColorForBackground(lineColor!)),
-            ),
+  Container showLineNumber(Color lineColor) {
+    Container container = Container();
+
+    // 正则表达式
+    RegExp oneDigit = RegExp(r'^\d$'); // 匹配1个数字  1 2 3 4...
+    RegExp twoDigits = RegExp(r'^\d{2}$'); // 匹配2个数字  10 11 12 13...
+    RegExp oneDigitOneCharacter =
+        RegExp(r'^[a-zA-Z]\d$'); // 匹配1个字符1个数字  S1 S2 L1 L2 C5...
+    RegExp threeChineseCharacters = RegExp(r'^[\u4e00-\u9fff]{3}$'); // 匹配3个汉字
+    RegExp fourChineseCharacters =
+        RegExp(r'^[\u4e00-\u9fff]{4}$'); // 匹配4个汉字 南城环线  漓水环线 环山北线...
+    RegExp fiveChineseCharacters =
+        RegExp(r"^[\u4e00-\u9fff]{5}$"); // 匹配5个汉字 创新港环线...
+
+    //要达到完美显示效果，必须使用层叠组件，否则文字显示打架
+    //因此需要根据不同线路名称手动调节显示效果，不可使用动态调节
+    if (oneDigit.hasMatch(lineNumber)) {
+      container = Container(
+          width: 75,
+          height: 45,
+          decoration: BoxDecoration(
+            color: lineColor,
+            borderRadius: BorderRadius.circular(7.0),
           ),
-          Positioned(
-            left: 27,
-            child: Text(
-              "号线",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: "GennokiokuLCDFont",
-                  color: Util.getTextColorForBackground(lineColor!)),
+          child: Stack(children: [
+            Positioned(
+              bottom: -2,
+              left: 5,
+              child: Text(
+                lineNumber,
+                style: TextStyle(
+                    fontSize: 40,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: Util.getTextColorForBackground(lineColor)),
+              ),
             ),
-          ),
-          Positioned(
-            top: 22,
-            left: 26,
-            child: Text(
-              "Line $lineNumber",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: "GennokiokuLCDFont",
-                  color: Util.getTextColorForBackground(lineColor!)),
+            Positioned(
+              left: 29,
+              child: Text(
+                "号线",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
             ),
+            Positioned(
+              top: 22,
+              left: 28,
+              child: Text(
+                "Line $lineNumberEN",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+          ]));
+    } else if (twoDigits.hasMatch(lineNumber) ||
+        oneDigitOneCharacter.hasMatch(lineNumber)) {
+      container = Container(
+          width: 105,
+          height: 45,
+          decoration: BoxDecoration(
+            color: lineColor,
+            borderRadius: BorderRadius.circular(7.0),
           ),
-        ]));
+          child: Stack(children: [
+            Positioned(
+              bottom: -2,
+              left: 5,
+              child: Text(
+                lineNumber,
+                style: TextStyle(
+                    letterSpacing: -3,
+                    fontSize: 40,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              left: 51,
+              child: Text(
+                "号线",
+                style: TextStyle(
+                    letterSpacing: 3,
+                    fontSize: 18,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              top: 22,
+              left: 50,
+              child: Text(
+                "Line $lineNumberEN",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+          ]));
+    } else if (fourChineseCharacters.hasMatch(lineNumber)) {
+      container = Container(
+          width: 95,
+          height: 45,
+          decoration: BoxDecoration(
+            color: lineColor,
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          child: Stack(children: [
+            Positioned(
+              left: 7,
+              child: Text(
+                lineNumber,
+                style: TextStyle(
+                    letterSpacing: 3,
+                    fontSize: 18,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              top: 22,
+              left: 24,
+              child: Text(
+                "Line $lineNumberEN",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+          ]));
+    } else if (fiveChineseCharacters.hasMatch(lineNumber)) {
+      container = Container(
+          width: 95,
+          height: 45,
+          decoration: BoxDecoration(
+            color: lineColor,
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          child: Stack(children: [
+            Positioned(
+              left: 7,
+              child: Text(
+                lineNumber,
+                style: TextStyle(
+                    letterSpacing: -1.9,
+                    fontSize: 18,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              top: 22,
+              left: 24,
+              child: Text(
+                "Line $lineNumberEN",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+          ]));
+    }
+    return container;
   }
 
   //显示下一站/终点站下拉菜单内容
@@ -515,7 +659,7 @@ class HomePageState extends State<HomePage> {
         if (nextStationListIndex != 0) {
           for (int i = nextStationListIndex! - 1; i < terminusListIndex!; i++) {
             //nextStationListIndex-1：下一站前的线条
-            replaceList.add(routeLine(i, lineColor!));
+            replaceList.add(routeLine(i, lineColor));
           }
           //替换原集合
           lineList.replaceRange(
@@ -524,7 +668,7 @@ class HomePageState extends State<HomePage> {
         //下一站为起始站
         {
           for (int i = nextStationListIndex!; i < terminusListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor!));
+            replaceList.add(routeLine(i, lineColor));
           }
           lineList.replaceRange(
               nextStationListIndex!, terminusListIndex!, replaceList);
@@ -535,7 +679,7 @@ class HomePageState extends State<HomePage> {
         //下一站不为终点站
         if (nextStationListIndex != stations.length - 1) {
           for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
-            replaceList.add(routeLine(i, lineColor!));
+            replaceList.add(routeLine(i, lineColor));
           }
           lineList.replaceRange(
               terminusListIndex!, nextStationListIndex! + 1, replaceList);
@@ -543,7 +687,7 @@ class HomePageState extends State<HomePage> {
         //下一站为终点站
         {
           for (int i = terminusListIndex!; i < nextStationListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor!));
+            replaceList.add(routeLine(i, lineColor));
           }
           lineList.replaceRange(
               terminusListIndex!, nextStationListIndex!, replaceList);
@@ -765,6 +909,7 @@ class HomePageState extends State<HomePage> {
 
           // 设置线路颜色和颜色变体
           lineNumber = jsonData['lineNumber'];
+          lineNumberEN = jsonData['lineNumberEN'];
           lineColor = Util.hexToColor(jsonData['lineColor']);
           lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
@@ -925,8 +1070,9 @@ class HomePageState extends State<HomePage> {
         RenderRepaintBoundary boundary =
             key.currentContext!.findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage(
-            pixelRatio:
-                2560 / findRenderObject.size.width); //确保导出的图片宽高固定为2560*500//TODO:菜单加个自选清晰度，默认2560
+            pixelRatio: 2560 /
+                findRenderObject
+                    .size.width); //确保导出的图片宽高固定为2560*500//TODO:菜单加个自选清晰度，默认2560
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();
