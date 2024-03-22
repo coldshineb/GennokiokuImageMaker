@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../Util.dart';
 
 class Widgets {
+  //线路名称标识
   static Container lineNumberIcon(
       Color lineColor, String lineNumber, String lineNumberEN) {
     Container container = Container();
@@ -191,6 +192,7 @@ class Widgets {
     return container;
   }
 
+  //导出分辨率选择下拉列表
   static List<DropdownMenuItem> resolutionList() {
     return [
       const DropdownMenuItem(

@@ -574,13 +574,11 @@ class HomePageState extends State<HomePage> {
         }
         //下一站与终点站相同，但不为首尾站
         else {
-          //TODO 下一站与终点站相同时（不为首尾站）怎么处理？加个左行右行开关？
           //向左行
           if (trainDirectionValue == 0) {
             replaceList.add(Container(
               padding: EdgeInsets.only(
                   left: (1400 / (stations.length - 1)) * nextStationListIndex!),
-              //最左侧，不用间隔
               height: 15,
               child: Container(
                 width: (1400 / (stations.length - 1)),
@@ -589,12 +587,13 @@ class HomePageState extends State<HomePage> {
             ));
             lineList.replaceRange(
                 nextStationListIndex!, nextStationListIndex! + 1, replaceList);
-          } else {
+          }
+          //向右行
+          else {
             replaceList.add(Container(
               padding: EdgeInsets.only(
                   left: (1400 / (stations.length - 1)) *
                       (nextStationListIndex! - 1)),
-              //最左侧，不用间隔
               height: 15,
               child: Container(
                 width: (1400 / (stations.length - 1)),
@@ -972,6 +971,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  //获取文件夹路径
   Future<String?> getExportPath(String dialogTitle, String fileName) async {
     String? path = await FilePicker.platform.saveFile(
         dialogTitle: dialogTitle,
