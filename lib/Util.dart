@@ -50,5 +50,4 @@ class Util {
     // 根据亮度值返回合适的文本颜色
     return luminance > 0.5 ? Colors.black : Colors.white;
   }
-
 }

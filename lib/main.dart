@@ -86,6 +86,9 @@ class HomePageState extends State<HomePage> {
   int? nextStationListIndex;
   int? terminusListIndex;
 
+  String trainDirectionValue = "向右行";
+  int exportWidthValue = 2560;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,69 +104,103 @@ class HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MenuBar(children: [
-                SizedBox(
-                  child: MenuItemButton(
-                    onPressed: _importImage,
-                    child: const Text(
-                      "导入图片",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                    ),
+                MenuItemButton(
+                  onPressed: _importImage,
+                  child: const Text(
+                    "导入图片",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  child: MenuItemButton(
-                    onPressed: _importLineJson,
-                    child: const Text(
-                      "导入线路",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                    ),
+                MenuItemButton(
+                  onPressed: _importLineJson,
+                  child: const Text(
+                    "导入线路",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
                 const VerticalDivider(),
                 const VerticalDivider(),
-                SizedBox(
-                  child: MenuItemButton(
-                    onPressed: exportAllImage,
-                    child: const Text(
-                      "导出全部图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                    ),
+                MenuItemButton(
+                  onPressed: exportAllImage,
+                  child: const Text(
+                    "导出全部图",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  child: MenuItemButton(
-                    onPressed: exportDynamicImage,
-                    child: const Text(
-                      "导出当前站全部图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                    ),
+                MenuItemButton(
+                  onPressed: exportDynamicImage,
+                  child: const Text(
+                    "导出当前站全部图",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
                 const VerticalDivider(),
-                SizedBox(
-                  child: MenuItemButton(
-                    onPressed: exportMainImage,
-                    child: const Text(
-                      "导出主线路图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                    ),
+                MenuItemButton(
+                  onPressed: exportMainImage,
+                  child: const Text(
+                    "导出主线路图",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  child: MenuItemButton(
-                    onPressed: exportPassingImage,
-                    child: const Text(
-                      "导出下一站图",
-                      style: TextStyle(
-                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
-                    ),
+                MenuItemButton(
+                  onPressed: exportPassingImage,
+                  child: const Text(
+                    "导出下一站图",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
                   ),
                 ),
+                const VerticalDivider(),
+                Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: const Text(
+                    "导出分辨率",
+                    style: TextStyle(
+                        fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                  ),
+                ),
+                DropdownButton(
+                  items: Widgets.resolutionList(),
+                  onChanged: (value) {
+                    setState(() {
+                      exportWidthValue = value!;
+                    });
+                  },
+                  value: exportWidthValue,
+                ),
+                const VerticalDivider(),
+                const VerticalDivider(),
+                RadioMenuButton(
+                    value: "向左行",
+                    groupValue: trainDirectionValue,
+                    onChanged: (v) {
+                      setState(() {
+                        trainDirectionValue = v!;
+                      });
+                    },
+                    child: const Text(
+                      "向左行",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    )),
+                RadioMenuButton(
+                    value: "向右行",
+                    groupValue: trainDirectionValue,
+                    onChanged: (v) {
+                      setState(() {
+                        trainDirectionValue = v!;
+                      });
+                    },
+                    child: const Text(
+                      "向右行",
+                      style: TextStyle(
+                          fontFamily: "GennokiokuLCDFont", color: Colors.black),
+                    ))
               ]),
               MenuBar(children: [
                 Container(
@@ -266,7 +303,8 @@ class HomePageState extends State<HomePage> {
                               Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(270, 16, 0, 0),
-                                child: Widgets.lineNumber(lineColor,lineNumber,lineNumberEN),
+                                child: Widgets.lineNumberIcon(
+                                    lineColor, lineNumber, lineNumberEN),
                               ),
                               Container(
                                   padding:
@@ -884,7 +922,7 @@ class HomePageState extends State<HomePage> {
         RenderRepaintBoundary boundary =
             key.currentContext!.findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage(
-            pixelRatio: 2560 /
+            pixelRatio: exportWidthValue /
                 findRenderObject
                     .size.width); //确保导出的图片宽高固定为2560*500//TODO:菜单加个自选清晰度，默认2560
         ByteData? byteData =
