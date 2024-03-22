@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'Util.dart';
 import 'Util/CustomColors.dart';
@@ -16,11 +17,22 @@ void main() {
   runApp(const GennokiokuMetroLCDMaker());
 }
 
+void loadFont() async {
+  var fontLoader1 = FontLoader("GennokiokuLCDFont");
+  fontLoader1
+      .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
+  var fontLoader2 = FontLoader("STZongyi");
+  fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
+  await fontLoader1.load();
+  await fontLoader2.load();
+}
+
 class GennokiokuMetroLCDMaker extends StatelessWidget {
   const GennokiokuMetroLCDMaker({super.key});
 
   @override
   Widget build(BuildContext context) {
+    loadFont();
     return MaterialApp(
       title: 'Gennokioku Metro LCD Maker',
       theme: ThemeData(
@@ -387,13 +399,13 @@ class HomePageState extends State<HomePage> {
                                     )
                                   : const SizedBox(),
                               Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(22.5, 16, 0, 0),
-                                child: Image.asset(
-                                  "assets/image/gennokioku_railway_transit_logo.png",
-                                  scale: 1.5,
-                                ),
-                              ), //TODO:图片logo换为svg等方式绘制，避免模糊
+                                  padding:
+                                      const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
+                                  alignment: Alignment.topLeft,
+                                  height: 274,
+                                  width: 274,
+                                  child: SvgPicture.string(
+                                      Util.railwayTransitLogo)),
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(521, 8, 0, 0),
