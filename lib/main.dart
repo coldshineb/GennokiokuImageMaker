@@ -4,9 +4,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'Util.dart';
@@ -66,6 +69,8 @@ class HomePageState extends State<HomePage> {
   //站名集合
   List<Station> stations = [];
 
+  String lineNumber = "";
+
   //线路颜色和颜色变体，默认透明，导入文件时赋值
   Color? lineColor = Colors.transparent;
   Color? lineVariantColor = Colors.transparent;
@@ -77,168 +82,6 @@ class HomePageState extends State<HomePage> {
   //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
   int? nextStationListIndex;
   int? terminusListIndex;
-
-  //TODO:导入背景图片，待完整复刻样式后删除
-  void _importImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      withData: true,
-      allowedExtensions: ['png'],
-      dialogTitle: '选择背景图片文件',
-    );
-    if (result != null) {
-      Uint8List? bytes = result.files.single.bytes;
-      setState(() {
-        _imageBytes = bytes;
-      });
-    }
-  }
-
-  //导入线路文件
-  void _importLineJson() async {
-    List<dynamic> stationsFromJson = [];
-    Map<String, dynamic> jsonData;
-
-    // 选择 JSON 文件
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        withData: true,
-        allowedExtensions: ['json'],
-        dialogTitle: '选择线路 JSON 文件',
-        lockParentWindow: true);
-    if (result != null) {
-      Uint8List bytes = result.files.single.bytes!;
-      //尝试读取文件
-      try {
-        // 读取 JSON 文件内容
-        String jsonString = utf8.decode(bytes);
-        // 解析 JSON 数据，保存到键值对中
-        jsonData = json.decode(jsonString);
-        // 将站点保存到临时集合中
-        stationsFromJson = jsonData['stations'];
-        // 站点不能少于 2 或大于 32
-        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
-          //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
-          stations.clear();
-          nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
-          terminusListIndex = 0;
-
-          // 设置线路颜色和颜色变体
-          lineColor = Util.hexToColor(jsonData['lineColor']);
-          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
-          // 遍历临时集合，获取站点信息，保存到 stations 集合中
-          for (dynamic item in stationsFromJson) {
-            Station station = Station(
-              stationNameCN: item['stationNameCN'],
-              stationNameEN: item['stationNameEN'],
-            );
-            stations.add(station);
-          }
-
-          //文件成功导入后将下拉菜单默认值设为第一站
-          nextStationListValue = stations[0].stationNameCN;
-          terminusListValue = stations[0].stationNameCN;
-          // 刷新页面状态
-          setState(() {});
-        } else if (stationsFromJson.length < 2) {
-          showAlertDialog("错误", "站点数量不能小于 2");
-        } else if (stationsFromJson.length > 32) {
-          showAlertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
-        }
-      } catch (e) {
-        print('读取文件失败: $e');
-        showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
-      }
-    }
-  }
-
-  //导出全部图
-  void exportAllImage() async {
-    if (stations.isNotEmpty) {
-      String? path = await FilePicker.platform.getDirectoryPath();
-      if (path != null) {
-        if (nextStationListIndex! < terminusListIndex!) {
-          for (int i = 0; i < terminusListIndex! + 1; i++) {
-            nextStationListIndex = i;
-            setState(() {});
-            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
-            await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _mainImageKey,
-                "$path\\运行中 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
-                false);
-          }
-        } else if (nextStationListIndex! > terminusListIndex!) {
-          for (int i = terminusListIndex!; i < stations.length; i++) {
-            nextStationListIndex = i;
-            setState(() {});
-            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
-            await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _mainImageKey,
-                "$path\\运行中 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
-                false);
-          }
-        }
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path",
-              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
-        ));
-      }
-    } else {
-      noStationsSnackbar();
-    }
-  }
-
-  //导出当前站全部图
-  Future<void> exportDynamicImage() async {
-    if (stations.isNotEmpty) {
-      await exportMainImage();
-      await exportPassingImage();
-    } else {
-      noStationsSnackbar();
-    }
-  }
-
-  //导出主线路图
-  Future<void> exportMainImage() async {
-    if (stations.isNotEmpty) {
-      await exportImage(
-          _mainImageKey,
-          await getExportPath("保存",
-              "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
-  }
-
-  //导出下一站图
-  Future<void> exportPassingImage() async {
-    if (stations.isNotEmpty) {
-      await exportImage(
-          _passingImageKey,
-          await getExportPath("保存",
-              "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +183,8 @@ class HomePageState extends State<HomePage> {
                   onChanged: (value) {
                     try {
                       nextStationListIndex = stations.indexWhere((element) =>
-                          element.stationNameCN == value); //根据选择的站名，找到站名集合中对应的索引
+                          element.stationNameCN ==
+                          value); //根据选择的站名，找到站名集合中对应的索引
                       nextStationListValue = value;
                       setState(() {});
                     } catch (e) {
@@ -409,6 +253,7 @@ class HomePageState extends State<HomePage> {
                                     )
                                   : const SizedBox(),
                               Container(
+                                  //原忆轨道交通图标
                                   padding:
                                       const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
                                   alignment: Alignment.topLeft,
@@ -416,6 +261,11 @@ class HomePageState extends State<HomePage> {
                                   width: 274,
                                   child: SvgPicture.string(
                                       Util.railwayTransitLogo)),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(270, 16, 0, 0),
+                                child: showLineNumber(),
+                              ),
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(521, 8, 0, 0),
@@ -580,6 +430,50 @@ class HomePageState extends State<HomePage> {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  Container showLineNumber() {
+    return Container(
+        width: 75,
+        height: 45,
+        decoration: BoxDecoration(
+          color: lineColor,
+          borderRadius: BorderRadius.circular(7.0),
+        ),
+        child: Stack(children: [
+          Positioned(
+            bottom: -2,
+            left: 5,
+            child: Text(
+              lineNumber,
+              style: TextStyle(
+                  fontSize: 40,
+                  fontFamily: "GennokiokuLCDFont",
+                  color: Util.getTextColorForBackground(lineColor!)),
+            ),
+          ),
+          Positioned(
+            left: 27,
+            child: Text(
+              "号线",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: "GennokiokuLCDFont",
+                  color: Util.getTextColorForBackground(lineColor!)),
+            ),
+          ),
+          Positioned(
+            top: 22,
+            left: 26,
+            child: Text(
+              "Line $lineNumber",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: "GennokiokuLCDFont",
+                  color: Util.getTextColorForBackground(lineColor!)),
+            ),
+          ),
+        ]));
   }
 
   //显示下一站/终点站下拉菜单内容
@@ -820,6 +714,169 @@ class HomePageState extends State<HomePage> {
     return Stack(
       children: tempList,
     );
+  }
+
+  //TODO:导入背景图片，待完整复刻样式后删除
+  void _importImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      withData: true,
+      allowedExtensions: ['png'],
+      dialogTitle: '选择背景图片文件',
+    );
+    if (result != null) {
+      Uint8List? bytes = result.files.single.bytes;
+      setState(() {
+        _imageBytes = bytes;
+      });
+    }
+  }
+
+  //导入线路文件
+  void _importLineJson() async {
+    List<dynamic> stationsFromJson = [];
+    Map<String, dynamic> jsonData;
+
+    // 选择 JSON 文件
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        withData: true,
+        allowedExtensions: ['json'],
+        dialogTitle: '选择线路 JSON 文件',
+        lockParentWindow: true);
+    if (result != null) {
+      Uint8List bytes = result.files.single.bytes!;
+      //尝试读取文件
+      try {
+        // 读取 JSON 文件内容
+        String jsonString = utf8.decode(bytes);
+        // 解析 JSON 数据，保存到键值对中
+        jsonData = json.decode(jsonString);
+        // 将站点保存到临时集合中
+        stationsFromJson = jsonData['stations'];
+        // 站点不能少于 2 或大于 32
+        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
+          //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
+          stations.clear();
+          nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
+          terminusListIndex = 0;
+
+          // 设置线路颜色和颜色变体
+          lineNumber = jsonData['lineNumber'];
+          lineColor = Util.hexToColor(jsonData['lineColor']);
+          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
+          // 遍历临时集合，获取站点信息，保存到 stations 集合中
+          for (dynamic item in stationsFromJson) {
+            Station station = Station(
+              stationNameCN: item['stationNameCN'],
+              stationNameEN: item['stationNameEN'],
+            );
+            stations.add(station);
+          }
+
+          //文件成功导入后将下拉菜单默认值设为第一站
+          nextStationListValue = stations[0].stationNameCN;
+          terminusListValue = stations[0].stationNameCN;
+          // 刷新页面状态
+          setState(() {});
+        } else if (stationsFromJson.length < 2) {
+          showAlertDialog("错误", "站点数量不能小于 2");
+        } else if (stationsFromJson.length > 32) {
+          showAlertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
+        }
+      } catch (e) {
+        print('读取文件失败: $e');
+        showAlertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
+      }
+    }
+  }
+
+  //导出全部图
+  void exportAllImage() async {
+    if (stations.isNotEmpty) {
+      String? path = await FilePicker.platform.getDirectoryPath();
+      if (path != null) {
+        if (nextStationListIndex! < terminusListIndex!) {
+          for (int i = 0; i < terminusListIndex! + 1; i++) {
+            nextStationListIndex = i;
+            setState(() {});
+            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _mainImageKey,
+                "$path\\运行中 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                false);
+          }
+        } else if (nextStationListIndex! > terminusListIndex!) {
+          for (int i = terminusListIndex!; i < stations.length; i++) {
+            nextStationListIndex = i;
+            setState(() {});
+            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _passingImageKey,
+                "$path\\下一站 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}.png",
+                false);
+            await exportImage(
+                _mainImageKey,
+                "$path\\运行中 ${stations.length - nextStationListIndex!} ${stations[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                false);
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("图片已成功保存至: $path",
+              style: const TextStyle(fontFamily: "GennokiokuLCDFont")),
+        ));
+      }
+    } else {
+      noStationsSnackbar();
+    }
+  }
+
+  //导出当前站全部图
+  Future<void> exportDynamicImage() async {
+    if (stations.isNotEmpty) {
+      await exportMainImage();
+      await exportPassingImage();
+    } else {
+      noStationsSnackbar();
+    }
+  }
+
+  //导出主线路图
+  Future<void> exportMainImage() async {
+    if (stations.isNotEmpty) {
+      await exportImage(
+          _mainImageKey,
+          await getExportPath("保存",
+              "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png"),
+          true);
+    } else {
+      noStationsSnackbar();
+    }
+  }
+
+  //导出下一站图
+  Future<void> exportPassingImage() async {
+    if (stations.isNotEmpty) {
+      await exportImage(
+          _passingImageKey,
+          await getExportPath("保存",
+              "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png"),
+          true);
+    } else {
+      noStationsSnackbar();
+    }
   }
 
   //通用提示对话框方法
