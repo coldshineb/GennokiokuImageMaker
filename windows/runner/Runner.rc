@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "main" "\0"
+            VALUE "CompanyName", "Calicy LLC" "\0"
+            VALUE "FileDescription", "原忆轨道交通 LCD 生成器" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "main" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "main.exe" "\0"
-            VALUE "ProductName", "main" "\0"
+            VALUE "InternalName", "Gennokioku LCD Maker" "\0"
+            VALUE "LegalCopyright", "(C) 2024 Coldshine. All rights reserved." "\0"
+            VALUE "OriginalFilename", "GennokiokuLCDMaker.exe" "\0"
+            VALUE "ProductName", "GennokiokuLCDMaker" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

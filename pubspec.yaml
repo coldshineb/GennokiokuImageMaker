@@ -42,6 +42,7 @@ dependencies:
   #flutter_image_compress: ^2.2.0
   file_picker: ^8.0.0+1
   flutter_svg: ^2.0.10+1
+  flutter_launcher_icons: ^0.13.1
   #window_manager: ^0.3.8
 
 dev_dependencies:
@@ -99,3 +100,20 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/image/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/image/icon.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/image/icon.png"
+    icon_size: 128 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/image/icon.png"
