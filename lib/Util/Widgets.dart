@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main/Util/CustomRegExp.dart';
 
+import '../Object/TransferLine.dart';
 import '../Util.dart';
 
 class Widgets {
@@ -210,5 +211,72 @@ class Widgets {
         ),
       )
     ];
+  }
+
+  //一系列换乘线路图标中的文字，因为后期有 U 型线路图，因此文字部分单独抽出来，没有抽出整个 Stack
+  static Container transferLineIcon(TransferLine transferLine) {
+    return Container(
+      height: 34,
+      width: 34,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Util.hexToColor(transferLine.lineColor)),
+    );
+  }
+  static Positioned transferLineTextOneDigit(TransferLine transferLine) {
+    return Positioned(
+      top: -6,
+      left: 9,
+      child: Text(
+        transferLine.lineNumber,
+        style: TextStyle(
+            fontSize: 28,
+            color: Util.getTextColorForBackground(
+                Util.hexToColor(transferLine.lineColor))),
+      ),
+    );
+  }
+
+  static Positioned transferLineTextTwoDigits(TransferLine transferLine) {
+    return Positioned(
+      top: -6,
+      left: 4,
+      child: Text(
+        transferLine.lineNumber,
+        style: TextStyle(
+            fontSize: 28,
+            color: Util.getTextColorForBackground(
+                Util.hexToColor(transferLine.lineColor))),
+      ),
+    );
+  }
+
+  static Positioned transferLineTextTwoCharacters(TransferLine transferLine) {
+    return Positioned(
+      top: 2,
+      left: 6,
+      child: Text(
+        transferLine.lineNumber,
+        style: TextStyle(
+            fontSize: 18,
+            color: Util.getTextColorForBackground(
+                Util.hexToColor(transferLine.lineColor))),
+      ),
+    );
+  }
+
+  static Positioned transferLineTextOneDigitOneCharacter(
+      TransferLine transferLine) {
+    return Positioned(
+      top: 1,
+      left: 4,
+      child: Text(
+        transferLine.lineNumber,
+        style: TextStyle(
+            fontSize: 20,
+            color: Util.getTextColorForBackground(
+                Util.hexToColor(transferLine.lineColor))),
+      ),
+    );
   }
 }

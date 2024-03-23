@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Object/TransferLine.dart';
 import 'package:main/Util/CustomRegExp.dart';
+import 'Parent/LCD.dart';
 import 'Util.dart';
 import 'Util/CustomColors.dart';
 import 'Util/CustomPainter.dart';
@@ -50,7 +51,7 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> with LCD {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -121,7 +122,7 @@ class HomePageState extends State<HomePage> {
                 Container(
                   height: 48,
                   child: MenuItemButton(
-                    onPressed: _importLineJson,
+                    onPressed: importLineJson,
                     child: const Text(
                       "导入线路",
                       style: TextStyle(color: Colors.black),
@@ -247,7 +248,7 @@ class HomePageState extends State<HomePage> {
                     "下一站",
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ), //设置空时的提示文字
-                  items: showStationList(),
+                  items: showStationList(stationList),
                   onChanged: (value) {
                     try {
                       nextStationListIndex = stationList.indexWhere((element) =>
@@ -273,7 +274,7 @@ class HomePageState extends State<HomePage> {
                     "终点站",
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  items: showStationList(),
+                  items: showStationList(stationList),
                   onChanged: (value) {
                     try {
                       terminusListIndex = stationList.indexWhere(
@@ -488,148 +489,6 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Stack showTransferIcon() {
-    List<Container> iconList = [];
-    for (int i = 0; i < transferLineList.length; i++) {
-      List<TransferLine> value = transferLineList[i];
-      if (value.isNotEmpty) {
-        for (int j = 0; j < value.length; j++) {
-          if (CustomRegExp.oneDigit.hasMatch(value[j].lineNumber)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 34,
-                      width: 34,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Util.hexToColor(value[j].lineColor)),
-                    ),
-                    Positioned(
-                      top: -6,
-                      left: 9,
-                      child: Text(
-                        value[j].lineNumber,
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Util.getTextColorForBackground(
-                                Util.hexToColor(value[j].lineColor))),
-                      ),
-                    )
-                  ],
-                )));
-          }else if
-          (CustomRegExp.twoDigits.hasMatch(value[j].lineNumber)){
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 34,
-                      width: 34,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Util.hexToColor(value[j].lineColor)),
-                    ),
-                    Positioned(
-                      top: -6,
-                      left: 4,
-                      child: Text(
-                        value[j].lineNumber,
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Util.getTextColorForBackground(
-                                Util.hexToColor(value[j].lineColor))),
-                      ),
-                    )
-                  ],
-                )));
-          }
-          else if(CustomRegExp.oneDigitOneCharacter.hasMatch(value[j].lineNumber)){
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 34,
-                      width: 34,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Util.hexToColor(value[j].lineColor)),
-                    ),
-                    Positioned(
-                      top: 1,
-                      left: 4,
-                      child: Text(
-                        value[j].lineNumber,
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Util.getTextColorForBackground(
-                                Util.hexToColor(value[j].lineColor))),
-                      ),
-                    )
-                  ],
-                )));
-          }
-          else if(CustomRegExp.twoCharacters.hasMatch(value[j].lineNumber)){
-            {
-              iconList.add(Container(
-                  padding: EdgeInsets.fromLTRB(
-                      (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 34,
-                        width: 34,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Util.hexToColor(value[j].lineColor)),
-                      ),
-                      Positioned(
-                        top: 2,
-                        left: 3,
-                        child: Text(
-                          value[j].lineNumber,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Util.getTextColorForBackground(
-                                  Util.hexToColor(value[j].lineColor))),
-                        ),
-                      )
-                    ],
-                  )));
-            }
-          }
-        }
-      }
-    }
-
-    return Stack(
-      children: iconList,
-    );
-  }
-
-  //显示下一站/终点站下拉菜单内容
-  List<DropdownMenuItem> showStationList() {
-    List<DropdownMenuItem> tempList = [];
-    try {
-      for (Station value in stationList) {
-        value.stationNameCN;
-        tempList.add(DropdownMenuItem(
-          value: value.stationNameCN,
-          child: Text(value.stationNameCN),
-        ));
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
-    return tempList;
-  }
-
   //显示线路
   Stack showRouteLine() {
     List<Container> lineList = [];
@@ -837,6 +696,70 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  //显示换乘线路图标
+  Stack showTransferIcon() {
+    List<Container> iconList = [];
+
+    //遍历获取每站的换乘信息列表
+    for (int i = 0; i < transferLineList.length; i++) {
+      List<TransferLine> value = transferLineList[i];
+      if (value.isNotEmpty) {
+        //遍历获取每站的换乘信息列表中具体的换乘线路信息
+        for (int j = 0; j < value.length; j++) {
+          TransferLine transferLine = value[j];
+          if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumber)) {
+            iconList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextOneDigit(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.twoDigits.hasMatch(transferLine.lineNumber)) {
+            iconList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextTwoDigits(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.oneDigitOneCharacter
+              .hasMatch(transferLine.lineNumber)) {
+            iconList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextOneDigitOneCharacter(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.twoCharacters
+              .hasMatch(transferLine.lineNumber)) {
+            {
+              iconList.add(Container(
+                  padding: EdgeInsets.fromLTRB(
+                      (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                  child: Stack(
+                    children: [
+                      Widgets.transferLineIcon(transferLine),
+                      Widgets.transferLineTextTwoCharacters(transferLine)
+                    ],
+                  )));
+            }
+          }
+        }
+      }
+    }
+    return Stack(
+      children: iconList,
+    );
+  }
+
   //显示站名
   Stack showStationName() {
     List<Container> tempList = [];
@@ -886,7 +809,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  //TODO:导入背景图片，待完整复刻样式后删除
+  //导入背景图片，图片样式复刻已完成，此功能此后只做开发用途
   void _importImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -903,7 +826,8 @@ class HomePageState extends State<HomePage> {
   }
 
   //导入线路文件
-  void _importLineJson() async {
+  @override
+  void importLineJson() async {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
 
@@ -980,7 +904,8 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-//导出全部图
+  //导出全部图
+  @override
   void exportAllImage() async {
     if (stationList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
@@ -1033,7 +958,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-//导出当前站全部图
+  //导出当前站全部图
   Future<void> exportDynamicImage() async {
     if (stationList.isNotEmpty) {
       await exportMainImage();
@@ -1043,12 +968,12 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-//导出主线路图
+  //导出主线路图
   Future<void> exportMainImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
           _mainImageKey,
-          await getExportPath("保存",
+          await getExportPath(context, "保存",
               "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png"),
           true);
     } else {
@@ -1056,12 +981,12 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-//导出下一站图
+  //导出下一站图
   Future<void> exportPassingImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
           _passingImageKey,
-          await getExportPath("保存",
+          await getExportPath(context, "保存",
               "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png"),
           true);
     } else {
@@ -1069,7 +994,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-//通用提示对话框方法
+  //通用提示对话框方法
   void alertDialog(String title, String content) {
     showDialog(
         context: context,
@@ -1089,14 +1014,15 @@ class HomePageState extends State<HomePage> {
         });
   }
 
-//无线路信息 snackbar
+  //无线路信息 snackbar
   void noStationsSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("无线路信息"),
     ));
   }
 
-//通用导出方法
+  //通用导出方法
+  @override
   Future<void> exportImage(
       GlobalKey key, String? path, bool showSnackbar) async {
     //路径检验有效，保存
@@ -1127,24 +1053,6 @@ class HomePageState extends State<HomePage> {
           content: Text("图片已成功保存至: $path"),
         ));
       }
-    }
-  }
-
-//获取文件夹路径
-  Future<String?> getExportPath(String dialogTitle, String fileName) async {
-    String? path = await FilePicker.platform.saveFile(
-        dialogTitle: dialogTitle,
-        fileName: fileName,
-        type: FileType.image,
-        allowedExtensions: ["PNG"],
-        lockParentWindow: true);
-    if (path != null) {
-      return path;
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("取消导出"),
-      ));
-      return null;
     }
   }
 }
