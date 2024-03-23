@@ -1,3 +1,5 @@
+import 'TransferLine.dart';
+
 class Station {
   final String stationNameCN;
   final String stationNameEN;
@@ -9,6 +11,6 @@ class Station {
 
   @override
   String toString() {
-    return 'Station(stationNameCN: $stationNameCN, stationNameEN: $stationNameEN)';
+    return 'Station{stationNameCN: $stationNameCN, stationNameEN: $stationNameEN}';
   }
 }

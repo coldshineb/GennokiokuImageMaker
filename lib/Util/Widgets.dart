@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/Util/CustomRegExp.dart';
 
 import '../Util.dart';
 
@@ -8,20 +9,9 @@ class Widgets {
       Color lineColor, String lineNumber, String lineNumberEN) {
     Container container = Container();
 
-    // 正则表达式
-    RegExp oneDigit = RegExp(r'^\d$'); // 匹配1个数字  1 2 3 4...
-    RegExp twoDigits = RegExp(r'^\d{2}$'); // 匹配2个数字  10 11 12 13...
-    RegExp oneDigitOneCharacter =
-        RegExp(r'^[a-zA-Z]\d$'); // 匹配1个字符1个数字  S1 S2 L1 L2 C5...
-    RegExp threeChineseCharacters = RegExp(r'^[\u4e00-\u9fff]{3}$'); // 匹配3个汉字
-    RegExp fourChineseCharacters =
-        RegExp(r'^[\u4e00-\u9fff]{4}$'); // 匹配4个汉字 南城环线  漓水环线 环山北线...
-    RegExp fiveChineseCharacters =
-        RegExp(r"^[\u4e00-\u9fff]{5}$"); // 匹配5个汉字 创新港环线...
-
     //要达到完美显示效果，必须使用层叠组件，否则文字显示打架
     //因此需要根据不同线路名称手动调节显示效果，不可使用动态调节
-    if (oneDigit.hasMatch(lineNumber)) {
+    if (CustomRegExp.oneDigit.hasMatch(lineNumber)) {
       container = Container(
           width: 75,
           height: 45,
@@ -67,8 +57,8 @@ class Widgets {
               ),
             ),
           ]));
-    } else if (twoDigits.hasMatch(lineNumber) ||
-        oneDigitOneCharacter.hasMatch(lineNumber)) {
+    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber) ||
+        CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
       container = Container(
           width: 105,
           height: 45,
@@ -116,7 +106,7 @@ class Widgets {
               ),
             ),
           ]));
-    } else if (fourChineseCharacters.hasMatch(lineNumber)) {
+    } else if (CustomRegExp.fourChineseCharacters.hasMatch(lineNumber)) {
       container = Container(
           width: 95,
           height: 45,
@@ -152,7 +142,7 @@ class Widgets {
               ),
             ),
           ]));
-    } else if (fiveChineseCharacters.hasMatch(lineNumber)) {
+    } else if (CustomRegExp.fiveChineseCharacters.hasMatch(lineNumber)) {
       container = Container(
           width: 95,
           height: 45,
