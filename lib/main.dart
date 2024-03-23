@@ -833,6 +833,8 @@ class HomePageState extends State<HomePage> {
             nextStationListIndex = i;
             setState(() {});
             //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+            //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
+            //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
             await exportImage(
                 _passingImageKey,
                 "$path\\下一站 ${nextStationListIndex! + 1} ${stations[nextStationListIndex!].stationNameCN}.png",
