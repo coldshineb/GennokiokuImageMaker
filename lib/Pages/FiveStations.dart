@@ -188,6 +188,52 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
+                    "小交线路设置：",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: const Text(
+                    "运行方向",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Container(
+                  height: 48,
+                  child: RadioMenuButton(
+                      value: 0,
+                      groupValue: trainDirectionValue,
+                      onChanged: (v) {
+                        setState(() {
+                          trainDirectionValue = v!;
+                        });
+                      },
+                      child: const Text(
+                        "向左行",
+                        style: TextStyle(color: Colors.black),
+                      )),
+                ),
+                Container(
+                  height: 48,
+                  child: RadioMenuButton(
+                      value: 1,
+                      groupValue: trainDirectionValue,
+                      onChanged: (v) {
+                        setState(() {
+                          trainDirectionValue = v!;
+                        });
+                      },
+                      child: const Text(
+                        "向右行",
+                        style: TextStyle(color: Colors.black),
+                      )),
+                )
+              ]),
+              MenuBar(children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 14, left: 7),
+                  child: const Text(
                     "当前站",
                     style: TextStyle(color: Colors.black),
                   ),
@@ -199,24 +245,24 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   ), //设置空时的提示文字
                   items: showStationList(stationList),
                   onChanged: (value) {
-                    if ((stationList.indexWhere((element) =>
-                                    element.stationNameCN == value) -
-                                terminusListIndex!)
-                            .abs() >=
-                        2) {
-                      try {
-                        currentStationListIndex = stationList.indexWhere(
-                            (element) =>
-                                element.stationNameCN ==
-                                value); //根据选择的站名，找到站名集合中对应的索引
-                        currentStationListValue = value;
-                        setState(() {});
-                      } catch (e) {
-                        print(e);
-                      }
-                    } else {
-                      alertDialog("错误", "当前站与终点站间隔不能小于 2");
+                    // if ((stationList.indexWhere((element) =>
+                    //                 element.stationNameCN == value) -
+                    //             terminusListIndex!)
+                    //         .abs() >=
+                    //     2) {
+                    try {
+                      currentStationListIndex = stationList.indexWhere(
+                          (element) =>
+                              element.stationNameCN ==
+                              value); //根据选择的站名，找到站名集合中对应的索引
+                      currentStationListValue = value;
+                      setState(() {});
+                    } catch (e) {
+                      print(e);
                     }
+                    // } else {
+                    //   alertDialog("错误", "当前站与终点站间隔不能小于 2");
+                    // }
                   },
                   value: currentStationListValue,
                 ),
@@ -234,29 +280,29 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   ),
                   items: showStationList(stationList),
                   onChanged: (value) {
-                    if ((stationList.indexWhere((element) =>
-                                    element.stationNameCN == value) -
-                                currentStationListIndex!)
-                            .abs() >=
-                        2) {
-                      try {
-                        terminusListIndex = stationList.indexWhere(
-                            (element) => element.stationNameCN == value);
-                        terminusListValue = value;
-                        setState(() {});
-                      } catch (e) {
-                        print(e);
-                      }
-                    } else {
-                      alertDialog("错误", "当前站与终点站间隔不能小于 2");
+                    // if ((stationList.indexWhere((element) =>
+                    //                 element.stationNameCN == value) -
+                    //             currentStationListIndex!)
+                    //         .abs() >=
+                    //     2) {
+                    try {
+                      terminusListIndex = stationList.indexWhere(
+                          (element) => element.stationNameCN == value);
+                      terminusListValue = value;
+                      setState(() {});
+                    } catch (e) {
+                      print(e);
                     }
+                    // } else {
+                    //   alertDialog("错误", "当前站与终点站间隔不能小于 2");
+                    // }
                   },
                   value: terminusListValue,
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
-                    "注意：到站时的线路图仅支持五站图，不要让当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。程序会崩溃，没有任何提示。",
+                    "注意：先选择终点站，再选择当前站。到站时的线路图仅支持五站图，避免当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。目前没做判断，程序会崩溃。",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -401,8 +447,8 @@ class FiveStationsState extends State<FiveStations> with LCD {
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                                //child: showRouteIcon(),
+                                    const EdgeInsets.fromLTRB(400, 167, 0, 0),
+                                child: showRouteIcon(),
                               ),
                             ],
                           ),
@@ -595,55 +641,109 @@ class FiveStationsState extends State<FiveStations> with LCD {
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
-    for (int i = 0; i < stationList.length; i++) {
-      iconList.add(Container(
-          padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
-          child: CustomPaint(
-            painter: StationIconSmallPainter(
-                lineColor: Util.hexToColor(CustomColors.passedStation),
-                lineVariantColor:
-                    Util.hexToColor(CustomColors.passedStationVariant),
-                shadow: true),
-          )));
-    }
-    if (currentStationListIndex != null && terminusListIndex != null) {
-      if (currentStationListIndex! <= terminusListIndex!) {
-        List<Container> replaceList = [];
-        for (int i = currentStationListIndex!;
-            i < terminusListIndex! + 1;
-            i++) {
-          replaceList.add(Container(
-              padding: EdgeInsets.fromLTRB(
-                  10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+    if (stationList.isNotEmpty) {
+      if (currentStationListIndex! < terminusListIndex!) {
+        for (int i = 0; i < 2; i++) {
+          iconList.add(Container(
+              padding: EdgeInsets.only(left: 223.0 * i),
               child: CustomPaint(
-                painter: StationIconSmallPainter(
+                painter: StationIconMediumPainter(
+                    lineColor: Util.hexToColor(CustomColors.passedStation),
+                    lineVariantColor:
+                        Util.hexToColor(CustomColors.passedStationVariant),
+                    shadow: true),
+              )));
+        }
+        iconList.add(Container(
+            padding: EdgeInsets.only(left: 223.0 * 2),
+            child: CustomPaint(
+              painter: StationIconBigPainter(
+                  lineColor: Util.hexToColor(CustomColors.passedStation),
+                  lineVariantColor:
+                      Util.hexToColor(CustomColors.passedStationVariant),
+                  shadow: true),
+            )));
+        for (int i = 3; i < 5; i++) {
+          iconList.add(Container(
+              padding: EdgeInsets.only(left: 223.0 * i),
+              child: CustomPaint(
+                painter: StationIconMediumPainter(
                     lineColor: lineColor,
                     lineVariantColor: lineVariantColor,
                     shadow: true),
               )));
         }
-        iconList.replaceRange(
-            currentStationListIndex!, terminusListIndex! + 1, replaceList);
       } else if (currentStationListIndex! > terminusListIndex!) {
-        List<Container> replaceList = [];
-        for (int i = terminusListIndex!;
-            i < currentStationListIndex! + 1;
-            i++) {
-          replaceList.add(Container(
-              padding: EdgeInsets.fromLTRB(
-                  10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+        for (int i = 0; i < 2; i++) {
+          iconList.add(Container(
+              padding: EdgeInsets.only(left: 223.0 * i),
               child: CustomPaint(
-                painter: StationIconSmallPainter(
+                painter: StationIconMediumPainter(
                     lineColor: lineColor,
                     lineVariantColor: lineVariantColor,
                     shadow: true),
               )));
         }
-        iconList.replaceRange(
-            terminusListIndex!, currentStationListIndex! + 1, replaceList);
+        iconList.add(Container(
+            padding: EdgeInsets.only(left: 223.0 * 2),
+            child: CustomPaint(
+              painter: StationIconBigPainter(
+                  lineColor: Util.hexToColor(CustomColors.passedStation),
+                  lineVariantColor:
+                      Util.hexToColor(CustomColors.passedStationVariant),
+                  shadow: true),
+            )));
+        for (int i = 3; i < 5; i++) {
+          iconList.add(Container(
+              padding: EdgeInsets.only(left: 223.0 * i),
+              child: CustomPaint(
+                painter: StationIconMediumPainter(
+                    lineColor: Util.hexToColor(CustomColors.passedStation),
+                    lineVariantColor:
+                        Util.hexToColor(CustomColors.passedStationVariant),
+                    shadow: true),
+              )));
+        }
       }
     }
+
+    // if (currentStationListIndex != null && terminusListIndex != null) {
+    //   if (currentStationListIndex! <= terminusListIndex!) {
+    //     List<Container> replaceList = [];
+    //     for (int i = currentStationListIndex!;
+    //         i < terminusListIndex! + 1;
+    //         i++) {
+    //       replaceList.add(Container(
+    //           padding: EdgeInsets.fromLTRB(
+    //               10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+    //           child: CustomPaint(
+    //             painter: StationIconSmallPainter(
+    //                 lineColor: lineColor,
+    //                 lineVariantColor: lineVariantColor,
+    //                 shadow: true),
+    //           )));
+    //     }
+    //     iconList.replaceRange(
+    //         currentStationListIndex!, terminusListIndex! + 1, replaceList);
+    //   } else if (currentStationListIndex! > terminusListIndex!) {
+    //     List<Container> replaceList = [];
+    //     for (int i = terminusListIndex!;
+    //         i < currentStationListIndex! + 1;
+    //         i++) {
+    //       replaceList.add(Container(
+    //           padding: EdgeInsets.fromLTRB(
+    //               10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+    //           child: CustomPaint(
+    //             painter: StationIconSmallPainter(
+    //                 lineColor: lineColor,
+    //                 lineVariantColor: lineVariantColor,
+    //                 shadow: true),
+    //           )));
+    //     }
+    //     iconList.replaceRange(
+    //         terminusListIndex!, currentStationListIndex! + 1, replaceList);
+    //   }
+    // }
     return Stack(
       children: iconList,
     );
@@ -675,10 +775,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
   Stack showStationName() {
     List<Positioned> tempList = [];
     if (stationList.isNotEmpty && currentStationListIndex != null) {
-      print(currentStationListIndex);
-      print(terminusListIndex);
-
-      //选站时注意不要让当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。（五站图怎么可能只显示四站！！！）懒得写异常抛出了，使用时自觉些
+      //选站时注意不要让当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。（五站图怎么可能只显示四站！！！）懒得写异常处理了，使用时自觉些
       //当前站在终点站左边
       if (currentStationListIndex! < terminusListIndex!) {
         //当前站为第3站~末3站
@@ -762,6 +859,43 @@ class FiveStationsState extends State<FiveStations> with LCD {
           for (int i = currentStationListIndex! - 1;
               i < currentStationListIndex! + 4;
               i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
+        //当前站为末2站
+        else if (currentStationListIndex == terminusListIndex!-1) {
+          int count = 0;
+          for (int i = currentStationListIndex! - 3;
+          i < currentStationListIndex! + 2;
+          i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
@@ -908,9 +1042,271 @@ class FiveStationsState extends State<FiveStations> with LCD {
             count++;
           }
         }
+        //当前站为第2站
+        else if (currentStationListIndex == terminusListIndex!+1) {
+          int count = 0;
+          for (int i = currentStationListIndex!-1;
+          i < currentStationListIndex! + 4;
+          i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
+      }
+      //当前站与终点站相同
+      else if (currentStationListIndex == terminusListIndex) {
+        //当前站为第3站~末3站
+        if (currentStationListIndex! > 2 &&
+            currentStationListIndex! < stationList.length - 2) {
+          if (trainDirectionValue == 1) {
+            int count = 0;
+            for (int i = currentStationListIndex! - 4;
+                i < currentStationListIndex! + 1;
+                i++) {
+              tempList.add(Positioned(
+                top: 229,
+                left: -916 + count * 446,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    stationList[i].stationNameCN,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ));
+              tempList.add(Positioned(
+                top: 273,
+                left: -916 + count * 446,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    stationList[i].stationNameEN,
+                    style: const TextStyle(
+                      fontSize: 15.5,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ));
+              count++;
+            }
+          } else {
+            int count = 0;
+            for (int i = currentStationListIndex!;
+                i < currentStationListIndex! + 5;
+                i++) {
+              tempList.add(Positioned(
+                top: 229,
+                left: -916 + count * 446,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    stationList[i].stationNameCN,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ));
+              tempList.add(Positioned(
+                top: 273,
+                left: -916 + count * 446,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    stationList[i].stationNameEN,
+                    style: const TextStyle(
+                      fontSize: 15.5,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ));
+              count++;
+            }
+          }
+        }
+        //当前站为第1站
+        else if (currentStationListIndex==0) {
+          int count = 0;
+          for (int i = currentStationListIndex!;
+          i < currentStationListIndex! + 5;
+          i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
+        //当前站为第2站
+        else if (currentStationListIndex==1) {
+          int count = 0;
+          for (int i = currentStationListIndex!-1;
+          i < currentStationListIndex! + 4;
+          i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
+        //当前站为末1站
+        else if (currentStationListIndex==stationList.length - 1) {
+          int count = 0;
+          for (int i = currentStationListIndex!-4;
+          i < currentStationListIndex!+1;
+          i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
+        //当前站为末2站
+        else if (currentStationListIndex==stationList.length - 2) {
+          int count = 0;
+          for (int i = currentStationListIndex!-3;
+          i < currentStationListIndex! + 2;
+          i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
       }
     }
-
     return Stack(
       children: tempList,
     );

@@ -3,35 +3,135 @@ import 'package:flutter/material.dart';
 
 class StationIconSmallPainter extends CustomPainter {
   final Color? lineColor; //线路主颜色
-  final Color? lineVariantColor;
+  final Color? lineVariantColor; //线路主颜色变体
 
-  bool shadow; //线路主颜色变体
+  bool shadow;
 
-  StationIconSmallPainter({required this.lineColor, required this.lineVariantColor,required this.shadow});
+  StationIconSmallPainter(
+      {required this.lineColor,
+      required this.lineVariantColor,
+      required this.shadow});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint linePaint = Paint()
+    final Paint outerCircle = Paint()
       ..color = lineColor!
       ..style = PaintingStyle.fill;
 
-    final Paint lineVariantsPaint = Paint()
+    final Paint mediumCircle = Paint()
       ..color = lineVariantColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint innerCircle = Paint()
+      ..color = lineColor!
       ..style = PaintingStyle.fill;
 
     if (shadow) {
       //边缘阴影
-      linePaint.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+      outerCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
     }
     // 外圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, linePaint);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, outerCircle);
 
     // 中圈圆
     canvas.drawCircle(
-        Offset(size.width / 2, size.height / 2), 12, lineVariantsPaint);
+        Offset(size.width / 2, size.height / 2), 12, mediumCircle);
 
     // 内圈圆
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 8.5, linePaint);
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2), 8.5, innerCircle);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class StationIconMediumPainter extends CustomPainter {
+  final Color? lineColor; //线路主颜色
+  final Color? lineVariantColor; //线路主颜色变体
+
+  bool shadow;
+
+  StationIconMediumPainter(
+      {required this.lineColor,
+      required this.lineVariantColor,
+      required this.shadow});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint outerCircle = Paint()
+      ..color = lineColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint mediumCircle = Paint()
+      ..color = lineVariantColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint innerCircle = Paint()
+      ..color = lineColor!
+      ..style = PaintingStyle.fill;
+
+    if (shadow) {
+      //边缘阴影
+      outerCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+    }
+    // 外圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 41, outerCircle);
+
+    // 中圈圆
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2), 27, mediumCircle);
+
+    // 内圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 20, innerCircle);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class StationIconBigPainter extends CustomPainter {
+  final Color? lineColor; //线路主颜色
+  final Color? lineVariantColor; //线路主颜色变体
+
+  bool shadow;
+
+  StationIconBigPainter(
+      {required this.lineColor,
+      required this.lineVariantColor,
+      required this.shadow});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint outerCircle = Paint()
+      ..color = lineColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint mediumCircle = Paint()
+      ..color = lineVariantColor!
+      ..style = PaintingStyle.fill;
+
+    final Paint innerCircle = Paint()
+      ..color = lineColor!
+      ..style = PaintingStyle.fill;
+
+    if (shadow) {
+      //边缘阴影
+      outerCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+    }
+    // 外圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 55, outerCircle);
+
+    // 中圈圆
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2), 39, mediumCircle);
+
+    // 内圈圆
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 26, innerCircle);
   }
 
   @override
