@@ -4,16 +4,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
-import 'package:main/Object/TransferLine.dart';
-import 'package:main/Util/CustomRegExp.dart';
 import '../Parent/LCD.dart';
 import '../Util.dart';
 import '../Util/CustomColors.dart';
@@ -68,9 +63,6 @@ class FiveStationsState extends State<FiveStations> with LCD {
 
   //站名集合
   List<Station> stationList = [];
-
-  //创建换乘线路列表的列表
-  List<List<TransferLine>> transferLineList = [];
 
   String lineNumber = "";
   String lineNumberEN = "";
@@ -207,15 +199,23 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   ), //设置空时的提示文字
                   items: showStationList(stationList),
                   onChanged: (value) {
-                    try {
-                      currentStationListIndex = stationList.indexWhere(
-                          (element) =>
-                              element.stationNameCN ==
-                              value); //根据选择的站名，找到站名集合中对应的索引
-                      currentStationListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
+                    if ((stationList.indexWhere((element) =>
+                                    element.stationNameCN == value) -
+                                terminusListIndex!)
+                            .abs() >=
+                        2) {
+                      try {
+                        currentStationListIndex = stationList.indexWhere(
+                            (element) =>
+                                element.stationNameCN ==
+                                value); //根据选择的站名，找到站名集合中对应的索引
+                        currentStationListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
+                    } else {
+                      alertDialog("错误", "当前站与终点站间隔不能小于 2");
                     }
                   },
                   value: currentStationListValue,
@@ -234,13 +234,21 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   ),
                   items: showStationList(stationList),
                   onChanged: (value) {
-                    try {
-                      terminusListIndex = stationList.indexWhere(
-                          (element) => element.stationNameCN == value);
-                      terminusListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
+                    if ((stationList.indexWhere((element) =>
+                                    element.stationNameCN == value) -
+                                currentStationListIndex!)
+                            .abs() >=
+                        2) {
+                      try {
+                        terminusListIndex = stationList.indexWhere(
+                            (element) => element.stationNameCN == value);
+                        terminusListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
+                    } else {
+                      alertDialog("错误", "当前站与终点站间隔不能小于 2");
                     }
                   },
                   value: terminusListValue,
@@ -249,7 +257,8 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "注意：到站时的线路图仅支持五站图，不要让当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。程序会崩溃，没有任何提示。",
-                    style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
               ])
@@ -431,7 +440,6 @@ class FiveStationsState extends State<FiveStations> with LCD {
           //重置所有变量
           _imageBytes = null;
           stationList.clear();
-          transferLineList.clear();
           lineColor = Colors.transparent;
           lineVariantColor = Colors.transparent;
           currentStationListIndex = null;
@@ -663,77 +671,13 @@ class FiveStationsState extends State<FiveStations> with LCD {
     );
   }
 
-  //显示换乘线路图标
-  Stack showTransferIcon() {
-    List<Container> iconList = [];
-
-    //遍历获取每站的换乘信息列表
-    for (int i = 0; i < transferLineList.length; i++) {
-      List<TransferLine> value = transferLineList[i];
-      if (value.isNotEmpty) {
-        //遍历获取每站的换乘信息列表中具体的换乘线路信息
-        for (int j = 0; j < value.length; j++) {
-          TransferLine transferLine = value[j];
-          if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumber)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextOneDigit(transferLine)
-                  ],
-                )));
-          } else if (CustomRegExp.twoDigits.hasMatch(transferLine.lineNumber)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextTwoDigits(transferLine)
-                  ],
-                )));
-          } else if (CustomRegExp.oneDigitOneCharacter
-              .hasMatch(transferLine.lineNumber)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextOneDigitOneCharacter(transferLine)
-                  ],
-                )));
-          } else if (CustomRegExp.twoCharacters
-              .hasMatch(transferLine.lineNumber)) {
-            {
-              iconList.add(Container(
-                  padding: EdgeInsets.fromLTRB(
-                      (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
-                  child: Stack(
-                    children: [
-                      Widgets.transferLineIcon(transferLine),
-                      Widgets.transferLineTextTwoCharacters(transferLine)
-                    ],
-                  )));
-            }
-          }
-        }
-      }
-    }
-    return Stack(
-      children: iconList,
-    );
-  }
-
   //显示站名
   Stack showStationName() {
     List<Positioned> tempList = [];
     if (stationList.isNotEmpty && currentStationListIndex != null) {
       print(currentStationListIndex);
       print(terminusListIndex);
-      //TODO 当前站为终点站时需要选择运行方向
+
       //选站时注意不要让当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。（五站图怎么可能只显示四站！！！）懒得写异常抛出了，使用时自觉些
       //当前站在终点站左边
       if (currentStationListIndex! < terminusListIndex!) {
@@ -849,52 +793,12 @@ class FiveStationsState extends State<FiveStations> with LCD {
             count++;
           }
         }
-        //当前站为末2站
-        else if (currentStationListIndex == terminusListIndex! - 1) {
-          int count = 0;
-          for (int i = currentStationListIndex! - 3;
-              i < currentStationListIndex! + 2;
-              i++) {
-            tempList.add(Positioned(
-              top: 229,
-              left: -916 + count * 446,
-              right: 0,
-              child: Center(
-                child: Text(
-                  stationList[i].stationNameCN,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ));
-            tempList.add(Positioned(
-              top: 273,
-              left: -916 + count * 446,
-              right: 0,
-              child: Center(
-                child: Text(
-                  stationList[i].stationNameEN,
-                  style: const TextStyle(
-                    fontSize: 15.5,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ));
-            count++;
-          }
-        }
       }
       //当前站在终点站右边
       else if (currentStationListIndex! > terminusListIndex!) {
-        if (terminusListIndex! < 3) {
-          alertDialog("title", "e as String");
-        }
         //当前站为第3站~末3站
         if (currentStationListIndex! > terminusListIndex! + 1 &&
-            currentStationListIndex! < stationList.length) {
+            currentStationListIndex! < stationList.length - 2) {
           int count = 0;
           for (int i = currentStationListIndex! - 2;
               i < currentStationListIndex! + 3;
@@ -930,85 +834,48 @@ class FiveStationsState extends State<FiveStations> with LCD {
             count++;
           }
         }
-        //当前站为第1站
-        else if (currentStationListIndex == 0) {
-          int count = 0;
-          for (int i = currentStationListIndex!;
-              i < currentStationListIndex! + 5;
-              i++) {
-            tempList.add(Positioned(
-              top: 229,
-              left: -916 + count * 446,
-              right: 0,
-              child: Center(
-                child: Text(
-                  stationList[i].stationNameCN,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ));
-            tempList.add(Positioned(
-              top: 273,
-              left: -916 + count * 446,
-              right: 0,
-              child: Center(
-                child: Text(
-                  stationList[i].stationNameEN,
-                  style: const TextStyle(
-                    fontSize: 15.5,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ));
-            count++;
-          }
-        }
-        //当前站为第2站
-        else if (currentStationListIndex == 1) {
-          int count = 0;
-          for (int i = currentStationListIndex! - 1;
-              i < currentStationListIndex! + 4;
-              i++) {
-            tempList.add(Positioned(
-              top: 229,
-              left: -916 + count * 446,
-              right: 0,
-              child: Center(
-                child: Text(
-                  stationList[i].stationNameCN,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ));
-            tempList.add(Positioned(
-              top: 273,
-              left: -916 + count * 446,
-              right: 0,
-              child: Center(
-                child: Text(
-                  stationList[i].stationNameEN,
-                  style: const TextStyle(
-                    fontSize: 15.5,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ));
-            count++;
-          }
-        }
         //当前站为末2站
-        else if (currentStationListIndex == terminusListIndex! - 1) {
+        else if (currentStationListIndex == stationList.length - 2) {
           int count = 0;
           for (int i = currentStationListIndex! - 3;
               i < currentStationListIndex! + 2;
+              i++) {
+            tempList.add(Positioned(
+              top: 229,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameCN,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            tempList.add(Positioned(
+              top: 273,
+              left: -916 + count * 446,
+              right: 0,
+              child: Center(
+                child: Text(
+                  stationList[i].stationNameEN,
+                  style: const TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ));
+            count++;
+          }
+        }
+        //当前站为末1站
+        else if (currentStationListIndex == stationList.length - 1) {
+          int count = 0;
+          for (int i = currentStationListIndex! - 4;
+              i < currentStationListIndex! + 1;
               i++) {
             tempList.add(Positioned(
               top: 229,
@@ -1092,7 +959,6 @@ class FiveStationsState extends State<FiveStations> with LCD {
         if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
-          transferLineList.clear();
           currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
           terminusListIndex = 0;
 
@@ -1104,22 +970,6 @@ class FiveStationsState extends State<FiveStations> with LCD {
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
-            //换乘信息和站点信息分开存，简化代码，显示换乘线路图标时直接读换乘线路列表的列表
-            //创建换乘线路列表
-            List<TransferLine> transferLines = [];
-            //判断是否有换乘信息
-            if (item['transfer'] != null) {
-              //读取换乘信息并转为换乘线路列表
-              List<dynamic> transfers = item['transfer'];
-              transferLines = transfers.map((transfer) {
-                return TransferLine(
-                    lineNumber: transfer['lineNumber'],
-                    lineColor: transfer['lineColor']);
-              }).toList();
-            }
-            //添加换乘信息列表到换乘信息列表的列表
-            transferLineList.add(transferLines);
-
             Station station = Station(
               stationNameCN: item['stationNameCN'],
               stationNameEN: item['stationNameEN'],
@@ -1159,15 +1009,15 @@ class FiveStationsState extends State<FiveStations> with LCD {
             //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
             await exportImage(
                 _passingImageKey,
-                "$path\\下一站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
                 false);
             await exportImage(
                 _passingImageKey,
-                "$path\\下一站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\运行中 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\五站图 已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         } else if (currentStationListIndex! > terminusListIndex!) {
@@ -1177,15 +1027,15 @@ class FiveStationsState extends State<FiveStations> with LCD {
             //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
             await exportImage(
                 _passingImageKey,
-                "$path\\下一站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
                 false);
             await exportImage(
                 _passingImageKey,
-                "$path\\下一站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\运行中 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\五站图 已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         }
