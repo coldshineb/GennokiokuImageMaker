@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/FiveStations.dart';
-import 'package:main/Pages/LinearRoute.dart';
+import 'package:main/Pages/LCD/ArrivalFiveStations.dart';
+import 'package:main/Pages/LCD/RunningLinearRoute.dart';
 
 import 'Util/CustomScrollBehavior.dart';
 

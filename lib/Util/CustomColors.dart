@@ -4,5 +4,4 @@ class CustomColors {
   static const String passedStationVariant = "888888"; //已过站颜色变体
   static const String passingStation = "E8E85B"; //下一站颜色
   static const String passingStationVariant = "F5BD57"; //下一站颜色变体
-
 }

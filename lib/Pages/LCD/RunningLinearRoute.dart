@@ -10,11 +10,11 @@ import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Object/TransferLine.dart';
 import 'package:main/Util/CustomRegExp.dart';
-import '../Parent/LCD.dart';
-import '../Util.dart';
-import '../Util/CustomColors.dart';
-import '../Util/CustomPainter.dart';
-import '../Util/Widgets.dart';
+import '../../Parent/LCD.dart';
+import '../../Util.dart';
+import '../../Util/CustomColors.dart';
+import '../../Util/CustomPainter.dart';
+import '../../Util/Widgets.dart';
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -26,8 +26,8 @@ void loadFont() async {
   await fontLoader2.load();
 }
 
-class LinearRouteRoot extends StatelessWidget {
-  const LinearRouteRoot({super.key});
+class RunningLinearRouteRoot extends StatelessWidget {
+  const RunningLinearRouteRoot({super.key});
 
   @override
   Widget build(BuildContext context) {

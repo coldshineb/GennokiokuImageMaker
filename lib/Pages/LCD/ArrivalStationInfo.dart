@@ -4,18 +4,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
+
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:main/Object/Station.dart';
-import '../Parent/LCD.dart';
-import '../Util.dart';
-import '../Util/CustomColors.dart';
-import '../Util/CustomPainter.dart';
-import '../Util/Widgets.dart';
+
+import '../../Parent/LCD.dart';
+import '../../Util.dart';
+import '../../Util/CustomColors.dart';
+import '../../Util/CustomPainter.dart';
+import '../../Util/Widgets.dart';
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -27,8 +27,8 @@ void loadFont() async {
   await fontLoader2.load();
 }
 
-class FiveStationsRoot extends StatelessWidget {
-  const FiveStationsRoot({super.key});
+class ArrivalStationInfoRoot extends StatelessWidget {
+  const ArrivalStationInfoRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -709,8 +709,8 @@ class FiveStationsState extends State<FiveStations> with LCD {
                     Util.hexToColor(CustomColors.passedStationVariant), true),
               )));
         }
-      }else{
-        if (trainDirectionValue==0) {
+      } else {
+        if (trainDirectionValue == 0) {
           lineList.add(Container(
               child: routeLine(
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
@@ -720,10 +720,12 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
@@ -731,7 +733,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 child: routeLine(
                     Util.hexToColor(CustomColors.passedStationVariant), true),
               )));
-        }else{
+        } else {
           lineList.add(Container(
               child: routeLine(
                   Util.hexToColor(CustomColors.passedStationVariant), true)));
@@ -744,10 +746,12 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
         }
       }
     }

@@ -7,7 +7,6 @@ import '../Util.dart';
 import '../Util/Widgets.dart';
 
 mixin class LCD {
-
   //显示下一站、当前站和终点站下拉菜单内容
   List<DropdownMenuItem> showStationList(List<Station> stationList) {
     List<DropdownMenuItem> tempList = [];

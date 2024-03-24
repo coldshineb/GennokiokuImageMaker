@@ -223,6 +223,7 @@ class Widgets {
           color: Util.hexToColor(transferLine.lineColor)),
     );
   }
+
   static Positioned transferLineTextOneDigit(TransferLine transferLine) {
     return Positioned(
       top: -6,
