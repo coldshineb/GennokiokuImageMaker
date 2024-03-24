@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'dart:convert';
 import 'dart:io';
@@ -467,7 +467,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(400, 167, 0, 0),
                                 child: showPassingRouteIcon(),
                               ),
                             ],
@@ -655,7 +655,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
               )));
         }
         iconList.add(Container(
-            padding: EdgeInsets.only(left: 223.0 * 2),
+            padding: const EdgeInsets.only(left: 223.0 * 2),
             child: CustomPaint(
               painter: StationIconBigPainter(
                   lineColor: Util.hexToColor(CustomColors.passedStation),
@@ -685,7 +685,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
               )));
         }
         iconList.add(Container(
-            padding: EdgeInsets.only(left: 223.0 * 2),
+            padding: const EdgeInsets.only(left: 223.0 * 2),
             child: CustomPaint(
               painter: StationIconBigPainter(
                   lineColor: Util.hexToColor(CustomColors.passedStation),
@@ -753,18 +753,105 @@ class FiveStationsState extends State<FiveStations> with LCD {
   Stack showPassingRouteIcon() {
     List<Container> tempList = [];
     if (currentStationListIndex != null) {
-      tempList.add(Container(
-          padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (stationList.length - 1)) * currentStationListIndex!,
-              0,
-              0,
-              0),
-          child: CustomPaint(
-              painter: StationIconSmallPainter(
-                  lineColor: Util.hexToColor(CustomColors.passingStation),
-                  lineVariantColor:
-                      Util.hexToColor(CustomColors.passingStationVariant),
-                  shadow: false))));
+      if (currentStationListIndex! < terminusListIndex!) {
+        if (currentStationListIndex == 0) {
+          tempList.add(Container(
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == 1) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == terminusListIndex! - 1) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(446, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        }
+      } else if (currentStationListIndex! > terminusListIndex!) {
+        if (currentStationListIndex == terminusListIndex! + 1) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == stationList.length - 2) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == stationList.length - 1) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(446, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        }
+      } else {
+        switch (trainDirectionValue) {
+          case 0:
+            tempList.add(Container(
+                child: CustomPaint(
+                    painter: StationIconBigPainter(
+                        lineColor: Util.hexToColor(CustomColors.passingStation),
+                        lineVariantColor:
+                            Util.hexToColor(CustomColors.passingStationVariant),
+                        shadow: false))));
+            break;
+          case 1:
+            tempList.add(Container(
+                padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
+                child: CustomPaint(
+                    painter: StationIconBigPainter(
+                        lineColor: Util.hexToColor(CustomColors.passingStation),
+                        lineVariantColor:
+                            Util.hexToColor(CustomColors.passingStationVariant),
+                        shadow: false))));
+            break;
+          default:
+        }
+      }
     }
     return Stack(
       children: tempList,
@@ -891,11 +978,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
           }
         }
         //当前站为末2站
-        else if (currentStationListIndex == terminusListIndex!-1) {
+        else if (currentStationListIndex == terminusListIndex! - 1) {
           int count = 0;
           for (int i = currentStationListIndex! - 3;
-          i < currentStationListIndex! + 2;
-          i++) {
+              i < currentStationListIndex! + 2;
+              i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
@@ -1043,11 +1130,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
           }
         }
         //当前站为第2站
-        else if (currentStationListIndex == terminusListIndex!+1) {
+        else if (currentStationListIndex == terminusListIndex! + 1) {
           int count = 0;
-          for (int i = currentStationListIndex!-1;
-          i < currentStationListIndex! + 4;
-          i++) {
+          for (int i = currentStationListIndex! - 1;
+              i < currentStationListIndex! + 4;
+              i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
@@ -1083,7 +1170,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
       //当前站与终点站相同
       else if (currentStationListIndex == terminusListIndex) {
         //当前站为第3站~末3站
-        if (currentStationListIndex! > 2 &&
+        if (currentStationListIndex! > 1 &&
             currentStationListIndex! < stationList.length - 2) {
           if (trainDirectionValue == 1) {
             int count = 0;
@@ -1158,11 +1245,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
           }
         }
         //当前站为第1站
-        else if (currentStationListIndex==0) {
+        else if (currentStationListIndex == 0) {
           int count = 0;
           for (int i = currentStationListIndex!;
-          i < currentStationListIndex! + 5;
-          i++) {
+              i < currentStationListIndex! + 5;
+              i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
@@ -1195,11 +1282,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
           }
         }
         //当前站为第2站
-        else if (currentStationListIndex==1) {
+        else if (currentStationListIndex == 1) {
           int count = 0;
-          for (int i = currentStationListIndex!-1;
-          i < currentStationListIndex! + 4;
-          i++) {
+          for (int i = currentStationListIndex! - 1;
+              i < currentStationListIndex! + 4;
+              i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
@@ -1232,11 +1319,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
           }
         }
         //当前站为末1站
-        else if (currentStationListIndex==stationList.length - 1) {
+        else if (currentStationListIndex == stationList.length - 1) {
           int count = 0;
-          for (int i = currentStationListIndex!-4;
-          i < currentStationListIndex!+1;
-          i++) {
+          for (int i = currentStationListIndex! - 4;
+              i < currentStationListIndex! + 1;
+              i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
@@ -1269,11 +1356,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
           }
         }
         //当前站为末2站
-        else if (currentStationListIndex==stationList.length - 2) {
+        else if (currentStationListIndex == stationList.length - 2) {
           int count = 0;
-          for (int i = currentStationListIndex!-3;
-          i < currentStationListIndex! + 2;
-          i++) {
+          for (int i = currentStationListIndex! - 3;
+              i < currentStationListIndex! + 2;
+              i++) {
             tempList.add(Positioned(
               top: 229,
               left: -916 + count * 446,
