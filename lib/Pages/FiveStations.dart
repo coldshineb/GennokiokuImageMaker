@@ -234,7 +234,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
-                    "注意：先选择终点站，再选择当前站。到站时的线路图仅支持五站图，避免当前站在终点站左边时，终点站为前四站；当前站在终点站右边时，终点站为末四站。目前没做判断，程序会崩溃。",
+                    "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间；选择小交线终点站时，先选运行方向",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -363,7 +363,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                               Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(200, 195, 0, 0),
-                                //child: showRouteLine(),
+                                child: showRouteLine(),
                               ),
                               Container(
                                 padding:
@@ -509,13 +509,14 @@ class FiveStationsState extends State<FiveStations> with LCD {
   //显示线路
   Stack showRouteLine() {
     List<Container> lineList = [];
+    //TODO：不用替换法，直接显示
     //显示整条线，默认为已过站
+    //根据选择的下一站和终点站，替换已过站为未过站
+    if (currentStationListIndex != null && terminusListIndex != null) {
     for (int i = 0; i < stationList.length - 1; i++) {
       lineList.add(
           (routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
     }
-    //根据选择的下一站和终点站，替换已过站为未过站
-    if (currentStationListIndex != null && terminusListIndex != null) {
       List<Container> replaceList = [];
       //非空判断
       //下一站在终点站左侧
@@ -633,11 +634,10 @@ class FiveStationsState extends State<FiveStations> with LCD {
   //线路
   Container routeLine(int i, Color color) {
     return Container(
-      padding: EdgeInsets.only(left: (1400 / (stationList.length - 1)) * i),
       //间隔
-      height: 15,
+      height: 25,
       child: Container(
-        width: (1400 / (stationList.length - 1)), //每个站与站之间线条的宽度
+        width: 200, //每个站与站之间线条的宽度
         color: color,
       ),
     );
