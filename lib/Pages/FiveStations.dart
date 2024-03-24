@@ -251,10 +251,16 @@ class FiveStationsState extends State<FiveStations> with LCD {
                     //         .abs() >=
                     //     2) {
                     try {
-                      currentStationListIndex = stationList.indexWhere(
-                          (element) =>
-                              element.stationNameCN ==
-                              value); //根据选择的站名，找到站名集合中对应的索引
+                      int indexWhere = stationList.indexWhere(
+                          (element) => element.stationNameCN == value);
+                      indexWhere;
+                      if (indexWhere == 2) {
+                        trainDirectionValue = 0;
+                      } else if (indexWhere == stationList.length - 3) {
+                        trainDirectionValue = 1;
+                      }
+                      currentStationListIndex =
+                          indexWhere; //根据选择的站名，找到站名集合中对应的索引
                       currentStationListValue = value;
                       setState(() {});
                     } catch (e) {
@@ -286,8 +292,15 @@ class FiveStationsState extends State<FiveStations> with LCD {
                     //         .abs() >=
                     //     2) {
                     try {
-                      terminusListIndex = stationList.indexWhere(
+                      int indexWhere = stationList.indexWhere(
                           (element) => element.stationNameCN == value);
+                      indexWhere;
+                      if (indexWhere == 2) {
+                        trainDirectionValue = 0;
+                      } else if (indexWhere == stationList.length - 3) {
+                        trainDirectionValue = 1;
+                      }
+                      terminusListIndex = indexWhere;
                       terminusListValue = value;
                       setState(() {});
                     } catch (e) {
@@ -829,27 +842,50 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       shadow: false))));
         }
       } else {
-        switch (trainDirectionValue) {
-          case 0:
-            tempList.add(Container(
-                child: CustomPaint(
-                    painter: StationIconBigPainter(
-                        lineColor: Util.hexToColor(CustomColors.passingStation),
-                        lineVariantColor:
-                            Util.hexToColor(CustomColors.passingStationVariant),
-                        shadow: false))));
-            break;
-          case 1:
-            tempList.add(Container(
-                padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
-                child: CustomPaint(
-                    painter: StationIconBigPainter(
-                        lineColor: Util.hexToColor(CustomColors.passingStation),
-                        lineVariantColor:
-                            Util.hexToColor(CustomColors.passingStationVariant),
-                        shadow: false))));
-            break;
-          default:
+        if (currentStationListIndex == 0) {
+          tempList.add(Container(
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == 1) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == stationList.length - 1) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else if (currentStationListIndex == stationList.length - 2) {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
+        } else {
+          tempList.add(Container(
+              padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
+              child: CustomPaint(
+                  painter: StationIconBigPainter(
+                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineVariantColor:
+                          Util.hexToColor(CustomColors.passingStationVariant),
+                      shadow: false))));
         }
       }
     }
