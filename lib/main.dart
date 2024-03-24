@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/Pages/FiveStations.dart';
 import 'package:main/Pages/LinearRoute.dart';
 
 import 'Util/CustomScrollBehavior.dart';
@@ -11,7 +12,7 @@ void main() {
         seedColor: Colors.pink,
       ),
     ),
-    scrollBehavior: CustomScrollBehavior(),//设置鼠标拖动滑动
+    scrollBehavior: CustomScrollBehavior(), //设置鼠标拖动滑动
     home: const Home(),
   ));
 }
@@ -27,20 +28,32 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:
-            const Text('原忆轨道交通 LCD 生成器'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-            child: const Text('直线型线路图 运行中'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LinearRoute()),
-              );
-            }),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('原忆轨道交通 LCD 生成器'),
+        ),
+        body: Row(
+          children: [
+            Center(
+              child: ElevatedButton(
+                  child: const Text('直线型线路图 运行中'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LinearRoute()),
+                    );
+                  }),
+            ),
+            Center(
+              child: ElevatedButton(
+                  child: const Text('五站图 已到站'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FiveStations()),
+                    );
+                  }),
+            ),
+          ],
+        ));
   }
 }

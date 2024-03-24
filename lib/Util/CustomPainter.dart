@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class StationIconPainter extends CustomPainter {
+class StationIconSmallPainter extends CustomPainter {
   final Color? lineColor; //线路主颜色
   final Color? lineVariantColor;
 
   bool shadow; //线路主颜色变体
 
-  StationIconPainter({required this.lineColor, required this.lineVariantColor,required this.shadow});
+  StationIconSmallPainter({required this.lineColor, required this.lineVariantColor,required this.shadow});
 
   @override
   void paint(Canvas canvas, Size size) {
