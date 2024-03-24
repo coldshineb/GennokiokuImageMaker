@@ -2,11 +2,14 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:main/Object/Station.dart';
 import '../Parent/LCD.dart';
 import '../Util.dart';
@@ -78,7 +81,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
   int? currentStationListIndex;
   int? terminusListIndex;
 
-  //运行方向，用于处理下一站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
+  //运行方向，用于处理已到站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
   int trainDirectionValue = 1;
 
   //默认导出宽度
@@ -107,14 +110,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
-                    "小交线路设置：",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text(
-                    "运行方向",
+                    "（第一步）运行方向",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -153,7 +149,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
-                    "当前站",
+                    "（第三步）当前站",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -164,11 +160,6 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   ), //设置空时的提示文字
                   items: showStationList(stationList),
                   onChanged: (value) {
-                    // if ((stationList.indexWhere((element) =>
-                    //                 element.stationNameCN == value) -
-                    //             terminusListIndex!)
-                    //         .abs() >=
-                    //     2) {
                     try {
                       int indexWhere = stationList.indexWhere(
                           (element) => element.stationNameCN == value);
@@ -185,16 +176,13 @@ class FiveStationsState extends State<FiveStations> with LCD {
                     } catch (e) {
                       print(e);
                     }
-                    // } else {
-                    //   alertDialog("错误", "当前站与终点站间隔不能小于 2");
-                    // }
                   },
                   value: currentStationListValue,
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
-                    "终点站",
+                    "（第二步）终点站",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -205,11 +193,6 @@ class FiveStationsState extends State<FiveStations> with LCD {
                   ),
                   items: showStationList(stationList),
                   onChanged: (value) {
-                    // if ((stationList.indexWhere((element) =>
-                    //                 element.stationNameCN == value) -
-                    //             currentStationListIndex!)
-                    //         .abs() >=
-                    //     2) {
                     try {
                       int indexWhere = stationList.indexWhere(
                           (element) => element.stationNameCN == value);
@@ -225,16 +208,13 @@ class FiveStationsState extends State<FiveStations> with LCD {
                     } catch (e) {
                       print(e);
                     }
-                    // } else {
-                    //   alertDialog("错误", "当前站与终点站间隔不能小于 2");
-                    // }
                   },
                   value: terminusListValue,
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
-                    "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间；选择小交线终点站时，先选运行方向",
+                    "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -362,7 +342,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                                   child: showStationName()),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(200, 195, 0, 0),
+                                    const EdgeInsets.fromLTRB(286, 154, 0, 0),
                                 child: showRouteLine(),
                               ),
                               Container(
@@ -374,7 +354,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                           ),
                         ),
                       ),
-                      //下一站图
+                      //已到站图
                       RepaintBoundary(
                         key: _passingImageKey,
                         child: Container(
@@ -424,16 +404,16 @@ class FiveStationsState extends State<FiveStations> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: _importImage,
-          child: const Text(
-            "导入图片",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
+      // Container(
+      //   height: 48,
+      //   child: MenuItemButton(
+      //     onPressed: _importImage,
+      //     child: const Text(
+      //       "导入图片",
+      //       style: TextStyle(color: Colors.black),
+      //     ),
+      //   ),
+      // ),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -482,7 +462,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
         child: MenuItemButton(
           onPressed: exportPassingImage,
           child: const Text(
-            "导出下一站图",
+            "导出已到站图",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -509,138 +489,297 @@ class FiveStationsState extends State<FiveStations> with LCD {
   //显示线路
   Stack showRouteLine() {
     List<Container> lineList = [];
-    //TODO：不用替换法，直接显示
-    //显示整条线，默认为已过站
-    //根据选择的下一站和终点站，替换已过站为未过站
     if (currentStationListIndex != null && terminusListIndex != null) {
-    for (int i = 0; i < stationList.length - 1; i++) {
-      lineList.add(
-          (routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
-    }
-      List<Container> replaceList = [];
-      //非空判断
-      //下一站在终点站左侧
       if (currentStationListIndex! < terminusListIndex!) {
-        //下一站不为起始站
-        if (currentStationListIndex != 0) {
-          for (int i = currentStationListIndex! - 1;
-              i < terminusListIndex!;
-              i++) {
-            //nextStationListIndex-1：下一站前的线条
-            replaceList.add(routeLine(i, lineColor));
-          }
-          //替换原集合
-          lineList.replaceRange(
-              currentStationListIndex! - 1, terminusListIndex!, replaceList);
-        } else
-        //下一站为起始站
-        {
-          for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
-          }
-          lineList.replaceRange(
-              currentStationListIndex!, terminusListIndex!, replaceList);
-        }
-      }
-      //下一站在终点站右侧
-      else if (currentStationListIndex! > terminusListIndex!) {
-        //下一站不为终点站
-        if (currentStationListIndex != stationList.length - 1) {
-          for (int i = terminusListIndex!;
-              i < currentStationListIndex! + 1;
-              i++) {
-            replaceList.add(routeLine(i, lineColor));
-          }
-          lineList.replaceRange(
-              terminusListIndex!, currentStationListIndex! + 1, replaceList);
-        } else
-        //下一站为终点站
-        {
-          for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
-          }
-          lineList.replaceRange(
-              terminusListIndex!, currentStationListIndex!, replaceList);
-        }
-      } else {
-        //下一站为首站
         if (currentStationListIndex == 0) {
-          replaceList.add(Container(
-            //最左侧，不用间隔
-            height: 15,
-            child: Container(
-              width: (1400 / (stationList.length - 1)),
-              color: lineColor,
-            ),
-          ));
-          lineList.replaceRange(0, 1, replaceList);
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(lineColor, true),
+              )));
+        } else if (currentStationListIndex == 1) {
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(lineColor, true),
+              )));
+        } else if (currentStationListIndex == 2) {
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(lineColor, true),
+              )));
+        } else if (currentStationListIndex == terminusListIndex! - 2) {
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+        } else if (currentStationListIndex == terminusListIndex! - 1) {
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+        } else {
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(lineColor, true),
+              )));
         }
-        //下一站为尾站
-        else if (currentStationListIndex == stationList.length - 1) {
-          replaceList.add(Container(
-            padding: EdgeInsets.only(
-                left: (1400 / (stationList.length - 1)) *
-                    (stationList.length - 2)),
-            //最右侧
-            height: 15,
-            child: Container(
-              width: (1400 / (stationList.length - 1)),
-              color: lineColor,
-            ),
-          ));
-          lineList.replaceRange(
-              stationList.length - 2, stationList.length - 1, replaceList);
+      } else if (currentStationListIndex! > terminusListIndex!) {
+        if (currentStationListIndex == stationList.length - 1) {
+          lineList.add(Container(child: routeLine(lineColor, true)));
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(lineColor, false)));
+        } else if (currentStationListIndex == stationList.length - 2) {
+          lineList.add(Container(child: routeLine(lineColor, true)));
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+        } else if (currentStationListIndex == stationList.length - 3) {
+          lineList.add(Container(child: routeLine(lineColor, true)));
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+        } else if (currentStationListIndex == terminusListIndex! + 2) {
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(
+                    Util.hexToColor(CustomColors.passedStationVariant), true),
+              )));
+        } else if (currentStationListIndex == terminusListIndex! + 1) {
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(
+                    Util.hexToColor(CustomColors.passedStationVariant), true),
+              )));
+        } else {
+          lineList.add(Container(child: routeLine(lineColor, true)));
+          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(lineColor, false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(
+                    Util.hexToColor(CustomColors.passedStationVariant), true),
+              )));
         }
-        //下一站与终点站相同，但不为首尾站
-        else {
-          //向左行
-          if (trainDirectionValue == 0) {
-            replaceList.add(Container(
-              padding: EdgeInsets.only(
-                  left: (1400 / (stationList.length - 1)) *
-                      currentStationListIndex!),
-              height: 15,
-              child: Container(
-                width: (1400 / (stationList.length - 1)),
-                color: lineColor,
-              ),
-            ));
-            lineList.replaceRange(currentStationListIndex!,
-                currentStationListIndex! + 1, replaceList);
-          }
-          //向右行
-          else {
-            replaceList.add(Container(
-              padding: EdgeInsets.only(
-                  left: (1400 / (stationList.length - 1)) *
-                      (currentStationListIndex! - 1)),
-              height: 15,
-              child: Container(
-                width: (1400 / (stationList.length - 1)),
-                color: lineColor,
-              ),
-            ));
-            lineList.replaceRange(currentStationListIndex! - 1,
-                currentStationListIndex!, replaceList);
-          }
+      }else{
+        if (trainDirectionValue==0) {
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 1007),
+              child: Transform.rotate(
+                angle: pi,
+                child: routeLine(
+                    Util.hexToColor(CustomColors.passedStationVariant), true),
+              )));
+        }else{
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+          lineList.add(Container(
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 1),
+              child: routeLine(
+                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 2),
+              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
+          lineList.add(Container(
+              padding: const EdgeInsets.only(left: 223 * 3),
+              child: routeLine(Util.hexToColor(CustomColors.passedStationVariant), false)));
         }
       }
     }
+    //非空判断
     return Stack(
       children: lineList,
     );
   }
 
   //线路
-  Container routeLine(int i, Color color) {
-    return Container(
-      //间隔
-      height: 25,
-      child: Container(
-        width: 200, //每个站与站之间线条的宽度
-        color: color,
-      ),
-    );
+  Container routeLine(Color color, bool gradient) {
+    return gradient
+        ? Container(
+            //间隔
+            height: 27,
+            child: Container(
+                width: 115,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [color.withOpacity(0), color],
+                  ),
+                )),
+          )
+        : Container(
+            //间隔
+            padding: const EdgeInsets.only(left: 115),
+            height: 27,
+            child: Container(
+              width: 223,
+              color: color,
+            ),
+          );
   }
 
   CustomPaint nextStationIconMediumPainter() {
