@@ -520,7 +520,8 @@ class FiveStationsState extends State<FiveStations> with LCD {
     List<Container> lineList = [];
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
-      lineList.add((routeLine(i, Util.hexToColor(CustomColors.passedStation))));
+      lineList.add(
+          (routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
     }
     //根据选择的下一站和终点站，替换已过站为未过站
     if (currentStationListIndex != null && terminusListIndex != null) {
@@ -651,112 +652,182 @@ class FiveStationsState extends State<FiveStations> with LCD {
     );
   }
 
+  CustomPaint nextStationIconMediumPainter() {
+    return CustomPaint(
+      painter: StationIconMediumPainter(
+          lineColor: lineColor,
+          lineVariantColor: lineVariantColor,
+          shadow: true),
+    );
+  }
+
+  CustomPaint passedStationIconMediumPainter() {
+    return CustomPaint(
+      painter: StationIconMediumPainter(
+          lineColor: Util.hexToColor(CustomColors.passedStation),
+          lineVariantColor: Util.hexToColor(CustomColors.passedStationVariant),
+          shadow: true),
+    );
+  }
+
+  CustomPaint passedStationIconBigPainter() {
+    return CustomPaint(
+      painter: StationIconBigPainter(
+          lineColor: Util.hexToColor(CustomColors.passedStation),
+          lineVariantColor: Util.hexToColor(CustomColors.passedStationVariant),
+          shadow: true),
+    );
+  }
+
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
     if (stationList.isNotEmpty) {
       if (currentStationListIndex! < terminusListIndex!) {
-        for (int i = 0; i < 2; i++) {
+        //当前站为第1站
+        if (currentStationListIndex == 0) {
           iconList.add(Container(
-              padding: EdgeInsets.only(left: 223.0 * i),
-              child: CustomPaint(
-                painter: StationIconMediumPainter(
-                    lineColor: Util.hexToColor(CustomColors.passedStation),
-                    lineVariantColor:
-                        Util.hexToColor(CustomColors.passedStationVariant),
-                    shadow: true),
-              )));
+              padding: const EdgeInsets.only(left: 223.0 * 0),
+              child: passedStationIconBigPainter()));
+          for (int i = 1; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
         }
-        iconList.add(Container(
-            padding: const EdgeInsets.only(left: 223.0 * 2),
-            child: CustomPaint(
-              painter: StationIconBigPainter(
-                  lineColor: Util.hexToColor(CustomColors.passedStation),
-                  lineVariantColor:
-                      Util.hexToColor(CustomColors.passedStationVariant),
-                  shadow: true),
-            )));
-        for (int i = 3; i < 5; i++) {
+        //当前站为第2站
+        else if (currentStationListIndex == 1) {
+          for (int i = 0; i < 1; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
           iconList.add(Container(
-              padding: EdgeInsets.only(left: 223.0 * i),
-              child: CustomPaint(
-                painter: StationIconMediumPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
-                    shadow: true),
-              )));
+              padding: const EdgeInsets.only(left: 223.0 * 1),
+              child: passedStationIconBigPainter()));
+          for (int i = 2; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
+        }
+        //当前站为末2站
+        else if (currentStationListIndex == terminusListIndex! - 1) {
+          for (int i = 0; i < 3; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
+          iconList.add(Container(
+              padding: const EdgeInsets.only(left: 223.0 * 3),
+              child: passedStationIconBigPainter()));
+          for (int i = 4; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
+        }
+        //当前站为第3站~末3站
+        else {
+          for (int i = 0; i < 2; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
+          iconList.add(Container(
+              padding: const EdgeInsets.only(left: 223.0 * 2),
+              child: passedStationIconBigPainter()));
+          for (int i = 3; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
         }
       } else if (currentStationListIndex! > terminusListIndex!) {
-        for (int i = 0; i < 2; i++) {
+        //当前站为末1站
+        if (currentStationListIndex == stationList.length - 1) {
           iconList.add(Container(
-              padding: EdgeInsets.only(left: 223.0 * i),
-              child: CustomPaint(
-                painter: StationIconMediumPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
-                    shadow: true),
-              )));
+              padding: const EdgeInsets.only(left: 223.0 * 4),
+              child: passedStationIconBigPainter()));
+          for (int i = 0; i < 4; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
         }
-        iconList.add(Container(
-            padding: const EdgeInsets.only(left: 223.0 * 2),
-            child: CustomPaint(
-              painter: StationIconBigPainter(
-                  lineColor: Util.hexToColor(CustomColors.passedStation),
-                  lineVariantColor:
-                      Util.hexToColor(CustomColors.passedStationVariant),
-                  shadow: true),
-            )));
-        for (int i = 3; i < 5; i++) {
+        //当前站为末2站
+        else if (currentStationListIndex == stationList.length - 2) {
+          for (int i = 4; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
           iconList.add(Container(
-              padding: EdgeInsets.only(left: 223.0 * i),
-              child: CustomPaint(
-                painter: StationIconMediumPainter(
-                    lineColor: Util.hexToColor(CustomColors.passedStation),
-                    lineVariantColor:
-                        Util.hexToColor(CustomColors.passedStationVariant),
-                    shadow: true),
-              )));
+              padding: const EdgeInsets.only(left: 223.0 * 3),
+              child: passedStationIconBigPainter()));
+          for (int i = 0; i < 3; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
+        }
+        //当前站为第2站
+        else if (currentStationListIndex == terminusListIndex! + 1) {
+          for (int i = 0; i < 1; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
+          iconList.add(Container(
+              padding: const EdgeInsets.only(left: 223.0 * 0),
+              child: passedStationIconBigPainter()));
+          for (int i = 2; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
+        }
+        //当前站为第3站~末3站
+        else {
+          for (int i = 0; i < 2; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: nextStationIconMediumPainter()));
+          }
+          iconList.add(Container(
+              padding: const EdgeInsets.only(left: 223.0 * 2),
+              child: passedStationIconBigPainter()));
+          for (int i = 3; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
+        }
+      }
+      //当前站与终点站相同
+      else {
+        //右行
+        if (trainDirectionValue == 1) {
+          for (int i = 0; i < 4; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
+          iconList.add(Container(
+              padding: const EdgeInsets.only(left: 223.0 * 4),
+              child: passedStationIconBigPainter()));
+        }
+        //左行
+        else {
+          for (int i = 1; i < 5; i++) {
+            iconList.add(Container(
+                padding: EdgeInsets.only(left: 223.0 * i),
+                child: passedStationIconMediumPainter()));
+          }
+          iconList.add(Container(child: passedStationIconBigPainter()));
         }
       }
     }
-
-    // if (currentStationListIndex != null && terminusListIndex != null) {
-    //   if (currentStationListIndex! <= terminusListIndex!) {
-    //     List<Container> replaceList = [];
-    //     for (int i = currentStationListIndex!;
-    //         i < terminusListIndex! + 1;
-    //         i++) {
-    //       replaceList.add(Container(
-    //           padding: EdgeInsets.fromLTRB(
-    //               10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
-    //           child: CustomPaint(
-    //             painter: StationIconSmallPainter(
-    //                 lineColor: lineColor,
-    //                 lineVariantColor: lineVariantColor,
-    //                 shadow: true),
-    //           )));
-    //     }
-    //     iconList.replaceRange(
-    //         currentStationListIndex!, terminusListIndex! + 1, replaceList);
-    //   } else if (currentStationListIndex! > terminusListIndex!) {
-    //     List<Container> replaceList = [];
-    //     for (int i = terminusListIndex!;
-    //         i < currentStationListIndex! + 1;
-    //         i++) {
-    //       replaceList.add(Container(
-    //           padding: EdgeInsets.fromLTRB(
-    //               10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
-    //           child: CustomPaint(
-    //             painter: StationIconSmallPainter(
-    //                 lineColor: lineColor,
-    //                 lineVariantColor: lineVariantColor,
-    //                 shadow: true),
-    //           )));
-    //     }
-    //     iconList.replaceRange(
-    //         terminusListIndex!, currentStationListIndex! + 1, replaceList);
-    //   }
-    // }
     return Stack(
       children: iconList,
     );

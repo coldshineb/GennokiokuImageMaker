@@ -494,7 +494,7 @@ class LinearRouteState extends State<LinearRoute> with LCD {
     List<Container> lineList = [];
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
-      lineList.add((routeLine(i, Util.hexToColor(CustomColors.passedStation))));
+      lineList.add((routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
     }
     //根据选择的下一站和终点站，替换已过站为未过站
     if (nextStationListIndex != null && terminusListIndex != null) {
