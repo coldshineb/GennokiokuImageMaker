@@ -40,17 +40,17 @@ class RunningLinearRouteRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: LinearRoute(),
+      home: RunningLinearRoute(),
     );
   }
 }
 
-class LinearRoute extends StatefulWidget {
+class RunningLinearRoute extends StatefulWidget {
   @override
-  LinearRouteState createState() => LinearRouteState();
+  RunningLinearRouteState createState() => RunningLinearRouteState();
 }
 
-class LinearRouteState extends State<LinearRoute> with LCD {
+class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;

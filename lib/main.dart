@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:main/Pages/LCD/ArrivalFiveStations.dart';
 import 'package:main/Pages/LCD/RunningLinearRoute.dart';
 
+import 'Pages/LCD/ArrivalStationInfo.dart';
 import 'Util/CustomScrollBehavior.dart';
 
 void main() {
@@ -35,21 +36,31 @@ class _HomeState extends State<Home> {
           children: [
             Center(
               child: ElevatedButton(
-                  child: const Text('直线型线路图 运行中'),
+                  child: const Text('运行中 直线型线路图'),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LinearRoute()),
+                      MaterialPageRoute(builder: (context) => RunningLinearRoute()),
                     );
                   }),
             ),
             Center(
               child: ElevatedButton(
-                  child: const Text('五站图 已到站'),
+                  child: const Text('已到站 五站图'),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FiveStations()),
+                      MaterialPageRoute(builder: (context) => ArrivalFiveStations()),
+                    );
+                  }),
+            ),
+            Center(
+              child: ElevatedButton(
+                  child: const Text('已到站 站点信息图'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ArrivalStationInfo()),
                     );
                   }),
             ),

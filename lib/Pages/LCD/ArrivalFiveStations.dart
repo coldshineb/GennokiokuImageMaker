@@ -41,17 +41,17 @@ class ArrivalFiveStationsRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: FiveStations(),
+      home: ArrivalFiveStations(),
     );
   }
 }
 
-class FiveStations extends StatefulWidget {
+class ArrivalFiveStations extends StatefulWidget {
   @override
-  FiveStationsState createState() => FiveStationsState();
+  ArrivalFiveStationsState createState() => ArrivalFiveStationsState();
 }
 
-class FiveStationsState extends State<FiveStations> with LCD {
+class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -96,7 +96,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
           onPressed: () => Navigator.of(context).pop(),
           tooltip: '返回',
         ),
-        title: const Text('五站图 已到站'),
+        title: const Text('已到站 五站图'),
         elevation: 20,
       ),
       body: Column(
@@ -1783,7 +1783,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\五站图 已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\已到站 五站图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         } else if (currentStationListIndex! > terminusListIndex!) {
@@ -1801,7 +1801,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\五站图 已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\已到站 五站图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         }
@@ -1830,7 +1830,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "五站图 已到站 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
+              "已到站 五站图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
           true);
     } else {
       noStationsSnackbar();
