@@ -7,7 +7,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import '../Parent/LCD.dart';
 import '../Util.dart';
@@ -103,87 +102,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MenuBar(children: [
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: _importImage,
-                    child: const Text(
-                      "导入图片",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: importLineJson,
-                    child: const Text(
-                      "导入线路",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(),
-                const VerticalDivider(),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportAllImage,
-                    child: const Text(
-                      "导出全部图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportDynamicImage,
-                    child: const Text(
-                      "导出当前站全部图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportMainImage,
-                    child: const Text(
-                      "导出主线路图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportPassingImage,
-                    child: const Text(
-                      "导出下一站图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text(
-                    "导出分辨率",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                DropdownButton(
-                  items: Widgets.resolutionList(),
-                  onChanged: (value) {
-                    setState(() {
-                      exportWidthValue = value!;
-                    });
-                  },
-                  value: exportWidthValue,
-                ),
-              ]),
+              importAndExportMenubar(),
               MenuBar(children: [
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
@@ -349,21 +268,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
-                              Container(
-                                  //原忆轨道交通图标
-                                  padding:
-                                      const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
-                                  alignment: Alignment.topLeft,
-                                  height: 274,
-                                  width: 274,
-                                  child: SvgPicture.string(
-                                      Util.railwayTransitLogo)),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(270, 16, 0, 0),
-                                child: Widgets.lineNumberIcon(
-                                    lineColor, lineNumber, lineNumberEN),
-                              ),
+                              gennokiokuRailwayTransitLogoWidget(),
+                              lineNumberIconWidget(
+                                  lineColor, lineNumber, lineNumberEN),
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(522.5, 8, 0, 0),
@@ -513,6 +420,90 @@ class FiveStationsState extends State<FiveStations> with LCD {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  MenuBar importAndExportMenubar() {
+    return MenuBar(children: [
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: _importImage,
+          child: const Text(
+            "导入图片",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: importLineJson,
+          child: const Text(
+            "导入线路",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      const VerticalDivider(),
+      const VerticalDivider(),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportAllImage,
+          child: const Text(
+            "导出全部图",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportDynamicImage,
+          child: const Text(
+            "导出当前站全部图",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      const VerticalDivider(),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportMainImage,
+          child: const Text(
+            "导出主线路图",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportPassingImage,
+          child: const Text(
+            "导出下一站图",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      Container(
+        padding: const EdgeInsets.only(top: 14),
+        child: const Text(
+          "导出分辨率",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      DropdownButton(
+        items: Widgets.resolutionList(),
+        onChanged: (value) {
+          setState(() {
+            exportWidthValue = value!;
+          });
+        },
+        value: exportWidthValue,
+      ),
+    ]);
   }
 
   //显示线路
@@ -683,6 +674,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
   Stack showRouteIcon() {
     List<Container> iconList = [];
     if (stationList.isNotEmpty) {
+      //当前站在终点站左
       if (currentStationListIndex! < terminusListIndex!) {
         //当前站为第1站
         if (currentStationListIndex == 0) {
@@ -743,7 +735,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 child: nextStationIconMediumPainter()));
           }
         }
-      } else if (currentStationListIndex! > terminusListIndex!) {
+      }
+      //当前站在终点站右
+      else if (currentStationListIndex! > terminusListIndex!) {
         //当前站为末1站
         if (currentStationListIndex == stationList.length - 1) {
           iconList.add(Container(
@@ -779,7 +773,7 @@ class FiveStationsState extends State<FiveStations> with LCD {
                 child: nextStationIconMediumPainter()));
           }
           iconList.add(Container(
-              padding: const EdgeInsets.only(left: 223.0 * 0),
+              padding: const EdgeInsets.only(left: 223.0 * 1),
               child: passedStationIconBigPainter()));
           for (int i = 2; i < 5; i++) {
             iconList.add(Container(
@@ -837,7 +831,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
   Stack showPassingRouteIcon() {
     List<Container> tempList = [];
     if (currentStationListIndex != null) {
+      //当前站在终点站左
       if (currentStationListIndex! < terminusListIndex!) {
+        //当前站为第1站
         if (currentStationListIndex == 0) {
           tempList.add(Container(
               child: CustomPaint(
@@ -846,7 +842,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else if (currentStationListIndex == 1) {
+        }
+        //当前站为第2站
+        else if (currentStationListIndex == 1) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
@@ -855,7 +853,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else if (currentStationListIndex == terminusListIndex! - 1) {
+        }
+        //当前站为末2站
+        else if (currentStationListIndex == terminusListIndex! - 1) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
@@ -864,9 +864,11 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else {
+        }
+        //当前站为第3站~末3站
+        else {
           tempList.add(Container(
-              padding: const EdgeInsets.fromLTRB(446, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
               child: CustomPaint(
                   painter: StationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
@@ -874,7 +876,10 @@ class FiveStationsState extends State<FiveStations> with LCD {
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
         }
-      } else if (currentStationListIndex! > terminusListIndex!) {
+      }
+      //当前站在终点站右
+      else if (currentStationListIndex! > terminusListIndex!) {
+        //当前站为第2站
         if (currentStationListIndex == terminusListIndex! + 1) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
@@ -884,7 +889,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else if (currentStationListIndex == stationList.length - 2) {
+        }
+        //当前站为末2站
+        else if (currentStationListIndex == stationList.length - 2) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
@@ -893,7 +900,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else if (currentStationListIndex == stationList.length - 1) {
+        }
+        //当前站为末1站
+        else if (currentStationListIndex == stationList.length - 1) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
               child: CustomPaint(
@@ -902,7 +911,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else {
+        }
+        //当前站为第3站~末3站
+        else {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(446, 0, 0, 0),
               child: CustomPaint(
@@ -912,7 +923,10 @@ class FiveStationsState extends State<FiveStations> with LCD {
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
         }
-      } else {
+      }
+      //当前站与终点站相同
+      else {
+        //第1站
         if (currentStationListIndex == 0) {
           tempList.add(Container(
               child: CustomPaint(
@@ -921,7 +935,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else if (currentStationListIndex == 1) {
+        }
+        //第2站
+        else if (currentStationListIndex == 1) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
@@ -930,16 +946,31 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else if (currentStationListIndex == stationList.length - 1) {
-          tempList.add(Container(
-              padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
-              child: CustomPaint(
-                  painter: StationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
-                      lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
-                      shadow: false))));
-        } else if (currentStationListIndex == stationList.length - 2) {
+        }
+        //末1站
+        else if (currentStationListIndex == terminusListIndex!) {
+          if (trainDirectionValue == 0) {
+            tempList.add(Container(
+                padding: const EdgeInsets.fromLTRB(223 * 0, 0, 0, 0),
+                child: CustomPaint(
+                    painter: StationIconBigPainter(
+                        lineColor: Util.hexToColor(CustomColors.passingStation),
+                        lineVariantColor:
+                            Util.hexToColor(CustomColors.passingStationVariant),
+                        shadow: false))));
+          } else {
+            tempList.add(Container(
+                padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
+                child: CustomPaint(
+                    painter: StationIconBigPainter(
+                        lineColor: Util.hexToColor(CustomColors.passingStation),
+                        lineVariantColor:
+                            Util.hexToColor(CustomColors.passingStationVariant),
+                        shadow: false))));
+          }
+        }
+        //末2站
+        else if (currentStationListIndex == terminusListIndex! - 1) {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
@@ -948,7 +979,9 @@ class FiveStationsState extends State<FiveStations> with LCD {
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
                       shadow: false))));
-        } else {
+        }
+        //第3站~末3站
+        else {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
               child: CustomPaint(
@@ -1654,20 +1687,20 @@ class FiveStationsState extends State<FiveStations> with LCD {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "运行中 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
+              "五站图 已到站 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
           true);
     } else {
       noStationsSnackbar();
     }
   }
 
-  //导出下一站图
+  //导出已到站图
   Future<void> exportPassingImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
           _passingImageKey,
           await getExportPath(context, "保存",
-              "下一站 ${currentStationListIndex! + 1} $currentStationListValue.png"),
+              "已到站 ${currentStationListIndex! + 1} $currentStationListValue.png"),
           true);
     } else {
       noStationsSnackbar();

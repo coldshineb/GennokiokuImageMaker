@@ -7,7 +7,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Object/TransferLine.dart';
 import 'package:main/Util/CustomRegExp.dart';
@@ -108,87 +107,7 @@ class LinearRouteState extends State<LinearRoute> with LCD {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MenuBar(children: [
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: _importImage,
-                    child: const Text(
-                      "导入图片",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: importLineJson,
-                    child: const Text(
-                      "导入线路",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(),
-                const VerticalDivider(),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportAllImage,
-                    child: const Text(
-                      "导出全部图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportDynamicImage,
-                    child: const Text(
-                      "导出当前站全部图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportMainImage,
-                    child: const Text(
-                      "导出主线路图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: exportPassingImage,
-                    child: const Text(
-                      "导出下一站图",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text(
-                    "导出分辨率",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                DropdownButton(
-                  items: Widgets.resolutionList(),
-                  onChanged: (value) {
-                    setState(() {
-                      exportWidthValue = value!;
-                    });
-                  },
-                  value: exportWidthValue,
-                ),
-              ]),
+              importAndExportMenubar(),
               MenuBar(children: [
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
@@ -316,21 +235,8 @@ class LinearRouteState extends State<LinearRoute> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
-                              Container(
-                                  //原忆轨道交通图标
-                                  padding:
-                                      const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
-                                  alignment: Alignment.topLeft,
-                                  height: 274,
-                                  width: 274,
-                                  child: SvgPicture.string(
-                                      Util.railwayTransitLogo)),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(270, 16, 0, 0),
-                                child: Widgets.lineNumberIcon(
-                                    lineColor, lineNumber, lineNumberEN),
-                              ),
+                              gennokiokuRailwayTransitLogoWidget(),
+                              lineNumberIconWidget(lineColor, lineNumber, lineNumberEN),
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(522.5, 8, 0, 0),
@@ -487,6 +393,90 @@ class LinearRouteState extends State<LinearRoute> with LCD {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  MenuBar importAndExportMenubar() {
+    return MenuBar(children: [
+              Container(
+                height: 48,
+                child: MenuItemButton(
+                  onPressed: _importImage,
+                  child: const Text(
+                    "导入图片",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Container(
+                height: 48,
+                child: MenuItemButton(
+                  onPressed: importLineJson,
+                  child: const Text(
+                    "导入线路",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const VerticalDivider(),
+              const VerticalDivider(),
+              Container(
+                height: 48,
+                child: MenuItemButton(
+                  onPressed: exportAllImage,
+                  child: const Text(
+                    "导出全部图",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Container(
+                height: 48,
+                child: MenuItemButton(
+                  onPressed: exportDynamicImage,
+                  child: const Text(
+                    "导出当前站全部图",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const VerticalDivider(),
+              Container(
+                height: 48,
+                child: MenuItemButton(
+                  onPressed: exportMainImage,
+                  child: const Text(
+                    "导出主线路图",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Container(
+                height: 48,
+                child: MenuItemButton(
+                  onPressed: exportPassingImage,
+                  child: const Text(
+                    "导出下一站图",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 14),
+                child: const Text(
+                  "导出分辨率",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              DropdownButton(
+                items: Widgets.resolutionList(),
+                onChanged: (value) {
+                  setState(() {
+                    exportWidthValue = value!;
+                  });
+                },
+                value: exportWidthValue,
+              ),
+            ]);
   }
 
   //显示线路
