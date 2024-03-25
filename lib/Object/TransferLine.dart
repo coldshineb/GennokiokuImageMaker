@@ -1,9 +1,11 @@
 class TransferLine {
   final String lineNumber;
+  final String lineNumberEN;
   final String lineColor;
 
-  TransferLine({
-    required this.lineNumber,
+  TransferLine(
+    this.lineNumber, {
+    required this.lineNumberEN,
     required this.lineColor,
   });
 

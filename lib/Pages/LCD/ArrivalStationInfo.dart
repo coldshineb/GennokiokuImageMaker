@@ -15,10 +15,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
 
+import '../../Object/TransferLine.dart';
 import '../../Parent/LCD.dart';
 import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
+import '../../Util/CustomRegExp.dart';
 import '../../Util/Widgets.dart';
 
 void loadFont() async {
@@ -68,6 +70,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //站名集合
   List<Station> stationList = [];
+
+  //创建换乘线路列表的列表
+  List<List<TransferLine>> transferLineList = [];
 
   String lineNumber = "";
   String lineNumberEN = "";
@@ -341,7 +346,12 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               hereMark(),
                               directionMarkLeft(),
                               directionMarkRight(),
-                              transfer()
+                              transferFrame(),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 1535, top: 158),
+                                child: transferIcon(),
+                              )
                             ],
                           ),
                         ),
@@ -358,6 +368,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           //重置所有变量
           _imageBytes = null;
           stationList.clear();
+          transferLineList.clear();
           lineColor = Colors.transparent;
           currentStationListIndex = null;
           terminusListIndex = null;
@@ -375,9 +386,11 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     );
   }
 
-  Container transfer() {
+  Container transferFrame() {
     Container container = Container();
-    if (stationList.isNotEmpty) {
+    if (stationList.isNotEmpty &&
+        transferLineList[currentStationListIndex!].isNotEmpty) {
+      print(transferLineList[currentStationListIndex!]);
       String colorStr = jsonData['lineColor'];
       colorStr = colorStr.replaceAll('#', '');
       String s =
@@ -388,6 +401,36 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
       );
     }
     return container;
+  }
+
+  //显示换乘线路图标
+  Stack transferIcon() {
+    List<Container> iconList = [];
+    if (currentStationListIndex != null) {
+      List<TransferLine> value = transferLineList[currentStationListIndex!];
+      if (value.isNotEmpty) {
+        //遍历获取每站的换乘信息列表中具体的换乘线路信息
+        for (int j = 0; j < value.length; j++) {
+          TransferLine transferLine = value[j];
+          iconList.add(Container(
+              child: Stack(
+            children: [
+              Transform.scale(
+                scale: 1.27,
+                child: Widgets.lineNumberIcon(
+                    Util.hexToColor(value[j].lineColor),
+                    value[j].lineNumber,
+                    value[j].lineNumberEN),
+              )
+            ],
+          )));
+        }
+      }
+    }
+
+    return Stack(
+      children: iconList,
+    );
   }
 
   Container directionMarkLeft() {
@@ -649,6 +692,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         } else {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
+          transferLineList.clear();
           currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
           terminusListIndex = 0;
 
@@ -662,6 +706,22 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
+            //换乘信息和站点信息分开存，简化代码，显示换乘线路图标时直接读换乘线路列表的列表
+            //创建换乘线路列表
+            List<TransferLine> transferLines = [];
+            //判断是否有换乘信息
+            if (item['transfer'] != null) {
+              //读取换乘信息并转为换乘线路列表
+              List<dynamic> transfers = item['transfer'];
+              transferLines = transfers.map((transfer) {
+                return TransferLine(transfer['lineNumber'],
+                    lineNumberEN: transfer['lineNumberEN'],
+                    lineColor: transfer['lineColor']);
+              }).toList();
+            }
+            //添加换乘信息列表到换乘信息列表的列表
+            transferLineList.add(transferLines);
+
             Station station = Station(
               stationNameCN: item['stationNameCN'],
               stationNameEN: item['stationNameEN'],

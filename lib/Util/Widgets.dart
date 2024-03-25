@@ -276,7 +276,7 @@ class Widgets {
       top: -6,
       left: 9,
       child: Text(
-        transferLine.lineNumber,
+        transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 28,
             color: Util.getTextColorForBackground(
@@ -290,7 +290,7 @@ class Widgets {
       top: -6,
       left: 4,
       child: Text(
-        transferLine.lineNumber,
+        transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 28,
             color: Util.getTextColorForBackground(
@@ -304,7 +304,7 @@ class Widgets {
       top: 2,
       left: 6,
       child: Text(
-        transferLine.lineNumber,
+        transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 18,
             color: Util.getTextColorForBackground(
@@ -319,7 +319,7 @@ class Widgets {
       top: 1,
       left: 4,
       child: Text(
-        transferLine.lineNumber,
+        transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 20,
             color: Util.getTextColorForBackground(

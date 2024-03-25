@@ -551,7 +551,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         //遍历获取每站的换乘信息列表中具体的换乘线路信息
         for (int j = 0; j < value.length; j++) {
           TransferLine transferLine = value[j];
-          if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumber)) {
+          if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
                     (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
@@ -561,7 +561,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                     Widgets.transferLineTextOneDigit(transferLine)
                   ],
                 )));
-          } else if (CustomRegExp.twoDigits.hasMatch(transferLine.lineNumber)) {
+          } else if (CustomRegExp.twoDigits
+              .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
                     (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
@@ -572,7 +573,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                   ],
                 )));
           } else if (CustomRegExp.oneDigitOneCharacter
-              .hasMatch(transferLine.lineNumber)) {
+              .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
                     (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
@@ -583,7 +584,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                   ],
                 )));
           } else if (CustomRegExp.twoCharacters
-              .hasMatch(transferLine.lineNumber)) {
+              .hasMatch(transferLine.lineNumberEN)) {
             {
               iconList.add(Container(
                   padding: EdgeInsets.fromLTRB(
@@ -716,8 +717,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               //读取换乘信息并转为换乘线路列表
               List<dynamic> transfers = item['transfer'];
               transferLines = transfers.map((transfer) {
-                return TransferLine(
-                    lineNumber: transfer['lineNumber'],
+                return TransferLine("",
+                    lineNumberEN: transfer['lineNumberEN'],
                     lineColor: transfer['lineColor']);
               }).toList();
             }
