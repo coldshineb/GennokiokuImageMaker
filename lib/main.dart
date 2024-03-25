@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:main/Pages/LCD/ArrivalFiveStations.dart';
+import 'package:main/Pages/LCD/ArrivalLinearRoute.dart';
 import 'package:main/Pages/LCD/RunningLinearRoute.dart';
 
 import 'Pages/LCD/ArrivalStationInfo.dart';
@@ -61,6 +62,16 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ArrivalStationInfo()),
+                    );
+                  }),
+            ),
+            Center(
+              child: ElevatedButton(
+                  child: const Text('已到站 直线型线路图'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ArrivalLinearRoute()),
                     );
                   }),
             ),
