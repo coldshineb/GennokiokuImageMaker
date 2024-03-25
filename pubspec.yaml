@@ -71,6 +71,10 @@ flutter:
   assets:
      - assets/image/railwayTransitLogo.svg
      - assets/image/arrivalStationInfoBody.svg
+     - assets/image/arrivalStationInfoHere.svg
+     - assets/image/arrivalStationInfoDirectionToLeft.svg
+     - assets/image/arrivalStationInfoDirectionToRight.svg
+     - assets/image/arrivalStationInfoTransfer.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

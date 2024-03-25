@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
 
@@ -334,11 +335,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         ),
                                   )),
                               arrivalStationInfoBody(),
-                              Positioned(
-                                top: 184,
-                                left: 459,
-                                child: showCarriage(),
-                              )
+                              carriage(),
+                              directionMarkLeft(),
+                              directionMarkRight()
                             ],
                           ),
                         ),
@@ -372,15 +371,71 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     );
   }
 
-  Row showCarriage() {
+  Container directionMarkLeft() {
+    Container container = Container();
+    if (stationList.isNotEmpty) {
+      switch (trainDirectionValue) {
+        case 0:
+          container = Container(
+            padding: const EdgeInsets.only(left: 380, top: 251.5),
+            child: SvgPicture.asset(
+                height: 22,
+                width: 22,
+                "assets/image/arrivalStationInfoDirectionToLeft.svg"),
+          );
+          break;
+        case 1:
+          container = Container(
+            padding: const EdgeInsets.only(left: 380, top: 251.5),
+            child: SvgPicture.asset(
+                height: 22,
+                width: 22,
+                "assets/image/arrivalStationInfoDirectionToRight.svg"),
+          );
+          break;
+        default:
+      }
+    }
+    return container;
+  }
+
+  Container directionMarkRight() {
+    Container container = Container();
+    if (stationList.isNotEmpty) {
+      switch (trainDirectionValue) {
+        case 0:
+          container = Container(
+            padding: const EdgeInsets.only(left: 1186, top: 251.5),
+            child: SvgPicture.asset(
+                height: 22,
+                width: 22,
+                "assets/image/arrivalStationInfoDirectionToLeft.svg"),
+          );
+          break;
+        case 1:
+          container = Container(
+            padding: const EdgeInsets.only(left: 1186, top: 251.5),
+            child: SvgPicture.asset(
+                height: 22,
+                width: 22,
+                "assets/image/arrivalStationInfoDirectionToRight.svg"),
+          );
+          break;
+
+        default:
+      }
+    }
+    return container;
+  }
+
+  Container carriage() {
     List<Container> tempList = [];
     if (carriages != null) {
-      print(carriages);
       for (int i = 1; i < carriages! + 1; i++) {
         tempList.add(Container(
           alignment: Alignment.center,
           height: 61,
-          width: (725 - 4 * (carriages! - 1)) / carriages!,
+          width: (722 - 4 * (carriages! - 1)) / carriages!,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               color: Util.hexToColor("595757")),
@@ -420,8 +475,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         )
       ]);
     }
-    print(tempList);
-    return Row(children: tempList);
+    return Container(
+        padding: const EdgeInsets.only(left: 460, top: 184),
+        child: Row(children: tempList));
   }
 
   Container arrivalStationInfoBody() {
