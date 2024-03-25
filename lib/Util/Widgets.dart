@@ -58,8 +58,55 @@ class Widgets {
               ),
             ),
           ]));
-    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber) ||
-        CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
+    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber)) {
+      container = Container(
+          width: 100,
+          height: 45,
+          decoration: BoxDecoration(
+            color: lineColor,
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          child: Stack(children: [
+            Positioned(
+              bottom: -2,
+              left: 5,
+              child: Text(
+                lineNumber,
+                style: TextStyle(
+                    letterSpacing: -3,
+                    fontSize: 40,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              left: 46,
+              child: Text(
+                "号线",
+                style: TextStyle(
+                    letterSpacing: 3,
+                    fontSize: 18,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              top: 22,
+              left: 45,
+              child: Text(
+                "Line $lineNumberEN",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+          ]));
+    } else if (CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
       container = Container(
           width: 105,
           height: 45,

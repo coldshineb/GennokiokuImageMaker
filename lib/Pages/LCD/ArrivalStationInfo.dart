@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
 
 import '../../Parent/LCD.dart';
@@ -86,6 +87,8 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //默认导出宽度
   int exportWidthValue = 2560;
+
+  late Map<String, dynamic> jsonData;
 
   @override
   Widget build(BuildContext context) {
@@ -211,14 +214,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                   },
                   value: terminusListValue,
                 ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text(
-                    "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                ),
               ])
             ],
           ),
@@ -336,6 +331,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
+                              arrivalStationInfoBody()
                             ],
                           ),
                         ),
@@ -366,6 +362,26 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  Container arrivalStationInfoBody() {
+    Container container = Container();
+    if (lineColor != Colors.transparent) {
+      String colorStr = jsonData['lineColor'];
+      colorStr = colorStr.replaceAll('#', '');
+      String s = lineColor.computeLuminance() > 0.5
+          ? Util.arrivalStationInfoBody.replaceAll("fontColor", "000000")
+          : Util.arrivalStationInfoBody.replaceAll("fontColor", "ffffff");
+      s = s.replaceAll("lineColor", colorStr);
+      container = Container(
+          padding: const EdgeInsets.fromLTRB(330, 66, 0, 0),
+          height: 300,
+          width: 1323,
+          child: SvgPicture.string(s));
+      return container;
+    } else {
+      return container;
+    }
   }
 
   MenuBar importAndExportMenubar() {
@@ -452,7 +468,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   @override
   void importLineJson() async {
     List<dynamic> stationsFromJson = [];
-    Map<String, dynamic> jsonData;
 
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(

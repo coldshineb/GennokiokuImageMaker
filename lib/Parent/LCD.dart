@@ -31,7 +31,7 @@ mixin class LCD {
         alignment: Alignment.topLeft,
         height: 274,
         width: 274,
-        child: SvgPicture.string(Util.railwayTransitLogo));
+        child: SvgPicture.asset("assets/image/railwayTransitLogo.svg"));
   }
 
   //线路标识
