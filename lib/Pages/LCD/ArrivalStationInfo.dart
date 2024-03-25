@@ -338,6 +338,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                   )),
                               arrivalStationInfoBody(),
                               carriage(),
+                              hereMark(),
                               directionMarkLeft(),
                               directionMarkRight(),
                               transfer()
@@ -455,8 +456,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           height: 61,
           width: (722 - 4 * (carriages! - 1)) / carriages!,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: carriageColor),
+              borderRadius: BorderRadius.circular(5.0), color: carriageColor),
           child: Transform.translate(
             offset: const Offset(0, -4),
             child: Text(
@@ -477,7 +477,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         Container(
           alignment: Alignment.center,
           height: 61,
-          width: (725 - 4 * (carriages! - 1)) / carriages!,
+          width: (722 - 4 * (carriages! - 1)) / carriages!,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0), color: lineColor),
           child: Transform.translate(
@@ -496,6 +496,28 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     return Container(
         padding: const EdgeInsets.only(left: 460, top: 184),
         child: Row(children: tempList));
+  }
+
+  Container hereMark() {
+    Container container = Container();
+    if (carriages != null) {
+      container = Container(
+          padding: EdgeInsets.only(
+              left: 457.5 + //初始位置
+                  (726 / carriages! - 4) / 2 - //加上图标的一半宽度
+                  71 / 2 + //减去当前车厢标识的一半宽度，前三步计算出首个当前车厢标识的位置
+                  726 / carriages! * (currentCarriage! - 1), //加上图标的宽度
+              top: 251.5),
+          child: Transform.translate(
+            offset: const Offset(0, 0),
+            child: SvgPicture.asset(
+              "assets/image/arrivalStationInfoHere.svg",
+              height: 71,
+              width: 71,
+            ),
+          ));
+    }
+    return container;
   }
 
   Container arrivalStationInfoBody() {
