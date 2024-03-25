@@ -508,13 +508,10 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                   71 / 2 + //减去当前车厢标识的一半宽度，前三步计算出首个当前车厢标识的位置
                   726 / carriages! * (currentCarriage! - 1), //加上图标的宽度
               top: 251.5),
-          child: Transform.translate(
-            offset: const Offset(0, 0),
-            child: SvgPicture.asset(
-              "assets/image/arrivalStationInfoHere.svg",
-              height: 71,
-              width: 71,
-            ),
+          child: SvgPicture.asset(
+            "assets/image/arrivalStationInfoHere.svg",
+            height: 71,
+            width: 71,
           ));
     }
     return container;
