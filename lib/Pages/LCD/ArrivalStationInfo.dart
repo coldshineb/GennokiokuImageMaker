@@ -6,6 +6,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -73,6 +74,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //线路颜色，默认透明，导入文件时赋值
   Color lineColor = Colors.transparent;
+  Color carriageColor = Util.hexToColor("595757");
 
   int? carriages;
   int? currentCarriage;
@@ -454,7 +456,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           width: (722 - 4 * (carriages! - 1)) / carriages!,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
-              color: Util.hexToColor("595757")),
+              color: carriageColor),
           child: Transform.translate(
             offset: const Offset(0, -4),
             child: Text(
