@@ -337,7 +337,8 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               arrivalStationInfoBody(),
                               carriage(),
                               directionMarkLeft(),
-                              directionMarkRight()
+                              directionMarkRight(),
+                              transfer()
                             ],
                           ),
                         ),
@@ -369,6 +370,21 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  Container transfer() {
+    Container container = Container();
+    if (stationList.isNotEmpty) {
+      String colorStr = jsonData['lineColor'];
+      colorStr = colorStr.replaceAll('#', '');
+      String s =
+          Util.arrivalStationInfoTransfer.replaceAll("lineColor", colorStr);
+      container = Container(
+        padding: const EdgeInsets.only(left: 1348, top: 80),
+        child: SvgPicture.string(height: 206, width: 206, s),
+      );
+    }
+    return container;
   }
 
   Container directionMarkLeft() {
