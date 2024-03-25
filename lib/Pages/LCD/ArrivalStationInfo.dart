@@ -6,6 +6,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -59,7 +60,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
-  final GlobalKey _passingImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
@@ -70,9 +70,11 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   String lineNumber = "";
   String lineNumberEN = "";
 
-  //线路颜色和颜色变体，默认透明，导入文件时赋值
+  //线路颜色，默认透明，导入文件时赋值
   Color lineColor = Colors.transparent;
-  Color lineVariantColor = Colors.transparent;
+
+  int? carriages;
+  int? currentCarriage;
 
   //站名下拉菜单默认值，设空，导入文件时赋值
   String? currentStationListValue;
@@ -113,7 +115,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
-                    "（第一步）运行方向",
+                    "运行方向",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -152,7 +154,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
-                    "（第三步）当前站",
+                    "当前站",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -185,7 +187,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
-                    "（第二步）终点站",
+                    "终点站",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -331,7 +333,12 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
-                              arrivalStationInfoBody()
+                              arrivalStationInfoBody(),
+                              Positioned(
+                                top: 184,
+                                left: 459,
+                                child: showCarriage(),
+                              )
                             ],
                           ),
                         ),
@@ -349,19 +356,72 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           _imageBytes = null;
           stationList.clear();
           lineColor = Colors.transparent;
-          lineVariantColor = Colors.transparent;
           currentStationListIndex = null;
           terminusListIndex = null;
           currentStationListValue = null;
           terminusListValue = null;
           lineNumber = "";
           lineNumberEN = "";
+          carriages = null;
+          currentCarriage = null;
           setState(() {});
         },
         tooltip: '重置',
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  Row showCarriage() {
+    List<Container> tempList = [];
+    if (carriages != null) {
+      print(carriages);
+      for (int i = 1; i < carriages! + 1; i++) {
+        tempList.add(Container(
+          alignment: Alignment.center,
+          height: 61,
+          width: (725 - 4 * (carriages! - 1)) / carriages!,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              color: Util.hexToColor("595757")),
+          child: Transform.translate(
+            offset: const Offset(0, -4),
+            child: Text(
+              "$i",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 43,
+              ),
+            ),
+          ),
+        ));
+        tempList.add(Container(
+          width: 4,
+        ));
+      }
+      tempList
+          .replaceRange(2 * currentCarriage! - 2, 2 * currentCarriage! - 1, [
+        Container(
+          alignment: Alignment.center,
+          height: 61,
+          width: (725 - 4 * (carriages! - 1)) / carriages!,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0), color: lineColor),
+          child: Transform.translate(
+            offset: const Offset(0, -4),
+            child: Text(
+              "$currentCarriage",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 43,
+              ),
+            ),
+          ),
+        )
+      ]);
+    }
+    print(tempList);
+    return Row(children: tempList);
   }
 
   Container arrivalStationInfoBody() {
@@ -486,8 +546,14 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 2 或大于 32
-        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
+
+        int carriagesFromJson = int.parse(jsonData['carriages']);
+        int currentCarriageFromJson = int.parse(jsonData['currentCarriage']);
+
+        if (currentCarriageFromJson > carriagesFromJson ||
+            currentCarriageFromJson < 1) {
+          alertDialog("错误", "当前车厢不在车厢总数范围内");
+        } else {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
@@ -497,7 +563,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           lineNumber = jsonData['lineNumber'];
           lineNumberEN = jsonData['lineNumberEN'];
           lineColor = Util.hexToColor(jsonData['lineColor']);
-          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
+          carriages = carriagesFromJson;
+          currentCarriage = currentCarriageFromJson;
+
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
@@ -513,10 +581,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           terminusListValue = stationList[0].stationNameCN;
           // 刷新页面状态
           setState(() {});
-        } else if (stationsFromJson.length < 5) {
-          alertDialog("错误", "站点数量不能小于 5");
-        } else if (stationsFromJson.length > 32) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');
@@ -539,16 +603,12 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
             //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
             await exportImage(
-                _passingImageKey,
-                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _passingImageKey,
-                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                _mainImageKey,
+                "$path\\已到站 站点信息图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\五站图 已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\已到站 站点信息图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         } else if (currentStationListIndex! > terminusListIndex!) {
@@ -557,16 +617,12 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             setState(() {});
             //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
             await exportImage(
-                _passingImageKey,
-                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _passingImageKey,
-                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                _mainImageKey,
+                "$path\\已到站 站点信息图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\五站图 已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\已到站 站点信息图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         }
