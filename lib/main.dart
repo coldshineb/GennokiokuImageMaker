@@ -4,6 +4,7 @@ import 'package:main/Pages/LCD/ArrivalLinearRoute.dart';
 import 'package:main/Pages/LCD/RunningLinearRoute.dart';
 
 import 'Pages/LCD/ArrivalStationInfo.dart';
+import 'Pages/StationEntranceCover.dart';
 import 'Util/CustomScrollBehavior.dart';
 
 void main() {
@@ -72,6 +73,16 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ArrivalLinearRoute()),
+                    );
+                  }),
+            ),
+            Center(
+              child: ElevatedButton(
+                  child: const Text('出入口盖板'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StationEntranceCover()),
                     );
                   }),
             ),

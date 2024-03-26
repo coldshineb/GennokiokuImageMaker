@@ -33,11 +33,11 @@ class Widgets {
               ),
             ),
             Positioned(
-              left: 29,
+              left: 30,
               child: Text(
                 "号线",
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
@@ -45,12 +45,12 @@ class Widgets {
               ),
             ),
             Positioned(
-              top: 22,
-              left: 28,
+              top: 24,
+              left: 30,
               child: Text(
                 "Line $lineNumberEN",
                 style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
@@ -58,9 +58,10 @@ class Widgets {
               ),
             ),
           ]));
-    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber)) {
+    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber) ||
+        CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
       container = Container(
-          width: 100,
+          width: 75,
           height: 45,
           decoration: BoxDecoration(
             color: lineColor,
@@ -69,23 +70,24 @@ class Widgets {
           child: Stack(children: [
             Positioned(
               bottom: -2,
-              left: 5,
-              child: Text(
-                lineNumber,
-                style: TextStyle(
-                    letterSpacing: -3,
-                    fontSize: 40,
-                    fontFamily: "GennokiokuLCDFont",
-                    color: Util.getTextColorForBackground(lineColor)),
-              ),
+              left: 4,
+              child: Transform(
+                  transform: Matrix4.diagonal3Values(0.7, 1.0, 1.0),
+                  child: Text(
+                    lineNumber,
+                    style: TextStyle(
+                        letterSpacing: -3,
+                        fontSize: 40,
+                        fontFamily: "GennokiokuLCDFont",
+                        color: Util.getTextColorForBackground(lineColor)),
+                  )),
             ),
             Positioned(
-              left: 46,
+              left: 30,
               child: Text(
                 "号线",
                 style: TextStyle(
-                    letterSpacing: 3,
-                    fontSize: 18,
+                    fontSize: 20,
                     fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
@@ -93,60 +95,12 @@ class Widgets {
               ),
             ),
             Positioned(
-              top: 22,
-              left: 45,
+              top: 24,
+              left: 30,
               child: Text(
                 "Line $lineNumberEN",
                 style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: "GennokiokuLCDFont",
-                    color: lineColor == Colors.transparent
-                        ? Colors.transparent
-                        : Util.getTextColorForBackground(lineColor)),
-              ),
-            ),
-          ]));
-    } else if (CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
-      container = Container(
-          width: 105,
-          height: 45,
-          decoration: BoxDecoration(
-            color: lineColor,
-            borderRadius: BorderRadius.circular(7.0),
-          ),
-          child: Stack(children: [
-            Positioned(
-              bottom: -2,
-              left: 5,
-              child: Text(
-                lineNumber,
-                style: TextStyle(
-                    letterSpacing: -3,
-                    fontSize: 40,
-                    fontFamily: "GennokiokuLCDFont",
-                    color: Util.getTextColorForBackground(lineColor)),
-              ),
-            ),
-            Positioned(
-              left: 51,
-              child: Text(
-                "号线",
-                style: TextStyle(
-                    letterSpacing: 3,
-                    fontSize: 18,
-                    fontFamily: "GennokiokuLCDFont",
-                    color: lineColor == Colors.transparent
-                        ? Colors.transparent
-                        : Util.getTextColorForBackground(lineColor)),
-              ),
-            ),
-            Positioned(
-              top: 22,
-              left: 50,
-              child: Text(
-                "Line $lineNumberEN",
-                style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
