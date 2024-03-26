@@ -1567,8 +1567,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         //当前站为第2站
         else if (currentStationListIndex == 1) {
           int count = 0;
-          for (int i = currentStationListIndex! - 1;
-              i < currentStationListIndex! + 4;
+          for (int i = currentStationListIndex!;
+              i < currentStationListIndex! + 5;
               i++) {
             tempList.add(Positioned(
               top: 229,
@@ -1641,8 +1641,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         //当前站为末2站
         else if (currentStationListIndex == stationList.length - 2) {
           int count = 0;
-          for (int i = currentStationListIndex! - 3;
-              i < currentStationListIndex! + 2;
+          for (int i = currentStationListIndex! - 4;
+              i < currentStationListIndex! + 1;
               i++) {
             tempList.add(Positioned(
               top: 229,
