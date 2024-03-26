@@ -1,16 +1,15 @@
-# main
+# Gennokioku 原忆轨道交通 LCD 生成器
 
-A new Flutter project.
+基于 Flutter 跨平台框架的用于批量生成原忆轨道交通中使用的 LCD 图片、设施告示牌、灯箱图片等资源的工具箱。
 
-## Getting Started
+## 使用
 
-This project is a starting point for a Flutter application.
+请在 Gennokioku 原忆知识库中查看使用方法。
 
-A few resources to get you started if this is your first Flutter project:
+## 贡献
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+欢迎有代码经验和热爱轨道交通的朋友参与到贡献中。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# 版权
+
+代码仅作为学习交流使用，不得复制程序中的任何原创资源作为私用（如 SVG 资源、PNG 资源、站点图标等）；在二次分发时必须删除程序中一切与 Gennokioku 原忆相关的字样，并在版权信息处对本程序引用许可。
