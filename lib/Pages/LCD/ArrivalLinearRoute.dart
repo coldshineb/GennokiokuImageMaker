@@ -57,7 +57,6 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
-  final GlobalKey _passingImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;

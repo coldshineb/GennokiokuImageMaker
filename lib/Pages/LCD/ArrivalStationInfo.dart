@@ -2,16 +2,12 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
 
@@ -19,8 +15,6 @@ import '../../Object/TransferLine.dart';
 import '../../Parent/LCD.dart';
 import '../../Util.dart';
 import '../../Util/CustomColors.dart';
-import '../../Util/CustomPainter.dart';
-import '../../Util/CustomRegExp.dart';
 import '../../Util/Widgets.dart';
 
 void loadFont() async {
@@ -347,11 +341,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               directionMarkLeft(),
                               directionMarkRight(),
                               transferFrame(),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 1535, top: 158),
-                                child: transferIcon(),
-                              )
+                              transferIcon(),
                             ],
                           ),
                         ),
@@ -390,7 +380,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     Container container = Container();
     if (stationList.isNotEmpty &&
         transferLineList[currentStationListIndex!].isNotEmpty) {
-      print(transferLineList[currentStationListIndex!]);
       String colorStr = jsonData['lineColor'];
       colorStr = colorStr.replaceAll('#', '');
       String s =
@@ -404,32 +393,59 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   }
 
   //显示换乘线路图标
-  Stack transferIcon() {
-    List<Container> iconList = [];
+  Container transferIcon() {
+    List<Container> c = [];
     if (currentStationListIndex != null) {
       List<TransferLine> value = transferLineList[currentStationListIndex!];
       if (value.isNotEmpty) {
-        //遍历获取每站的换乘信息列表中具体的换乘线路信息
-        for (int j = 0; j < value.length; j++) {
-          TransferLine transferLine = value[j];
-          iconList.add(Container(
-              child: Stack(
-            children: [
-              Transform.scale(
-                scale: 1.27,
-                child: Widgets.lineNumberIcon(
-                    Util.hexToColor(value[j].lineColor),
-                    value[j].lineNumber,
-                    value[j].lineNumberEN),
-              )
-            ],
-          )));
+        switch (value.length) {
+          case 1:
+            c.add(Container(
+              padding: const EdgeInsets.only(top: 60),
+              child: transferIconWidget(value, 0),
+            ));
+            break;
+          case 2:
+            c.add(Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: transferIconWidget(value, 0),
+            ));
+            c.add(Container(
+              padding: const EdgeInsets.only(top: 100),
+              child: transferIconWidget(value, 1),
+            ));
+            break;
+          case 3:
+            c.add(Container(
+              padding: const EdgeInsets.only(top: 0),
+              child: transferIconWidget(value, 0),
+            ));
+            c.add(Container(
+              padding: const EdgeInsets.only(top: 60),
+              child: transferIconWidget(value, 1),
+            ));
+            c.add(Container(
+              padding: const EdgeInsets.only(top: 120),
+              child: transferIconWidget(value, 2),
+            ));
+            break;
+          default:
         }
       }
     }
+    return Container(
+      padding: const EdgeInsets.only(left: 1535, top: 98),
+      child: Stack(
+        children: c,
+      ),
+    );
+  }
 
-    return Stack(
-      children: iconList,
+  Transform transferIconWidget(List<TransferLine> value, int index) {
+    return Transform.scale(
+      scale: 1.27,
+      child: Widgets.lineNumberIcon(Util.hexToColor(value[index].lineColor),
+          value[index].lineNumber, value[index].lineNumberEN),
     );
   }
 
