@@ -185,7 +185,7 @@ class Widgets {
   }
 
   //导出分辨率选择下拉列表
-  static List<DropdownMenuItem> resolutionList() {
+  static List<DropdownMenuItem> resolutionListLCD() {
     return [
       const DropdownMenuItem(
         value: 2560,
@@ -209,6 +209,36 @@ class Widgets {
           "10240*2000",
           style:
               TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+        ),
+      )
+    ];
+  }
+
+  //导出分辨率选择下拉列表
+  static List<DropdownMenuItem> resolutionListCover() {
+    return [
+      const DropdownMenuItem(
+        value: 1920,
+        child: Text(
+          "1920*320",
+          style:
+          TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+        ),
+      ),
+      const DropdownMenuItem(
+        value: 3840,
+        child: Text(
+          "3840*640",
+          style:
+          TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+        ),
+      ),
+      const DropdownMenuItem(
+        value: 7680,
+        child: Text(
+          "7680*1280",
+          style:
+          TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
         ),
       )
     ];

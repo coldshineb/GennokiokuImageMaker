@@ -29,7 +29,7 @@ mixin class LCD {
     return Container(
         padding: const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
         alignment: Alignment.topLeft,
-        height: 274,
+        height: 80,
         width: 274,
         child: SvgPicture.asset("assets/image/railwayTransitLogo.svg"));
   }

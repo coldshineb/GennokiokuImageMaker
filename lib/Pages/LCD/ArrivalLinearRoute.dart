@@ -171,7 +171,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                       RepaintBoundary(
                         key: _mainImageKey,
                         child: Container(
-                          color: Util.hexToColor(CustomColors.backgroundColor),
+                          color: Util.hexToColor(CustomColors.backgroundColorLCD),
                           child: Stack(
                             children: [
                               const SizedBox(
@@ -380,7 +380,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         ),
       ),
       DropdownButton(
-        items: Widgets.resolutionList(),
+        items: Widgets.resolutionListLCD(),
         onChanged: (value) {
           setState(() {
             exportWidthValue = value!;

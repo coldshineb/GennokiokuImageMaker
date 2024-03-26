@@ -232,7 +232,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                       RepaintBoundary(
                         key: _mainImageKey,
                         child: Container(
-                          color: Util.hexToColor(CustomColors.backgroundColor),
+                          color: Util.hexToColor(CustomColors.backgroundColorLCD),
                           child: Stack(
                             children: [
                               const SizedBox(
@@ -598,16 +598,16 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: _importImage,
-          child: const Text(
-            "导入图片",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
+      // Container(
+      //   height: 48,
+      //   child: MenuItemButton(
+      //     onPressed: _importImage,
+      //     child: const Text(
+      //       "导入图片",
+      //       style: TextStyle(color: Colors.black),
+      //     ),
+      //   ),
+      // ),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -649,7 +649,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         ),
       ),
       DropdownButton(
-        items: Widgets.resolutionList(),
+        items: Widgets.resolutionListLCD(),
         onChanged: (value) {
           setState(() {
             exportWidthValue = value!;
