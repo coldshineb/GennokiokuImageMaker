@@ -97,6 +97,9 @@ flutter:
     - family: STZongyi
       fonts:
         - asset: assets/font/STZongyi.ttf
+    - family: HYYanKaiW
+      fonts:
+        - asset: assets/font/HYYanKaiW.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

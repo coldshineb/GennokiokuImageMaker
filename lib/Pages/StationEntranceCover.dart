@@ -140,6 +140,13 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                                   children: entranceNumber(),
                                 ),
                               ),
+                              Container(
+                                width: imageWidth,
+                                height: imageHeight,
+                                child: Stack(
+                                  children: stationName(),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -326,18 +333,45 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     return list;
   }
 
+  List<Positioned> stationName() {
+    return <Positioned>[
+      const Positioned(
+          top: 43,
+          left: 65,
+          right: 0,
+          child: Text(
+            textAlign: TextAlign.center,
+            "赤羽",
+            style: TextStyle(
+                letterSpacing: 4,
+                color: Colors.red,
+                fontSize: 80,
+                fontFamily: "HYYanKaiW"),
+          )),
+      const Positioned(
+          top: 131,
+          left: 61.5,
+          right: 0,
+          child: Text(
+            textAlign: TextAlign.center,
+            "CHI YU",
+            style: TextStyle(wordSpacing: 2, color: Colors.red, fontSize: 30),
+          )),
+    ];
+  }
+
   List<Positioned> entranceNumber() {
     return <Positioned>[
       const Positioned(
           top: 24,
           right: 263.5,
-          child: Text(textAlign: TextAlign.right,
+          child: Text(
+            textAlign: TextAlign.right,
             "A",
             style: TextStyle(color: Colors.red, fontSize: 122),
           )),
     ];
   }
-
 
   List<Positioned> entrance() {
     return <Positioned>[
@@ -346,14 +380,16 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
           left: 1181.5,
           child: Text(
             "入口",
-            style: TextStyle(letterSpacing: 3, color: Colors.white, fontSize: 48),
+            style:
+                TextStyle(letterSpacing: 3, color: Colors.white, fontSize: 48),
           )),
       const Positioned(
           top: 112,
           left: 1181.5,
           child: Text(
             "Entrance",
-            style: TextStyle(letterSpacing: 2.45, color: Colors.white, fontSize: 48),
+            style: TextStyle(
+                letterSpacing: 2.45, color: Colors.white, fontSize: 48),
           ))
     ];
   }
