@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:main/Object/EntranceCover.dart';
 
 import '../Object/Station.dart';
 import '../Util/Widgets.dart';
@@ -11,10 +12,25 @@ mixin class LCD {
     List<DropdownMenuItem> tempList = [];
     try {
       for (Station value in stationList) {
-        value.stationNameCN;
         tempList.add(DropdownMenuItem(
           value: value.stationNameCN,
           child: Text(value.stationNameCN),
+        ));
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return tempList;
+  }
+
+  //显示下一站、当前站和终点站下拉菜单内容
+  List<DropdownMenuItem> showEntranceList(List<EntranceCover> stationList) {
+    List<DropdownMenuItem> tempList = [];
+    try {
+      for (EntranceCover value in stationList) {
+        tempList.add(DropdownMenuItem(
+          value: "${value.stationNameCN} ${value.entranceNumber}",
+          child: Text("${value.stationNameCN} ${value.entranceNumber}"),
         ));
       }
     } on Exception catch (e) {

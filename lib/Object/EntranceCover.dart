@@ -3,18 +3,18 @@ import 'package:main/Object/Station.dart';
 import 'Line.dart';
 
 class EntranceCover extends Station {
-  final String entranceNumbers;
+  final String entranceNumber;
   final List<Line> lines;
 
   EntranceCover({
     required super.stationNameCN,
     required super.stationNameEN,
-    required this.entranceNumbers,
+    required this.entranceNumber,
     required this.lines,
   });
 
   @override
   String toString() {
-    return 'EntranceCover{stationNameCN: $stationNameCN, stationNameEN: $stationNameEN, entranceNumbers: $entranceNumbers, lines: $lines}';
+    return 'EntranceCover{stationNameCN: $stationNameCN, stationNameEN: $stationNameEN, entranceNumber: $entranceNumber, lines: $lines}';
   }
 }

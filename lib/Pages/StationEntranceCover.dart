@@ -64,13 +64,19 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   //背景图片字节数据
   Uint8List? _imageBytes;
 
+  String? stationListValue;
+  String? entranceValue;
+
+  //下拉列表选择站名和出入口编号对应的索引
+  int? stationIndex;
+
   //站名集合
   List<EntranceCover> stationList = [];
 
   //默认导出宽度
   int exportWidthValue = 1920;
 
-  int? stationIndex;
+  String? value2;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +88,39 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               importAndExportMenubar(),
+              MenuBar(children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 14, left: 7),
+                  child: const Text(
+                    "站名与入口编号",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                DropdownButton(
+                  disabledHint: const Text(
+                    "站名与入口编号",
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ), //设置空时的提示文字
+                  items: showEntranceList(stationList),
+                  onChanged: (value) {
+                    try {
+                      stationIndex = stationList.indexWhere((element) =>
+                          element.stationNameCN ==
+                              value.toString().split(" ")[0] &&
+                          element.entranceNumber ==
+                              value
+                                  .toString()
+                                  .split(" ")[1]); //根据选择的站名，找到站名集合中对应的索引
+                      value2 = value;
+                      setState(() {});
+                      print(stationIndex);
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  value: value2,
+                ),
+              ])
             ],
           ),
           Expanded(
@@ -334,43 +373,48 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   }
 
   List<Positioned> stationName() {
-    return <Positioned>[
-      const Positioned(
+    List<Positioned> list = [];
+    if (stationIndex != null) {
+      list.add(Positioned(
           top: 43,
           left: 65,
           right: 0,
           child: Text(
             textAlign: TextAlign.center,
-            "赤羽",
-            style: TextStyle(
+            stationList[stationIndex!].stationNameCN,
+            style: const TextStyle(
                 letterSpacing: 4,
-                color: Colors.red,
+                color: Colors.white,
                 fontSize: 80,
                 fontFamily: "HYYanKaiW"),
-          )),
-      const Positioned(
+          )));
+      list.add(Positioned(
           top: 131,
           left: 61.5,
           right: 0,
           child: Text(
             textAlign: TextAlign.center,
-            "CHI YU",
-            style: TextStyle(wordSpacing: 2, color: Colors.red, fontSize: 30),
-          )),
-    ];
+            stationList[stationIndex!].stationNameEN,
+            style: const TextStyle(
+                wordSpacing: 2, color: Colors.white, fontSize: 30),
+          )));
+    }
+    return list;
   }
 
   List<Positioned> entranceNumber() {
-    return <Positioned>[
-      const Positioned(
-          top: 24,
-          right: 263.5,
-          child: Text(
-            textAlign: TextAlign.right,
-            "A",
-            style: TextStyle(color: Colors.red, fontSize: 122),
-          )),
-    ];
+    return stationIndex != null
+        ? <Positioned>[
+            Positioned(
+                top: 24,
+                right: 263.5,
+                child: Text(
+                  textAlign: TextAlign.right,
+                  stationList[stationIndex!].entranceNumber,
+                  style: const TextStyle(color: Colors.white, fontSize: 122),
+                )),
+          ]
+        : <Positioned>[];
   }
 
   List<Positioned> entrance() {
@@ -434,7 +478,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         child: MenuItemButton(
           onPressed: exportMainImage,
           child: const Text(
-            "导出主线路图",
+            "导出当前图",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -524,14 +568,16 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
               EntranceCover station = EntranceCover(
                 stationNameCN: item['stationNameCN'],
                 stationNameEN: item['stationNameEN'],
-                entranceNumbers: value1,
+                entranceNumber: value1,
                 lines: line,
               );
               stationList.add(station);
             }
           }
+          stationListValue = stationList[0].stationNameCN;
+          entranceValue = stationList[0].entranceNumber;
+          value2 = "$stationListValue $entranceValue";
 
-          stationIndex = 0;
           // 刷新页面状态
           setState(() {});
         }
@@ -548,18 +594,21 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     if (stationList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
       if (path != null) {
-        setState(() {});
-        //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
-        //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
-        //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
-        await exportImage(
-            _mainImageKey,
-            "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} + 出入口编号.png",
-            false);
-        await exportImage(
-            _mainImageKey,
-            "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} + 出入口编号.png",
-            false);
+        for (int i = 0; i < stationList.length; i++) {
+          stationIndex = i;
+          setState(() {});
+          //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+          //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
+          //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
+          await exportImage(
+              _mainImageKey,
+              "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} ${stationList[stationIndex!].entranceNumber}.png",
+              false);
+          await exportImage(
+              _mainImageKey,
+              "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} ${stationList[stationIndex!].entranceNumber}.png",
+              false);
+        }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("图片已成功保存至: $path"),
         ));
@@ -569,13 +618,13 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     }
   }
 
-  //导出主线路图
+  //导出当前图
   Future<void> exportMainImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "出入口盖板 ${stationList[stationIndex!].stationNameCN} + 出入口编号.png"),
+              "出入口盖板 ${stationList[stationIndex!].stationNameCN} ${stationList[stationIndex!].entranceNumber}.png"),
           true);
     } else {
       noStationsSnackbar();
