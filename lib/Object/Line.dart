@@ -1,9 +1,9 @@
-class TransferLine {
+class Line {
   final String lineNumber;
   final String lineNumberEN;
   final String lineColor;
 
-  TransferLine(
+  Line(
     this.lineNumber, {
     required this.lineNumberEN,
     required this.lineColor,
@@ -11,6 +11,6 @@ class TransferLine {
 
   @override
   String toString() {
-    return 'TransferLine{lineNumber: $lineNumber, lineColor: $lineColor}';
+    return 'Line{lineNumber: $lineNumber, lineNumberEN: $lineNumberEN, lineColor: $lineColor}';
   }
 }

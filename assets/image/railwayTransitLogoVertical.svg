@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 239.27 222.43">
+    <g id="Template">
+        <text transform="translate(42.74 174.12)" fill="#fff">
+            <tspan font-family="STZongyi" font-size="25.62">
+                <tspan x="0" y="0">原忆轨道交通</tspan>
+            </tspan>
+            <tspan font-family="GennokiokuLCDFont" font-size="22.12">
+                <tspan x="-42.74" y="38.42">GENNOKIO</tspan>
+                <tspan x="71.94" y="38.42" letter-spacing="0em">K</tspan>
+                <tspan x="85.78" y="38.42" letter-spacing="0em">U RAI</tspan>
+                <tspan x="141.06" y="38.42" letter-spacing="-.07em">L</tspan>
+                <tspan x="151.59" y="38.42" letter-spacing="-.02em">W</tspan>
+                <tspan x="170.55" y="38.42" letter-spacing="-.07em">A</tspan>
+                <tspan x="184.06" y="38.42">Y</tspan>
+            </tspan>
+        </text>
+        <path d="M189.12,21.61v95.1c0,11.76-9.39,21.31-21.08,21.6-.13-22.95-16.43-42.07-38.09-46.55v-9.15c13.06-.16,26.12-.32,39.18-.48-13.06-9.72-26.12-19.44-39.18-29.16v-10.28h17.45l-17.45-24.86V0h37.55c11.94,0,21.61,9.68,21.61,21.61ZM109.96,91.89v-9.27c-13.06-.16-26.12-.32-39.18-.48,13.06-9.72,26.12-19.44,39.18-29.16v-10.28h-17.56l17.56-25.01V0h-37.55c-11.94,0-21.61,9.68-21.61,21.61v95.1c0,11.94,9.68,21.61,21.61,21.61h0c.13-22.77,16.16-41.76,37.55-46.44ZM119.96,105.37c-19.8,0-35.88,14.71-36.19,32.96h72.38c-.31-18.25-16.39-32.96-36.19-32.96Z"
+              fill="#54b8ea" stroke-width="0"/>
+    </g>
+</svg>

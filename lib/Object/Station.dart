@@ -1,5 +1,3 @@
-import 'TransferLine.dart';
-
 class Station {
   final String stationNameCN;
   final String stationNameEN;

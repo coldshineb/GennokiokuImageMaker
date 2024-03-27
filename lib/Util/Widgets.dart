@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main/Util/CustomRegExp.dart';
 
-import '../Object/TransferLine.dart';
+import '../Object/Line.dart';
 import '../Util.dart';
 
 class Widgets {
@@ -245,7 +245,7 @@ class Widgets {
   }
 
   //一系列换乘线路图标中的文字，因为后期有 U 型线路图，因此文字部分单独抽出来，没有抽出整个 Stack
-  static Container transferLineIcon(TransferLine transferLine) {
+  static Container transferLineIcon(Line transferLine) {
     return Container(
       height: 34,
       width: 34,
@@ -255,7 +255,7 @@ class Widgets {
     );
   }
 
-  static Positioned transferLineTextOneDigit(TransferLine transferLine) {
+  static Positioned transferLineTextOneDigit(Line transferLine) {
     return Positioned(
       top: -6,
       left: 9,
@@ -269,7 +269,7 @@ class Widgets {
     );
   }
 
-  static Positioned transferLineTextTwoDigits(TransferLine transferLine) {
+  static Positioned transferLineTextTwoDigits(Line transferLine) {
     return Positioned(
       top: -6,
       left: 4,
@@ -283,7 +283,7 @@ class Widgets {
     );
   }
 
-  static Positioned transferLineTextTwoCharacters(TransferLine transferLine) {
+  static Positioned transferLineTextTwoCharacters(Line transferLine) {
     return Positioned(
       top: 2,
       left: 6,
@@ -298,7 +298,7 @@ class Widgets {
   }
 
   static Positioned transferLineTextOneDigitOneCharacter(
-      TransferLine transferLine) {
+      Line transferLine) {
     return Positioned(
       top: 1,
       left: 4,

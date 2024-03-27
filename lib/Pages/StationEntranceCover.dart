@@ -6,9 +6,13 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:main/Object/EntranceCover.dart';
 import 'package:main/Object/Station.dart';
 
 import '../../Parent/LCD.dart';
@@ -16,6 +20,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
+import '../Object/Line.dart';
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -63,22 +68,12 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   Uint8List? _imageBytes;
 
   //站名集合
-  List<Station> stationList = [];
-
-  String lineNumber = "";
-  String lineNumberEN = "";
-
-  //线路颜色和颜色变体，默认透明，导入文件时赋值
-  Color lineColor = Colors.transparent;
-
-  //站名下拉菜单默认值，设空，导入文件时赋值
-  String? currentStationListValue;
-
-  //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
-  int? currentStationListIndex;
+  List<EntranceCover> stationList = [];
 
   //默认导出宽度
   int exportWidthValue = 1920;
+
+  int? stationIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -99,36 +94,6 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               importAndExportMenubar(),
-              MenuBar(children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text(
-                    "站名",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "站名",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ), //设置空时的提示文字
-                  items: showStationList(stationList),
-                  onChanged: (value) {
-                    try {
-                      int indexWhere = stationList.indexWhere(
-                          (element) => element.stationNameCN == value);
-                      indexWhere;
-                      currentStationListIndex =
-                          indexWhere; //根据选择的站名，找到站名集合中对应的索引
-                      currentStationListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: currentStationListValue,
-                ),
-              ])
             ],
           ),
           Expanded(
@@ -142,7 +107,8 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                       RepaintBoundary(
                         key: _mainImageKey,
                         child: Container(
-                          color: Util.hexToColor(CustomColors.backgroundColorCover),
+                          color: Util.hexToColor(
+                              CustomColors.backgroundColorCover),
                           child: Stack(
                             children: [
                               const SizedBox(
@@ -157,6 +123,21 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 18, top: 39),
+                                child: SvgPicture.asset(
+                                    height: 167,
+                                    width: 167,
+                                    "assets/image/railwayTransitLogoVertical.svg"),
+                              ),
+                              Container(
+                                width: imageWidth,
+                                height: imageHeight,
+                                child: Stack(
+                                  children: line(),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -172,18 +153,75 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         onPressed: () {
           //重置所有变量
           _imageBytes = null;
+          stationIndex = null;
           stationList.clear();
-          lineColor = Colors.transparent;
-          currentStationListIndex = null;
-          currentStationListValue = null;
-          lineNumber = "";
-          lineNumberEN = "";
           setState(() {});
         },
         tooltip: '重置',
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  List<Positioned> line() {
+    List<Positioned> list = [];
+    if (stationIndex != null) {
+      for (int i = 0; i < stationList[stationIndex!].lines.length; i++) {
+        var value = stationList[stationIndex!].lines[i];
+        list.add(Positioned(
+          left: 217 + 109.0 * i,
+          child: Container(height: 198, width: 95, color: Colors.white),
+        ));
+        list.add(Positioned(
+          top: 7,
+          left: -911 + 218.0 * i,
+          right: 0,
+          child: Center(
+            child: Text(
+              value.lineNumber,
+              style: TextStyle(
+                fontSize: 95,
+                color: Util.hexToColor(value.lineColor),
+              ),
+            ),
+          ),
+        ));
+        list.add(Positioned(
+          top: 120,
+          left: -911 + 218.0 * i,
+          right: 0,
+          child: Center(
+            child: Center(
+              child: Text(
+                "号线",
+                style: TextStyle(
+                  fontSize: 20,
+                  letterSpacing: 3,
+                  color: Util.hexToColor(value.lineColor),
+                ),
+              ),
+            ),
+          ),
+        ));
+        list.add(Positioned(
+          top: 143,
+          left: -911 + 218.0 * i,
+          right: 0,
+          child: Center(
+            child: Center(
+              child: Text(
+                "Line ${value.lineNumberEN}",
+                style: TextStyle(
+                  fontSize: 18.5,
+                  color: Util.hexToColor(value.lineColor),
+                ),
+              ),
+            ),
+          ),
+        ));
+      }
+    }
+    return list;
   }
 
   MenuBar importAndExportMenubar() {
@@ -289,28 +327,41 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 2 或大于 32
+
         if (stationsFromJson.isNotEmpty) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
-          currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
-
-          // 设置线路颜色和颜色变体
-          lineNumber = jsonData['lineNumber'];
-          lineNumberEN = jsonData['lineNumberEN'];
-          lineColor = Util.hexToColor(jsonData['lineColor']);
-          // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
-            Station station = Station(
-              stationNameCN: item['stationNameCN'],
-              stationNameEN: item['stationNameEN'],
-            );
-            stationList.add(station);
+            List<dynamic> entranceNumbers = item['entranceNumbers'];
+            List<dynamic> lines = item['lines'];
+
+            //每次添加新的线路数据前清空上一循环添加的数据
+            List<Line> line = [];
+
+            //获取线路信息
+            for (var value in lines) {
+              var lineNumber = value['lineNumber'];
+              var lineNumberEN = value['lineNumberEN'];
+              var lineColor = value['lineColor'];
+              line.add(Line(lineNumber,
+                  lineNumberEN: lineNumberEN, lineColor: lineColor));
+            }
+
+            //获取入口编号
+            for (var value1 in entranceNumbers) {
+              //最终在这里将所有站点信息添加进集合
+              EntranceCover station = EntranceCover(
+                stationNameCN: item['stationNameCN'],
+                stationNameEN: item['stationNameEN'],
+                entranceNumbers: value1,
+                lines: line,
+              );
+              stationList.add(station);
+            }
           }
 
-          //文件成功导入后将下拉菜单默认值设为第一站
-          currentStationListValue = stationList[0].stationNameCN;
+          stationIndex = 0;
           // 刷新页面状态
           setState(() {});
         }
@@ -327,21 +378,18 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     if (stationList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
       if (path != null) {
-        for (int i = 0; i < stationList.length - 1; i++) {
-          currentStationListIndex = i;
-          setState(() {});
-          //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
-          //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
-          //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
-          await exportImage(
-              _mainImageKey,
-              "$path\\出入口盖板 ${stationList[currentStationListIndex!].stationNameCN} + 出入口编号.png",
-              false);
-          await exportImage(
-              _mainImageKey,
-              "$path\\出入口盖板 ${stationList[currentStationListIndex!].stationNameCN} + 出入口编号.png",
-              false);
-        }
+        setState(() {});
+        //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
+        //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
+        //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
+        await exportImage(
+            _mainImageKey,
+            "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} + 出入口编号.png",
+            false);
+        await exportImage(
+            _mainImageKey,
+            "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} + 出入口编号.png",
+            false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("图片已成功保存至: $path"),
         ));
@@ -357,7 +405,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "出入口盖板 ${stationList[currentStationListIndex!].stationNameCN} + 出入口编号.png"),
+              "出入口盖板 ${stationList[stationIndex!].stationNameCN} + 出入口编号.png"),
           true);
     } else {
       noStationsSnackbar();

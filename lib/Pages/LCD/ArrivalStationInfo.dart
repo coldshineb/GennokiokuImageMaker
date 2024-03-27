@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
 
-import '../../Object/TransferLine.dart';
+import '../../Object/Line.dart';
 import '../../Parent/LCD.dart';
 import '../../Util.dart';
 import '../../Util/CustomColors.dart';
@@ -66,7 +66,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   List<Station> stationList = [];
 
   //创建换乘线路列表的列表
-  List<List<TransferLine>> transferLineList = [];
+  List<List<Line>> transferLineList = [];
 
   String lineNumber = "";
   String lineNumberEN = "";
@@ -396,7 +396,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   Container transferIcon() {
     List<Container> c = [];
     if (currentStationListIndex != null) {
-      List<TransferLine> value = transferLineList[currentStationListIndex!];
+      List<Line> value = transferLineList[currentStationListIndex!];
       if (value.isNotEmpty) {
         switch (value.length) {
           case 1:
@@ -441,7 +441,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     );
   }
 
-  Transform transferIconWidget(List<TransferLine> value, int index) {
+  Transform transferIconWidget(List<Line> value, int index) {
     return Transform.scale(
       scale: 1.27,
       child: Widgets.lineNumberIcon(Util.hexToColor(value[index].lineColor),
@@ -724,13 +724,13 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           for (dynamic item in stationsFromJson) {
             //换乘信息和站点信息分开存，简化代码，显示换乘线路图标时直接读换乘线路列表的列表
             //创建换乘线路列表
-            List<TransferLine> transferLines = [];
+            List<Line> transferLines = [];
             //判断是否有换乘信息
             if (item['transfer'] != null) {
               //读取换乘信息并转为换乘线路列表
               List<dynamic> transfers = item['transfer'];
               transferLines = transfers.map((transfer) {
-                return TransferLine(transfer['lineNumber'],
+                return Line(transfer['lineNumber'],
                     lineNumberEN: transfer['lineNumberEN'],
                     lineColor: transfer['lineColor']);
               }).toList();
