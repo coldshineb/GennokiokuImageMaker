@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Util {
+  static const String appVersion = '1.1';
+  static const String copyright =
+      '版权所有 © Calicy LLC 2022-2024 Gennokioku 原忆 2022-2024 Coldshine 2020-2024，由 Flutter 强力驱动';
+
   //轨道交通标识
   //如后续有修改，需要改 arrivalStationInfoBody.svg 以下内容
   //字体 FZLTHProGlobal-Regular, &apos;FZLTHPro Global&apos; 改为 GennokiokuLCDFont

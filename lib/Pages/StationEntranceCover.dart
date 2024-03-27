@@ -2,24 +2,19 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/EntranceCover.dart';
-import 'package:main/Object/Station.dart';
 import 'package:main/Util/CustomRegExp.dart';
 
 import '../../Parent/LCD.dart';
 import '../../Util.dart';
 import '../../Util/CustomColors.dart';
-import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
 import '../Object/Line.dart';
 

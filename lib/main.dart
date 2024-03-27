@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main/Pages/Roots.dart';
 
+import 'Pages/HomePage.dart';
 import 'Pages/StationEntranceCover.dart';
 import 'Util/CustomScrollBehavior.dart';
 
@@ -34,9 +35,12 @@ class _HomeState extends State<Home> {
     Widget page;
     switch (_selectedIndex) {
       case 0:
-        page = const LCDRoot();
+        page = const HomePage();
         break;
       case 1:
+        page = const LCDRoot();
+        break;
+      case 2:
         page = StationEntranceCover();
         break;
       default:
@@ -45,11 +49,13 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('原忆轨道交通图片生成器'),
+        backgroundColor: Colors.pink[50],
+        title: const Text('Gennokioku 原忆轨道交通图片生成器'),
       ),
       body: Row(
         children: <Widget>[
           NavigationRail(
+            backgroundColor: Colors.pink[50],
             selectedIndex: _selectedIndex,
             groupAlignment: groupAlignment,
             onDestinationSelected: (int index) {
@@ -59,6 +65,11 @@ class _HomeState extends State<Home> {
             },
             labelType: labelType,
             destinations: const <NavigationRailDestination>[
+              NavigationRailDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home),
+                label: Text('欢迎', style: TextStyle(fontSize: 15)),
+              ),
               NavigationRailDestination(
                 icon: Icon(Icons.fit_screen_outlined),
                 selectedIcon: Icon(Icons.fit_screen),
