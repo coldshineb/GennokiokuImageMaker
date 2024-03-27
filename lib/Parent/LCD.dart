@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../Object/Station.dart';
-import '../Util.dart';
 import '../Util/Widgets.dart';
 
 mixin class LCD {
@@ -47,6 +46,9 @@ mixin class LCD {
 
   //导入线路文件
   void importLineJson() async {}
+
+  //导入纹理
+  void importPattern() async {}
 
   //导出全部图
   void exportAllImage() async {}

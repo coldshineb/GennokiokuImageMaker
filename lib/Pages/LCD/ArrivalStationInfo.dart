@@ -61,6 +61,8 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //背景图片字节数据
   Uint8List? _imageBytes;
+  //背景纹理
+  Uint8List? pattern;
 
   //站名集合
   List<Station> stationList = [];
@@ -242,6 +244,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
+                              backgroundPattern(),
                               gennokiokuRailwayTransitLogoWidget(showLogo),
                               lineNumberIconWidget(
                                   lineColor, lineNumber, lineNumberEN),
@@ -352,6 +355,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         onPressed: () {
           //重置所有变量
           _imageBytes = null;
+          pattern = null;
           stationList.clear();
           transferLineList.clear();
           lineColor = Colors.transparent;
@@ -590,7 +594,14 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
       return container;
     }
   }
-
+  Container backgroundPattern() {
+    return pattern != null
+        ? Container(
+        height: imageHeight,
+        width: imageWidth,
+        child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
+        : Container();
+  }
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
       // Container(
@@ -609,6 +620,15 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           onPressed: importLineJson,
           child: const Text(
             "导入线路",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: importPattern,
+          child: const Text(
+            "导入纹理",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -683,6 +703,22 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     }
   }
 
+  //导入纹理
+  @override
+  void importPattern() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      withData: true,
+      allowedExtensions: ['png'],
+      dialogTitle: '选择纹理图片文件',
+    );
+    if (result != null) {
+      Uint8List? bytes = result.files.single.bytes;
+      setState(() {
+        pattern = bytes;
+      });
+    }
+  }
   //导入线路文件
   @override
   void importLineJson() async {

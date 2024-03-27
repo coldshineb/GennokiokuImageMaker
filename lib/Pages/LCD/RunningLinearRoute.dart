@@ -61,6 +61,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   //背景图片字节数据
   Uint8List? _imageBytes;
+  //背景纹理
+  Uint8List? pattern;
 
   //站名集合
   List<Station> stationList = [];
@@ -233,6 +235,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
+                              backgroundPattern(),
                               gennokiokuRailwayTransitLogoWidget(showLogo),
                               lineNumberIconWidget(
                                   lineColor, lineNumber, lineNumberEN),
@@ -376,6 +379,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         onPressed: () {
           //重置所有变量
           _imageBytes = null;
+          pattern = null;
           stationList.clear();
           transferLineList.clear();
           lineColor = Colors.transparent;
@@ -392,6 +396,15 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  Container backgroundPattern() {
+    return pattern != null
+        ? Container(
+            height: imageHeight,
+            width: imageWidth,
+            child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
+        : Container();
   }
 
   MenuBar importAndExportMenubar() {
@@ -412,6 +425,16 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           onPressed: importLineJson,
           child: const Text(
             "导入线路",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: importPattern,
+          child: const Text(
+            "导入纹理",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -922,6 +945,23 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         print('读取文件失败: $e');
         alertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
+    }
+  }
+
+  //导入纹理
+  @override
+  void importPattern() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      withData: true,
+      allowedExtensions: ['png'],
+      dialogTitle: '选择纹理图片文件',
+    );
+    if (result != null) {
+      Uint8List? bytes = result.files.single.bytes;
+      setState(() {
+        pattern = bytes;
+      });
     }
   }
 
