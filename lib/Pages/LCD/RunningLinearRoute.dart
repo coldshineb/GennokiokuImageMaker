@@ -89,6 +89,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //默认导出宽度
   int exportWidthValue = 2560;
 
+  //线路线条宽度
+  int lineLength = 1330;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,7 +223,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                       RepaintBoundary(
                         key: _mainImageKey,
                         child: Container(
-                          color: Util.hexToColor(CustomColors.backgroundColorLCD),
+                          color:
+                              Util.hexToColor(CustomColors.backgroundColorLCD),
                           child: Stack(
                             children: [
                               const SizedBox(
@@ -533,12 +537,13 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         }
       } else {
         //下一站为首站
+
         if (nextStationListIndex == 0) {
           replaceList.add(Container(
             //最左侧，不用间隔
             height: 15,
             child: Container(
-              width: (1400 / (stationList.length - 1)),
+              width: (lineLength / (stationList.length - 1)),
               color: lineColor,
             ),
           ));
@@ -548,12 +553,12 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         else if (nextStationListIndex == stationList.length - 1) {
           replaceList.add(Container(
             padding: EdgeInsets.only(
-                left: (1400 / (stationList.length - 1)) *
+                left: (lineLength / (stationList.length - 1)) *
                     (stationList.length - 2)),
             //最右侧
             height: 15,
             child: Container(
-              width: (1400 / (stationList.length - 1)),
+              width: (lineLength / (stationList.length - 1)),
               color: lineColor,
             ),
           ));
@@ -566,11 +571,11 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           if (trainDirectionValue == 0) {
             replaceList.add(Container(
               padding: EdgeInsets.only(
-                  left: (1400 / (stationList.length - 1)) *
+                  left: (lineLength / (stationList.length - 1)) *
                       nextStationListIndex!),
               height: 15,
               child: Container(
-                width: (1400 / (stationList.length - 1)),
+                width: (lineLength / (stationList.length - 1)),
                 color: lineColor,
               ),
             ));
@@ -581,11 +586,11 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           else {
             replaceList.add(Container(
               padding: EdgeInsets.only(
-                  left: (1400 / (stationList.length - 1)) *
+                  left: (lineLength / (stationList.length - 1)) *
                       (nextStationListIndex! - 1)),
               height: 15,
               child: Container(
-                width: (1400 / (stationList.length - 1)),
+                width: (lineLength / (stationList.length - 1)),
                 color: lineColor,
               ),
             ));
@@ -603,11 +608,12 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //线路
   Container routeLine(int i, Color color) {
     return Container(
-      padding: EdgeInsets.only(left: (1400 / (stationList.length - 1)) * i),
+      padding:
+          EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
       //间隔
       height: 15,
       child: Container(
-        width: (1400 / (stationList.length - 1)), //每个站与站之间线条的宽度
+        width: (lineLength / (stationList.length - 1)), //每个站与站之间线条的宽度
         color: color,
       ),
     );
@@ -616,10 +622,11 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
+
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+              10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: StationIconSmallPainter(
                 lineColor: Util.hexToColor(CustomColors.passedStation),
@@ -634,7 +641,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         for (int i = nextStationListIndex!; i < terminusListIndex! + 1; i++) {
           replaceList.add(Container(
               padding: EdgeInsets.fromLTRB(
-                  10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
                 painter: StationIconSmallPainter(
                     lineColor: lineColor,
@@ -649,7 +656,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
           replaceList.add(Container(
               padding: EdgeInsets.fromLTRB(
-                  10 + (1400 / (stationList.length - 1)) * i, 0, 0, 0),
+                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
                 painter: StationIconSmallPainter(
                     lineColor: lineColor,
@@ -672,7 +679,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     if (nextStationListIndex != null) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (1400 / (stationList.length - 1)) * nextStationListIndex!,
+              10 +
+                  (lineLength / (stationList.length - 1)) *
+                      nextStationListIndex!,
               0,
               0,
               0),
@@ -699,10 +708,14 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         //遍历获取每站的换乘信息列表中具体的换乘线路信息
         for (int j = 0; j < value.length; j++) {
           TransferLine transferLine = value[j];
+
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -713,7 +726,10 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -724,7 +740,10 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
-                    (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -736,7 +755,10 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             {
               iconList.add(Container(
                   padding: EdgeInsets.fromLTRB(
-                      (1400 / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                      (lineLength / (stationList.length - 1)) * i,
+                      35.5 * j,
+                      0,
+                      0),
                   child: Stack(
                     children: [
                       Widgets.transferLineIcon(transferLine),
@@ -760,7 +782,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     for (Station value in stationList) {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
-            (1400 / (stationList.length - 1)) * count, 0, 0, 0),
+            (lineLength / (stationList.length - 1)) * count, 0, 0, 0),
         child: Container(
           //逆时针45度
           transform: Matrix4.rotationZ(-0.75),
@@ -778,7 +800,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
             //英文站名做适当偏移
-            15 + (1400 / (stationList.length - 1)) * count,
+            15 + (lineLength / (stationList.length - 1)) * count,
             10,
             0,
             0),
