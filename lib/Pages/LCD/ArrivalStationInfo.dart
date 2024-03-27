@@ -97,15 +97,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-          tooltip: '返回',
-        ),
-        title: const Text('已到站 站点信息图'),
-        elevation: 20,
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
