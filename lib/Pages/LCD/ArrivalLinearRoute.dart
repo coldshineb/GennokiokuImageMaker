@@ -82,9 +82,12 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
   int? currentStationListIndex;
   int? terminusListIndex;
 
+  //是否显示原忆轨道交通品牌图标
+  bool showLogo = true;
+
   //默认导出宽度
   int exportWidthValue = 2560;
-  
+
   //线路线条宽度
   int lineLength = 1330;
 
@@ -165,7 +168,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                       RepaintBoundary(
                         key: _mainImageKey,
                         child: Container(
-                          color: Util.hexToColor(CustomColors.backgroundColorLCD),
+                          color:
+                              Util.hexToColor(CustomColors.backgroundColorLCD),
                           child: Stack(
                             children: [
                               const SizedBox(
@@ -180,7 +184,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
-                              gennokiokuRailwayTransitLogoWidget(),
+                              gennokiokuRailwayTransitLogoWidget(showLogo),
                               lineNumberIconWidget(
                                   lineColor, lineNumber, lineNumberEN),
                               Container(
@@ -382,6 +386,18 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         },
         value: exportWidthValue,
       ),
+      const VerticalDivider(),
+      const VerticalDivider(),
+      Container(
+          height: 48,
+          child: CheckboxMenuButton(
+            value: showLogo,
+            onChanged: (bool? value) {
+              showLogo = value!;
+              setState(() {});
+            },
+            child: const Text("显示品牌图标"),
+          )),
     ]);
   }
 
@@ -446,7 +462,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
   //线路
   Container routeLine(int i, Color color) {
     return Container(
-      padding: EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
+      padding:
+          EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
       //间隔
       height: 15,
       child: Container(
@@ -517,7 +534,9 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
     if (currentStationListIndex != null) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (lineLength / (stationList.length - 1)) * currentStationListIndex!,
+              10 +
+                  (lineLength / (stationList.length - 1)) *
+                      currentStationListIndex!,
               0,
               0,
               0),
@@ -547,7 +566,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -558,7 +580,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -569,7 +594,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -581,7 +609,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
             {
               iconList.add(Container(
                   padding: EdgeInsets.fromLTRB(
-                      (lineLength / (stationList.length - 1)) * i, 35.5 * j, 0, 0),
+                      (lineLength / (stationList.length - 1)) * i,
+                      35.5 * j,
+                      0,
+                      0),
                   child: Stack(
                     children: [
                       Widgets.transferLineIcon(transferLine),

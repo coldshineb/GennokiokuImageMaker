@@ -86,6 +86,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //运行方向，用于处理下一站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
   int trainDirectionValue = 1;
 
+  //是否显示原忆轨道交通品牌图标
+  bool showLogo = true;
+
   //默认导出宽度
   int exportWidthValue = 2560;
 
@@ -230,7 +233,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
-                              gennokiokuRailwayTransitLogoWidget(),
+                              gennokiokuRailwayTransitLogoWidget(showLogo),
                               lineNumberIconWidget(
                                   lineColor, lineNumber, lineNumberEN),
                               Container(
@@ -472,6 +475,18 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         },
         value: exportWidthValue,
       ),
+      const VerticalDivider(),
+      const VerticalDivider(),
+      Container(
+          height: 48,
+          child: CheckboxMenuButton(
+            value: showLogo,
+            onChanged: (bool? value) {
+              showLogo = value!;
+              setState(() {});
+            },
+            child: const Text("显示品牌图标"),
+          )),
     ]);
   }
 

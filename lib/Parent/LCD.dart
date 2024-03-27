@@ -25,13 +25,15 @@ mixin class LCD {
   }
 
   //原忆轨道交通图标
-  Container gennokiokuRailwayTransitLogoWidget() {
-    return Container(
-        padding: const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
-        alignment: Alignment.topLeft,
-        height: 80,
-        width: 274,
-        child: SvgPicture.asset("assets/image/railwayTransitLogo.svg"));
+  Container gennokiokuRailwayTransitLogoWidget(bool show) {
+    return show
+        ? Container(
+            padding: const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
+            alignment: Alignment.topLeft,
+            height: 80,
+            width: 274,
+            child: SvgPicture.asset("assets/image/railwayTransitLogo.svg"))
+        : Container();
   }
 
   //线路标识

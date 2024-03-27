@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -125,6 +126,20 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                                   children: line(),
                                 ),
                               ),
+                              Container(
+                                width: imageWidth,
+                                height: imageHeight,
+                                child: Stack(
+                                  children: entrance(),
+                                ),
+                              ),
+                              Container(
+                                width: imageWidth,
+                                height: imageHeight,
+                                child: Stack(
+                                  children: entranceNumber(),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -228,19 +243,20 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
               ),
             ),
           ));
-        }else if (CustomRegExp.fourChineseCharacters.hasMatch(value.lineNumber)) {
+        } else if (CustomRegExp.fourChineseCharacters
+            .hasMatch(value.lineNumber)) {
           list.add(Positioned(
             top: 43.5,
             left: -909 + 218.0 * i,
             right: 0,
             child: Center(
-                child: Text(
-                  value.lineNumber.substring(0,2),
-                  style: TextStyle(
-                    fontSize: 38,
-                    color: Util.hexToColor(value.lineColor),
-                  ),
+              child: Text(
+                value.lineNumber.substring(0, 2),
+                style: TextStyle(
+                  fontSize: 38,
+                  color: Util.hexToColor(value.lineColor),
                 ),
+              ),
             ),
           ));
           list.add(Positioned(
@@ -249,7 +265,37 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             right: 0,
             child: Center(
               child: Text(
-                value.lineNumber.substring(2,4),
+                value.lineNumber.substring(2, 4),
+                style: TextStyle(
+                  fontSize: 38,
+                  color: Util.hexToColor(value.lineColor),
+                ),
+              ),
+            ),
+          ));
+        } else if (CustomRegExp.fiveChineseCharacters
+            .hasMatch(value.lineNumber)) {
+          list.add(Positioned(
+            top: 51,
+            left: -909 + 218.0 * i,
+            right: 0,
+            child: Center(
+              child: Text(
+                value.lineNumber.substring(0, 3),
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Util.hexToColor(value.lineColor),
+                ),
+              ),
+            ),
+          ));
+          list.add(Positioned(
+            top: 89.5,
+            left: -909 + 218.0 * i,
+            right: 0,
+            child: Center(
+              child: Text(
+                value.lineNumber.substring(3, 5),
                 style: TextStyle(
                   fontSize: 38,
                   color: Util.hexToColor(value.lineColor),
@@ -258,7 +304,6 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             ),
           ));
         }
-
 
         list.add(Positioned(
           top: 143,
@@ -279,6 +324,38 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
       }
     }
     return list;
+  }
+
+  List<Positioned> entranceNumber() {
+    return <Positioned>[
+      const Positioned(
+          top: 24,
+          right: 263.5,
+          child: Text(textAlign: TextAlign.right,
+            "A",
+            style: TextStyle(color: Colors.red, fontSize: 122),
+          )),
+    ];
+  }
+
+
+  List<Positioned> entrance() {
+    return <Positioned>[
+      const Positioned(
+          top: 54,
+          left: 1181.5,
+          child: Text(
+            "入口",
+            style: TextStyle(letterSpacing: 3, color: Colors.white, fontSize: 48),
+          )),
+      const Positioned(
+          top: 112,
+          left: 1181.5,
+          child: Text(
+            "Entrance",
+            style: TextStyle(letterSpacing: 2.45, color: Colors.white, fontSize: 48),
+          ))
+    ];
   }
 
   MenuBar importAndExportMenubar() {
