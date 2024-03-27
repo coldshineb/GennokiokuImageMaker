@@ -5,7 +5,6 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -64,19 +63,19 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   //背景图片字节数据
   Uint8List? _imageBytes;
 
-  String? stationListValue;
-  String? entranceValue;
+  String? stationValue; //站名
+  String? entranceValue; //出入口编号
+  String? entranceListValue; //下拉列表内容  站名+出入口编号
+  int? entranceIndex; //下拉列表选择站名和出入口编号对应的索引
 
-  //下拉列表选择站名和出入口编号对应的索引
-  int? stationIndex;
+  //站名和出入口编号集合
+  List<EntranceCover> entranceList = [];
 
-  //站名集合
-  List<EntranceCover> stationList = [];
+  //是否显示原忆轨道交通品牌图标
+  bool showLogo = true;
 
   //默认导出宽度
   int exportWidthValue = 1920;
-
-  String? value2;
 
   @override
   Widget build(BuildContext context) {
@@ -101,24 +100,22 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                     "站名与入口编号",
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ), //设置空时的提示文字
-                  items: showEntranceList(stationList),
+                  items: showEntranceList(entranceList),
                   onChanged: (value) {
                     try {
-                      stationIndex = stationList.indexWhere((element) =>
+                      entranceIndex = entranceList.indexWhere((element) =>
                           element.stationNameCN ==
                               value.toString().split(" ")[0] &&
                           element.entranceNumber ==
-                              value
-                                  .toString()
-                                  .split(" ")[1]); //根据选择的站名，找到站名集合中对应的索引
-                      value2 = value;
+                              value.toString().split(
+                                  " ")[1]); //根据选择的站名和出入口编号，找到站名和出入口编号集合中对应的索引
+                      entranceListValue = value;
                       setState(() {});
-                      print(stationIndex);
                     } catch (e) {
                       print(e);
                     }
                   },
-                  value: value2,
+                  value: entranceListValue,
                 ),
               ])
             ],
@@ -150,14 +147,8 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 18, top: 39),
-                                child: SvgPicture.asset(
-                                    height: 167,
-                                    width: 167,
-                                    "assets/image/railwayTransitLogoVertical.svg"),
-                              ),
+                              gennokiokuRailwayTransitLogoWidgetVertical(
+                                  showLogo),
                               Container(
                                 width: imageWidth,
                                 height: imageHeight,
@@ -201,8 +192,11 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         onPressed: () {
           //重置所有变量
           _imageBytes = null;
-          stationIndex = null;
-          stationList.clear();
+          entranceIndex = null;
+          entranceList.clear();
+          stationValue = null;
+          entranceValue = null;
+          entranceListValue = null;
           setState(() {});
         },
         tooltip: '重置',
@@ -211,11 +205,24 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     );
   }
 
+  Container gennokiokuRailwayTransitLogoWidgetVertical(bool show) {
+    return show
+        ? Container(
+            padding: const EdgeInsets.only(left: 18, top: 39),
+            child: SvgPicture.asset(
+                height: 167,
+                width: 167,
+                "assets/image/railwayTransitLogoVertical.svg"),
+          )
+        : Container();
+  }
+
+  //线路标识
   List<Positioned> line() {
     List<Positioned> list = [];
-    if (stationIndex != null) {
-      for (int i = 0; i < stationList[stationIndex!].lines.length; i++) {
-        var value = stationList[stationIndex!].lines[i];
+    if (entranceList.isNotEmpty) {
+      for (int i = 0; i < entranceList[entranceIndex!].lines.length; i++) {
+        var value = entranceList[entranceIndex!].lines[i];
         list.add(Positioned(
           left: 217 + 109.0 * i,
           child: Container(height: 198, width: 95, color: Colors.white),
@@ -372,16 +379,17 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     return list;
   }
 
+  //站名
   List<Positioned> stationName() {
     List<Positioned> list = [];
-    if (stationIndex != null) {
+    if (entranceList.isNotEmpty) {
       list.add(Positioned(
           top: 43,
           left: 65,
           right: 0,
           child: Text(
             textAlign: TextAlign.center,
-            stationList[stationIndex!].stationNameCN,
+            entranceList[entranceIndex!].stationNameCN,
             style: const TextStyle(
                 letterSpacing: 4,
                 color: Colors.white,
@@ -394,7 +402,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
           right: 0,
           child: Text(
             textAlign: TextAlign.center,
-            stationList[stationIndex!].stationNameEN,
+            entranceList[entranceIndex!].stationNameEN,
             style: const TextStyle(
                 wordSpacing: 2, color: Colors.white, fontSize: 30),
           )));
@@ -402,21 +410,23 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     return list;
   }
 
+  //出入口编号
   List<Positioned> entranceNumber() {
-    return stationIndex != null
+    return entranceList.isNotEmpty
         ? <Positioned>[
             Positioned(
                 top: 24,
                 right: 263.5,
                 child: Text(
                   textAlign: TextAlign.right,
-                  stationList[stationIndex!].entranceNumber,
+                  entranceList[entranceIndex!].entranceNumber,
                   style: const TextStyle(color: Colors.white, fontSize: 122),
                 )),
           ]
         : <Positioned>[];
   }
 
+  //"入口 Entrance"标识
   List<Positioned> entrance() {
     return <Positioned>[
       const Positioned(
@@ -499,6 +509,18 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         },
         value: exportWidthValue,
       ),
+      const VerticalDivider(),
+      const VerticalDivider(),
+      Container(
+          height: 48,
+          child: CheckboxMenuButton(
+            value: showLogo,
+            onChanged: (bool? value) {
+              showLogo = value!;
+              setState(() {});
+            },
+            child: const Text("显示品牌图标"),
+          )),
     ]);
   }
 
@@ -544,7 +566,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
 
         if (stationsFromJson.isNotEmpty) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
-          stationList.clear();
+          entranceList.clear();
 
           for (dynamic item in stationsFromJson) {
             List<dynamic> entranceNumbers = item['entranceNumbers'];
@@ -571,12 +593,12 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                 entranceNumber: value1,
                 lines: line,
               );
-              stationList.add(station);
+              entranceList.add(station);
             }
           }
-          stationListValue = stationList[0].stationNameCN;
-          entranceValue = stationList[0].entranceNumber;
-          value2 = "$stationListValue $entranceValue";
+          entranceListValue =
+              "${entranceList[0].stationNameCN} ${entranceList[0].entranceNumber}"; //把第一个元素的信息给到下拉列表
+          entranceIndex = 0; //设置默认显示第一张图
 
           // 刷新页面状态
           setState(() {});
@@ -591,22 +613,22 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   //导出全部图
   @override
   void exportAllImage() async {
-    if (stationList.isNotEmpty) {
+    if (entranceList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
       if (path != null) {
-        for (int i = 0; i < stationList.length; i++) {
-          stationIndex = i;
+        for (int i = 0; i < entranceList.length; i++) {
+          entranceIndex = i;
           setState(() {});
           //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
           //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
           //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
           await exportImage(
               _mainImageKey,
-              "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} ${stationList[stationIndex!].entranceNumber}.png",
+              "$path\\出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
               false);
           await exportImage(
               _mainImageKey,
-              "$path\\出入口盖板 ${stationList[stationIndex!].stationNameCN} ${stationList[stationIndex!].entranceNumber}.png",
+              "$path\\出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
               false);
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -620,11 +642,11 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
 
   //导出当前图
   Future<void> exportMainImage() async {
-    if (stationList.isNotEmpty) {
+    if (entranceList.isNotEmpty) {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "出入口盖板 ${stationList[stationIndex!].stationNameCN} ${stationList[stationIndex!].entranceNumber}.png"),
+              "出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png"),
           true);
     } else {
       noStationsSnackbar();
