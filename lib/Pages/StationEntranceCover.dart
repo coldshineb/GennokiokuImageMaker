@@ -14,6 +14,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/EntranceCover.dart';
 import 'package:main/Object/Station.dart';
+import 'package:main/Util/CustomRegExp.dart';
 
 import '../../Parent/LCD.dart';
 import '../../Util.dart';
@@ -172,37 +173,107 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
           left: 217 + 109.0 * i,
           child: Container(height: 198, width: 95, color: Colors.white),
         ));
-        list.add(Positioned(
-          top: 7,
-          left: -911 + 218.0 * i,
-          right: 0,
-          child: Center(
-            child: Text(
-              value.lineNumber,
-              style: TextStyle(
-                fontSize: 95,
-                color: Util.hexToColor(value.lineColor),
-              ),
-            ),
-          ),
-        ));
-        list.add(Positioned(
-          top: 120,
-          left: -911 + 218.0 * i,
-          right: 0,
-          child: Center(
+        if (CustomRegExp.oneDigit.hasMatch(value.lineNumber)) {
+          list.add(Positioned(
+            top: 7,
+            left: -911 + 218.0 * i,
+            right: 0,
             child: Center(
               child: Text(
-                "号线",
+                value.lineNumber,
                 style: TextStyle(
-                  fontSize: 20,
-                  letterSpacing: 3,
+                  fontSize: 95,
                   color: Util.hexToColor(value.lineColor),
                 ),
               ),
             ),
-          ),
-        ));
+          ));
+          list.add(Positioned(
+            top: 120,
+            left: -911 + 218.0 * i,
+            right: 0,
+            child: Center(
+              child: Center(
+                child: Text(
+                  "号线",
+                  style: TextStyle(
+                    fontSize: 20,
+                    letterSpacing: 3,
+                    color: Util.hexToColor(value.lineColor),
+                  ),
+                ),
+              ),
+            ),
+          ));
+        } else if (CustomRegExp.twoDigits.hasMatch(value.lineNumber) ||
+            CustomRegExp.oneDigitOneCharacter.hasMatch(value.lineNumber)) {
+          list.add(Positioned(
+            top: 7,
+            left: -895 + 218.0 * i,
+            right: 0,
+            child: Center(
+              child: Transform(
+                transform: Matrix4.diagonal3Values(0.8, 1.0, 1.0),
+                child: Text(
+                  value.lineNumber,
+                  style: TextStyle(
+                    letterSpacing: -5,
+                    fontSize: 95,
+                    color: Util.hexToColor(value.lineColor),
+                  ),
+                ),
+              ),
+            ),
+          ));
+          list.add(Positioned(
+            top: 120,
+            left: -911 + 218.0 * i,
+            right: 0,
+            child: Center(
+              child: Center(
+                child: Text(
+                  "号线",
+                  style: TextStyle(
+                    fontSize: 20,
+                    letterSpacing: 3,
+                    color: Util.hexToColor(value.lineColor),
+                  ),
+                ),
+              ),
+            ),
+          ));
+        }else if (CustomRegExp.fourChineseCharacters.hasMatch(value.lineNumber)) {
+          list.add(Positioned(
+            top: 43.5,
+            left: -909 + 218.0 * i,
+            right: 0,
+            child: Center(
+                child: Text(
+                  value.lineNumber.substring(0,2),
+                  style: TextStyle(
+                    fontSize: 38,
+                    color: Util.hexToColor(value.lineColor),
+                  ),
+                ),
+            ),
+          ));
+          list.add(Positioned(
+            top: 89.5,
+            left: -909 + 218.0 * i,
+            right: 0,
+            child: Center(
+              child: Text(
+                value.lineNumber.substring(2,4),
+                style: TextStyle(
+                  fontSize: 38,
+                  color: Util.hexToColor(value.lineColor),
+                ),
+              ),
+            ),
+          ));
+        }
+
+
         list.add(Positioned(
           top: 143,
           left: -911 + 218.0 * i,
