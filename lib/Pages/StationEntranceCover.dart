@@ -676,7 +676,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   //无线路信息 snackbar
   void noStationsSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无线路信息"),
+      content: Text("无站点信息"),
     ));
   }
 
