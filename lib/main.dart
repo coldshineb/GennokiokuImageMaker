@@ -66,8 +66,8 @@ class _HomeState extends State<Home> {
             labelType: labelType,
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
+                icon: Icon(Icons.assistant_outlined),
+                selectedIcon: Icon(Icons.assistant),
                 label: Text('欢迎', style: TextStyle(fontSize: 15)),
               ),
               NavigationRailDestination(
@@ -82,6 +82,7 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
+          const VerticalDivider(thickness: 1,width: 1),
           Expanded(
               child: Container(
             color: Theme.of(context).colorScheme.primaryContainer,

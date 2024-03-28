@@ -551,7 +551,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         type: FileType.custom,
         withData: true,
         allowedExtensions: ['json'],
-        dialogTitle: '选择线路 JSON 文件',
+        dialogTitle: '选择站名 JSON 文件',
         lockParentWindow: true);
     if (result != null) {
       Uint8List bytes = result.files.single.bytes!;

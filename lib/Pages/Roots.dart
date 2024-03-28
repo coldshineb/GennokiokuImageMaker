@@ -71,6 +71,7 @@ class _LCDRootState extends State<LCDRoot> {
               ),
             ],
           ),
+          const VerticalDivider(thickness: 1,width: 1),
           Expanded(
               child: Container(
             child: page,
