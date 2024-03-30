@@ -441,8 +441,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           ),
         ),
       ),
-      const VerticalDivider(),
-      const VerticalDivider(),
+      const VerticalDivider(thickness: 2),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -500,8 +499,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         },
         value: exportWidthValue,
       ),
-      const VerticalDivider(),
-      const VerticalDivider(),
+      const VerticalDivider(thickness: 2),
       Container(
           height: 48,
           child: CheckboxMenuButton(

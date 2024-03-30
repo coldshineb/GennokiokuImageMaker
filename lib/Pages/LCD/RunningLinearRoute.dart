@@ -439,8 +439,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           ),
         ),
       ),
-      const VerticalDivider(),
-      const VerticalDivider(),
+      const VerticalDivider(thickness: 2),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -498,8 +497,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         },
         value: exportWidthValue,
       ),
-      const VerticalDivider(),
-      const VerticalDivider(),
+      const VerticalDivider(thickness: 2),
       Container(
           height: 48,
           child: CheckboxMenuButton(
