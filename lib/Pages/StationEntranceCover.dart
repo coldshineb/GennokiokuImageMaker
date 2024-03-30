@@ -156,13 +156,13 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                                   children: line(),
                                 ),
                               ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: entrance(),
-                                ),
-                              ),
+                              // Container(
+                              //   width: imageWidth,
+                              //   height: imageHeight,
+                              //   child: Stack(
+                              //     children: entrance(),
+                              //   ),
+                              // ),
                               Container(
                                 width: imageWidth,
                                 height: imageHeight,
@@ -383,29 +383,80 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
   List<Positioned> stationName() {
     List<Positioned> list = [];
     if (entranceList.isNotEmpty) {
-      list.add(Positioned(
-          top: 43,
-          left: 65,
-          right: 0,
-          child: Text(
-            textAlign: TextAlign.center,
-            entranceList[entranceIndex!].stationNameCN,
-            style: const TextStyle(
-                letterSpacing: 4,
-                color: Colors.white,
-                fontSize: 80,
-                fontFamily: "HYYanKaiW"),
-          )));
-      list.add(Positioned(
-          top: 131,
-          left: 61.5,
-          right: 0,
-          child: Text(
-            textAlign: TextAlign.center,
-            entranceList[entranceIndex!].stationNameEN,
-            style: const TextStyle(
-                wordSpacing: 2, color: Colors.white, fontSize: 30),
-          )));
+      //根据不同线路个数调整站名位置
+      if (entranceList[entranceIndex!].lines.length == 3) {
+        list.add(Positioned(
+            top: 43,
+            left: 195,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              entranceList[entranceIndex!].stationNameCN,
+              style: const TextStyle(
+                  letterSpacing: 4,
+                  color: Colors.white,
+                  fontSize: 80,
+                  fontFamily: "HYYanKaiW"),
+            )));
+        list.add(Positioned(
+            top: 131,
+            left: 191.5,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              entranceList[entranceIndex!].stationNameEN,
+              style: const TextStyle(
+                  wordSpacing: 2, color: Colors.white, fontSize: 30),
+            )));
+      } else if (entranceList[entranceIndex!].lines.length == 4) {
+        list.add(Positioned(
+            top: 43,
+            left: 455,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              entranceList[entranceIndex!].stationNameCN,
+              style: const TextStyle(
+                  letterSpacing: 4,
+                  color: Colors.white,
+                  fontSize: 80,
+                  fontFamily: "HYYanKaiW"),
+            )));
+        list.add(Positioned(
+            top: 131,
+            left: 451.5,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              entranceList[entranceIndex!].stationNameEN,
+              style: const TextStyle(
+                  wordSpacing: 2, color: Colors.white, fontSize: 30),
+            )));
+      } else {
+        list.add(Positioned(
+            top: 43,
+            left: 65,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              entranceList[entranceIndex!].stationNameCN,
+              style: const TextStyle(
+                  letterSpacing: 4,
+                  color: Colors.white,
+                  fontSize: 80,
+                  fontFamily: "HYYanKaiW"),
+            )));
+        list.add(Positioned(
+            top: 131,
+            left: 61.5,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              entranceList[entranceIndex!].stationNameEN,
+              style: const TextStyle(
+                  wordSpacing: 2, color: Colors.white, fontSize: 30),
+            )));
+      }
     }
     return list;
   }
@@ -416,7 +467,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         ? <Positioned>[
             Positioned(
                 top: 24,
-                right: 263.5,
+                right: 63.5,
                 child: Text(
                   textAlign: TextAlign.right,
                   entranceList[entranceIndex!].entranceNumber,
