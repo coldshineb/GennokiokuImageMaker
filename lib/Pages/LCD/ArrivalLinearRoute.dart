@@ -60,6 +60,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
 
   //背景图片字节数据
   Uint8List? _imageBytes;
+
   //背景纹理
   Uint8List? pattern;
 
@@ -332,9 +333,9 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
   Container backgroundPattern() {
     return pattern != null
         ? Container(
-        height: imageHeight,
-        width: imageWidth,
-        child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
+            height: imageHeight,
+            width: imageWidth,
+            child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
         : Container();
   }
 
@@ -625,6 +626,23 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                     Widgets.transferLineTextOneDigitOneCharacter(transferLine)
                   ],
                 )));
+          } else if (CustomRegExp.twoCharactersStartsWithM
+              .hasMatch(transferLine.lineNumberEN)) {
+            {
+              iconList.add(Container(
+                  padding: EdgeInsets.fromLTRB(
+                      (lineLength / (stationList.length - 1)) * i,
+                      35.5 * j,
+                      0,
+                      0),
+                  child: Stack(
+                    children: [
+                      Widgets.transferLineIcon(transferLine),
+                      Widgets.transferLineTextTwoCharactersStartsWithM(
+                          transferLine)
+                    ],
+                  )));
+            }
           } else if (CustomRegExp.twoCharacters
               .hasMatch(transferLine.lineNumberEN)) {
             {

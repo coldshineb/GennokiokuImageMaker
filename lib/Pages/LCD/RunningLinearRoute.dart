@@ -61,6 +61,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   //背景图片字节数据
   Uint8List? _imageBytes;
+
   //背景纹理
   Uint8List? pattern;
 
@@ -763,6 +764,20 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                     Widgets.transferLineTextTwoDigits(transferLine)
                   ],
                 )));
+          } else if (CustomRegExp.twoDigits
+              .hasMatch(transferLine.lineNumberEN)) {
+            iconList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    (lineLength / (stationList.length - 1)) * i,
+                    35.5 * j,
+                    0,
+                    0),
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextTwoDigits(transferLine)
+                  ],
+                )));
           } else if (CustomRegExp.oneDigitOneCharacter
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
@@ -777,6 +792,22 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                     Widgets.transferLineTextOneDigitOneCharacter(transferLine)
                   ],
                 )));
+          } else if (CustomRegExp.twoCharactersStartsWithM
+              .hasMatch(transferLine.lineNumberEN)) {
+            {
+              iconList.add(Container(
+                  padding: EdgeInsets.fromLTRB(
+                      (lineLength / (stationList.length - 1)) * i,
+                      35.5 * j,
+                      0,
+                      0),
+                  child: Stack(
+                    children: [
+                      Widgets.transferLineIcon(transferLine),
+                      Widgets.transferLineTextTwoCharactersStartsWithM(transferLine)
+                    ],
+                  )));
+            }
           } else if (CustomRegExp.twoCharacters
               .hasMatch(transferLine.lineNumberEN)) {
             {

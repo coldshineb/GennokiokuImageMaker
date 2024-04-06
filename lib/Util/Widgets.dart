@@ -296,7 +296,19 @@ class Widgets {
       ),
     );
   }
-
+  static Positioned transferLineTextTwoCharactersStartsWithM(Line transferLine) {
+    return Positioned(
+      top: 3,
+      left: 5,
+      child: Text(
+        transferLine.lineNumberEN,
+        style: TextStyle(
+            fontSize: 16,
+            color: Util.getTextColorForBackground(
+                Util.hexToColor(transferLine.lineColor))),
+      ),
+    );
+  }
   static Positioned transferLineTextOneDigitOneCharacter(
       Line transferLine) {
     return Positioned(
