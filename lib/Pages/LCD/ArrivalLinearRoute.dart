@@ -156,7 +156,27 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                     }
                   },
                   value: terminusListValue,
-                )
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: previousStation,
+                    child: const Text(
+                      "上一站",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: nextStation,
+                    child: const Text(
+                      "下一站",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
               ])
             ],
           ),
@@ -947,6 +967,31 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
           content: Text("图片已成功保存至: $path"),
         ));
       }
+    }
+  }
+
+  void nextStation() {
+    if (currentStationListIndex == stationList.length - 1 ||
+        currentStationListIndex == null) {
+      return;
+    } else {
+      setState(() {
+        currentStationListIndex = currentStationListIndex! + 1;
+        currentStationListValue =
+            stationList[currentStationListIndex!].stationNameCN;
+      });
+    }
+  }
+
+  void previousStation() {
+    if (currentStationListIndex == 0 || currentStationListIndex == null) {
+      return;
+    } else {
+      setState(() {
+        currentStationListIndex = currentStationListIndex! - 1;
+        currentStationListValue =
+            stationList[currentStationListIndex!].stationNameCN;
+      });
     }
   }
 }

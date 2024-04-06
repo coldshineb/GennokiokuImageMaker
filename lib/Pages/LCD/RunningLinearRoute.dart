@@ -205,7 +205,27 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                     }
                   },
                   value: terminusListValue,
-                )
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: previousStation,
+                    child: const Text(
+                      "上一站",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: nextStation,
+                    child: const Text(
+                      "下一站",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
               ])
             ],
           ),
@@ -804,7 +824,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   child: Stack(
                     children: [
                       Widgets.transferLineIcon(transferLine),
-                      Widgets.transferLineTextTwoCharactersStartsWithM(transferLine)
+                      Widgets.transferLineTextTwoCharactersStartsWithM(
+                          transferLine)
                     ],
                   )));
             }
@@ -1143,6 +1164,29 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           content: Text("图片已成功保存至: $path"),
         ));
       }
+    }
+  }
+
+  void nextStation() {
+    if (nextStationListIndex == stationList.length - 1 ||
+        nextStationListIndex == null) {
+      return;
+    } else {
+      setState(() {
+        nextStationListIndex = nextStationListIndex! + 1;
+        nextStationListValue = stationList[nextStationListIndex!].stationNameCN;
+      });
+    }
+  }
+
+  void previousStation() {
+    if (nextStationListIndex == 0 || nextStationListIndex == null) {
+      return;
+    } else {
+      setState(() {
+        nextStationListIndex = nextStationListIndex! - 1;
+        nextStationListValue = stationList[nextStationListIndex!].stationNameCN;
+      });
     }
   }
 }

@@ -61,6 +61,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //背景图片字节数据
   Uint8List? _imageBytes;
+
   //背景纹理
   Uint8List? pattern;
 
@@ -90,9 +91,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //运行方向，用于处理已到站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
   int trainDirectionValue = 1;
+
   //是否显示原忆轨道交通品牌图标
   bool showLogo = true;
-
 
   //默认导出宽度
   int exportWidthValue = 2560;
@@ -213,6 +214,26 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                     }
                   },
                   value: terminusListValue,
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: previousStation,
+                    child: const Text(
+                      "上一站",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: nextStation,
+                    child: const Text(
+                      "下一站",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
                 ),
               ])
             ],
@@ -594,14 +615,16 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
       return container;
     }
   }
+
   Container backgroundPattern() {
     return pattern != null
         ? Container(
-        height: imageHeight,
-        width: imageWidth,
-        child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
+            height: imageHeight,
+            width: imageWidth,
+            child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
         : Container();
   }
+
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
       // Container(
@@ -623,7 +646,8 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             style: TextStyle(color: Colors.black),
           ),
         ),
-      ),      Container(
+      ),
+      Container(
         height: 48,
         child: MenuItemButton(
           onPressed: importPattern,
@@ -717,6 +741,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
       });
     }
   }
+
   //导入线路文件
   @override
   void importLineJson() async {
@@ -917,6 +942,31 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
           content: Text("图片已成功保存至: $path"),
         ));
       }
+    }
+  }
+
+  void nextStation() {
+    if (currentStationListIndex == stationList.length - 1 ||
+        currentStationListIndex == null) {
+      return;
+    } else {
+      setState(() {
+        currentStationListIndex = currentStationListIndex! + 1;
+        currentStationListValue =
+            stationList[currentStationListIndex!].stationNameCN;
+      });
+    }
+  }
+
+  void previousStation() {
+    if (currentStationListIndex == 0 || currentStationListIndex == null) {
+      return;
+    } else {
+      setState(() {
+        currentStationListIndex = currentStationListIndex! - 1;
+        currentStationListValue =
+            stationList[currentStationListIndex!].stationNameCN;
+      });
     }
   }
 }
