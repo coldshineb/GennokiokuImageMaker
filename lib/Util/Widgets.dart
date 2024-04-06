@@ -271,12 +271,12 @@ class Widgets {
 
   static Positioned transferLineTextTwoDigits(Line transferLine) {
     return Positioned(
-      top: -6,
-      left: 4,
+      top: -3,
+      left: 5,
       child: Text(
         transferLine.lineNumberEN,
         style: TextStyle(
-            fontSize: 28,
+            fontSize: 24,
             color: Util.getTextColorForBackground(
                 Util.hexToColor(transferLine.lineColor))),
       ),
@@ -313,7 +313,7 @@ class Widgets {
       Line transferLine) {
     return Positioned(
       top: 1,
-      left: 4,
+      left: 6,
       child: Text(
         transferLine.lineNumberEN,
         style: TextStyle(
