@@ -468,10 +468,27 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             Positioned(
                 top: 24,
                 right: 63.5,
-                child: Text(
-                  textAlign: TextAlign.right,
-                  entranceList[entranceIndex!].entranceNumber,
-                  style: const TextStyle(color: Colors.white, fontSize: 122),
+                child: RichText(
+                  text: TextSpan(
+                    text: entranceList[entranceIndex!]
+                        .entranceNumber
+                        .substring(0, 1),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 122,
+                        fontFamily: "GennokiokuLCDFont"),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: entranceList[entranceIndex!]
+                            .entranceNumber
+                            .substring(1),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 62,
+                            fontFamily: "GennokiokuLCDFont"),
+                      ),
+                    ],
+                  ),
                 )),
           ]
         : <Positioned>[];
