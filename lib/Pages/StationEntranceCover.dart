@@ -117,6 +117,30 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                   },
                   value: entranceListValue,
                 ),
+                Row(
+                  children: [
+                    Container(
+                      height: 48,
+                      child: MenuItemButton(
+                        onPressed: previousStation,
+                        child: const Text(
+                          "上一个",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 48,
+                      child: MenuItemButton(
+                        onPressed: nextStation,
+                        child: const Text(
+                          "下一个",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ])
             ],
           ),
@@ -739,10 +763,10 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         });
   }
 
-  //无线路信息 snackbar
+  //无站名信息 snackbar
   void noStationsSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无站点信息"),
+      content: Text("无站名信息"),
     ));
   }
 
@@ -778,6 +802,32 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
           content: Text("图片已成功保存至: $path"),
         ));
       }
+    }
+  }
+
+  void nextStation() {
+    if (entranceList.isNotEmpty) {
+      if (entranceIndex! < entranceList.length - 1) {
+        entranceIndex = entranceIndex! + 1;
+      } else {
+        entranceIndex = 0;
+      }
+      entranceListValue =
+          "${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}";
+      setState(() {});
+    }
+  }
+
+  void previousStation() {
+    if (entranceList.isNotEmpty) {
+      if (entranceIndex! > 0) {
+        entranceIndex = entranceIndex! - 1;
+      } else {
+        entranceIndex = entranceList.length - 1;
+      }
+      entranceListValue =
+          "${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}";
+      setState(() {});
     }
   }
 }
