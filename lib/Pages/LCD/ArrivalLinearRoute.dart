@@ -646,23 +646,6 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                     Widgets.transferLineTextOneDigitOneCharacter(transferLine)
                   ],
                 )));
-          } else if (CustomRegExp.twoCharactersStartsWithM
-              .hasMatch(transferLine.lineNumberEN)) {
-            {
-              iconList.add(Container(
-                  padding: EdgeInsets.fromLTRB(
-                      (lineLength / (stationList.length - 1)) * i,
-                      35.5 * j,
-                      0,
-                      0),
-                  child: Stack(
-                    children: [
-                      Widgets.transferLineIcon(transferLine),
-                      Widgets.transferLineTextTwoCharactersStartsWithM(
-                          transferLine)
-                    ],
-                  )));
-            }
           } else if (CustomRegExp.twoCharacters
               .hasMatch(transferLine.lineNumberEN)) {
             {

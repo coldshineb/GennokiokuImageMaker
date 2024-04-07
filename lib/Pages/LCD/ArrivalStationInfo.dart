@@ -414,37 +414,37 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   //显示换乘线路图标
   Container transferIcon() {
-    List<Container> c = [];
+    List<Container> tempList = [];
     if (currentStationListIndex != null) {
       List<Line> value = transferLineList[currentStationListIndex!];
       if (value.isNotEmpty) {
         switch (value.length) {
           case 1:
-            c.add(Container(
+            tempList.add(Container(
               padding: const EdgeInsets.only(top: 60),
               child: transferIconWidget(value, 0),
             ));
             break;
           case 2:
-            c.add(Container(
+            tempList.add(Container(
               padding: const EdgeInsets.only(top: 30),
               child: transferIconWidget(value, 0),
             ));
-            c.add(Container(
+            tempList.add(Container(
               padding: const EdgeInsets.only(top: 100),
               child: transferIconWidget(value, 1),
             ));
             break;
           case 3:
-            c.add(Container(
+            tempList.add(Container(
               padding: const EdgeInsets.only(top: 0),
               child: transferIconWidget(value, 0),
             ));
-            c.add(Container(
+            tempList.add(Container(
               padding: const EdgeInsets.only(top: 60),
               child: transferIconWidget(value, 1),
             ));
-            c.add(Container(
+            tempList.add(Container(
               padding: const EdgeInsets.only(top: 120),
               child: transferIconWidget(value, 2),
             ));
@@ -456,7 +456,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
     return Container(
       padding: const EdgeInsets.only(left: 1535, top: 98),
       child: Stack(
-        children: c,
+        children: tempList,
       ),
     );
   }

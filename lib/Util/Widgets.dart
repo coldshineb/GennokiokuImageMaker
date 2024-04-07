@@ -258,8 +258,10 @@ class Widgets {
   static Positioned transferLineTextOneDigit(Line transferLine) {
     return Positioned(
       top: -6,
-      left: 9,
+      left: 0,
+      right: 0,
       child: Text(
+        textAlign: TextAlign.center,
         transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 28,
@@ -272,8 +274,10 @@ class Widgets {
   static Positioned transferLineTextTwoDigits(Line transferLine) {
     return Positioned(
       top: -3,
-      left: 5,
+      left: 0,
+      right: 0,
       child: Text(
+        textAlign: TextAlign.center,
         transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 24,
@@ -286,8 +290,9 @@ class Widgets {
   static Positioned transferLineTextTwoCharacters(Line transferLine) {
     return Positioned(
       top: 2,
-      left: 6,
-      child: Text(
+      left: 0,
+      right: 0,
+      child: Text(textAlign: TextAlign.center,
         transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 18,
@@ -296,25 +301,15 @@ class Widgets {
       ),
     );
   }
-  static Positioned transferLineTextTwoCharactersStartsWithM(Line transferLine) {
-    return Positioned(
-      top: 3,
-      left: 5,
-      child: Text(
-        transferLine.lineNumberEN,
-        style: TextStyle(
-            fontSize: 16,
-            color: Util.getTextColorForBackground(
-                Util.hexToColor(transferLine.lineColor))),
-      ),
-    );
-  }
+
   static Positioned transferLineTextOneDigitOneCharacter(
       Line transferLine) {
     return Positioned(
       top: 1,
-      left: 6,
+      left: 0,
+      right: 0,
       child: Text(
+        textAlign: TextAlign.center,
         transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 20,
