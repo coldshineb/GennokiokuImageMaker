@@ -23,8 +23,10 @@ class Widgets {
           child: Stack(children: [
             Positioned(
               bottom: -2,
-              left: 5,
+              left: 0,
+              right: 40,
               child: Text(
+                textAlign: TextAlign.center,
                 lineNumber,
                 style: TextStyle(
                     fontSize: 40,
@@ -58,8 +60,7 @@ class Widgets {
               ),
             ),
           ]));
-    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber) ||
-        CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
+    } else if (CustomRegExp.twoDigits.hasMatch(lineNumber)) {
       container = Container(
           width: 75,
           height: 45,
@@ -70,10 +71,63 @@ class Widgets {
           child: Stack(children: [
             Positioned(
               bottom: -2,
-              left: 4,
+              left: 0,
+              right: 30,
               child: Transform(
                   transform: Matrix4.diagonal3Values(0.7, 1.0, 1.0),
                   child: Text(
+                    textAlign: TextAlign.center,
+                    lineNumber,
+                    style: TextStyle(
+                        letterSpacing: -3,
+                        fontSize: 40,
+                        fontFamily: "GennokiokuLCDFont",
+                        color: Util.getTextColorForBackground(lineColor)),
+                  )),
+            ),
+            Positioned(
+              left: 30,
+              child: Text(
+                "号线",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+            Positioned(
+              top: 24,
+              left: 30,
+              child: Text(
+                "Line $lineNumberEN",
+                style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: "GennokiokuLCDFont",
+                    color: lineColor == Colors.transparent
+                        ? Colors.transparent
+                        : Util.getTextColorForBackground(lineColor)),
+              ),
+            ),
+          ]));
+    } else if (CustomRegExp.oneDigitOneCharacter.hasMatch(lineNumber)) {
+      container = Container(
+          width: 75,
+          height: 45,
+          decoration: BoxDecoration(
+            color: lineColor,
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          child: Stack(children: [
+            Positioned(
+              bottom: -2,
+              left: 0,
+              right: 25,
+              child: Transform(
+                  transform: Matrix4.diagonal3Values(0.6, 1.0, 1.0),
+                  child: Text(
+                    textAlign: TextAlign.center,
                     lineNumber,
                     style: TextStyle(
                         letterSpacing: -3,
@@ -132,8 +186,10 @@ class Widgets {
             ),
             Positioned(
               top: 22,
-              left: 24,
+              left: 0,
+              right: 0,
               child: Text(
+                textAlign: TextAlign.center,
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 14,
@@ -168,8 +224,10 @@ class Widgets {
             ),
             Positioned(
               top: 22,
-              left: 24,
+              left: 0,
+              right: 0,
               child: Text(
+                textAlign: TextAlign.center,
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 14,
@@ -222,7 +280,7 @@ class Widgets {
         child: Text(
           "1920*320",
           style:
-          TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
         ),
       ),
       const DropdownMenuItem(
@@ -230,7 +288,7 @@ class Widgets {
         child: Text(
           "3840*640",
           style:
-          TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
         ),
       ),
       const DropdownMenuItem(
@@ -238,7 +296,7 @@ class Widgets {
         child: Text(
           "7680*1280",
           style:
-          TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
         ),
       )
     ];
@@ -292,7 +350,8 @@ class Widgets {
       top: 2,
       left: 0,
       right: 0,
-      child: Text(textAlign: TextAlign.center,
+      child: Text(
+        textAlign: TextAlign.center,
         transferLine.lineNumberEN,
         style: TextStyle(
             fontSize: 18,
@@ -302,8 +361,7 @@ class Widgets {
     );
   }
 
-  static Positioned transferLineTextOneDigitOneCharacter(
-      Line transferLine) {
+  static Positioned transferLineTextOneDigitOneCharacter(Line transferLine) {
     return Positioned(
       top: 1,
       left: 0,
