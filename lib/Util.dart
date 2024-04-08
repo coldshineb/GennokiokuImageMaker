@@ -106,27 +106,11 @@ class Util {
 ''';
 
   static Color hexToColor(String hexColor) {
-    // 移除可能包含的 '#' 符号
-    hexColor = hexColor.replaceAll('#', '');
-
-    // 如果16进制字符串长度不为6，则返回默认颜色
-    if (hexColor.length != 6) {
-      return Colors.black;
-    }
-
-    // 将16进制颜色转换为RGB值
-    int red = int.parse(hexColor.substring(0, 2), radix: 16);
-    int green = int.parse(hexColor.substring(2, 4), radix: 16);
-    int blue = int.parse(hexColor.substring(4, 6), radix: 16);
-
-    // 返回对应的Color对象
-    return Color.fromRGBO(red, green, blue, 1.0);
+    return Color(int.parse('FF${hexColor.replaceAll('#', '')}', radix: 16));
   }
 
   static Color getTextColorForBackground(Color backgroundColor) {
-    // 计算颜色的亮度
-    double luminance = backgroundColor.computeLuminance();
     // 根据亮度值返回合适的文本颜色
-    return luminance > 0.5 ? Colors.black : Colors.white;
+    return backgroundColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
   }
 }
