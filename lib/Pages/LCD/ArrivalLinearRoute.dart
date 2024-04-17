@@ -213,7 +213,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   lineColor, lineNumber, lineNumberEN),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(522.5, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
                                   child: const Text(
                                     "当前站",
                                     style: TextStyle(fontSize: 28
@@ -222,7 +222,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
-                                      516.5, 41, 0, 0),
+                                      446.5, 41, 0, 0),
                                   child: const Text(
                                     "Current station",
                                     style: TextStyle(fontSize: 14
@@ -231,7 +231,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(911.5, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(1111.5, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
                                     style: TextStyle(fontSize: 28
@@ -240,7 +240,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
-                                      924.5, 41, 0, 0),
+                                      1124.5, 41, 0, 0),
                                   child: const Text(
                                     "Terminus",
                                     style: TextStyle(fontSize: 14
@@ -249,7 +249,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(619, 8, 0, 0),
+                                      const EdgeInsets.fromLTRB(549, 8, 0, 0),
                                   child: Text(
                                     currentStationListIndex == null
                                         ? ""
@@ -262,7 +262,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
-                                      1010.5, 8, 0, 0),
+                                      1210.5, 8, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
@@ -274,7 +274,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
-                                      619.5, 41, 0, 0),
+                                      549.5, 41, 0, 0),
                                   child: Text(
                                     currentStationListIndex == null
                                         ? ""
@@ -286,7 +286,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
-                                      1010.5, 41, 0, 0),
+                                      1210.5, 41, 0, 0),
                                   child: Text(
                                     terminusListIndex == null
                                         ? ""
