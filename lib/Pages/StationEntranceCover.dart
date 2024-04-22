@@ -592,7 +592,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         ),
       ),
       DropdownButton(
-        items: Widgets.resolutionListCover(),
+        items: Widgets.resolutionListStationEntranceCover(),
         onChanged: (value) {
           setState(() {
             exportWidthValue = value!;

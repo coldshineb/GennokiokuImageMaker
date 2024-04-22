@@ -837,7 +837,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   CustomPaint nextStationIconMediumPainter() {
     return CustomPaint(
-      painter: StationIconMediumPainter(
+      painter: LCDStationIconMediumPainter(
           lineColor: lineColor,
           lineVariantColor: lineVariantColor,
           shadow: true),
@@ -846,7 +846,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   CustomPaint passedStationIconMediumPainter() {
     return CustomPaint(
-      painter: StationIconMediumPainter(
+      painter: LCDStationIconMediumPainter(
           lineColor: Util.hexToColor(CustomColors.passedStation),
           lineVariantColor: Util.hexToColor(CustomColors.passedStationVariant),
           shadow: true),
@@ -855,7 +855,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   CustomPaint passedStationIconBigPainter() {
     return CustomPaint(
-      painter: StationIconBigPainter(
+      painter: LCDStationIconBigPainter(
           lineColor: Util.hexToColor(CustomColors.passedStation),
           lineVariantColor: Util.hexToColor(CustomColors.passedStationVariant),
           shadow: true),
@@ -1029,7 +1029,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         if (currentStationListIndex == 0) {
           tempList.add(Container(
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1040,7 +1040,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1051,7 +1051,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1062,7 +1062,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1076,7 +1076,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1087,7 +1087,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1098,7 +1098,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1109,7 +1109,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(446, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1122,7 +1122,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         if (currentStationListIndex == 0) {
           tempList.add(Container(
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1133,7 +1133,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1145,7 +1145,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
             tempList.add(Container(
                 padding: const EdgeInsets.fromLTRB(223 * 0, 0, 0, 0),
                 child: CustomPaint(
-                    painter: StationIconBigPainter(
+                    painter: LCDStationIconBigPainter(
                         lineColor: Util.hexToColor(CustomColors.passingStation),
                         lineVariantColor:
                             Util.hexToColor(CustomColors.passingStationVariant),
@@ -1154,7 +1154,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
             tempList.add(Container(
                 padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
                 child: CustomPaint(
-                    painter: StationIconBigPainter(
+                    painter: LCDStationIconBigPainter(
                         lineColor: Util.hexToColor(CustomColors.passingStation),
                         lineVariantColor:
                             Util.hexToColor(CustomColors.passingStationVariant),
@@ -1166,7 +1166,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),
@@ -1177,7 +1177,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
               child: CustomPaint(
-                  painter: StationIconBigPainter(
+                  painter: LCDStationIconBigPainter(
                       lineColor: Util.hexToColor(CustomColors.passingStation),
                       lineVariantColor:
                           Util.hexToColor(CustomColors.passingStationVariant),

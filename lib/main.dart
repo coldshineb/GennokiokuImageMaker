@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:main/Pages/Roots.dart';
+import 'package:main/Pages/ScreenDoorCover.dart';
 
 import 'Pages/HomePage.dart';
 import 'Pages/StationEntranceCover.dart';
@@ -43,6 +44,9 @@ class _HomeState extends State<Home> {
       case 2:
         page = StationEntranceCover();
         break;
+      case 3:
+        page = ScreenDoorCover();
+        break;
       default:
         throw UnimplementedError('no widget for $_selectedIndex');
     }
@@ -80,9 +84,14 @@ class _HomeState extends State<Home> {
                 selectedIcon: Icon(Icons.signpost),
                 label: Text('出入口盖板', style: TextStyle(fontSize: 15)),
               ),
+              NavigationRailDestination(
+                icon: Icon(Icons.signpost_outlined),
+                selectedIcon: Icon(Icons.signpost),
+                label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
+              ),
             ],
           ),
-          const VerticalDivider(thickness: 1,width: 1),
+          const VerticalDivider(thickness: 1, width: 1),
           Expanded(
               child: Container(
             color: Theme.of(context).colorScheme.primaryContainer,

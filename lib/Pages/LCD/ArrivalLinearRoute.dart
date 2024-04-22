@@ -523,7 +523,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: StationIconSmallPainter(
+            painter: LCDStationIconSmallPainter(
                 lineColor: Util.hexToColor(CustomColors.passedStation),
                 lineVariantColor:
                     Util.hexToColor(CustomColors.passedStationVariant),
@@ -540,7 +540,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               padding: EdgeInsets.fromLTRB(
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
-                painter: StationIconSmallPainter(
+                painter: LCDStationIconSmallPainter(
                     lineColor: lineColor,
                     lineVariantColor: lineVariantColor,
                     shadow: true),
@@ -555,7 +555,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               padding: EdgeInsets.fromLTRB(
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
-                painter: StationIconSmallPainter(
+                painter: LCDStationIconSmallPainter(
                     lineColor: lineColor,
                     lineVariantColor: lineVariantColor,
                     shadow: true),
@@ -583,7 +583,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               0,
               0),
           child: CustomPaint(
-              painter: StationIconSmallPainter(
+              painter: LCDStationIconSmallPainter(
                   lineColor: Util.hexToColor(CustomColors.passingStation),
                   lineVariantColor:
                       Util.hexToColor(CustomColors.passingStationVariant),

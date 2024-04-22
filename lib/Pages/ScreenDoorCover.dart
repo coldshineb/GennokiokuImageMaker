@@ -26,8 +26,8 @@ void loadFont() async {
   await fontLoader2.load();
 }
 
-class RunningLinearRouteRoot extends StatelessWidget {
-  const RunningLinearRouteRoot({super.key});
+class ScreenDoorCoverRoot extends StatelessWidget {
+  const ScreenDoorCoverRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,30 +40,26 @@ class RunningLinearRouteRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: RunningLinearRoute(),
+      home: ScreenDoorCover(),
     );
   }
 }
 
-class RunningLinearRoute extends StatefulWidget {
+class ScreenDoorCover extends StatefulWidget {
   @override
-  RunningLinearRouteState createState() => RunningLinearRouteState();
+  ScreenDoorCoverState createState() => ScreenDoorCoverState();
 }
 
-class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
+class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
-  static const double imageHeight = 335;
-  static const double imageWidth = 1715.2;
+  static const double imageHeight = 640;
+  static const double imageWidth = 1920;
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
-  final GlobalKey _passingImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
-
-  //背景纹理
-  Uint8List? pattern;
 
   //站名集合
   List<Station> stationList = [];
@@ -79,24 +75,21 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   Color lineVariantColor = Colors.transparent;
 
   //站名下拉菜单默认值，设空，导入文件时赋值
-  String? nextStationListValue;
+  String? currentStationListValue;
   String? terminusListValue;
 
   //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
-  int? nextStationListIndex;
+  int? currentStationListIndex;
   int? terminusListIndex;
-
-  //运行方向，用于处理下一站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
-  int trainDirectionValue = 1;
 
   //是否显示原忆轨道交通品牌图标
   bool showLogo = true;
 
-  //默认导出宽度
-  int exportWidthValue = 2560;
+  //默认导出高度
+  int exportHeightValue = 1280;
 
   //线路线条宽度
-  int lineLength = 1330;
+  int lineLength = 1790;
 
   @override
   Widget build(BuildContext context) {
@@ -112,74 +105,29 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                 Container(
                   padding: const EdgeInsets.only(top: 14, left: 7),
                   child: const Text(
-                    "小交线路设置：",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text(
-                    "运行方向",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: RadioMenuButton(
-                      value: 0,
-                      groupValue: trainDirectionValue,
-                      onChanged: (v) {
-                        setState(() {
-                          trainDirectionValue = v!;
-                        });
-                      },
-                      child: const Text(
-                        "向左行",
-                        style: TextStyle(color: Colors.black),
-                      )),
-                ),
-                Container(
-                  height: 48,
-                  child: RadioMenuButton(
-                      value: 1,
-                      groupValue: trainDirectionValue,
-                      onChanged: (v) {
-                        setState(() {
-                          trainDirectionValue = v!;
-                        });
-                      },
-                      child: const Text(
-                        "向右行",
-                        style: TextStyle(color: Colors.black),
-                      )),
-                )
-              ]),
-              MenuBar(children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text(
-                    "下一站",
+                    "当前站",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
                 DropdownButton(
                   disabledHint: const Text(
-                    "下一站",
+                    "当前站",
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ), //设置空时的提示文字
                   items: showStationList(stationList),
                   onChanged: (value) {
                     try {
-                      nextStationListIndex = stationList.indexWhere((element) =>
-                          element.stationNameCN ==
-                          value); //根据选择的站名，找到站名集合中对应的索引
-                      nextStationListValue = value;
+                      currentStationListIndex = stationList.indexWhere(
+                          (element) =>
+                              element.stationNameCN ==
+                              value); //根据选择的站名，找到站名集合中对应的索引
+                      currentStationListValue = value;
                       setState(() {});
                     } catch (e) {
                       print(e);
                     }
                   },
-                  value: nextStationListValue,
+                  value: currentStationListValue,
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 14),
@@ -256,7 +204,6 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                       ),
                                     )
                                   : const SizedBox(),
-                              backgroundPattern(),
                               gennokiokuRailwayTransitLogoWidget(showLogo),
                               lineNumberIconWidget(
                                   lineColor, lineNumber, lineNumberEN),
@@ -264,23 +211,23 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                   padding:
                                       const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
                                   child: const Text(
-                                    "下一站",
+                                    "当前站",
                                     style: TextStyle(fontSize: 28
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(456, 41, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      446.5, 41, 0, 0),
                                   child: const Text(
-                                    "Next station",
+                                    "Current station",
                                     style: TextStyle(fontSize: 14
                                         //fontWeight: FontWeight.bold,
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(1111.5, 8, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      1111.5, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
                                     style: TextStyle(fontSize: 28
@@ -300,9 +247,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                   padding:
                                       const EdgeInsets.fromLTRB(549, 8, 0, 0),
                                   child: Text(
-                                    nextStationListIndex == null
+                                    currentStationListIndex == null
                                         ? ""
-                                        : stationList[nextStationListIndex!]
+                                        : stationList[currentStationListIndex!]
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                                     style: const TextStyle(fontSize: 28
@@ -325,9 +272,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                   padding: const EdgeInsets.fromLTRB(
                                       549.5, 41, 0, 0),
                                   child: Text(
-                                    nextStationListIndex == null
+                                    currentStationListIndex == null
                                         ? ""
-                                        : stationList[nextStationListIndex!]
+                                        : stationList[currentStationListIndex!]
                                             .stationNameEN,
                                     style: const TextStyle(fontSize: 14
                                         //fontWeight: FontWeight.bold,
@@ -347,43 +294,23 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                   )),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 165, 0, 0),
+                                    const EdgeInsets.fromLTRB(52, 345, 0, 0),
                                 child: showStationName(),
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(200, 195, 0, 0),
+                                    const EdgeInsets.fromLTRB(110, 195, 0, 0),
                                 child: showRouteLine(),
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(55, 286, 0, 0),
                                 child: showRouteIcon(),
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(183, 221.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(93, 221.5, 0, 0),
                                 child: showTransferIcon(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //下一站图
-                      RepaintBoundary(
-                        key: _passingImageKey,
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Stack(
-                            children: [
-                              const SizedBox(
-                                width: imageWidth,
-                                height: imageHeight,
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
-                                child: showPassingRouteIcon(),
                               ),
                             ],
                           ),
@@ -400,14 +327,13 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         onPressed: () {
           //重置所有变量
           _imageBytes = null;
-          pattern = null;
           stationList.clear();
           transferLineList.clear();
           lineColor = Colors.transparent;
           lineVariantColor = Colors.transparent;
-          nextStationListIndex = null;
+          currentStationListIndex = null;
           terminusListIndex = null;
-          nextStationListValue = null;
+          currentStationListValue = null;
           terminusListValue = null;
           lineNumber = "";
           lineNumberEN = "";
@@ -419,33 +345,14 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     );
   }
 
-  Container backgroundPattern() {
-    return pattern != null
-        ? Container(
-            height: imageHeight,
-            width: imageWidth,
-            child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
-        : Container();
-  }
-
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      // Container(
-      //   height: 48,
-      //   child: MenuItemButton(
-      //     onPressed: _importImage,
-      //     child: const Text(
-      //       "导入图片",
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
       Container(
         height: 48,
         child: MenuItemButton(
-          onPressed: importLineJson,
+          onPressed: _importImage,
           child: const Text(
-            "导入线路",
+            "导入图片",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -453,9 +360,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
       Container(
         height: 48,
         child: MenuItemButton(
-          onPressed: importPattern,
+          onPressed: importLineJson,
           child: const Text(
-            "导入纹理",
+            "导入线路",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -471,16 +378,6 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           ),
         ),
       ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDynamicImage,
-          child: const Text(
-            "导出当前站全部图",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
       const VerticalDivider(),
       Container(
         height: 48,
@@ -491,32 +388,6 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             style: TextStyle(color: Colors.black),
           ),
         ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportPassingImage,
-          child: const Text(
-            "导出下一站图",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(top: 14),
-        child: const Text(
-          "导出分辨率",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      DropdownButton(
-        items: Widgets.resolutionListLCD(),
-        onChanged: (value) {
-          setState(() {
-            exportWidthValue = value!;
-          });
-        },
-        value: exportWidthValue,
       ),
       const VerticalDivider(thickness: 2),
       Container(
@@ -540,111 +411,48 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
       lineList.add(
           (routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
     }
-    //根据选择的下一站和终点站，替换已过站为未过站
-    if (nextStationListIndex != null && terminusListIndex != null) {
+    //根据选择的当前站和终点站，替换已过站为未过站
+    if (currentStationListIndex != null && terminusListIndex != null) {
       List<Container> replaceList = [];
       //非空判断
-      //下一站在终点站左侧
-      if (nextStationListIndex! < terminusListIndex!) {
-        //下一站不为起始站
-        if (nextStationListIndex != 0) {
-          for (int i = nextStationListIndex! - 1; i < terminusListIndex!; i++) {
-            //nextStationListIndex-1：下一站前的线条
+      //当前站在终点站左侧
+      if (currentStationListIndex! < terminusListIndex!) {
+        //当前站不为起始站
+        if (currentStationListIndex != 0) {
+          for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
+            //nextStationListIndex-1：当前站前的线条
             replaceList.add(routeLine(i, lineColor));
           }
           //替换原集合
           lineList.replaceRange(
-              nextStationListIndex! - 1, terminusListIndex!, replaceList);
+              currentStationListIndex!, terminusListIndex!, replaceList);
         } else
-        //下一站为起始站
+        //当前站为起始站
         {
-          for (int i = nextStationListIndex!; i < terminusListIndex!; i++) {
+          for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
             replaceList.add(routeLine(i, lineColor));
           }
           lineList.replaceRange(
-              nextStationListIndex!, terminusListIndex!, replaceList);
+              currentStationListIndex!, terminusListIndex!, replaceList);
         }
       }
-      //下一站在终点站右侧
-      else if (nextStationListIndex! > terminusListIndex!) {
-        //下一站不为终点站
-        if (nextStationListIndex != stationList.length - 1) {
-          for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
+      //当前站在终点站右侧
+      else if (currentStationListIndex! > terminusListIndex!) {
+        //当前站不为终点站
+        if (currentStationListIndex != stationList.length - 1) {
+          for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
             replaceList.add(routeLine(i, lineColor));
           }
           lineList.replaceRange(
-              terminusListIndex!, nextStationListIndex! + 1, replaceList);
+              terminusListIndex!, currentStationListIndex!, replaceList);
         } else
-        //下一站为终点站
+        //当前站为终点站
         {
-          for (int i = terminusListIndex!; i < nextStationListIndex!; i++) {
+          for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
             replaceList.add(routeLine(i, lineColor));
           }
           lineList.replaceRange(
-              terminusListIndex!, nextStationListIndex!, replaceList);
-        }
-      } else {
-        //下一站为首站
-
-        if (nextStationListIndex == 0) {
-          replaceList.add(Container(
-            //最左侧，不用间隔
-            height: 15,
-            child: Container(
-              width: (lineLength / (stationList.length - 1)),
-              color: lineColor,
-            ),
-          ));
-          lineList.replaceRange(0, 1, replaceList);
-        }
-        //下一站为尾站
-        else if (nextStationListIndex == stationList.length - 1) {
-          replaceList.add(Container(
-            padding: EdgeInsets.only(
-                left: (lineLength / (stationList.length - 1)) *
-                    (stationList.length - 2)),
-            //最右侧
-            height: 15,
-            child: Container(
-              width: (lineLength / (stationList.length - 1)),
-              color: lineColor,
-            ),
-          ));
-          lineList.replaceRange(
-              stationList.length - 2, stationList.length - 1, replaceList);
-        }
-        //下一站与终点站相同，但不为首尾站
-        else {
-          //向左行
-          if (trainDirectionValue == 0) {
-            replaceList.add(Container(
-              padding: EdgeInsets.only(
-                  left: (lineLength / (stationList.length - 1)) *
-                      nextStationListIndex!),
-              height: 15,
-              child: Container(
-                width: (lineLength / (stationList.length - 1)),
-                color: lineColor,
-              ),
-            ));
-            lineList.replaceRange(
-                nextStationListIndex!, nextStationListIndex! + 1, replaceList);
-          }
-          //向右行
-          else {
-            replaceList.add(Container(
-              padding: EdgeInsets.only(
-                  left: (lineLength / (stationList.length - 1)) *
-                      (nextStationListIndex! - 1)),
-              height: 15,
-              child: Container(
-                width: (lineLength / (stationList.length - 1)),
-                color: lineColor,
-              ),
-            ));
-            lineList.replaceRange(
-                nextStationListIndex! - 1, nextStationListIndex!, replaceList);
-          }
+              terminusListIndex!, currentStationListIndex!, replaceList);
         }
       }
     }
@@ -670,23 +478,25 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
-
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: LCDStationIconSmallPainter(
-                lineColor: Util.hexToColor(CustomColors.passedStation),
-                lineVariantColor:
-                    Util.hexToColor(CustomColors.passedStationVariant),
-                shadow: true),
+            painter: ScreenDoorCoverStationIconPainter(lineColor),
+            // painter: StationIconSmallPainter(
+            //     lineColor: Util.hexToColor(CustomColors.passedStation),
+            //     lineVariantColor:
+            //         Util.hexToColor(CustomColors.passedStationVariant),
+            //     shadow: true),
           )));
     }
-    if (nextStationListIndex != null && terminusListIndex != null) {
-      if (nextStationListIndex! <= terminusListIndex!) {
+    if (currentStationListIndex != null && terminusListIndex != null) {
+      if (currentStationListIndex! <= terminusListIndex!) {
         List<Container> replaceList = [];
-        for (int i = nextStationListIndex!; i < terminusListIndex! + 1; i++) {
+        for (int i = currentStationListIndex! + 1;
+            i < terminusListIndex! + 1;
+            i++) {
           replaceList.add(Container(
               padding: EdgeInsets.fromLTRB(
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
@@ -698,10 +508,10 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               )));
         }
         iconList.replaceRange(
-            nextStationListIndex!, terminusListIndex! + 1, replaceList);
-      } else if (nextStationListIndex! > terminusListIndex!) {
+            currentStationListIndex! + 1, terminusListIndex! + 1, replaceList);
+      } else if (currentStationListIndex! > terminusListIndex!) {
         List<Container> replaceList = [];
-        for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
+        for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
           replaceList.add(Container(
               padding: EdgeInsets.fromLTRB(
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
@@ -713,7 +523,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               )));
         }
         iconList.replaceRange(
-            terminusListIndex!, nextStationListIndex! + 1, replaceList);
+            terminusListIndex!, currentStationListIndex!, replaceList);
       }
     }
     return Stack(
@@ -724,12 +534,12 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //显示正在过站图标
   Stack showPassingRouteIcon() {
     List<Container> tempList = [];
-    if (nextStationListIndex != null) {
+    if (currentStationListIndex != null) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
               10 +
                   (lineLength / (stationList.length - 1)) *
-                      nextStationListIndex!,
+                      currentStationListIndex!,
               0,
               0,
               0),
@@ -756,7 +566,6 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         //遍历获取每站的换乘信息列表中具体的换乘线路信息
         for (int j = 0; j < value.length; j++) {
           Line transferLine = value[j];
-
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Container(
                 padding: EdgeInsets.fromLTRB(
@@ -768,20 +577,6 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   children: [
                     Widgets.transferLineIcon(transferLine),
                     Widgets.transferLineTextOneDigit(transferLine)
-                  ],
-                )));
-          } else if (CustomRegExp.twoDigits
-              .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextTwoDigits(transferLine)
                   ],
                 )));
           } else if (CustomRegExp.twoDigits
@@ -844,16 +639,15 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     for (Station value in stationList) {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
-            (lineLength / (stationList.length - 1)) * count, 0, 0, 0),
+            13 + (lineLength / (stationList.length - 1)) * count, 0, 0, 0),
         child: Container(
-          //逆时针45度
-          transform: Matrix4.rotationZ(-0.75),
+          //顺时针45度
+          transform: Matrix4.rotationZ(0.75),
           child: Text(
             value.stationNameCN,
             style: const TextStyle(
               //fontWeight: FontWeight.bold,
-              fontSize: 14,
-
+              fontSize: 16,
               color: Colors.black,
             ),
           ),
@@ -862,18 +656,17 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
       tempList.add(Container(
         padding: EdgeInsets.fromLTRB(
             //英文站名做适当偏移
-            15 + (lineLength / (stationList.length - 1)) * count,
-            10,
+            (lineLength / (stationList.length - 1)) * count,
+            15,
             0,
             0),
         child: Container(
-          transform: Matrix4.rotationZ(-0.75),
+          transform: Matrix4.rotationZ(0.75),
           child: Text(
             value.stationNameEN,
             style: const TextStyle(
               //fontWeight: FontWeight.bold,
-              fontSize: 12,
-
+              fontSize: 8.5,
               color: Colors.black,
             ),
           ),
@@ -930,7 +723,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
-          nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
+          currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
           terminusListIndex = 0;
 
           // 设置线路颜色和颜色变体
@@ -965,7 +758,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           }
 
           //文件成功导入后将下拉菜单默认值设为第一站
-          nextStationListValue = stationList[0].stationNameCN;
+          currentStationListValue = stationList[0].stationNameCN;
           terminusListValue = stationList[0].stationNameCN;
           // 刷新页面状态
           setState(() {});
@@ -981,65 +774,40 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     }
   }
 
-  //导入纹理
-  @override
-  void importPattern() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      withData: true,
-      allowedExtensions: ['png'],
-      dialogTitle: '选择纹理图片文件',
-    );
-    if (result != null) {
-      Uint8List? bytes = result.files.single.bytes;
-      setState(() {
-        pattern = bytes;
-      });
-    }
-  }
-
   //导出全部图
   @override
   void exportAllImage() async {
     if (stationList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
       if (path != null) {
-        if (nextStationListIndex! < terminusListIndex!) {
+        if (currentStationListIndex! < terminusListIndex!) {
           for (int i = 0; i < terminusListIndex! + 1; i++) {
-            nextStationListIndex = i;
+            currentStationListIndex = i;
             setState(() {});
             //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
             //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
             //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
             await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}.png",
+                _mainImageKey,
+                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\运行中 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
-        } else if (nextStationListIndex! > terminusListIndex!) {
+        } else if (currentStationListIndex! > terminusListIndex!) {
           for (int i = terminusListIndex!; i < stationList.length; i++) {
-            nextStationListIndex = i;
+            currentStationListIndex = i;
             setState(() {});
             //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
             await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${stationList.length - nextStationListIndex!} ${stationList[nextStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
-                _passingImageKey,
-                "$path\\下一站 ${stationList.length - nextStationListIndex!} ${stationList[nextStationListIndex!].stationNameCN}.png",
+                _mainImageKey,
+                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
             await exportImage(
                 _mainImageKey,
-                "$path\\运行中 ${stationList.length - nextStationListIndex!} ${stationList[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         }
@@ -1052,36 +820,13 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     }
   }
 
-  //导出当前站全部图
-  Future<void> exportDynamicImage() async {
-    if (stationList.isNotEmpty) {
-      await exportMainImage();
-      await exportPassingImage();
-    } else {
-      noStationsSnackbar();
-    }
-  }
-
   //导出主线路图
   Future<void> exportMainImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
-  }
-
-  //导出下一站图
-  Future<void> exportPassingImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          _passingImageKey,
-          await getExportPath(context, "保存",
-              "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png"),
+              "运行中 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
           true);
     } else {
       noStationsSnackbar();
@@ -1130,9 +875,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         RenderRepaintBoundary boundary =
             key.currentContext!.findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage(
-            pixelRatio: exportWidthValue /
-                findRenderObject
-                    .size.width); //确保导出的图片宽高默认为2560*500，可通过下拉列表选择其他预设分辨率
+            pixelRatio: exportHeightValue / findRenderObject
+                .size.height); //确保导出的图片高度为1280
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -1151,24 +895,26 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   }
 
   void nextStation() {
-    if (nextStationListIndex == stationList.length - 1 ||
-        nextStationListIndex == null) {
+    if (currentStationListIndex == stationList.length - 1 ||
+        currentStationListIndex == null) {
       return;
     } else {
       setState(() {
-        nextStationListIndex = nextStationListIndex! + 1;
-        nextStationListValue = stationList[nextStationListIndex!].stationNameCN;
+        currentStationListIndex = currentStationListIndex! + 1;
+        currentStationListValue =
+            stationList[currentStationListIndex!].stationNameCN;
       });
     }
   }
 
   void previousStation() {
-    if (nextStationListIndex == 0 || nextStationListIndex == null) {
+    if (currentStationListIndex == 0 || currentStationListIndex == null) {
       return;
     } else {
       setState(() {
-        nextStationListIndex = nextStationListIndex! - 1;
-        nextStationListValue = stationList[nextStationListIndex!].stationNameCN;
+        currentStationListIndex = currentStationListIndex! - 1;
+        currentStationListValue =
+            stationList[currentStationListIndex!].stationNameCN;
       });
     }
   }

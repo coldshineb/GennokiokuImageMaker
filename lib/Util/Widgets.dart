@@ -273,7 +273,7 @@ class Widgets {
   }
 
   //导出分辨率选择下拉列表
-  static List<DropdownMenuItem> resolutionListCover() {
+  static List<DropdownMenuItem> resolutionListStationEntranceCover() {
     return [
       const DropdownMenuItem(
         value: 1920,
