@@ -85,10 +85,12 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //默认导出高度
   int exportHeightValue = 1280;
 
-  //线路线条宽度
+  //线路线条长宽
   int lineLength = 1700;
+  static double lineHeight = 17;
 
-  TextStyle stationNameTextTextstyle = TextStyle(
+  //用于计算站名图中线条所需宽度
+  TextStyle stationNameTextTextStyle = TextStyle(
       fontSize: 118,
       letterSpacing: 4,
       fontFamily: "HYYanKaiW",
@@ -295,7 +297,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                                       currentStationListIndex!]
                                                   .stationNameCN,
                                           //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                          style: stationNameTextTextstyle,
+                                          style: stationNameTextTextStyle,
                                         )),
                                     Positioned(
                                         left: 0,
@@ -330,11 +332,11 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                                           stationList[
                                                                   currentStationListIndex!]
                                                               .stationNameCN,
-                                                          stationNameTextTextstyle)) /
+                                                          stationNameTextTextStyle)) /
                                                   2 -
                                               110
                                           : 0,
-                                      height: 17,
+                                      height: lineHeight,
                                       child: Container(
                                           decoration:
                                               BoxDecoration(color: lineColor)),
@@ -348,11 +350,11 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                                           stationList[
                                                                   currentStationListIndex!]
                                                               .stationNameCN,
-                                                          stationNameTextTextstyle)) /
+                                                          stationNameTextTextStyle)) /
                                                   2 -
                                               110
                                           : 0,
-                                      height: 17,
+                                      height: lineHeight,
                                       child: Container(
                                           decoration:
                                               BoxDecoration(color: lineColor)),
@@ -465,6 +467,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     }
     //根据选择的当前站和终点站，替换已过站为未过站
     if (currentStationListIndex != null) {
+      //上行
       if (isToLeft) {
         List<Container> replaceList = [];
         //当前站不为终点站
@@ -481,7 +484,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           }
           lineList.replaceRange(0, currentStationListIndex!, replaceList);
         }
-      } else {
+      }
+      //下行
+      else {
         List<Container> replaceList = [];
         //当前站不为终点站
         if (currentStationListIndex != stationList.length - 1) {
@@ -519,7 +524,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             child: Container(
               width: (lineLength / (stationList.length - 1)) - 42,
               //每个站与站之间线条的宽度
-              height: 17,
+              height: lineHeight,
               color: color,
             )));
   }
@@ -537,6 +542,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   Util.hexToColor(CustomColors.screenDoorCoverPassedStation)),
             )));
       }
+      //上行
       if (isToLeft) {
         List<Container> replaceList = [];
         for (int i = 0; i < currentStationListIndex!; i++) {
@@ -548,7 +554,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               )));
         }
         iconList.replaceRange(0, currentStationListIndex!, replaceList);
-      } else {
+      }
+      //下行
+      else {
         List<Container> replaceList = [];
         for (int i = stationList.length - currentStationListIndex!;
             i < stationList.length;
@@ -573,9 +581,12 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   Stack showTransferIcon(bool isToLeft) {
     List<Positioned> iconList = [];
     List<List<Line>> transferLineListToShow = [];
+    //上行
     if (isToLeft) {
       transferLineListToShow = transferLineList;
-    } else {
+    }
+    //下行
+    else {
       transferLineListToShow = transferLineList.reversed.toList();
     }
 
@@ -654,6 +665,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //显示站名
   Stack showStationName(bool isToLeft) {
     List<Container> tempList = [];
+    //上行
     if (isToLeft) {
       for (int i = 0; i < stationList.length; i++) {
         tempList.add(stationNameCN(
@@ -665,6 +677,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             Util.hexToColor(CustomColors.screenDoorCoverPassedStationText),
             stationList));
       }
+      //根据选择的当前站，替换已过站为未过站
       if (currentStationListIndex != null) {
         List<Container> replaceList = [];
         for (int i = 0; i < currentStationListIndex!; i++) {
@@ -673,7 +686,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         }
         tempList.replaceRange(0, 2 * currentStationListIndex!, replaceList);
       }
-    } else {
+    }
+    //下行
+    else {
       List<Station> reversedStationList = stationList.reversed.toList();
       for (int i = 0; i < stationList.length; i++) {
         tempList.add(stationNameCN(
@@ -685,6 +700,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             Util.hexToColor(CustomColors.screenDoorCoverPassedStationText),
             reversedStationList));
       }
+      //根据选择的当前站，替换已过站为未过站
       if (currentStationListIndex != null) {
         List<Container> replaceList = [];
         for (int i = stationList.length - currentStationListIndex!;
@@ -895,7 +911,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       await exportImage(
           routeUpImageKey,
           await getExportPath(context, "保存",
-              "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png"),
+              "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png"),
           true);
     } else {
       noStationsSnackbar();

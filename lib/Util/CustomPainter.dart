@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:main/Pages/ScreenDoorCover.dart';
 
 // 站点小图标
 class LCDStationIconSmallPainter extends CustomPainter {
@@ -185,9 +186,9 @@ class ScreenDoorCoverRouteLineClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    final radius = 17.0;
+    double radius = ScreenDoorCoverState.lineHeight;
     path.moveTo(0, size.height);
-    path.arcToPoint(Offset(0, 0),
+    path.arcToPoint(const Offset(0, 0),
         radius: Radius.circular(radius), clockwise: false);
     path.lineTo(size.width, 0);
     path.arcToPoint(Offset(size.width, radius),
