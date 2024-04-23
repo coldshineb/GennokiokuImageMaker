@@ -78,7 +78,7 @@ class Util {
   ''';
 
   static const String arrivalStationInfoTransfer =
-      '''<?xml version="1.0" encoding="UTF-8"?>
+  '''<?xml version="1.0" encoding="UTF-8"?>
 <svg id="_图层_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 504.5 307.86">
     <g id="_图层_1-2">
         <g id="transfer">
@@ -111,6 +111,18 @@ class Util {
 
   static Color getTextColorForBackground(Color backgroundColor) {
     // 根据亮度值返回合适的文本颜色
-    return backgroundColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    return backgroundColor.computeLuminance() > 0.5 ? Colors.black : Colors
+        .white;
+  }
+
+  // 获取文本宽度
+  static double getTextWidth(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.width;
   }
 }

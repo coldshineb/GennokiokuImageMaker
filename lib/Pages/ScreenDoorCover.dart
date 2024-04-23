@@ -53,10 +53,12 @@ class ScreenDoorCover extends StatefulWidget {
 class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 640;
-  static const double imageWidth = 1920;
+  static const double mainImageWidth = 1920;
+  static const double stationImageWidth = 1280;
 
   //用于识别组件的 key
-  final GlobalKey _mainImageKey = GlobalKey();
+  final GlobalKey routeImageKey = GlobalKey();
+  final GlobalKey stationImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
@@ -70,9 +72,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   String lineNumber = "";
   String lineNumberEN = "";
 
-  //线路颜色和颜色变体，默认透明，导入文件时赋值
+  //线路颜色，默认透明，导入文件时赋值
   Color lineColor = Colors.transparent;
-  Color lineVariantColor = Colors.transparent;
 
   //站名下拉菜单默认值，设空，导入文件时赋值
   String? currentStationListValue;
@@ -82,14 +83,17 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   int? currentStationListIndex;
   int? terminusListIndex;
 
-  //是否显示原忆轨道交通品牌图标
-  bool showLogo = true;
-
   //默认导出高度
   int exportHeightValue = 1280;
 
   //线路线条宽度
-  int lineLength = 1790;
+  int lineLength = 1700;
+
+  TextStyle stationNameTextTextstyle = TextStyle(
+      fontSize: 118,
+      letterSpacing: 4,
+      fontFamily: "HYYanKaiW",
+      color: Util.hexToColor(CustomColors.screenDoorCoverStationName));
 
   @override
   Widget build(BuildContext context) {
@@ -186,134 +190,149 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                     children: [
                       //主线路图
                       RepaintBoundary(
-                        key: _mainImageKey,
-                        child: Container(
-                          color:
-                              Util.hexToColor(CustomColors.backgroundColorLCD),
-                          child: Stack(
-                            children: [
-                              const SizedBox(
-                                width: imageWidth,
+                        key: routeImageKey,
+                        child: Stack(
+                          children: [
+                            const SizedBox(
+                              width: mainImageWidth,
+                              height: imageHeight,
+                            ),
+                            _imageBytes != null
+                                ? SizedBox(
+                                    height: imageHeight,
+                                    child: Image.memory(
+                                      _imageBytes!,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(72, 345, 0, 0),
+                              child: showStationName(),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.fromLTRB(104.8, 278, 0, 0),
+                              child: showRouteLine(),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
+                              child: showRouteIcon(),
+                            ),
+                            Container(
+                              width: mainImageWidth,
+                              height: imageHeight,
+                              child: showTransferIcon(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      //站名图
+                      RepaintBoundary(
+                        key: stationImageKey,
+                        child: Stack(
+                          children: [
+                            const SizedBox(
+                              width: stationImageWidth,
+                              height: imageHeight,
+                            ),
+                            _imageBytes != null
+                                ? SizedBox(
+                                    height: imageHeight,
+                                    child: Image.memory(
+                                      _imageBytes!,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(27, 32, 0, 0),
+                              child: Transform.scale(
+                                  alignment: Alignment.topLeft,
+                                  scale: 2.4,
+                                  child: Widgets.lineNumberIcon(
+                                      lineColor, lineNumber, lineNumberEN)),
+                            ),
+                            Container(
                                 height: imageHeight,
-                              ),
-                              _imageBytes != null
-                                  ? SizedBox(
-                                      height: imageHeight,
-                                      child: Image.memory(
-                                        _imageBytes!,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              gennokiokuRailwayTransitLogoWidget(showLogo),
-                              lineNumberIconWidget(
-                                  lineColor, lineNumber, lineNumberEN),
-                              Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
-                                  child: const Text(
-                                    "当前站",
-                                    style: TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      446.5, 41, 0, 0),
-                                  child: const Text(
-                                    "Current station",
-                                    style: TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1111.5, 8, 0, 0),
-                                  child: const Text(
-                                    "终点站",
-                                    style: TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1124.5, 41, 0, 0),
-                                  child: const Text(
-                                    "Terminus",
-                                    style: TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(549, 8, 0, 0),
-                                  child: Text(
-                                    currentStationListIndex == null
-                                        ? ""
-                                        : stationList[currentStationListIndex!]
-                                            .stationNameCN,
-                                    //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style: const TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1210.5, 8, 0, 0),
-                                  child: Text(
-                                    terminusListIndex == null
-                                        ? ""
-                                        : stationList[terminusListIndex!]
-                                            .stationNameCN,
-                                    style: const TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      549.5, 41, 0, 0),
-                                  child: Text(
-                                    currentStationListIndex == null
-                                        ? ""
-                                        : stationList[currentStationListIndex!]
-                                            .stationNameEN,
-                                    style: const TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1210.5, 41, 0, 0),
-                                  child: Text(
-                                    terminusListIndex == null
-                                        ? ""
-                                        : stationList[terminusListIndex!]
-                                            .stationNameEN,
-                                    style: const TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
-                                  )),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(52, 345, 0, 0),
-                                child: showStationName(),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(110, 195, 0, 0),
-                                child: showRouteLine(),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(55, 286, 0, 0),
-                                child: showRouteIcon(),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(93, 221.5, 0, 0),
-                                child: showTransferIcon(),
-                              ),
-                            ],
-                          ),
+                                width: stationImageWidth,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        left: 0,
+                                        top: 158,
+                                        right: 0,
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          currentStationListIndex == null
+                                              ? ""
+                                              : stationList[
+                                                      currentStationListIndex!]
+                                                  .stationNameCN,
+                                          //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
+                                          style: stationNameTextTextstyle,
+                                        )),
+                                    Positioned(
+                                        left: 0,
+                                        top: 300,
+                                        right: 0,
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          currentStationListIndex == null
+                                              ? ""
+                                              : stationList[
+                                                      currentStationListIndex!]
+                                                  .stationNameEN,
+                                          style: TextStyle(
+                                              fontSize: 43,
+                                              letterSpacing: 2,
+                                              color: Util.hexToColor(CustomColors
+                                                  .screenDoorCoverStationName)),
+                                        )),
+                                  ],
+                                )),
+                            Container(
+                                height: imageHeight,
+                                width: stationImageWidth,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 278,
+                                      left: 0,
+                                      width: currentStationListIndex != null
+                                          ? (stationImageWidth -
+                                                      Util.getTextWidth(
+                                                          stationList[
+                                                                  currentStationListIndex!]
+                                                              .stationNameCN,
+                                                          stationNameTextTextstyle)) /
+                                                  2 -
+                                              110
+                                          : 0,
+                                      height: 16,
+                                      child: Container(
+                                          decoration:
+                                              BoxDecoration(color: lineColor)),
+                                    ),
+                                    Positioned(
+                                      top: 278,
+                                      right: 0,
+                                      width: currentStationListIndex != null
+                                          ? (stationImageWidth -
+                                                      Util.getTextWidth(
+                                                          stationList[
+                                                                  currentStationListIndex!]
+                                                              .stationNameCN,
+                                                          stationNameTextTextstyle)) /
+                                                  2 -
+                                              110
+                                          : 0,
+                                      height: 16,
+                                      child: Container(
+                                          decoration:
+                                              BoxDecoration(color: lineColor)),
+                                    ),
+                                  ],
+                                ))
+                          ],
                         ),
                       ),
                     ],
@@ -330,7 +349,6 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           stationList.clear();
           transferLineList.clear();
           lineColor = Colors.transparent;
-          lineVariantColor = Colors.transparent;
           currentStationListIndex = null;
           terminusListIndex = null;
           currentStationListValue = null;
@@ -347,16 +365,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: _importImage,
-          child: const Text(
-            "导入图片",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
+      // Container(
+      //   height: 48,
+      //   child: MenuItemButton(
+      //     onPressed: _importImage,
+      //     child: const Text(
+      //       "导入图片",
+      //       style: TextStyle(color: Colors.black),
+      //     ),
+      //   ),
+      // ),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -389,17 +407,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           ),
         ),
       ),
-      const VerticalDivider(thickness: 2),
       Container(
-          height: 48,
-          child: CheckboxMenuButton(
-            value: showLogo,
-            onChanged: (bool? value) {
-              showLogo = value!;
-              setState(() {});
-            },
-            child: const Text("显示品牌图标"),
-          )),
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportStationImage,
+          child: const Text(
+            "导出站名图",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
     ]);
   }
 
@@ -408,8 +425,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     List<Container> lineList = [];
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
-      lineList.add(
-          (routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
+      lineList.add(routeLine(
+          i, Util.hexToColor(CustomColors.screenDoorCoverPassedStation)));
     }
     //根据选择的当前站和终点站，替换已过站为未过站
     if (currentStationListIndex != null && terminusListIndex != null) {
@@ -464,15 +481,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //线路
   Container routeLine(int i, Color color) {
     return Container(
-      padding:
-          EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
-      //间隔
-      height: 15,
-      child: Container(
-        width: (lineLength / (stationList.length - 1)), //每个站与站之间线条的宽度
-        color: color,
-      ),
-    );
+        padding:
+            EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
+        child: ClipPath(
+            clipper: ScreenDoorCoverRouteLineClipper(),
+            child: Container(
+              width: (lineLength / (stationList.length - 1)) - 39.5,
+              //每个站与站之间线条的宽度
+              height: 17,
+              color: color,
+            )));
   }
 
   //显示站点图标  与 showRouteLine 类似
@@ -483,12 +501,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: ScreenDoorCoverStationIconPainter(lineColor),
-            // painter: StationIconSmallPainter(
-            //     lineColor: Util.hexToColor(CustomColors.passedStation),
-            //     lineVariantColor:
-            //         Util.hexToColor(CustomColors.passedStationVariant),
-            //     shadow: true),
+            painter: ScreenDoorCoverStationIconPainter(
+                Util.hexToColor(CustomColors.screenDoorCoverPassedStation)),
           )));
     }
     if (currentStationListIndex != null && terminusListIndex != null) {
@@ -501,10 +515,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               padding: EdgeInsets.fromLTRB(
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
-                painter: LCDStationIconSmallPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
-                    shadow: true),
+                painter: ScreenDoorCoverStationIconPainter(lineColor),
               )));
         }
         iconList.replaceRange(
@@ -516,10 +527,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               padding: EdgeInsets.fromLTRB(
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
-                painter: LCDStationIconSmallPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
-                    shadow: true),
+                painter: ScreenDoorCoverStationIconPainter(lineColor),
               )));
         }
         iconList.replaceRange(
@@ -531,33 +539,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     );
   }
 
-  //显示正在过站图标
-  Stack showPassingRouteIcon() {
-    List<Container> tempList = [];
-    if (currentStationListIndex != null) {
-      tempList.add(Container(
-          padding: EdgeInsets.fromLTRB(
-              10 +
-                  (lineLength / (stationList.length - 1)) *
-                      currentStationListIndex!,
-              0,
-              0,
-              0),
-          child: CustomPaint(
-              painter: LCDStationIconSmallPainter(
-                  lineColor: Util.hexToColor(CustomColors.passingStation),
-                  lineVariantColor:
-                      Util.hexToColor(CustomColors.passingStationVariant),
-                  shadow: false))));
-    }
-    return Stack(
-      children: tempList,
-    );
-  }
-
   //显示换乘线路图标
   Stack showTransferIcon() {
-    List<Container> iconList = [];
+    List<Positioned> iconList = [];
 
     //遍历获取每站的换乘信息列表
     for (int i = 0; i < transferLineList.length; i++) {
@@ -567,61 +551,58 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         for (int j = 0; j < value.length; j++) {
           Line transferLine = value[j];
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextOneDigit(transferLine)
-                  ],
-                )));
+            iconList.add(Positioned(
+                top: -47 * j + 223,
+                left: (lineLength / (stationList.length - 1)) * i + 68,
+                child: Transform.scale(
+                    scale: 1.24,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine), //换乘线路图标
+                        Widgets.transferLineTextOneDigit(transferLine), //换乘线路数字
+                      ],
+                    ))));
           } else if (CustomRegExp.twoDigits
               .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextTwoDigits(transferLine)
-                  ],
-                )));
+            iconList.add(Positioned(
+                top: -47 * j + 223,
+                left: (lineLength / (stationList.length - 1)) * i + 68,
+                child: Transform.scale(
+                    scale: 1.24,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine),
+                        Widgets.transferLineTextTwoDigits(transferLine),
+                      ],
+                    ))));
           } else if (CustomRegExp.oneDigitOneCharacter
               .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextOneDigitOneCharacter(transferLine)
-                  ],
-                )));
+            iconList.add(Positioned(
+                top: -47 * j + 223,
+                left: (lineLength / (stationList.length - 1)) * i + 68,
+                child: Transform.scale(
+                    scale: 1.24,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine),
+                        Widgets.transferLineTextOneDigitOneCharacter(
+                            transferLine),
+                      ],
+                    ))));
           } else if (CustomRegExp.twoCharacters
               .hasMatch(transferLine.lineNumberEN)) {
             {
-              iconList.add(Container(
-                  padding: EdgeInsets.fromLTRB(
-                      (lineLength / (stationList.length - 1)) * i,
-                      35.5 * j,
-                      0,
-                      0),
-                  child: Stack(
-                    children: [
-                      Widgets.transferLineIcon(transferLine),
-                      Widgets.transferLineTextTwoCharacters(transferLine)
-                    ],
-                  )));
+              iconList.add(Positioned(
+                  top: -47 * j + 223,
+                  left: (lineLength / (stationList.length - 1)) * i + 68,
+                  child: Transform.scale(
+                      scale: 1.24,
+                      child: Stack(
+                        children: [
+                          Widgets.transferLineIcon(transferLine),
+                          Widgets.transferLineTextTwoCharacters(transferLine),
+                        ],
+                      ))));
             }
           }
         }
@@ -635,47 +616,79 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //显示站名
   Stack showStationName() {
     List<Container> tempList = [];
-    double count = 0;
-    for (Station value in stationList) {
-      tempList.add(Container(
-        padding: EdgeInsets.fromLTRB(
-            13 + (lineLength / (stationList.length - 1)) * count, 0, 0, 0),
-        child: Container(
-          //顺时针45度
-          transform: Matrix4.rotationZ(0.75),
-          child: Text(
-            value.stationNameCN,
-            style: const TextStyle(
-              //fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ));
-      tempList.add(Container(
-        padding: EdgeInsets.fromLTRB(
-            //英文站名做适当偏移
-            (lineLength / (stationList.length - 1)) * count,
-            15,
-            0,
-            0),
-        child: Container(
-          transform: Matrix4.rotationZ(0.75),
-          child: Text(
-            value.stationNameEN,
-            style: const TextStyle(
-              //fontWeight: FontWeight.bold,
-              fontSize: 8.5,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ));
-      count++;
+    for (int i = 0; i < stationList.length; i++) {
+      tempList.add(stationNameCN(
+          i, Util.hexToColor(CustomColors.screenDoorCoverPassedStationText)));
+      tempList.add(stationNameEN(
+          i, Util.hexToColor(CustomColors.screenDoorCoverPassedStationText)));
     }
+    if (currentStationListIndex != null && terminusListIndex != null) {
+      if (currentStationListIndex! <= terminusListIndex!) {
+        List<Container> replaceList = [];
+        for (int i = currentStationListIndex!;
+            i < terminusListIndex! + 1;
+            i++) {
+          replaceList.add(stationNameCN(i, Colors.black));
+          replaceList.add(stationNameEN(i, Colors.black));
+        }
+        tempList.replaceRange(2 * currentStationListIndex!,
+            2 * (terminusListIndex! + 1), replaceList);
+      } else if (currentStationListIndex! > terminusListIndex!) {
+        List<Container> replaceList = [];
+        for (int i = terminusListIndex!;
+            i < currentStationListIndex! + 1;
+            i++) {
+          replaceList.add(stationNameCN(i, Colors.black));
+          replaceList.add(stationNameEN(i, Colors.black));
+        }
+        tempList.replaceRange(
+            2 * terminusListIndex!, 2 * currentStationListIndex!, replaceList);
+      }
+    }
+
     return Stack(
       children: tempList,
+    );
+  }
+
+  Container stationNameCN(int i, Color color) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(
+          13 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+      child: Container(
+        //顺时针45度
+        transform: Matrix4.rotationZ(0.75),
+        child: Text(
+          stationList[i].stationNameCN,
+          style: TextStyle(
+            //fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: color,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container stationNameEN(int i, Color color) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(
+          //英文站名做适当偏移
+          (lineLength / (stationList.length - 1)) * i,
+          15,
+          0,
+          0),
+      child: Container(
+        transform: Matrix4.rotationZ(0.75),
+        child: Text(
+          stationList[i].stationNameEN,
+          style: TextStyle(
+            //fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: color,
+          ),
+        ),
+      ),
     );
   }
 
@@ -730,7 +743,6 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           lineNumber = jsonData['lineNumber'];
           lineNumberEN = jsonData['lineNumberEN'];
           lineColor = Util.hexToColor(jsonData['lineColor']);
-          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
@@ -788,12 +800,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
             //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
             await exportImage(
-                _mainImageKey,
-                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                routeImageKey,
+                "$path\\屏蔽门盖板 线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
             await exportImage(
-                _mainImageKey,
-                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                routeImageKey,
+                "$path\\屏蔽门盖板 线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                false);
+            await exportImage(
+                stationImageKey,
+                "$path\\屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         } else if (currentStationListIndex! > terminusListIndex!) {
@@ -802,12 +818,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             setState(() {});
             //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
             await exportImage(
-                _mainImageKey,
-                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                routeImageKey,
+                "$path\\屏蔽门盖板 线路图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
             await exportImage(
-                _mainImageKey,
-                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                routeImageKey,
+                "$path\\屏蔽门盖板 线路图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                false);
+            await exportImage(
+                stationImageKey,
+                "$path\\屏蔽门盖板 站名 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 false);
           }
         }
@@ -824,9 +844,22 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   Future<void> exportMainImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
-          _mainImageKey,
+          routeImageKey,
           await getExportPath(context, "保存",
-              "运行中 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
+              "屏蔽门盖板 线路图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
+          true);
+    } else {
+      noStationsSnackbar();
+    }
+  }
+
+  //导出站名图
+  Future<void> exportStationImage() async {
+    if (stationList.isNotEmpty) {
+      await exportImage(
+          stationImageKey,
+          await getExportPath(context, "保存",
+              "屏蔽门盖板 站名 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
           true);
     } else {
       noStationsSnackbar();
@@ -875,8 +908,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         RenderRepaintBoundary boundary =
             key.currentContext!.findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage(
-            pixelRatio: exportHeightValue / findRenderObject
-                .size.height); //确保导出的图片高度为1280
+            pixelRatio: exportHeightValue /
+                findRenderObject.size.height); //确保导出的图片高度为1280
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();

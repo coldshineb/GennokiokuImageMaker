@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// 站点小图标
 class LCDStationIconSmallPainter extends CustomPainter {
   final Color? lineColor; //线路主颜色
   final Color? lineVariantColor; //线路主颜色变体
@@ -48,6 +49,7 @@ class LCDStationIconSmallPainter extends CustomPainter {
   }
 }
 
+// 站点中图标
 class LCDStationIconMediumPainter extends CustomPainter {
   final Color? lineColor; //线路主颜色
   final Color? lineVariantColor; //线路主颜色变体
@@ -94,6 +96,7 @@ class LCDStationIconMediumPainter extends CustomPainter {
   }
 }
 
+// 站点大图标
 class LCDStationIconBigPainter extends CustomPainter {
   final Color? lineColor; //线路主颜色
   final Color? lineVariantColor; //线路主颜色变体
@@ -140,6 +143,7 @@ class LCDStationIconBigPainter extends CustomPainter {
   }
 }
 
+// 屏蔽门站点图标
 class ScreenDoorCoverStationIconPainter extends CustomPainter {
   final Color? lineColor;
 
@@ -172,6 +176,28 @@ class ScreenDoorCoverStationIconPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+// 屏蔽门盖板线路线条
+class ScreenDoorCoverRouteLineClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    final radius = 17.0;
+    path.moveTo(0, size.height);
+    path.arcToPoint(Offset(0, 0),
+        radius: Radius.circular(radius), clockwise: false);
+    path.lineTo(size.width, 0);
+    path.arcToPoint(Offset(size.width, radius),
+        radius: Radius.circular(radius), clockwise: false);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false;
   }
 }

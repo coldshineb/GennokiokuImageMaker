@@ -230,8 +230,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                         ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(1111.5, 8, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      1111.5, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
                                     style: TextStyle(fontSize: 28
@@ -312,6 +312,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                 child: showRouteIcon(),
                               ),
                               Container(
+                                width: imageWidth,
+                                height: imageHeight,
                                 padding:
                                     const EdgeInsets.fromLTRB(183, 221.5, 0, 0),
                                 child: showTransferIcon(),
@@ -596,7 +598,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
 
   //显示换乘线路图标
   Stack showTransferIcon() {
-    List<Container> iconList = [];
+    List<Positioned> iconList = [];
 
     //遍历获取每站的换乘信息列表
     for (int i = 0; i < transferLineList.length; i++) {
@@ -605,13 +607,11 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         //遍历获取每站的换乘信息列表中具体的换乘线路信息
         for (int j = 0; j < value.length; j++) {
           Line transferLine = value[j];
+
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -620,12 +620,20 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                 )));
           } else if (CustomRegExp.twoDigits
               .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextTwoDigits(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.twoDigits
+              .hasMatch(transferLine.lineNumberEN)) {
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -634,12 +642,9 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                 )));
           } else if (CustomRegExp.oneDigitOneCharacter
               .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Container(
-                padding: EdgeInsets.fromLTRB(
-                    (lineLength / (stationList.length - 1)) * i,
-                    35.5 * j,
-                    0,
-                    0),
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
                 child: Stack(
                   children: [
                     Widgets.transferLineIcon(transferLine),
@@ -649,12 +654,9 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
           } else if (CustomRegExp.twoCharacters
               .hasMatch(transferLine.lineNumberEN)) {
             {
-              iconList.add(Container(
-                  padding: EdgeInsets.fromLTRB(
-                      (lineLength / (stationList.length - 1)) * i,
-                      35.5 * j,
-                      0,
-                      0),
+              iconList.add(Positioned(
+                  left: (lineLength / (stationList.length - 1)) * i,
+                  top: 35.5 * j,
                   child: Stack(
                     children: [
                       Widgets.transferLineIcon(transferLine),
