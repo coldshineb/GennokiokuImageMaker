@@ -307,7 +307,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                                   2 -
                                               110
                                           : 0,
-                                      height: 16,
+                                      height: 17,
                                       child: Container(
                                           decoration:
                                               BoxDecoration(color: lineColor)),
@@ -325,7 +325,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                                   2 -
                                               110
                                           : 0,
-                                      height: 16,
+                                      height: 17,
                                       child: Container(
                                           decoration:
                                               BoxDecoration(color: lineColor)),
