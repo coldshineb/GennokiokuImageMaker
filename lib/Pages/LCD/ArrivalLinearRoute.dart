@@ -177,6 +177,21 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                     ),
                   ),
                 ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: () {
+                      setState(() {
+                        stationList = stationList.reversed.toList();
+                        transferLineList = transferLineList.reversed.toList();
+                      });
+                    },
+                    child: const Text(
+                      "反转站点",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
               ])
             ],
           ),

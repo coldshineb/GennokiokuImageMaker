@@ -85,8 +85,8 @@ class _HomeState extends State<Home> {
                 label: Text('出入口盖板', style: TextStyle(fontSize: 15)),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.signpost_outlined),
-                selectedIcon: Icon(Icons.signpost),
+                icon: Icon(Icons.splitscreen_outlined),
+                selectedIcon: Icon(Icons.splitscreen),
                 label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
               ),
             ],

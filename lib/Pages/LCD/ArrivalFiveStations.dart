@@ -229,6 +229,20 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   ),
                 ),
                 Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: () {
+                      setState(() {
+                        stationList = stationList.reversed.toList();
+                      });
+                    },
+                    child: const Text(
+                      "反转站点",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+                Container(
                   padding: const EdgeInsets.only(top: 14),
                   child: const Text(
                     "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间",
