@@ -12,15 +12,73 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
-
     steps:
-        - name: Clone repository
-          uses: actions/checkout@v4
-        - name: Set up Flutter
-          uses: subosito/flutter-action@v2
-          with:
-            channel: stable
-            flutter-version: 3.19.3
-        - run: flutter build windows
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.19.3
+      - run: flutter build windows
+      - name: Zip build files
+        run: |
+          Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath GennokiokuImageMaker-windows-${{ github.run_number }}.zip
+        shell: pwsh
+
+      - name: Upload Artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./GennokiokuImageMaker-windows-${{ github.run_number }}.zip
+          name: GennokiokuImageMaker-windows
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.19.3
+      - run: flutter pub get
+      - run: flutter build apk
+      - run: mv ./build/app/outputs/apk/release/app-release.apk ./GennokiokuImageMaker-android-${{ github.run_number }}.apk
+
+      - name: Upload Artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./GennokiokuImageMaker-android-${{ github.run_number }}.apk
+          name: GennokiokuImageMaker-android
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.19.3
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+      - run: flutter build linux
+      - name: Zip build files
+        run: |
+          cd ./build/linux/x64/release/bundle/
+          zip -r GennokiokuImageMaker-linux-${{ github.run_number }}.zip ./*
+          mv GennokiokuImageMaker-linux-${{ github.run_number }}.zip ../../../../../
+
+      - name: Upload Artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./GennokiokuImageMaker-linux-${{ github.run_number }}.zip
+          name: GennokiokuImageMaker-linux
