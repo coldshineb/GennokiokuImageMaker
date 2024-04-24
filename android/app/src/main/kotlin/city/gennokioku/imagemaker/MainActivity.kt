@@ -1,4 +1,4 @@
-package com.example.main
+package city.gennokioku.imagemaker
 
 import io.flutter.embedding.android.FlutterActivity
 
