@@ -214,6 +214,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                   const EdgeInsets.fromLTRB(106, 278, 0, 0),
                               child: showRouteLine(true),
                             ),
+                            routeLineLeft(),
+                            routeLineRight(),
                             Container(
                               padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
                               child: showRouteIcon(true),
@@ -252,6 +254,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                   const EdgeInsets.fromLTRB(106, 278, 0, 0),
                               child: showRouteLine(false),
                             ),
+                            routeLineLeft(),
+                            routeLineRight(),
                             Container(
                               padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
                               child: showRouteIcon(false),
@@ -445,6 +449,76 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  //左侧顶头线条
+  Container routeLineLeft() {
+    return Container(
+        height: imageHeight,
+        width: routeImageWidth,
+        child: Stack(
+          children: [
+            stationList.isNotEmpty
+                ? Positioned(
+                    top: 278,
+                    left: 14,
+                    child: ClipPath(
+                        clipper: ScreenDoorCoverRouteLineClipper(),
+                        child: Container(
+                          width: 50,
+                          //每个站与站之间线条的宽度
+                          height: lineHeight,
+                          color: lineColor,
+                        )))
+                : Container(),
+            stationList.isNotEmpty
+                ? Positioned(
+                    top: 278,
+                    child: Container(
+                      width: 50,
+                      //每个站与站之间线条的宽度
+                      height: lineHeight,
+                      color: lineColor,
+                    ))
+                : Container(),
+          ],
+        ));
+  }
+
+  //右侧顶头线条
+  Container routeLineRight() {
+    return Container(
+        height: imageHeight,
+        width: routeImageWidth,
+        child: Stack(
+          children: [
+            stationList.isNotEmpty
+                ? Positioned(
+                    top: 278,
+                    right: 64,
+                    child: ClipPath(
+                        clipper: ScreenDoorCoverRouteLineClipper(),
+                        child: Container(
+                          width: 50,
+                          //每个站与站之间线条的宽度
+                          height: lineHeight,
+                          color: Util.hexToColor(
+                              CustomColors.screenDoorCoverPassedStation),
+                        )))
+                : Container(),
+            stationList.isNotEmpty
+                ? Positioned(
+                    top: 278,right: 0,
+                    child: Container(
+                      width: 80,
+                      //每个站与站之间线条的宽度
+                      height: lineHeight,
+                      color: Util.hexToColor(
+                          CustomColors.screenDoorCoverPassedStation),
+                    ))
+                : Container(),
+          ],
+        ));
   }
 
   MenuBar importAndExportMenubar() {
