@@ -105,6 +105,16 @@ class Util {
 </svg>
 ''';
 
+  static const String screenDoorCoverDirectionArrow =
+  '''<svg xmlns="http://www.w3.org/2000/svg" width="631.25" height="578.125">
+   <g>
+      <path
+         d="M475.625 323.635H-45.078L215.078 583.79h-81.64l-289.063-289.063L133.438 5.666h81.64L-45.078 265.822h520.703v57.813z"
+         transform="translate(155.625 -5.666)" />
+   </g>
+</svg>
+  ''';
+
   static Color hexToColor(String hexColor) {
     return Color(int.parse('FF${hexColor.replaceAll('#', '')}', radix: 16));
   }

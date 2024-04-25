@@ -2,11 +2,13 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Util/CustomRegExp.dart';
 import '../../Object/Line.dart';
@@ -60,6 +62,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   final GlobalKey routeUpImageKey = GlobalKey();
   final GlobalKey routeDownImageKey = GlobalKey();
   final GlobalKey stationImageKey = GlobalKey();
+  final GlobalKey directionUpImageKey = GlobalKey();
+  final GlobalKey directionDownImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
@@ -364,6 +368,54 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                           ],
                         ),
                       ),
+                      //上行运行方向图
+                      RepaintBoundary(
+                        key: directionUpImageKey,
+                        child: Stack(
+                          children: [
+                            const SizedBox(
+                              width: stationImageWidth,
+                              height: imageHeight,
+                            ),
+                            _imageBytes != null
+                                ? SizedBox(
+                                    height: imageHeight,
+                                    child: Image.memory(
+                                      _imageBytes!,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            directionImageTerminusLabel(true),
+                            directionArrow(true),
+                            directionImageLine(true),
+                            directionImageNextStationLabel(true)
+                          ],
+                        ),
+                      ),
+                      //下行运行方向图
+                      RepaintBoundary(
+                        key: directionDownImageKey,
+                        child: Stack(
+                          children: [
+                            const SizedBox(
+                              width: stationImageWidth,
+                              height: imageHeight,
+                            ),
+                            _imageBytes != null
+                                ? SizedBox(
+                                    height: imageHeight,
+                                    child: Image.memory(
+                                      _imageBytes!,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            directionImageTerminusLabel(false),
+                            directionArrow(false),
+                            directionImageLine(false),
+                            directionImageNextStationLabel(false)
+                          ],
+                        ),
+                      ),
                     ],
                   )),
             ),
@@ -390,18 +442,234 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     );
   }
 
+  //运行方向图的下一站标签
+  Container directionImageNextStationLabel(bool isToLeft) {
+    if (isToLeft) {
+      //上行
+      return currentStationListIndex != 0 && currentStationListIndex != null
+          ? Container(
+              height: imageHeight,
+              width: stationImageWidth,
+              child: Stack(
+                children: [
+                  Positioned(
+                      left: 20,
+                      top: 350,
+                      child: Text(
+                        "下一站    ${stationList[currentStationListIndex! - 1].stationNameCN}",
+                        style: const TextStyle(fontSize: 40),
+                      )),
+                  Positioned(
+                      left: 20,
+                      top: 400,
+                      right: 0,
+                      child: Text(
+                        "Next station  ${stationList[currentStationListIndex! - 1].stationNameEN}",
+                        style: const TextStyle(fontSize: 26),
+                      )),
+                ],
+              ),
+            )
+          : Container();
+    } else {
+      //下行
+      return currentStationListIndex != stationList.length - 1 &&
+              currentStationListIndex != null
+          ? Container(
+              height: imageHeight,
+              width: stationImageWidth,
+              child: Stack(
+                children: [
+                  Positioned(
+                      left: 20,
+                      top: 350,
+                      child: Text(
+                        "下一站    ${stationList[currentStationListIndex! + 1].stationNameCN}",
+                        style: const TextStyle(fontSize: 40),
+                      )),
+                  Positioned(
+                      left: 20,
+                      top: 400,
+                      right: 0,
+                      child: Text(
+                        "Next station  ${stationList[currentStationListIndex! + 1].stationNameEN}",
+                        style: const TextStyle(fontSize: 26),
+                      )),
+                ],
+              ),
+            )
+          : Container();
+    }
+  }
+
+  //运行方向图线
+  Container directionImageLine(bool isToLeft) {
+    return Container(
+        height: imageHeight,
+        width: stationImageWidth,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 278,
+              left: 0,
+              width: currentStationListIndex != null
+                  ? (stationImageWidth -
+                              Util.getTextWidth(
+                                  isToLeft
+                                      ? "往 ${stationList[0].stationNameCN}"
+                                      : "往 ${stationList[stationList.length - 1].stationNameCN}",
+                                  TextStyle(
+                                      fontSize: 77,
+                                      color: Util.hexToColor(CustomColors
+                                          .screenDoorCoverStationName)))) /
+                          2 -
+                      130
+                  : 0,
+              height: lineHeight,
+              child: Container(decoration: BoxDecoration(color: lineColor)),
+            ),
+            Positioned(
+              top: 278,
+              right: 0,
+              width: currentStationListIndex != null
+                  ? (stationImageWidth -
+                              Util.getTextWidth(
+                                  isToLeft
+                                      ? "往 ${stationList[0].stationNameCN}"
+                                      : "往 ${stationList[stationList.length - 1].stationNameCN}",
+                                  TextStyle(
+                                      fontSize: 77,
+                                      color: Util.hexToColor(CustomColors
+                                          .screenDoorCoverStationName)))) /
+                          2 -
+                      130
+                  : 0,
+              height: lineHeight,
+              child: Container(decoration: BoxDecoration(color: lineColor)),
+            ),
+          ],
+        ));
+  }
+
+  //终点站标签
+  Container directionImageTerminusLabel(bool isToLeft) {
+    String terminusTextCN = "";
+    String terminusTextEN = "";
+    double leftPos = 138;//默认左边距
+    if (currentStationListIndex == null) {
+      //默认情况下不显示终点站标签
+      terminusTextCN = "";
+      terminusTextEN = "";
+    } else {
+      if (isToLeft) {
+        //上行
+        if (currentStationListIndex == 0) {
+          //当前站为第一站时显示终点站
+          terminusTextCN = "终点站 ${stationList[0].stationNameCN}";
+          terminusTextEN = "Terminus ${stationList[0].stationNameEN}";
+          leftPos = 0;
+        } else {
+          //当前站不为第一站时显示往终点站
+          terminusTextCN = "往 ${stationList[0].stationNameCN}";
+          terminusTextEN = "To ${stationList[0].stationNameEN}";
+        }
+      } else {
+        //下行
+        if (currentStationListIndex == stationList.length - 1) {
+          //当前站为终点站时显示终点站
+          terminusTextCN =
+              "终点站 ${stationList[stationList.length - 1].stationNameCN}";
+          terminusTextEN =
+              "Terminus ${stationList[stationList.length - 1].stationNameEN}";
+          leftPos = 0;
+        } else {
+          //当前站不为终点站时显示往终点站
+          terminusTextCN =
+              "往 ${stationList[stationList.length - 1].stationNameCN}";
+          terminusTextEN =
+              "To ${stationList[stationList.length - 1].stationNameEN}";
+        }
+      }
+    }
+    return Container(
+        height: imageHeight,
+        width: stationImageWidth,
+        child: Stack(
+          children: [
+            Positioned(
+                left: leftPos,
+                top: 200,
+                right: 0,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  terminusTextCN,
+                  style: TextStyle(
+                      fontSize: 77,
+                      color: Util.hexToColor(
+                          CustomColors.screenDoorCoverStationName)),
+                )),
+            Positioned(
+                left: leftPos,
+                top: 305,
+                right: 0,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  terminusTextEN,
+                  style: TextStyle(
+                      fontSize: 30,
+                      letterSpacing: 2,
+                      color: Util.hexToColor(
+                          CustomColors.screenDoorCoverStationName)),
+                )),
+          ],
+        ));
+  }
+
+
+  //方向箭头
+  Positioned directionArrow(bool isToLeft) {
+    if (currentStationListIndex == null) {
+      return Positioned(child: Container());
+    } else {
+      if (isToLeft && currentStationListIndex == 0 ||
+          !isToLeft && currentStationListIndex == stationList.length - 1) {
+        //上行且当前站为第一站，或下行且当前站为终点站时不显示箭头
+        return Positioned(child: Container());
+      } else {
+        return Positioned(
+            left: -200 -
+                (Util.getTextWidth(
+                        isToLeft
+                            ? "往 ${stationList[0].stationNameCN}"
+                            : "往 ${stationList[stationList.length - 1].stationNameCN}",
+                        TextStyle(
+                            fontSize: 77,
+                            color: Util.hexToColor(
+                                CustomColors.screenDoorCoverStationName))) -
+                    138),
+            top: 242,
+            right: 0,
+            child: SvgPicture.string(
+              Util.screenDoorCoverDirectionArrow,
+              width: 90,
+              height: 90,
+            ));
+      }
+    }
+  }
+
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      // Container(
-      //   height: 48,
-      //   child: MenuItemButton(
-      //     onPressed: _importImage,
-      //     child: const Text(
-      //       "导入图片",
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: _importImage,
+          child: const Text(
+            "导入图片",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -801,8 +1069,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 2 或大于 32
-        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
+        // 站点不能少于 3 或大于 32
+        if (stationsFromJson.length >= 3 && stationsFromJson.length <= 32) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
