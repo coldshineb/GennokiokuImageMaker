@@ -231,8 +231,16 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   child: MenuItemButton(
                     onPressed: () {
                       setState(() {
-                        stationList = stationList.reversed.toList();
-                        transferLineList = transferLineList.reversed.toList();
+                        if (stationList.isNotEmpty) {
+                          stationList = stationList.reversed.toList();
+                          transferLineList = transferLineList.reversed.toList();
+                          nextStationListIndex = stationList.length -
+                              1 -
+                              nextStationListIndex!; //反转站点索引
+                          terminusListIndex = stationList.length -
+                              1 -
+                              terminusListIndex!; //反转站点索引
+                        }
                       });
                     },
                     child: const Text(

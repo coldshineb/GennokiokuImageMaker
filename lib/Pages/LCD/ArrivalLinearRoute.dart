@@ -182,8 +182,16 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                   child: MenuItemButton(
                     onPressed: () {
                       setState(() {
-                        stationList = stationList.reversed.toList();
-                        transferLineList = transferLineList.reversed.toList();
+                        if (stationList.isNotEmpty) {
+                          stationList = stationList.reversed.toList();
+                          transferLineList = transferLineList.reversed.toList();
+                          currentStationListIndex = stationList.length -
+                              1 -
+                              currentStationListIndex!; //反转站点索引
+                          terminusListIndex = stationList.length -
+                              1 -
+                              terminusListIndex!; //反转站点索引
+                        }
                       });
                     },
                     child: const Text(
