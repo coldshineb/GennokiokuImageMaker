@@ -523,16 +523,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: _importImage,
-          child: const Text(
-            "导入图片",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
+      // Container(
+      //   height: 48,
+      //   child: MenuItemButton(
+      //     onPressed: _importImage,
+      //     child: const Text(
+      //       "导入图片",
+      //       style: TextStyle(color: Colors.black),
+      //     ),
+      //   ),
+      // ),
       Container(
         height: 48,
         child: MenuItemButton(
