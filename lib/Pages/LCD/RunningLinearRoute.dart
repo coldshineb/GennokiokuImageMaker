@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
+import 'package:main/Preference.dart';
 import 'package:main/Util/CustomRegExp.dart';
 import '../../Object/Line.dart';
 import '../../Parent/LCD.dart';
@@ -463,16 +464,18 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      // Container(
-      //   height: 48,
-      //   child: MenuItemButton(
-      //     onPressed: _importImage,
-      //     child: const Text(
-      //       "导入图片",
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
+      Preference.isDevMode
+          ? Container(
+              height: 48,
+              child: MenuItemButton(
+                onPressed: _importImage,
+                child: const Text(
+                  "导入图片",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            )
+          : Container(),
       Container(
         height: 48,
         child: MenuItemButton(

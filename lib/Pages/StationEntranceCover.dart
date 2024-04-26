@@ -17,6 +17,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/Widgets.dart';
 import '../Object/Line.dart';
+import '../Preference.dart';
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -42,12 +43,14 @@ class StationEntranceCoverRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: StationEntranceCover(),
+      home: const StationEntranceCover(),
     );
   }
 }
 
 class StationEntranceCover extends StatefulWidget {
+  const StationEntranceCover({super.key});
+
   @override
   StationEntranceCoverState createState() => StationEntranceCoverState();
 }
@@ -542,16 +545,18 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      // Container(
-      //   height: 48,
-      //   child: MenuItemButton(
-      //     onPressed: _importImage,
-      //     child: const Text(
-      //       "导入图片",
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
+      Preference.isDevMode
+          ? Container(
+              height: 48,
+              child: MenuItemButton(
+                onPressed: _importImage,
+                child: const Text(
+                  "导入图片",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            )
+          : Container(),
       Container(
         height: 48,
         child: MenuItemButton(

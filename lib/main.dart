@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:main/Pages/Roots.dart';
 import 'package:main/Pages/ScreenDoorCover.dart';
+import 'package:main/Preference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
+import 'Pages/SettingPage.dart';
 import 'Pages/StationEntranceCover.dart';
 import 'Util/CustomScrollBehavior.dart';
 
@@ -23,16 +26,27 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home> createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   int _selectedIndex = 0;
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   double groupAlignment = -1.0;
+  static SharedPreferences? sharedPreferences;// 持久化数据
+
+  // 设置持久化数据
+  void loadPref() async {
+    sharedPreferences = await SharedPreferences.getInstance();// 获取持久化数据
+    setState(() {
+      //启用开发选项
+      Preference.isDevMode = sharedPreferences!.getBool('isDevMode') ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    loadPref();
     Widget page;
     switch (_selectedIndex) {
       case 0:
@@ -42,10 +56,13 @@ class _HomeState extends State<Home> {
         page = const LCDRoot();
         break;
       case 2:
-        page = StationEntranceCover();
+        page = const StationEntranceCover();
         break;
       case 3:
-        page = ScreenDoorCover();
+        page = const ScreenDoorCover();
+        break;
+      case 4:
+        page = const SettingPage();
         break;
       default:
         throw UnimplementedError('no widget for $_selectedIndex');
@@ -88,6 +105,11 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.splitscreen_outlined),
                 selectedIcon: Icon(Icons.splitscreen),
                 label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.settings_outlined),
+                selectedIcon: Icon(Icons.settings),
+                label: Text('设置', style: TextStyle(fontSize: 15)),
               ),
             ],
           ),

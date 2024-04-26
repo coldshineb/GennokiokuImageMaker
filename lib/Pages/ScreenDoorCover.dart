@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
+import '../Preference.dart';
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -42,12 +42,14 @@ class ScreenDoorCoverRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: ScreenDoorCover(),
+      home: const ScreenDoorCover(),
     );
   }
 }
 
 class ScreenDoorCover extends StatefulWidget {
+  const ScreenDoorCover({super.key});
+
   @override
   ScreenDoorCoverState createState() => ScreenDoorCoverState();
 }
@@ -508,7 +510,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                 : Container(),
             stationList.isNotEmpty
                 ? Positioned(
-                    top: 278,right: 0,
+                    top: 278,
+                    right: 0,
                     child: Container(
                       width: 80,
                       //每个站与站之间线条的宽度
@@ -523,16 +526,18 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      // Container(
-      //   height: 48,
-      //   child: MenuItemButton(
-      //     onPressed: _importImage,
-      //     child: const Text(
-      //       "导入图片",
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
+      Preference.isDevMode
+          ? Container(
+              height: 48,
+              child: MenuItemButton(
+                onPressed: _importImage,
+                child: const Text(
+                  "导入图片",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            )
+          : Container(),
       Container(
         height: 48,
         child: MenuItemButton(

@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
 
 import '../../Parent/LCD.dart';
+import '../../Preference.dart';
 import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
@@ -463,16 +464,18 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      // Container(
-      //   height: 48,
-      //   child: MenuItemButton(
-      //     onPressed: _importImage,
-      //     child: const Text(
-      //       "导入图片",
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
+      Preference.isDevMode
+          ? Container(
+              height: 48,
+              child: MenuItemButton(
+                onPressed: _importImage,
+                child: const Text(
+                  "导入图片",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            )
+          : Container(),
       Container(
         height: 48,
         child: MenuItemButton(
