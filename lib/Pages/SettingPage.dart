@@ -259,6 +259,60 @@ class _ScreenDoorCoverSettingPageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
+                          '允许的最大站点数量',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        Text(
+                          '限制导入的线路信息文件中站点数量，默认为 36。调整数量可能会导致降低美观程度，或出现显示异常',
+                          style: TextStyle(
+                              fontSize: 14.0, color: Colors.grey[600]),
+                        ),
+                      ],
+                    )),
+                    SizedBox(
+                      height: 40.0,
+                      width: 100.0,
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          hintText: '36',
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                        ],
+                        controller: TextEditingController(
+                            text: HomeState.sharedPreferences
+                                    ?.getInt(
+                                        PreferenceKey.screenDoorCoverMaxStation)
+                                    ?.toString() ??
+                                "36"),
+                        onChanged: (String value) {
+                          if (value.isEmpty) {
+                            HomeState.sharedPreferences?.setInt(
+                                PreferenceKey.screenDoorCoverMaxStation, 36);
+                            Util.screenDoorCoverMaxStation = 36;
+                          } else {
+                            HomeState.sharedPreferences?.setInt(
+                                PreferenceKey.screenDoorCoverMaxStation,
+                                int.parse(value));
+                            Util.screenDoorCoverMaxStation = int.parse(value);
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
                           '使用中粗体',
                           style: TextStyle(
                             fontSize: 18.0,

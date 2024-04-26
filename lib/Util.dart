@@ -126,18 +126,25 @@ class Util {
       ? FontWeight.w600
       : FontWeight.normal;
 
-  static FontWeight screenDoorCoverBoldFont = HomeState.sharedPreferences?.getBool(
-    PreferenceKey.screenDoorCoverIsBoldFont,
-  ) ??
-      true
-      ? FontWeight.w600
-      : FontWeight.normal;
+  static FontWeight screenDoorCoverBoldFont =
+      HomeState.sharedPreferences?.getBool(
+                PreferenceKey.screenDoorCoverIsBoldFont,
+              ) ??
+              true
+          ? FontWeight.w600
+          : FontWeight.normal;
 
   //LCD默认最大站点数
   static int lcdMaxStation = HomeState.sharedPreferences?.getInt(
         PreferenceKey.lcdMaxStation,
       ) ??
       32;
+
+  //屏蔽门盖板默认最大站点数
+  static int screenDoorCoverMaxStation = HomeState.sharedPreferences?.getInt(
+        PreferenceKey.screenDoorCoverMaxStation,
+      ) ??
+      36;
 
   static Color hexToColor(String hexColor) {
     return Color(int.parse('FF${hexColor.replaceAll('#', '')}', radix: 16));

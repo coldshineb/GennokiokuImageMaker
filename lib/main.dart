@@ -45,6 +45,10 @@ class HomeState extends State<Home> {
       //LCD最大站点数
       Preference.lcdMaxStation =
           sharedPreferences!.getInt(PreferenceKey.lcdMaxStation) ?? 32;
+      //屏蔽门盖板最大站点数
+      Preference.screenDoorCoverMaxStation =
+          sharedPreferences!.getInt(PreferenceKey.screenDoorCoverMaxStation) ??
+              36;
       //LCD是否使用粗体
       Preference.lcdIsBoldFont =
           sharedPreferences!.getBool(PreferenceKey.lcdIsBoldFont) ?? true;

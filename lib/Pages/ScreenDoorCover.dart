@@ -1152,8 +1152,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 3 或大于 36
-        if (stationsFromJson.length >= 3 && stationsFromJson.length <= 36) {
+        // 站点不能少于 3 或大于 maxStation
+        if (stationsFromJson.length >= 3 &&
+            stationsFromJson.length <= Util.screenDoorCoverMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -1195,9 +1196,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           setState(() {});
         } else if (stationsFromJson.length < 3) {
           alertDialog("错误", "站点数量不能小于 3");
-        } else if (stationsFromJson.length > 36) {
-          alertDialog("错误", "站点数量不能大于 36，过多的站点会导致显示不美观或显示异常");
-          alertDialog("错误", "站点数量不能大于 36，过多的站点会导致显示不美观或显示异常");
+        } else if (stationsFromJson.length > Util.screenDoorCoverMaxStation) {
+          alertDialog("错误",
+              "站点数量不能大于 ${Util.screenDoorCoverMaxStation}，过多的站点会导致显示不美观或显示异常");
         }
       } catch (e) {
         print('读取文件失败: $e');
