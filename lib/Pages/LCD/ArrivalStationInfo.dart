@@ -18,22 +18,11 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/Widgets.dart';
 
-void loadFont() async {
-  var fontLoader1 = FontLoader("GennokiokuLCDFont");
-  fontLoader1
-      .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
-  var fontLoader2 = FontLoader("STZongyi");
-  fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
-  await fontLoader1.load();
-  await fontLoader2.load();
-}
-
 class ArrivalStationInfoRoot extends StatelessWidget {
   const ArrivalStationInfoRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
     return MaterialApp(
       theme: ThemeData(
         tooltipTheme: const TooltipThemeData(
@@ -105,6 +94,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   @override
   Widget build(BuildContext context) {
+    loadFont();
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,7 +265,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
-                                  child:  Text(
+                                  child: Text(
                                     "当前站",
                                     style: TextStyle(
                                       fontSize: 28,
@@ -285,7 +275,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       446.5, 41, 0, 0),
-                                  child:  Text(
+                                  child: Text(
                                     "Current station",
                                     style: TextStyle(
                                       fontSize: 14,
@@ -295,7 +285,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1111.5, 8, 0, 0),
-                                  child:   Text(
+                                  child: Text(
                                     "终点站",
                                     style: TextStyle(
                                       fontSize: 28,
@@ -305,7 +295,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1124.5, 41, 0, 0),
-                                  child:  Text(
+                                  child: Text(
                                     "Terminus",
                                     style: TextStyle(
                                       fontSize: 14,
@@ -321,7 +311,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         : stationList[currentStationListIndex!]
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style:  TextStyle(
+                                    style: TextStyle(
                                       fontSize: 28,
                                       fontWeight: Util.lcdBoldFont,
                                     ),
@@ -334,7 +324,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameCN,
-                                    style:  TextStyle(
+                                    style: TextStyle(
                                       fontSize: 28,
                                       fontWeight: Util.lcdBoldFont,
                                     ),

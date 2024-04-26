@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
-import 'package:main/main.dart';
 
 import '../../Parent/LCD.dart';
 import '../../Preference.dart';
@@ -19,22 +18,11 @@ import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
 
-void loadFont() async {
-  var fontLoader1 = FontLoader("GennokiokuLCDFont");
-  fontLoader1
-      .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
-  var fontLoader2 = FontLoader("STZongyi");
-  fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
-  await fontLoader1.load();
-  await fontLoader2.load();
-}
-
 class ArrivalFiveStationsRoot extends StatelessWidget {
   const ArrivalFiveStationsRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
     return MaterialApp(
       theme: ThemeData(
         tooltipTheme: const TooltipThemeData(
@@ -99,6 +87,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   @override
   Widget build(BuildContext context) {
+    loadFont();
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

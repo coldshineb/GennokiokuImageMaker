@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/EntranceCover.dart';
 
@@ -7,6 +8,18 @@ import '../Object/Station.dart';
 import '../Util/Widgets.dart';
 
 mixin class LCD {
+
+  //加载字体
+  void loadFont() async {
+    var fontLoader1 = FontLoader("GennokiokuLCDFont");
+    fontLoader1
+        .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
+    var fontLoader2 = FontLoader("STZongyi");
+    fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
+    await fontLoader1.load();
+    await fontLoader2.load();
+  }
+
   //显示下一站、当前站和终点站下拉菜单内容
   List<DropdownMenuItem> showStationList(List<Station> stationList) {
     List<DropdownMenuItem> tempList = [];

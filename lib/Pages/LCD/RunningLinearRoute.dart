@@ -16,24 +16,12 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
-import '../../main.dart';
-
-void loadFont() async {
-  var fontLoader1 = FontLoader("GennokiokuLCDFont");
-  fontLoader1
-      .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
-  var fontLoader2 = FontLoader("STZongyi");
-  fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
-  await fontLoader1.load();
-  await fontLoader2.load();
-}
 
 class RunningLinearRouteRoot extends StatelessWidget {
   const RunningLinearRouteRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
     return MaterialApp(
       theme: ThemeData(
         tooltipTheme: const TooltipThemeData(
@@ -104,6 +92,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   @override
   Widget build(BuildContext context) {
+    loadFont();
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -18,22 +18,11 @@ import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
 import '../Preference.dart';
 
-void loadFont() async {
-  var fontLoader1 = FontLoader("GennokiokuLCDFont");
-  fontLoader1
-      .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
-  var fontLoader2 = FontLoader("STZongyi");
-  fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
-  await fontLoader1.load();
-  await fontLoader2.load();
-}
-
 class ScreenDoorCoverRoot extends StatelessWidget {
   const ScreenDoorCoverRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
     return MaterialApp(
       theme: ThemeData(
         tooltipTheme: const TooltipThemeData(
