@@ -559,6 +559,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           ),
         ),
       ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportThisStationImage,
+          child: const Text(
+            "导出当前站全部图",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
       const VerticalDivider(),
       Container(
         height: 48,
@@ -1253,6 +1263,19 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     }
   }
 
+  //导出当前站全部图
+  Future<void> exportThisStationImage() async {
+    if (stationList.isNotEmpty) {
+      await exportRouteUpImage();
+      await exportRouteDownImage();
+      await exportStationImage();
+      await exportDirectionUpImage();
+      await exportDirectionDownImage();
+    } else {
+      noStationsSnackbar();
+    }
+  }
+
   //导出上行主线路图
   Future<void> exportRouteUpImage() async {
     if (stationList.isNotEmpty) {
@@ -1270,7 +1293,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   Future<void> exportRouteDownImage() async {
     if (stationList.isNotEmpty) {
       await exportImage(
-          routeUpImageKey,
+          routeDownImageKey,
           await getExportPath(context, "保存",
               "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png"),
           true);
