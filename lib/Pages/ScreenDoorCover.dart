@@ -1076,7 +1076,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameCN,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: 16,
             color: color,
           ),
@@ -1099,7 +1099,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameEN,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: 12,
             color: color,
           ),
@@ -1191,6 +1191,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         } else if (stationsFromJson.length < 3) {
           alertDialog("错误", "站点数量不能小于 3");
         } else if (stationsFromJson.length > 36) {
+          alertDialog("错误", "站点数量不能大于 36，过多的站点会导致显示不美观或显示异常");
           alertDialog("错误", "站点数量不能大于 36，过多的站点会导致显示不美观或显示异常");
         }
       } catch (e) {
