@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       launchUrl(Uri.parse(
-                          "https://github.com/coldshineb/GennokiokuImageMaker/issues"));
+                          "https://github.com/coldshineb/GennokiokuImageMaker/issues/new?assignees=&labels=&projects=&template=%E9%94%99%E8%AF%AF%E6%8A%A5%E5%91%8A.md&title="));
                     },
                     child: const Text("错误报告"))
               ],
