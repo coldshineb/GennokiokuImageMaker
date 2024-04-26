@@ -42,12 +42,14 @@ class ArrivalStationInfoRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: ArrivalStationInfo(),
+      home: const ArrivalStationInfo(),
     );
   }
 }
 
 class ArrivalStationInfo extends StatefulWidget {
+  const ArrivalStationInfo({super.key});
+
   @override
   ArrivalStationInfoState createState() => ArrivalStationInfoState();
 }

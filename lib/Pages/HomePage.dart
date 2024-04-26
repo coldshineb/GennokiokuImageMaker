@@ -93,6 +93,13 @@ class HomePage extends StatelessWidget {
                     fontSize: 14.0,
                   ),
                 ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                    onPressed: () {
+                      launchUrl(Uri.parse(
+                          "https://github.com/coldshineb/GennokiokuImageMaker/issues"));
+                    },
+                    child: const Text("错误报告"))
               ],
             ),
           ),

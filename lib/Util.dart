@@ -127,7 +127,7 @@ class Util {
       : FontWeight.normal;
 
   static FontWeight screenDoorCoverBoldFont = HomeState.sharedPreferences?.getBool(
-    PreferenceKey.lcdIsBoldFont,
+    PreferenceKey.screenDoorCoverIsBoldFont,
   ) ??
       true
       ? FontWeight.w600

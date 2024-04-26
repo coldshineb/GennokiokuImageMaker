@@ -43,12 +43,14 @@ class ArrivalFiveStationsRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: ArrivalFiveStations(),
+      home: const ArrivalFiveStations(),
     );
   }
 }
 
 class ArrivalFiveStations extends StatefulWidget {
+  const ArrivalFiveStations({super.key});
+
   @override
   ArrivalFiveStationsState createState() => ArrivalFiveStationsState();
 }

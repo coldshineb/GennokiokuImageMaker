@@ -42,12 +42,14 @@ class RunningLinearRouteRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: RunningLinearRoute(),
+      home: const RunningLinearRoute(),
     );
   }
 }
 
 class RunningLinearRoute extends StatefulWidget {
+  const RunningLinearRoute({super.key});
+
   @override
   RunningLinearRouteState createState() => RunningLinearRouteState();
 }

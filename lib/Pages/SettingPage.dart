@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:main/Preference.dart';
 import 'package:main/main.dart';
 
@@ -137,20 +138,28 @@ class _LCDSettingPageState extends State<LCDSettingPage> {
                       height: 40.0,
                       width: 100.0,
                       child: TextField(
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           hintText: '32',
                         ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                        ],
                         controller: TextEditingController(
                             text: HomeState.sharedPreferences
                                     ?.getInt(PreferenceKey.lcdMaxStation)
                                     ?.toString() ??
                                 "32"),
                         onChanged: (String value) {
-                          HomeState.sharedPreferences?.setInt(
-                              PreferenceKey.lcdMaxStation, int.parse(value));
-                          Util.lcdMaxStation = int.parse(value);
+                          if (value.isEmpty) {
+                            HomeState.sharedPreferences
+                                ?.setInt(PreferenceKey.lcdMaxStation, 32);
+                            Util.lcdMaxStation = 32;
+                          } else {
+                            HomeState.sharedPreferences?.setInt(
+                                PreferenceKey.lcdMaxStation, int.parse(value));
+                            Util.lcdMaxStation = int.parse(value);
+                          }
                         },
                       ),
                     )

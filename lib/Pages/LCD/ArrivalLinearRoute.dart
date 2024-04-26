@@ -42,12 +42,14 @@ class ArrivalLinearRouteRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: ArrivalLinearRoute(),
+      home: const ArrivalLinearRoute(),
     );
   }
 }
 
 class ArrivalLinearRoute extends StatefulWidget {
+  const ArrivalLinearRoute({super.key});
+
   @override
   ArrivalLinearRouteState createState() => ArrivalLinearRouteState();
 }
