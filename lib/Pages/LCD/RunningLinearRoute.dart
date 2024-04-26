@@ -16,6 +16,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
+import '../../main.dart';
 
 void loadFont() async {
   var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -287,41 +288,41 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "下一站",
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(456, 41, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "Next station",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1111.5, 8, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "终点站",
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1124.5, 41, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "Terminus",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -333,9 +334,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                         : stationList[nextStationListIndex!]
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -346,9 +347,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameCN,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -359,9 +360,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                         ? ""
                                         : stationList[nextStationListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -372,9 +373,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -464,7 +465,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Preference.isDevMode
+      Preference.generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(
@@ -871,8 +872,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
             value.stationNameCN,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
+            style: TextStyle(
+              fontWeight: Util.lcdBoldFont,
               fontSize: 14,
               color: Colors.black,
             ),
@@ -890,8 +891,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           transform: Matrix4.rotationZ(-0.75),
           child: Text(
             value.stationNameEN,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
+            style: TextStyle(
+              fontWeight: Util.lcdBoldFont,
               fontSize: 12,
               color: Colors.black,
             ),
@@ -944,8 +945,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 2 或大于 32
-        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
+        // 站点不能少于 2 或大于 maxStation
+        if (stationsFromJson.length >= 2 &&
+            stationsFromJson.length <= Util.lcdMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -990,8 +992,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           setState(() {});
         } else if (stationsFromJson.length < 2) {
           alertDialog("错误", "站点数量不能小于 2");
-        } else if (stationsFromJson.length > 32) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
+        } else if (stationsFromJson.length > Util.lcdMaxStation) {
+          alertDialog("错误", "直线型线路图站点数量不能大于 ${Util.lcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');

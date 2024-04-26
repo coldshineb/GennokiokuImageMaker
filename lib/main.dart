@@ -33,14 +33,25 @@ class HomeState extends State<Home> {
   int _selectedIndex = 0;
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   double groupAlignment = -1.0;
-  static SharedPreferences? sharedPreferences;// 持久化数据
+  static SharedPreferences? sharedPreferences; // 持久化数据
 
   // 设置持久化数据
   void loadPref() async {
-    sharedPreferences = await SharedPreferences.getInstance();// 获取持久化数据
+    sharedPreferences = await SharedPreferences.getInstance(); // 获取持久化数据
     setState(() {
       //启用开发选项
-      Preference.isDevMode = sharedPreferences!.getBool('isDevMode') ?? false;
+      Preference.generalIsDevMode =
+          sharedPreferences!.getBool(PreferenceKey.generalIsDevMode) ?? false;
+      //LCD最大站点数
+      Preference.lcdMaxStation =
+          sharedPreferences!.getInt(PreferenceKey.lcdMaxStation) ?? 32;
+      //LCD是否使用粗体
+      Preference.lcdIsBoldFont =
+          sharedPreferences!.getBool(PreferenceKey.lcdIsBoldFont) ?? true;
+      //屏蔽门盖板是否使用粗体
+      Preference.screenDoorCoverIsBoldFont =
+          sharedPreferences!.getBool(PreferenceKey.screenDoorCoverIsBoldFont) ??
+              true;
     });
   }
 
@@ -62,7 +73,7 @@ class HomeState extends State<Home> {
         page = const ScreenDoorCover();
         break;
       case 4:
-        page = const SettingPage();
+        page = const SettingPageRoot();
         break;
       default:
         throw UnimplementedError('no widget for $_selectedIndex');

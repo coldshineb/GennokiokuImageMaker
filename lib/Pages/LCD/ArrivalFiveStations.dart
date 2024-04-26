@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
+import 'package:main/main.dart';
 
 import '../../Parent/LCD.dart';
 import '../../Preference.dart';
@@ -296,41 +297,41 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                               Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "当前站",
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       446.5, 41, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "Current station",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1111.5, 8, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "终点站",
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1124.5, 41, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     "Terminus",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -342,9 +343,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         : stationList[currentStationListIndex!]
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -355,9 +356,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameCN,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -368,9 +369,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         ? ""
                                         : stationList[currentStationListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -381,9 +382,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: Util.lcdBoldFont,
                                     ),
                                   )),
                               Container(
@@ -464,7 +465,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Preference.isDevMode
+      Preference.generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(
@@ -1820,8 +1821,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 2 或大于 32
-        if (stationsFromJson.length >= 2 && stationsFromJson.length <= 32) {
+        // 站点不能少于 2 或大于 maxStation
+        if (stationsFromJson.length >= 2 &&
+            stationsFromJson.length <= Util.lcdMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
@@ -1849,8 +1851,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           setState(() {});
         } else if (stationsFromJson.length < 5) {
           alertDialog("错误", "站点数量不能小于 5");
-        } else if (stationsFromJson.length > 32) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
+        } else if (stationsFromJson.length > Util.lcdMaxStation) {
+          alertDialog("错误", "直线型线路图站点数量不能大于 ${Util.lcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');

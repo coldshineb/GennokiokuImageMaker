@@ -526,7 +526,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Preference.isDevMode
+      Preference.generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(
@@ -1081,7 +1081,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameCN,
           style: TextStyle(
-            fontWeight: FontWeight.w600,
+            fontWeight: Util.screenDoorCoverBoldFont,
             fontSize: 16,
             color: color,
           ),
@@ -1104,7 +1104,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameEN,
           style: TextStyle(
-            fontWeight: FontWeight.w600,
+            fontWeight: Util.screenDoorCoverBoldFont,
             fontSize: 12,
             color: color,
           ),

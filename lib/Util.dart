@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'Preference.dart';
+import 'main.dart';
+
 class Util {
   static const String appVersion = '1.2.1';
   static const String copyright =
@@ -78,7 +81,7 @@ class Util {
   ''';
 
   static const String arrivalStationInfoTransfer =
-  '''<?xml version="1.0" encoding="UTF-8"?>
+      '''<?xml version="1.0" encoding="UTF-8"?>
 <svg id="_图层_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 504.5 307.86">
     <g id="_图层_1-2">
         <g id="transfer">
@@ -106,7 +109,7 @@ class Util {
 ''';
 
   static const String screenDoorCoverDirectionArrow =
-  '''<svg xmlns="http://www.w3.org/2000/svg" width="631.25" height="578.125">
+      '''<svg xmlns="http://www.w3.org/2000/svg" width="631.25" height="578.125">
    <g>
       <path
          d="M475.625 323.635H-45.078L215.078 583.79h-81.64l-289.063-289.063L133.438 5.666h81.64L-45.078 265.822h520.703v57.813z"
@@ -115,14 +118,36 @@ class Util {
 </svg>
   ''';
 
+  //LCD默认中粗体
+  static FontWeight lcdBoldFont = HomeState.sharedPreferences?.getBool(
+            PreferenceKey.lcdIsBoldFont,
+          ) ??
+          true
+      ? FontWeight.w600
+      : FontWeight.normal;
+
+  static FontWeight screenDoorCoverBoldFont = HomeState.sharedPreferences?.getBool(
+    PreferenceKey.lcdIsBoldFont,
+  ) ??
+      true
+      ? FontWeight.w600
+      : FontWeight.normal;
+
+  //LCD默认最大站点数
+  static int lcdMaxStation = HomeState.sharedPreferences?.getInt(
+        PreferenceKey.lcdMaxStation,
+      ) ??
+      32;
+
   static Color hexToColor(String hexColor) {
     return Color(int.parse('FF${hexColor.replaceAll('#', '')}', radix: 16));
   }
 
   static Color getTextColorForBackground(Color backgroundColor) {
     // 根据亮度值返回合适的文本颜色
-    return backgroundColor.computeLuminance() > 0.5 ? Colors.black : Colors
-        .white;
+    return backgroundColor.computeLuminance() > 0.5
+        ? Colors.black
+        : Colors.white;
   }
 
   // 获取文本宽度
@@ -131,8 +156,7 @@ class Util {
       text: TextSpan(text: text, style: style),
       maxLines: 1,
       textDirection: TextDirection.ltr,
-    )
-      ..layout(minWidth: 0, maxWidth: double.infinity);
+    )..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.width;
   }
 }

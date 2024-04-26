@@ -545,7 +545,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
 
   MenuBar importAndExportMenubar() {
     return MenuBar(children: [
-      Preference.isDevMode
+      Preference.generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(
