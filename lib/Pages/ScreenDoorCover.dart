@@ -101,75 +101,81 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               importAndExportMenubar(),
-              MenuBar(children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text(
-                    "当前站",
-                    style: TextStyle(color: Colors.black),
+              MenuBar(
+                  style: MenuStyle(
+                    fixedSize: MaterialStateProperty.all(
+                        Size(MediaQuery.of(context).size.width, 48)),
                   ),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "当前站",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ), //设置空时的提示文字
-                  items: showStationList(stationList),
-                  onChanged: (value) {
-                    try {
-                      currentStationListIndex = stationList.indexWhere(
-                          (element) =>
-                              element.stationNameCN ==
-                              value); //根据选择的站名，找到站名集合中对应的索引
-                      currentStationListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: currentStationListValue,
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: previousStation,
-                    child: const Text(
-                      "上一站",
-                      style: TextStyle(color: Colors.black),
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(top: 14, left: 7),
+                      child: const Text(
+                        "当前站",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: nextStation,
-                    child: const Text(
-                      "下一站",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: () {
-                      setState(() {
-                        if (stationList.isNotEmpty) {
-                          stationList = stationList.reversed.toList();
-                          transferLineList = transferLineList.reversed.toList();
-                          currentStationListIndex = stationList.length -
-                              1 -
-                              currentStationListIndex!; //反转站点索引
+                    DropdownButton(
+                      disabledHint: const Text(
+                        "当前站",
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ), //设置空时的提示文字
+                      items: showStationList(stationList),
+                      onChanged: (value) {
+                        try {
+                          currentStationListIndex = stationList.indexWhere(
+                              (element) =>
+                                  element.stationNameCN ==
+                                  value); //根据选择的站名，找到站名集合中对应的索引
+                          currentStationListValue = value;
+                          setState(() {});
+                        } catch (e) {
+                          print(e);
                         }
-                      });
-                    },
-                    child: const Text(
-                      "反转站点",
-                      style: TextStyle(color: Colors.black),
+                      },
+                      value: currentStationListValue,
                     ),
-                  ),
-                ),
-              ])
+                    Container(
+                      height: 48,
+                      child: MenuItemButton(
+                        onPressed: previousStation,
+                        child: const Text(
+                          "上一站",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 48,
+                      child: MenuItemButton(
+                        onPressed: nextStation,
+                        child: const Text(
+                          "下一站",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 48,
+                      child: MenuItemButton(
+                        onPressed: () {
+                          setState(() {
+                            if (stationList.isNotEmpty) {
+                              stationList = stationList.reversed.toList();
+                              transferLineList =
+                                  transferLineList.reversed.toList();
+                              currentStationListIndex = stationList.length -
+                                  1 -
+                                  currentStationListIndex!; //反转站点索引
+                            }
+                          });
+                        },
+                        child: const Text(
+                          "反转站点",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ])
             ],
           ),
           Expanded(
@@ -513,103 +519,109 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         ));
   }
 
+  @override
   MenuBar importAndExportMenubar() {
-    return MenuBar(children: [
-      Preference.generalIsDevMode
-          ? Container(
-              height: 48,
-              child: MenuItemButton(
-                onPressed: _importImage,
-                child: const Text(
-                  "导入图片",
-                  style: TextStyle(color: Colors.black),
-                ),
+    return MenuBar(
+        style: MenuStyle(
+          fixedSize: MaterialStateProperty.all(
+              Size(MediaQuery.of(context).size.width, 48)),
+        ),
+        children: [
+          Preference.generalIsDevMode
+              ? Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: _importImage,
+                    child: const Text(
+                      "导入图片",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                )
+              : Container(),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: importLineJson,
+              child: const Text(
+                "导入线路",
+                style: TextStyle(color: Colors.black),
               ),
-            )
-          : Container(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: importLineJson,
-          child: const Text(
-            "导入线路",
-            style: TextStyle(color: Colors.black),
+            ),
           ),
-        ),
-      ),
-      const VerticalDivider(thickness: 2),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportAllImage,
-          child: const Text(
-            "导出全部图",
-            style: TextStyle(color: Colors.black),
+          const VerticalDivider(thickness: 2),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportAllImage,
+              child: const Text(
+                "导出全部图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportThisStationImage,
-          child: const Text(
-            "导出当前站全部图",
-            style: TextStyle(color: Colors.black),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportThisStationImage,
+              child: const Text(
+                "导出当前站全部图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      const VerticalDivider(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportRouteUpImage,
-          child: const Text(
-            "导出上行主线路图",
-            style: TextStyle(color: Colors.black),
+          const VerticalDivider(),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportRouteUpImage,
+              child: const Text(
+                "导出上行主线路图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportRouteDownImage,
-          child: const Text(
-            "导出下行主线路图",
-            style: TextStyle(color: Colors.black),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportRouteDownImage,
+              child: const Text(
+                "导出下行主线路图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportStationImage,
-          child: const Text(
-            "导出站名图",
-            style: TextStyle(color: Colors.black),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportStationImage,
+              child: const Text(
+                "导出站名图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDirectionUpImage,
-          child: const Text(
-            "导出上行运行方向图",
-            style: TextStyle(color: Colors.black),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportDirectionUpImage,
+              child: const Text(
+                "导出上行运行方向图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDirectionDownImage,
-          child: const Text(
-            "导出下行运行方向图",
-            style: TextStyle(color: Colors.black),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportDirectionDownImage,
+              child: const Text(
+                "导出下行运行方向图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-    ]);
+        ]);
   }
 
   //运行方向图的下一站标签

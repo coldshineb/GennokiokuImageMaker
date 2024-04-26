@@ -8,7 +8,6 @@ import '../Object/Station.dart';
 import '../Util/Widgets.dart';
 
 mixin class LCD {
-
   //加载字体
   void loadFont() async {
     var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -81,6 +80,11 @@ mixin class LCD {
 
   //导出全部图
   void exportAllImage() async {}
+
+  //导入导出菜单栏
+  MenuBar importAndExportMenubar() {
+    return const MenuBar(children: []);
+  }
 
   //通用导出方法
   Future<void> exportImage(

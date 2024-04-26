@@ -80,61 +80,66 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               importAndExportMenubar(),
-              MenuBar(children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text(
-                    "站名与入口编号",
-                    style: TextStyle(color: Colors.black),
+              MenuBar(
+                  style: MenuStyle(
+                    fixedSize: MaterialStateProperty.all(
+                        Size(MediaQuery.of(context).size.width, 48)),
                   ),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "站名与入口编号",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ), //设置空时的提示文字
-                  items: showEntranceList(entranceList),
-                  onChanged: (value) {
-                    try {
-                      entranceIndex = entranceList.indexWhere((element) =>
-                          element.stationNameCN ==
-                              value.toString().split(" ")[0] &&
-                          element.entranceNumber ==
-                              value.toString().split(
-                                  " ")[1]); //根据选择的站名和出入口编号，找到站名和出入口编号集合中对应的索引
-                      entranceListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: entranceListValue,
-                ),
-                Row(
                   children: [
                     Container(
-                      height: 48,
-                      child: MenuItemButton(
-                        onPressed: previousStation,
-                        child: const Text(
-                          "上一个",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                      padding: const EdgeInsets.only(top: 14, left: 7),
+                      child: const Text(
+                        "站名与入口编号",
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
-                    Container(
-                      height: 48,
-                      child: MenuItemButton(
-                        onPressed: nextStation,
-                        child: const Text(
-                          "下一个",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
+                    DropdownButton(
+                      disabledHint: const Text(
+                        "站名与入口编号",
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ), //设置空时的提示文字
+                      items: showEntranceList(entranceList),
+                      onChanged: (value) {
+                        try {
+                          entranceIndex = entranceList.indexWhere((element) =>
+                              element.stationNameCN ==
+                                  value.toString().split(" ")[0] &&
+                              element.entranceNumber ==
+                                  value.toString().split(" ")[
+                                      1]); //根据选择的站名和出入口编号，找到站名和出入口编号集合中对应的索引
+                          entranceListValue = value;
+                          setState(() {});
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      value: entranceListValue,
                     ),
-                  ],
-                ),
-              ])
+                    Row(
+                      children: [
+                        Container(
+                          height: 48,
+                          child: MenuItemButton(
+                            onPressed: previousStation,
+                            child: const Text(
+                              "上一个",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 48,
+                          child: MenuItemButton(
+                            onPressed: nextStation,
+                            child: const Text(
+                              "下一个",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ])
             ],
           ),
           Expanded(
@@ -533,80 +538,86 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
     ];
   }
 
+  @override
   MenuBar importAndExportMenubar() {
-    return MenuBar(children: [
-      Preference.generalIsDevMode
-          ? Container(
-              height: 48,
-              child: MenuItemButton(
-                onPressed: _importImage,
-                child: const Text(
-                  "导入图片",
-                  style: TextStyle(color: Colors.black),
-                ),
+    return MenuBar(
+        style: MenuStyle(
+          fixedSize: MaterialStateProperty.all(
+              Size(MediaQuery.of(context).size.width, 48)),
+        ),
+        children: [
+          Preference.generalIsDevMode
+              ? Container(
+                  height: 48,
+                  child: MenuItemButton(
+                    onPressed: _importImage,
+                    child: const Text(
+                      "导入图片",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                )
+              : Container(),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: importLineJson,
+              child: const Text(
+                "导入站名",
+                style: TextStyle(color: Colors.black),
               ),
-            )
-          : Container(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: importLineJson,
-          child: const Text(
-            "导入站名",
-            style: TextStyle(color: Colors.black),
+            ),
           ),
-        ),
-      ),
-      const VerticalDivider(thickness: 2),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportAllImage,
-          child: const Text(
-            "导出全部图",
-            style: TextStyle(color: Colors.black),
+          const VerticalDivider(thickness: 2),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportAllImage,
+              child: const Text(
+                "导出全部图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      const VerticalDivider(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportMainImage,
-          child: const Text(
-            "导出当前图",
-            style: TextStyle(color: Colors.black),
+          const VerticalDivider(),
+          Container(
+            height: 48,
+            child: MenuItemButton(
+              onPressed: exportMainImage,
+              child: const Text(
+                "导出当前图",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(top: 14),
-        child: const Text(
-          "导出分辨率",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      DropdownButton(
-        items: Widgets.resolutionListStationEntranceCover(),
-        onChanged: (value) {
-          setState(() {
-            exportWidthValue = value!;
-          });
-        },
-        value: exportWidthValue,
-      ),
-      const VerticalDivider(thickness: 2),
-      Container(
-          height: 48,
-          child: CheckboxMenuButton(
-            value: showLogo,
-            onChanged: (bool? value) {
-              showLogo = value!;
-              setState(() {});
+          Container(
+            padding: const EdgeInsets.only(top: 14),
+            child: const Text(
+              "导出分辨率",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          DropdownButton(
+            items: Widgets.resolutionListStationEntranceCover(),
+            onChanged: (value) {
+              setState(() {
+                exportWidthValue = value!;
+              });
             },
-            child: const Text("显示品牌图标"),
-          )),
-    ]);
+            value: exportWidthValue,
+          ),
+          const VerticalDivider(thickness: 2),
+          Container(
+              height: 48,
+              child: CheckboxMenuButton(
+                value: showLogo,
+                onChanged: (bool? value) {
+                  showLogo = value!;
+                  setState(() {});
+                },
+                child: const Text("显示品牌图标"),
+              )),
+        ]);
   }
 
   //导入背景图片，图片样式复刻已完成，此功能此后只做开发用途
