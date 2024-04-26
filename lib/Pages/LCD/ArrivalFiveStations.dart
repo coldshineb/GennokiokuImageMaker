@@ -297,36 +297,40 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                       const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
                                   child: const Text(
                                     "当前站",
-                                    style: TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       446.5, 41, 0, 0),
                                   child: const Text(
                                     "Current station",
-                                    style: TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(1111.5, 8, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      1111.5, 8, 0, 0),
                                   child: const Text(
                                     "终点站",
-                                    style: TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
                                       1124.5, 41, 0, 0),
                                   child: const Text(
                                     "Terminus",
-                                    style: TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   padding:
@@ -337,9 +341,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         : stationList[currentStationListIndex!]
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style: const TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -349,9 +354,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameCN,
-                                    style: const TextStyle(fontSize: 28
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -361,9 +367,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         ? ""
                                         : stationList[currentStationListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -373,9 +380,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                         ? ""
                                         : stationList[terminusListIndex!]
                                             .stationNameEN,
-                                    style: const TextStyle(fontSize: 14
-                                        //fontWeight: FontWeight.bold,
-                                        ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   )),
                               Container(
                                   width: imageWidth,

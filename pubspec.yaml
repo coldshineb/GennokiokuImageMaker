@@ -94,6 +94,8 @@ flutter:
     - family: GennokiokuLCDFont
       fonts:
         - asset: assets/font/FZLTHProGlobal-Regular.TTF
+        - asset: assets/font/FZLTHProGlobal-Demibold.TTF
+          weight: 600
     - family: STZongyi
       fonts:
         - asset: assets/font/STZongyi.ttf

@@ -1076,7 +1076,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameCN,
           style: TextStyle(
-            //fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.bold,
             fontSize: 16,
             color: color,
           ),
@@ -1099,7 +1099,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameEN,
           style: TextStyle(
-            //fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.bold,
             fontSize: 12,
             color: color,
           ),
@@ -1147,8 +1147,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-        // 站点不能少于 3 或大于 32
-        if (stationsFromJson.length >= 3 && stationsFromJson.length <= 32) {
+        // 站点不能少于 3 或大于 36
+        if (stationsFromJson.length >= 3 && stationsFromJson.length <= 36) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -1188,10 +1188,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           currentStationListValue = stationList[0].stationNameCN;
           // 刷新页面状态
           setState(() {});
-        } else if (stationsFromJson.length < 2) {
-          alertDialog("错误", "站点数量不能小于 2");
-        } else if (stationsFromJson.length > 32) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 32，请使用 U 形线路图");
+        } else if (stationsFromJson.length < 3) {
+          alertDialog("错误", "站点数量不能小于 3");
+        } else if (stationsFromJson.length > 36) {
+          alertDialog("错误", "站点数量不能大于 36，过多的站点会导致显示不美观或显示异常");
         }
       } catch (e) {
         print('读取文件失败: $e');
