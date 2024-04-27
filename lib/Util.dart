@@ -133,11 +133,13 @@ class Util {
       colorScheme: darkColorScheme(),
     );
   }
+
   static ColorScheme lightColorScheme() {
     return ColorScheme.fromSeed(
       seedColor: Colors.pink,
     );
   }
+
   static ColorScheme darkColorScheme() {
     return ColorScheme.fromSeed(
         seedColor: Colors.pink, brightness: Brightness.dark);

@@ -22,16 +22,16 @@ class _LCDRootState extends State<LCDRoot> {
     Widget page;
     switch (_selectedIndex) {
       case 0:
-        page = RunningLinearRoute();
+        page = const RunningLinearRoute();
         break;
       case 1:
-        page = ArrivalFiveStations();
+        page = const ArrivalFiveStations();
         break;
       case 2:
-        page = ArrivalStationInfo();
+        page = const ArrivalStationInfo();
         break;
       case 3:
-        page = ArrivalLinearRoute();
+        page = const ArrivalLinearRoute();
         break;
       default:
         throw UnimplementedError('no widget for $_selectedIndex');

@@ -9,31 +9,29 @@ import 'Pages/StationEntranceCover.dart';
 import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
 
-Future<void> main() async {
-  SharedPreferences? sharedPreferences =
-      await SharedPreferences.getInstance(); // 获取持久化数据
+void main() async {
+  SharedPreferences? sharedPreferences; // 持久化数据
+  sharedPreferences = await SharedPreferences.getInstance(); // 获取持久化数据
   Preference.themeMode =
-      sharedPreferences.getInt(PreferenceKey.generalThemeMode) == 0
-          ? ThemeMode.system
+      sharedPreferences.getInt(PreferenceKey.generalThemeMode) == 2
+          ? ThemeMode.dark
           : sharedPreferences.getInt(PreferenceKey.generalThemeMode) == 1
               ? ThemeMode.light
-              : ThemeMode.dark;
+              : ThemeMode.system; //设置主题
   runApp(MaterialApp(
-    theme: Util.themeData(),
-    darkTheme: Util.darkThemeData(),
-    themeMode: Preference.themeMode,
-    scrollBehavior: CustomScrollBehavior(),
-    //设置鼠标拖动滑动
-    home: const Home(),
-  ));
-  print(Preference.themeMode);
+      theme: Util.themeData(),
+      darkTheme: Util.darkThemeData(),
+      themeMode: Preference.themeMode,
+      scrollBehavior: CustomScrollBehavior(),
+      //设置鼠标拖动滑动
+      home: const Home()));
 }
 
 class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => HomeState();
+  HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
@@ -89,7 +87,6 @@ class HomeState extends State<Home> {
       default:
         throw UnimplementedError('no widget for $_selectedIndex');
     }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).brightness == Brightness.light
