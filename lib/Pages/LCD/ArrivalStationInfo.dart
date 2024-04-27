@@ -111,10 +111,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(top: 14, left: 7),
-                      child: const Text(
-                        "运行方向",
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: const Text("运行方向"),
                     ),
                     Container(
                       height: 48,
@@ -126,10 +123,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               trainDirectionValue = v!;
                             });
                           },
-                          child: const Text(
-                            "向左行",
-                            style: TextStyle(color: Colors.black),
-                          )),
+                          child: const Text("向左行")),
                     ),
                     Container(
                       height: 48,
@@ -141,10 +135,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                               trainDirectionValue = v!;
                             });
                           },
-                          child: const Text(
-                            "向右行",
-                            style: TextStyle(color: Colors.black),
-                          )),
+                          child: const Text("向右行")),
                     )
                   ]),
               MenuBar(
@@ -155,10 +146,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(top: 14, left: 7),
-                      child: const Text(
-                        "当前站",
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: const Text("当前站"),
                     ),
                     DropdownButton(
                       disabledHint: const Text(
@@ -188,10 +176,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                     ),
                     Container(
                       padding: const EdgeInsets.only(top: 14),
-                      child: const Text(
-                        "终点站",
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: const Text("终点站"),
                     ),
                     DropdownButton(
                       disabledHint: const Text(
@@ -222,20 +207,14 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                       height: 48,
                       child: MenuItemButton(
                         onPressed: previousStation,
-                        child: const Text(
-                          "上一站",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        child: const Text("上一站"),
                       ),
                     ),
                     Container(
                       height: 48,
                       child: MenuItemButton(
                         onPressed: nextStation,
-                        child: const Text(
-                          "下一站",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        child: const Text("下一站"),
                       ),
                     ),
                   ])
@@ -278,9 +257,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                   child: Text(
                                     "当前站",
                                     style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 28,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -288,9 +267,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                   child: Text(
                                     "Current station",
                                     style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -298,9 +277,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                   child: Text(
                                     "终点站",
                                     style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 28,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -308,9 +287,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                   child: Text(
                                     "Terminus",
                                     style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding:
@@ -322,9 +301,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                             .stationNameCN,
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                                     style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 28,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -335,9 +314,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         : stationList[terminusListIndex!]
                                             .stationNameCN,
                                     style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 28,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -348,9 +327,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         : stationList[currentStationListIndex!]
                                             .stationNameEN,
                                     style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               Container(
                                   padding: const EdgeInsets.fromLTRB(
@@ -361,9 +340,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                         : stationList[terminusListIndex!]
                                             .stationNameEN,
                                     style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: Util.lcdBoldFont,
+                                        color: Colors.black),
                                   )),
                               arrivalStationInfoBody(),
                               carriage(),
@@ -649,10 +628,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                   height: 48,
                   child: MenuItemButton(
                     onPressed: _importImage,
-                    child: const Text(
-                      "导入图片",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                    child: const Text("导入图片"),
                   ),
                 )
               : Container(),
@@ -660,20 +636,14 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             height: 48,
             child: MenuItemButton(
               onPressed: importLineJson,
-              child: const Text(
-                "导入线路",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导入线路"),
             ),
           ),
           Container(
             height: 48,
             child: MenuItemButton(
               onPressed: importPattern,
-              child: const Text(
-                "导入纹理",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导入纹理"),
             ),
           ),
           const VerticalDivider(thickness: 2),
@@ -681,10 +651,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             height: 48,
             child: MenuItemButton(
               onPressed: exportAllImage,
-              child: const Text(
-                "导出全部图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出全部图"),
             ),
           ),
           const VerticalDivider(),
@@ -692,18 +659,12 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             height: 48,
             child: MenuItemButton(
               onPressed: exportMainImage,
-              child: const Text(
-                "导出主线路图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出主线路图"),
             ),
           ),
           Container(
             padding: const EdgeInsets.only(top: 14),
-            child: const Text(
-              "导出分辨率",
-              style: TextStyle(color: Colors.black),
-            ),
+            child: const Text("导出分辨率"),
           ),
           DropdownButton(
             items: Widgets.resolutionListLCD(),

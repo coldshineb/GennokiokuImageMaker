@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+
 class Preference {
+  static late ThemeMode themeMode;
   static late bool generalIsDevMode;
   static late int lcdMaxStation;
   static late int screenDoorCoverMaxStation;
@@ -7,6 +10,7 @@ class Preference {
 }
 
 class PreferenceKey {
+  static const String generalThemeMode = 'general.themeMode';
   static const String generalIsDevMode = 'general.isDevMode';
   static const String lcdMaxStation = 'lcd.maxStation';
   static const String screenDoorCoverMaxStation = 'screenDoorCover.maxStation';

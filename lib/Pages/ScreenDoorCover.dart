@@ -109,10 +109,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(top: 14, left: 7),
-                      child: const Text(
-                        "当前站",
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: const Text("当前站"),
                     ),
                     DropdownButton(
                       disabledHint: const Text(
@@ -138,20 +135,14 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       height: 48,
                       child: MenuItemButton(
                         onPressed: previousStation,
-                        child: const Text(
-                          "上一站",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        child: const Text("上一站"),
                       ),
                     ),
                     Container(
                       height: 48,
                       child: MenuItemButton(
                         onPressed: nextStation,
-                        child: const Text(
-                          "下一站",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        child: const Text("下一站"),
                       ),
                     ),
                     Container(
@@ -169,10 +160,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                             }
                           });
                         },
-                        child: const Text(
-                          "反转站点",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        child: const Text("反转站点"),
                       ),
                     ),
                   ])
@@ -532,10 +520,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   height: 48,
                   child: MenuItemButton(
                     onPressed: _importImage,
-                    child: const Text(
-                      "导入图片",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                    child: const Text("导入图片"),
                   ),
                 )
               : Container(),
@@ -543,10 +528,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             height: 48,
             child: MenuItemButton(
               onPressed: importLineJson,
-              child: const Text(
-                "导入线路",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导入线路"),
             ),
           ),
           const VerticalDivider(thickness: 2),
@@ -554,20 +536,14 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             height: 48,
             child: MenuItemButton(
               onPressed: exportAllImage,
-              child: const Text(
-                "导出全部图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出全部图"),
             ),
           ),
           Container(
             height: 48,
             child: MenuItemButton(
               onPressed: exportThisStationImage,
-              child: const Text(
-                "导出当前站全部图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出当前站全部图"),
             ),
           ),
           const VerticalDivider(),
@@ -575,50 +551,35 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             height: 48,
             child: MenuItemButton(
               onPressed: exportRouteUpImage,
-              child: const Text(
-                "导出上行主线路图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出上行主线路图"),
             ),
           ),
           Container(
             height: 48,
             child: MenuItemButton(
               onPressed: exportRouteDownImage,
-              child: const Text(
-                "导出下行主线路图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出下行主线路图"),
             ),
           ),
           Container(
             height: 48,
             child: MenuItemButton(
               onPressed: exportStationImage,
-              child: const Text(
-                "导出站名图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出站名图"),
             ),
           ),
           Container(
             height: 48,
             child: MenuItemButton(
               onPressed: exportDirectionUpImage,
-              child: const Text(
-                "导出上行运行方向图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出上行运行方向图"),
             ),
           ),
           Container(
             height: 48,
             child: MenuItemButton(
               onPressed: exportDirectionDownImage,
-              child: const Text(
-                "导出下行运行方向图",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: const Text("导出下行运行方向图"),
             ),
           ),
         ]);
@@ -639,7 +600,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       top: 350,
                       child: Text(
                         "下一站    ${stationList[currentStationListIndex! - 1].stationNameCN}",
-                        style: const TextStyle(fontSize: 40),
+                        style:
+                            const TextStyle(fontSize: 40, color: Colors.black),
                       )),
                   Positioned(
                       left: 20,
@@ -647,7 +609,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       right: 0,
                       child: Text(
                         "Next station  ${stationList[currentStationListIndex! - 1].stationNameEN}",
-                        style: const TextStyle(fontSize: 26),
+                        style:
+                            const TextStyle(fontSize: 26, color: Colors.black),
                       )),
                 ],
               ),
@@ -667,7 +630,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       top: 350,
                       child: Text(
                         "下一站    ${stationList[currentStationListIndex! + 1].stationNameCN}",
-                        style: const TextStyle(fontSize: 40),
+                        style:
+                            const TextStyle(fontSize: 40, color: Colors.black),
                       )),
                   Positioned(
                       left: 20,
@@ -675,7 +639,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       right: 0,
                       child: Text(
                         "Next station  ${stationList[currentStationListIndex! + 1].stationNameEN}",
-                        style: const TextStyle(fontSize: 26),
+                        style:
+                            const TextStyle(fontSize: 26, color: Colors.black),
                       )),
                 ],
               ),

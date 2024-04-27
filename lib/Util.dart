@@ -118,14 +118,29 @@ class Util {
 </svg>
   ''';
 
-  //主题
+  //浅色主题
   static ThemeData themeData() {
     return ThemeData(
       fontFamily: "GennokiokuLCDFont",
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.pink,
-      ),
+      colorScheme: lightColorScheme(),
     );
+  }
+
+  //深色主题
+  static ThemeData darkThemeData() {
+    return ThemeData(
+      fontFamily: "GennokiokuLCDFont",
+      colorScheme: darkColorScheme(),
+    );
+  }
+  static ColorScheme lightColorScheme() {
+    return ColorScheme.fromSeed(
+      seedColor: Colors.pink,
+    );
+  }
+  static ColorScheme darkColorScheme() {
+    return ColorScheme.fromSeed(
+        seedColor: Colors.pink, brightness: Brightness.dark);
   }
 
   //LCD默认中粗体

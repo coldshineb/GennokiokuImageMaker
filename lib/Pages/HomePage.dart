@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:main/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../Preference.dart';
 import '../Util.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,6 +11,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Util.themeData(),
+      darkTheme: Util.darkThemeData(),
+      themeMode: Preference.themeMode,
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,

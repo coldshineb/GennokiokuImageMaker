@@ -110,15 +110,13 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                     Container(
                       padding: const EdgeInsets.only(top: 14, left: 7),
                       child: const Text(
-                        "小交线路设置：",
-                        style: TextStyle(color: Colors.black),
+                        "小交线路设置："
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.only(top: 14),
                       child: const Text(
-                        "运行方向",
-                        style: TextStyle(color: Colors.black),
+                        "运行方向"
                       ),
                     ),
                     Container(
@@ -132,8 +130,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             });
                           },
                           child: const Text(
-                            "向左行",
-                            style: TextStyle(color: Colors.black),
+                            "向左行"
                           )),
                     ),
                     Container(
@@ -147,8 +144,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             });
                           },
                           child: const Text(
-                            "向右行",
-                            style: TextStyle(color: Colors.black),
+                            "向右行"
                           )),
                     )
                   ]),
@@ -161,8 +157,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                     Container(
                       padding: const EdgeInsets.only(top: 14, left: 7),
                       child: const Text(
-                        "下一站",
-                        style: TextStyle(color: Colors.black),
+                        "下一站"
                       ),
                     ),
                     DropdownButton(
@@ -188,8 +183,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                     Container(
                       padding: const EdgeInsets.only(top: 14),
                       child: const Text(
-                        "终点站",
-                        style: TextStyle(color: Colors.black),
+                        "终点站"
                       ),
                     ),
                     DropdownButton(
@@ -215,8 +209,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                       child: MenuItemButton(
                         onPressed: previousStation,
                         child: const Text(
-                          "上一站",
-                          style: TextStyle(color: Colors.black),
+                          "上一站"
                         ),
                       ),
                     ),
@@ -225,8 +218,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                       child: MenuItemButton(
                         onPressed: nextStation,
                         child: const Text(
-                          "下一站",
-                          style: TextStyle(color: Colors.black),
+                          "下一站"
                         ),
                       ),
                     ),
@@ -249,8 +241,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                           });
                         },
                         child: const Text(
-                          "反转站点",
-                          style: TextStyle(color: Colors.black),
+                          "反转站点"
                         ),
                       ),
                     ),
@@ -295,7 +286,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                     "下一站",
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -305,7 +296,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                     "Next station",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -315,7 +306,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                     "终点站",
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -325,7 +316,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                     "Terminus",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -339,7 +330,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                     //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -352,7 +343,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                             .stationNameCN,
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -365,7 +356,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                             .stationNameEN,
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -378,7 +369,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                             .stationNameEN,
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: Util.lcdBoldFont,
+                                      fontWeight: Util.lcdBoldFont,color: Colors.black
                                     ),
                                   )),
                               Container(
@@ -480,8 +471,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   child: MenuItemButton(
                     onPressed: _importImage,
                     child: const Text(
-                      "导入图片",
-                      style: TextStyle(color: Colors.black),
+                      "导入图片"
                     ),
                   ),
                 )
@@ -491,8 +481,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             child: MenuItemButton(
               onPressed: importLineJson,
               child: const Text(
-                "导入线路",
-                style: TextStyle(color: Colors.black),
+                "导入线路"
               ),
             ),
           ),
@@ -501,8 +490,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             child: MenuItemButton(
               onPressed: importPattern,
               child: const Text(
-                "导入纹理",
-                style: TextStyle(color: Colors.black),
+                "导入纹理"
               ),
             ),
           ),
@@ -512,8 +500,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             child: MenuItemButton(
               onPressed: exportAllImage,
               child: const Text(
-                "导出全部图",
-                style: TextStyle(color: Colors.black),
+                "导出全部图"
               ),
             ),
           ),
@@ -522,8 +509,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             child: MenuItemButton(
               onPressed: exportDynamicImage,
               child: const Text(
-                "导出当前站全部图",
-                style: TextStyle(color: Colors.black),
+                "导出当前站全部图"
               ),
             ),
           ),
@@ -533,8 +519,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             child: MenuItemButton(
               onPressed: exportMainImage,
               child: const Text(
-                "导出主线路图",
-                style: TextStyle(color: Colors.black),
+                "导出主线路图"
               ),
             ),
           ),
@@ -543,16 +528,14 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             child: MenuItemButton(
               onPressed: exportPassingImage,
               child: const Text(
-                "导出下一站图",
-                style: TextStyle(color: Colors.black),
+                "导出下一站图"
               ),
             ),
           ),
           Container(
             padding: const EdgeInsets.only(top: 14),
             child: const Text(
-              "导出分辨率",
-              style: TextStyle(color: Colors.black),
+              "导出分辨率"
             ),
           ),
           DropdownButton(

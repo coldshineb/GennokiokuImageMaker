@@ -9,12 +9,24 @@ import 'Pages/StationEntranceCover.dart';
 import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
 
-void main() {
+Future<void> main() async {
+  SharedPreferences? sharedPreferences =
+      await SharedPreferences.getInstance(); // 获取持久化数据
+  Preference.themeMode =
+      sharedPreferences.getInt(PreferenceKey.generalThemeMode) == 0
+          ? ThemeMode.system
+          : sharedPreferences.getInt(PreferenceKey.generalThemeMode) == 1
+              ? ThemeMode.light
+              : ThemeMode.dark;
   runApp(MaterialApp(
     theme: Util.themeData(),
-    scrollBehavior: CustomScrollBehavior(), //设置鼠标拖动滑动
+    darkTheme: Util.darkThemeData(),
+    themeMode: Preference.themeMode,
+    scrollBehavior: CustomScrollBehavior(),
+    //设置鼠标拖动滑动
     home: const Home(),
   ));
+  print(Preference.themeMode);
 }
 
 class Home extends StatefulWidget {
@@ -80,13 +92,17 @@ class HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[50],
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Colors.pink[50]
+            : Util.darkColorScheme().surface,
         title: const Text('Gennokioku 原忆轨道交通图片生成器'),
       ),
       body: Row(
         children: <Widget>[
           NavigationRail(
-            backgroundColor: Colors.pink[50],
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.pink[50]
+                : Util.darkColorScheme().surface,
             selectedIndex: _selectedIndex,
             groupAlignment: groupAlignment,
             onDestinationSelected: (int index) {

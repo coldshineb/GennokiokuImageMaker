@@ -248,25 +248,19 @@ class Widgets {
       const DropdownMenuItem(
         value: 2560,
         child: Text(
-          "2560*500",
-          style:
-              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+          "2560*500"
         ),
       ),
       const DropdownMenuItem(
         value: 5120,
         child: Text(
-          "5120*1000",
-          style:
-              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+          "5120*1000"
         ),
       ),
       const DropdownMenuItem(
         value: 10240,
         child: Text(
-          "10240*2000",
-          style:
-              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+          "10240*2000"
         ),
       )
     ];
@@ -278,25 +272,19 @@ class Widgets {
       const DropdownMenuItem(
         value: 1920,
         child: Text(
-          "1920*320",
-          style:
-              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+          "1920*320"
         ),
       ),
       const DropdownMenuItem(
         value: 3840,
         child: Text(
-          "3840*640",
-          style:
-              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+          "3840*640"
         ),
       ),
       const DropdownMenuItem(
         value: 7680,
         child: Text(
-          "7680*1280",
-          style:
-              TextStyle(fontFamily: "GennokiokuLCDFont", color: Colors.black),
+          "7680*1280"
         ),
       )
     ];

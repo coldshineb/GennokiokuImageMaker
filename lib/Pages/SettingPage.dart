@@ -18,6 +18,8 @@ class _GeneralSettingPageState extends State<GeneralSettingPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Util.themeData(),
+      darkTheme: Util.darkThemeData(),
+      themeMode: Preference.themeMode,
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -32,6 +34,96 @@ class _GeneralSettingPageState extends State<GeneralSettingPage> {
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+                const SizedBox(height: 10.0),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('主题模式'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  title: const Text('跟随系统'),
+                                  onTap: () {
+                                    HomeState.sharedPreferences?.setInt(
+                                        PreferenceKey.generalThemeMode, 0);
+                                    setState(() {
+                                      Preference.themeMode = ThemeMode.system;
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('浅色'),
+                                  onTap: () {
+                                    HomeState.sharedPreferences?.setInt(
+                                        PreferenceKey.generalThemeMode, 1);
+                                    setState(() {
+                                      Preference.themeMode = ThemeMode.light;
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('深色'),
+                                  onTap: () {
+                                    HomeState.sharedPreferences?.setInt(
+                                        PreferenceKey.generalThemeMode, 2);
+                                    setState(() {
+                                      Preference.themeMode = ThemeMode.dark;
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                  child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                          decoration: settingPageBoxDecoration(),
+                          padding: settingPageEdgeInsets(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '主题模式',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    '选择应用的主题模式，默认为跟随系统',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ],
+                              )),
+                              Container(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: Text(
+                                  Preference.themeMode == ThemeMode.system
+                                      ? '跟随系统'
+                                      : Preference.themeMode == ThemeMode.light
+                                          ? '浅色'
+                                          : '深色',
+                                  style: const TextStyle(
+                                      fontSize: 18.0, color: Colors.grey),
+                                ),
+                              )
+                            ],
+                          ))),
                 ),
                 const SizedBox(height: 10.0),
                 GestureDetector(
@@ -109,6 +201,8 @@ class _LCDSettingPageState extends State<LCDSettingPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Util.themeData(),
+      darkTheme: Util.darkThemeData(),
+      themeMode: Preference.themeMode,
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -296,6 +390,8 @@ class _ScreenDoorCoverSettingPageState
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Util.themeData(),
+      darkTheme: Util.darkThemeData(),
+      themeMode: Preference.themeMode,
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -479,7 +575,9 @@ EdgeInsets settingPageEdgeInsets() => const EdgeInsets.all(10.0);
 
 BoxDecoration settingPageBoxDecoration() {
   return BoxDecoration(
-    color: Colors.pink[50],
+    color: Preference.themeMode == ThemeMode.light
+        ? Colors.pink[50]
+        : Util.darkColorScheme().onSecondary,
     borderRadius: BorderRadius.circular(10.0),
   );
 }

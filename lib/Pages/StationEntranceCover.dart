@@ -82,22 +82,16 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
               importAndExportMenubar(),
               MenuBar(
                   style: MenuStyle(
-                    fixedSize: MaterialStateProperty.all(
-                        Size(MediaQuery.of(context).size.width, 48)),
-                  ),
+                      fixedSize: MaterialStateProperty.all(
+                          Size(MediaQuery.of(context).size.width, 48))),
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(top: 14, left: 7),
-                      child: const Text(
-                        "站名与入口编号",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(top: 14, left: 7),
+                        child: const Text("站名与入口编号")),
                     DropdownButton(
-                      disabledHint: const Text(
-                        "站名与入口编号",
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
-                      ), //设置空时的提示文字
+                      disabledHint: const Text("站名与入口编号",
+                          style: TextStyle(
+                              color: Colors.grey, fontSize: 14)), //设置空时的提示文字
                       items: showEntranceList(entranceList),
                       onChanged: (value) {
                         try {
@@ -120,22 +114,13 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
                         Container(
                           height: 48,
                           child: MenuItemButton(
-                            onPressed: previousStation,
-                            child: const Text(
-                              "上一个",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
+                              onPressed: previousStation,
+                              child: const Text("上一个")),
                         ),
                         Container(
                           height: 48,
                           child: MenuItemButton(
-                            onPressed: nextStation,
-                            child: const Text(
-                              "下一个",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
+                              onPressed: nextStation, child: const Text("下一个")),
                         ),
                       ],
                     ),
@@ -234,8 +219,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             child: SvgPicture.asset(
                 height: 167,
                 width: 167,
-                "assets/image/railwayTransitLogoVertical.svg"),
-          )
+                "assets/image/railwayTransitLogoVertical.svg"))
         : Container();
   }
 
@@ -550,53 +534,29 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
               ? Container(
                   height: 48,
                   child: MenuItemButton(
-                    onPressed: _importImage,
-                    child: const Text(
-                      "导入图片",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
+                      onPressed: _importImage, child: const Text("导入图片")),
                 )
               : Container(),
           Container(
             height: 48,
             child: MenuItemButton(
-              onPressed: importLineJson,
-              child: const Text(
-                "导入站名",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+                onPressed: importLineJson, child: const Text("导入站名")),
           ),
           const VerticalDivider(thickness: 2),
           Container(
             height: 48,
             child: MenuItemButton(
-              onPressed: exportAllImage,
-              child: const Text(
-                "导出全部图",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+                onPressed: exportAllImage, child: const Text("导出全部图")),
           ),
           const VerticalDivider(),
           Container(
             height: 48,
             child: MenuItemButton(
-              onPressed: exportMainImage,
-              child: const Text(
-                "导出当前图",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+                onPressed: exportMainImage, child: const Text("导出当前图")),
           ),
           Container(
-            padding: const EdgeInsets.only(top: 14),
-            child: const Text(
-              "导出分辨率",
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
+              padding: const EdgeInsets.only(top: 14),
+              child: const Text("导出分辨率")),
           DropdownButton(
             items: Widgets.resolutionListStationEntranceCover(),
             onChanged: (value) {
