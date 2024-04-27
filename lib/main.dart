@@ -5,18 +5,13 @@ import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
-import 'Pages/SettingPage.dart';
 import 'Pages/StationEntranceCover.dart';
+import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
 
 void main() {
   runApp(MaterialApp(
-    theme: ThemeData(
-      fontFamily: "GennokiokuLCDFont",
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.pink,
-      ),
-    ),
+    theme: Util.themeData(),
     scrollBehavior: CustomScrollBehavior(), //设置鼠标拖动滑动
     home: const Home(),
   ));

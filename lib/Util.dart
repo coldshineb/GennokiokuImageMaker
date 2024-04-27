@@ -118,6 +118,16 @@ class Util {
 </svg>
   ''';
 
+  //主题
+  static ThemeData themeData() {
+    return ThemeData(
+      fontFamily: "GennokiokuLCDFont",
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.pink,
+      ),
+    );
+  }
+
   //LCD默认中粗体
   static FontWeight lcdBoldFont = HomeState.sharedPreferences?.getBool(
             PreferenceKey.lcdIsBoldFont,

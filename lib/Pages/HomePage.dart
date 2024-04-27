@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Util.dart';
@@ -9,12 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: "GennokiokuLCDFont",
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.pink,
-        ),
-      ),
+      theme: Util.themeData(),
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
