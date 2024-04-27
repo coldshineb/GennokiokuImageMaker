@@ -95,7 +95,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage> {
                 child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Container(
-                        decoration: settingPageBoxDecoration(),
+                        decoration: settingPageBoxDecoration(context),
                         padding: settingPageEdgeInsets(),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,7 +146,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage> {
                   child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Container(
-                        decoration: settingPageBoxDecoration(),
+                        decoration: settingPageBoxDecoration(context),
                         padding: settingPageEdgeInsets(),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -267,7 +267,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                 child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Container(
-                        decoration: settingPageBoxDecoration(),
+                        decoration: settingPageBoxDecoration(context),
                         padding: settingPageEdgeInsets(),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -319,7 +319,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                   child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Container(
-                        decoration: settingPageBoxDecoration(),
+                        decoration: settingPageBoxDecoration(context),
                         padding: const EdgeInsets.all(10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -452,7 +452,7 @@ class ScreenDoorCoverSettingPageState
                 child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Container(
-                        decoration: settingPageBoxDecoration(),
+                        decoration: settingPageBoxDecoration(context),
                         padding: settingPageEdgeInsets(),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -506,7 +506,7 @@ class ScreenDoorCoverSettingPageState
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Container(
-                      decoration: settingPageBoxDecoration(),
+                      decoration: settingPageBoxDecoration(context),
                       padding: settingPageEdgeInsets(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -557,9 +557,9 @@ class ScreenDoorCoverSettingPageState
 
 EdgeInsets settingPageEdgeInsets() => const EdgeInsets.all(10.0);
 
-BoxDecoration settingPageBoxDecoration() {
+BoxDecoration settingPageBoxDecoration(BuildContext context) {
   return BoxDecoration(
-    color: Preference.themeMode == ThemeMode.light
+    color: Theme.of(context).brightness == Brightness.light
         ? Colors.pink[50]
         : Util.darkColorScheme().onSecondary,
     borderRadius: BorderRadius.circular(10.0),

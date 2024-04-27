@@ -11,6 +11,7 @@ import 'Util/CustomScrollBehavior.dart';
 
 void main() async {
   SharedPreferences? sharedPreferences; // 持久化数据
+  WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance(); // 获取持久化数据
   Preference.themeMode =
       sharedPreferences.getInt(PreferenceKey.generalThemeMode) == 2
