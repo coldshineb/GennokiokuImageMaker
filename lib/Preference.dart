@@ -17,3 +17,12 @@ class PreferenceKey {
   static const String lcdIsBoldFont = 'lcd.isBoldFont';
   static const String screenDoorCoverIsBoldFont = 'screenDoorCover.isBoldFont';
 }
+
+class DefaultPreference {
+  static const int generalThemeMode = 0;
+  static const bool generalIsDevMode = false;
+  static const int lcdMaxStation = 32;
+  static const int screenDoorCoverMaxStation = 36;
+  static const bool lcdIsBoldFont = true;
+  static const bool screenDoorCoverIsBoldFont = true;
+}

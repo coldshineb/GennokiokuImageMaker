@@ -109,13 +109,13 @@ class GeneralSettingPageState extends State<GeneralSettingPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                '主题模式',
+                                '主题',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                 ),
                               ),
                               Text(
-                                '选择应用的主题模式，默认为跟随系统',
+                                '选择应用的主题',
                                 style: TextStyle(
                                     fontSize: 14.0, color: Colors.grey[600]),
                               ),
@@ -211,7 +211,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
   String maxStationToSet = HomeState.sharedPreferences
           ?.getInt(PreferenceKey.lcdMaxStation)
           ?.toString() ??
-      '32';
+      '${DefaultPreference.lcdMaxStation}';
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +244,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                             title: const Text('允许的最大站点数量'),
                             content: TextField(
                               decoration: const InputDecoration(
-                                hintText: '32',
+                                hintText: '${DefaultPreference.lcdMaxStation}',
                               ),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
@@ -254,7 +254,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                                   text: HomeState.sharedPreferences
                                           ?.getInt(PreferenceKey.lcdMaxStation)
                                           ?.toString() ??
-                                      "32"),
+                                      "${DefaultPreference.lcdMaxStation}"),
                               onChanged: (String value) {
                                 maxStationToSet = value;
                               },
@@ -265,8 +265,10 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                                   setState(() {
                                     if (maxStationToSet.isEmpty) {
                                       HomeState.sharedPreferences?.setInt(
-                                          PreferenceKey.lcdMaxStation, 32);
-                                      Util.lcdMaxStation = 32;
+                                          PreferenceKey.lcdMaxStation,
+                                          DefaultPreference.lcdMaxStation);
+                                      Util.lcdMaxStation =
+                                          DefaultPreference.lcdMaxStation;
                                     } else {
                                       HomeState.sharedPreferences?.setInt(
                                           PreferenceKey.lcdMaxStation,
@@ -304,7 +306,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                                     ),
                                   ),
                                   Text(
-                                    '限制导入的线路信息文件中站点数量，默认为 32。调整数量可能会导致降低美观程度，或出现显示异常',
+                                    '限制导入的线路信息文件中站点数量，默认为 ${DefaultPreference.lcdMaxStation}。调整数量可能会导致降低美观程度，或出现显示异常',
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.grey[600]),
@@ -317,7 +319,7 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                                   HomeState.sharedPreferences
                                           ?.getInt(PreferenceKey.lcdMaxStation)
                                           ?.toString() ??
-                                      "32",
+                                      "${DefaultPreference.lcdMaxStation}",
                                   style: const TextStyle(
                                       fontSize: 18.0, color: Colors.grey),
                                 ),
@@ -412,7 +414,7 @@ class ScreenDoorCoverSettingPageState
   String maxStationToSet = HomeState.sharedPreferences
           ?.getInt(PreferenceKey.screenDoorCoverMaxStation)
           ?.toString() ??
-      "36";
+      "${DefaultPreference.screenDoorCoverMaxStation}";
 
   @override
   Widget build(BuildContext context) {
@@ -445,7 +447,8 @@ class ScreenDoorCoverSettingPageState
                             title: const Text('允许的最大站点数量'),
                             content: TextField(
                               decoration: const InputDecoration(
-                                hintText: '36',
+                                hintText:
+                                    '${DefaultPreference.screenDoorCoverMaxStation}',
                               ),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
@@ -456,7 +459,7 @@ class ScreenDoorCoverSettingPageState
                                           ?.getInt(PreferenceKey
                                               .screenDoorCoverMaxStation)
                                           ?.toString() ??
-                                      "36"),
+                                      "${DefaultPreference.screenDoorCoverMaxStation}"),
                               onChanged: (String value) {
                                 maxStationToSet = value;
                               },
@@ -469,8 +472,11 @@ class ScreenDoorCoverSettingPageState
                                       HomeState.sharedPreferences?.setInt(
                                           PreferenceKey
                                               .screenDoorCoverMaxStation,
-                                          36);
-                                      Util.screenDoorCoverMaxStation = 36;
+                                          DefaultPreference
+                                              .screenDoorCoverMaxStation);
+                                      Util.screenDoorCoverMaxStation =
+                                          DefaultPreference
+                                              .screenDoorCoverMaxStation;
                                     } else {
                                       HomeState.sharedPreferences?.setInt(
                                           PreferenceKey
@@ -509,7 +515,7 @@ class ScreenDoorCoverSettingPageState
                                     ),
                                   ),
                                   Text(
-                                    '限制导入的线路信息文件中站点数量，默认为 36。调整数量可能会导致降低美观程度，或出现显示异常',
+                                    '限制导入的线路信息文件中站点数量，默认为 ${DefaultPreference.screenDoorCoverMaxStation}。调整数量可能会导致降低美观程度，或出现显示异常',
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.grey[600]),
@@ -523,7 +529,7 @@ class ScreenDoorCoverSettingPageState
                                           ?.getInt(PreferenceKey
                                               .screenDoorCoverMaxStation)
                                           ?.toString() ??
-                                      "36",
+                                      "${DefaultPreference.screenDoorCoverMaxStation}",
                                   style: const TextStyle(
                                       fontSize: 18.0, color: Colors.grey),
                                 ),
