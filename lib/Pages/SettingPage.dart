@@ -44,39 +44,41 @@ class _GeneralSettingPageState extends State<GeneralSettingPage> {
                             PreferenceKey.generalIsDevMode, !currentValue);
                       });
                     },
-                    child: Container(
-                      decoration: settingPageBoxDecoration(),
-                      padding: settingPageEdgeInsets(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          decoration: settingPageBoxDecoration(),
+                          padding: settingPageEdgeInsets(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '启用开发选项',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
+                              const Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '启用开发选项',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                              Switch(
+                                value: HomeState.sharedPreferences?.getBool(
+                                      PreferenceKey.generalIsDevMode,
+                                    ) ??
+                                    false,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    HomeState.sharedPreferences?.setBool(
+                                        PreferenceKey.generalIsDevMode, value);
+                                  });
+                                },
                               ),
                             ],
-                          )),
-                          Switch(
-                            value: HomeState.sharedPreferences?.getBool(
-                                  PreferenceKey.generalIsDevMode,
-                                ) ??
-                                false,
-                            onChanged: (bool value) {
-                              setState(() {
-                                HomeState.sharedPreferences?.setBool(
-                                    PreferenceKey.generalIsDevMode, value);
-                              });
-                            },
                           ),
-                        ],
-                      ),
-                    ))
+                        )))
               ],
             ),
           ),
@@ -171,42 +173,45 @@ class _LCDSettingPageState extends State<LCDSettingPage> {
                           );
                         });
                   },
-                  child: Container(
-                      decoration: settingPageBoxDecoration(),
-                      padding: settingPageEdgeInsets(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                          decoration: settingPageBoxDecoration(),
+                          padding: settingPageEdgeInsets(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                '允许的最大站点数量',
-                                style: TextStyle(
-                                  fontSize: 18.0,
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '允许的最大站点数量',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    '限制导入的线路信息文件中站点数量，默认为 32。调整数量可能会导致降低美观程度，或出现显示异常',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ],
+                              )),
+                              Container(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: Text(
+                                  HomeState.sharedPreferences
+                                          ?.getInt(PreferenceKey.lcdMaxStation)
+                                          ?.toString() ??
+                                      "32",
+                                  style: const TextStyle(
+                                      fontSize: 18.0, color: Colors.grey),
                                 ),
-                              ),
-                              Text(
-                                '限制导入的线路信息文件中站点数量，默认为 32。调整数量可能会导致降低美观程度，或出现显示异常',
-                                style: TextStyle(
-                                    fontSize: 14.0, color: Colors.grey[600]),
-                              ),
+                              )
                             ],
-                          )),
-                          Container(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text(
-                              HomeState.sharedPreferences
-                                      ?.getInt(PreferenceKey.lcdMaxStation)
-                                      ?.toString() ??
-                                  "32",
-                              style: const TextStyle(
-                                  fontSize: 18.0, color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      )),
+                          ))),
                 ),
                 const SizedBox(height: 10.0),
                 GestureDetector(
@@ -221,46 +226,50 @@ class _LCDSettingPageState extends State<LCDSettingPage> {
                             !currentValue ? FontWeight.w600 : FontWeight.normal;
                       });
                     },
-                    child: Container(
-                      decoration: settingPageBoxDecoration(),
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          decoration: settingPageBoxDecoration(),
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                '使用中粗体',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                              Text(
-                                '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
-                                style: TextStyle(
-                                    fontSize: 14.0, color: Colors.grey[600]),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '使用中粗体',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ],
+                              )),
+                              Switch(
+                                value: HomeState.sharedPreferences?.getBool(
+                                      PreferenceKey.lcdIsBoldFont,
+                                    ) ??
+                                    true,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    HomeState.sharedPreferences?.setBool(
+                                        PreferenceKey.lcdIsBoldFont, value);
+                                    Util.lcdBoldFont = value
+                                        ? FontWeight.w600
+                                        : FontWeight.normal;
+                                  });
+                                },
                               ),
                             ],
-                          )),
-                          Switch(
-                            value: HomeState.sharedPreferences?.getBool(
-                                  PreferenceKey.lcdIsBoldFont,
-                                ) ??
-                                true,
-                            onChanged: (bool value) {
-                              setState(() {
-                                HomeState.sharedPreferences?.setBool(
-                                    PreferenceKey.lcdIsBoldFont, value);
-                                Util.lcdBoldFont =
-                                    value ? FontWeight.w600 : FontWeight.normal;
-                              });
-                            },
                           ),
-                        ],
-                      ),
-                    ))
+                        )))
               ],
             ),
           ),
@@ -356,43 +365,46 @@ class _ScreenDoorCoverSettingPageState
                           );
                         });
                   },
-                  child: Container(
-                      decoration: settingPageBoxDecoration(),
-                      padding: settingPageEdgeInsets(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                          decoration: settingPageBoxDecoration(),
+                          padding: settingPageEdgeInsets(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                '允许的最大站点数量',
-                                style: TextStyle(
-                                  fontSize: 18.0,
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '允许的最大站点数量',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    '限制导入的线路信息文件中站点数量，默认为 36。调整数量可能会导致降低美观程度，或出现显示异常',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ],
+                              )),
+                              Container(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: Text(
+                                  HomeState.sharedPreferences
+                                          ?.getInt(PreferenceKey
+                                              .screenDoorCoverMaxStation)
+                                          ?.toString() ??
+                                      "36",
+                                  style: const TextStyle(
+                                      fontSize: 18.0, color: Colors.grey),
                                 ),
-                              ),
-                              Text(
-                                '限制导入的线路信息文件中站点数量，默认为 36。调整数量可能会导致降低美观程度，或出现显示异常',
-                                style: TextStyle(
-                                    fontSize: 14.0, color: Colors.grey[600]),
-                              ),
+                              )
                             ],
-                          )),
-                          Container(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text(
-                              HomeState.sharedPreferences
-                                      ?.getInt(PreferenceKey
-                                          .screenDoorCoverMaxStation)
-                                      ?.toString() ??
-                                  "36",
-                              style: const TextStyle(
-                                  fontSize: 18.0, color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      )),
+                          ))),
                 ),
                 const SizedBox(height: 10.0),
                 GestureDetector(
@@ -409,45 +421,49 @@ class _ScreenDoorCoverSettingPageState
                             !currentValue ? FontWeight.w600 : FontWeight.normal;
                       });
                     },
-                    child: Container(
-                      decoration: settingPageBoxDecoration(),
-                      padding: settingPageEdgeInsets(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                '使用中粗体',
-                                style: TextStyle(
-                                  fontSize: 18.0,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        decoration: settingPageBoxDecoration(),
+                        padding: settingPageEdgeInsets(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  '使用中粗体',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
-                                style: TextStyle(
-                                    fontSize: 14.0, color: Colors.grey[600]),
-                              ),
-                            ],
-                          )),
-                          Switch(
-                            value: HomeState.sharedPreferences?.getBool(
-                                  PreferenceKey.screenDoorCoverIsBoldFont,
-                                ) ??
-                                true,
-                            onChanged: (bool value) {
-                              setState(() {
-                                HomeState.sharedPreferences?.setBool(
+                                Text(
+                                  '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.grey[600]),
+                                ),
+                              ],
+                            )),
+                            Switch(
+                              value: HomeState.sharedPreferences?.getBool(
                                     PreferenceKey.screenDoorCoverIsBoldFont,
-                                    value);
-                                Util.screenDoorCoverBoldFont =
-                                    value ? FontWeight.w600 : FontWeight.normal;
-                              });
-                            },
-                          ),
-                        ],
+                                  ) ??
+                                  true,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  HomeState.sharedPreferences?.setBool(
+                                      PreferenceKey.screenDoorCoverIsBoldFont,
+                                      value);
+                                  Util.screenDoorCoverBoldFont = value
+                                      ? FontWeight.w600
+                                      : FontWeight.normal;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ))
               ],
