@@ -51,7 +51,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('主题模式'),
+                            title: const Text('主题'),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -136,6 +136,70 @@ class GeneralSettingPageState extends State<GeneralSettingPage> {
                         ],
                       )),
                 ),
+              ),
+              const SizedBox(height: 10.0),
+              Material(
+                color: settingPageMaterialColor(context),
+                borderRadius: settingPageBorderRadius(),
+                child: InkWell(
+                    borderRadius: settingPageBorderRadius(),
+                    onTap: () {
+                      setState(() {
+                        bool currentValue = HomeState.sharedPreferences
+                                ?.getBool(PreferenceKey
+                                    .generalIsWhiteBackgroundInDarkMode) ??
+                            false;
+                        HomeState.sharedPreferences?.setBool(
+                            PreferenceKey.generalIsWhiteBackgroundInDarkMode,
+                            !currentValue);
+                      });
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: settingPageBorderRadius(),
+                        ),
+                        padding: settingPageEdgeInsets(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  '深色主题下使用白色背景',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                                Text(
+                                  '在深色主题下使用白色背景，而不是深色背景',
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.grey[600]),
+                                ),
+                              ],
+                            )),
+                            Switch(
+                              value: HomeState.sharedPreferences?.getBool(
+                                    PreferenceKey
+                                        .generalIsWhiteBackgroundInDarkMode,
+                                  ) ??
+                                  false,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  HomeState.sharedPreferences?.setBool(
+                                      PreferenceKey
+                                          .generalIsWhiteBackgroundInDarkMode,
+                                      value);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
               ),
               const SizedBox(height: 10.0),
               Material(

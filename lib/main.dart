@@ -45,6 +45,10 @@ class HomeState extends State<Home> {
   void loadPref() async {
     sharedPreferences = await SharedPreferences.getInstance(); // 获取持久化数据
     setState(() {
+      //深色主题下使用白色背景
+      Preference.generalIsWhiteBackgroundInDarkMode =
+          sharedPreferences!.getBool(PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
+              false;
       //启用开发选项
       Preference.generalIsDevMode =
           sharedPreferences!.getBool(PreferenceKey.generalIsDevMode) ?? false;

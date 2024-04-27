@@ -134,15 +134,25 @@ class Util {
     );
   }
 
+  //浅色主题颜色
   static ColorScheme lightColorScheme() {
     return ColorScheme.fromSeed(
       seedColor: Colors.pink,
     );
   }
 
+  //深色主题颜色
   static ColorScheme darkColorScheme() {
     return ColorScheme.fromSeed(
         seedColor: Colors.pink, brightness: Brightness.dark);
+  }
+
+  //获取背景颜色
+  static Color backgroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark &&
+            Preference.generalIsWhiteBackgroundInDarkMode
+        ? Colors.white
+        : Theme.of(context).scaffoldBackgroundColor;
   }
 
   //LCD默认中粗体
@@ -153,6 +163,7 @@ class Util {
       ? FontWeight.w600
       : FontWeight.normal;
 
+  //屏蔽门盖板默认中粗体
   static FontWeight screenDoorCoverBoldFont =
       HomeState.sharedPreferences?.getBool(
                 PreferenceKey.screenDoorCoverIsBoldFont,

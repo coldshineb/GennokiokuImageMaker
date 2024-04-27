@@ -51,6 +51,16 @@ mixin class LCD {
     return tempList;
   }
 
+  //菜单样式
+  MenuStyle menuStyle(BuildContext context) {
+    return MenuStyle(
+      shape: MaterialStateProperty.all(
+          const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+      fixedSize: MaterialStateProperty.all(
+          Size(MediaQuery.of(context).size.width, 48)),
+    );
+  }
+
   //原忆轨道交通图标
   Container gennokiokuRailwayTransitLogoWidget(bool show) {
     return show

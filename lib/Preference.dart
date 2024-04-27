@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Preference {
   static late ThemeMode themeMode;
   static late bool generalIsDevMode;
+  static late bool generalIsWhiteBackgroundInDarkMode;
   static late int lcdMaxStation;
   static late int screenDoorCoverMaxStation;
   static late bool lcdIsBoldFont;
@@ -12,6 +13,8 @@ class Preference {
 class PreferenceKey {
   static const String generalThemeMode = 'general.themeMode';
   static const String generalIsDevMode = 'general.isDevMode';
+  static const String generalIsWhiteBackgroundInDarkMode =
+      'general.isWhiteBackgroundInDarkMode';
   static const String lcdMaxStation = 'lcd.maxStation';
   static const String screenDoorCoverMaxStation = 'screenDoorCover.maxStation';
   static const String lcdIsBoldFont = 'lcd.isBoldFont';
@@ -21,6 +24,7 @@ class PreferenceKey {
 class DefaultPreference {
   static const int generalThemeMode = 0;
   static const bool generalIsDevMode = false;
+  static const bool generalIsWhiteBackgroundInDarkMode = false;
   static const int lcdMaxStation = 32;
   static const int screenDoorCoverMaxStation = 36;
   static const bool lcdIsBoldFont = true;
