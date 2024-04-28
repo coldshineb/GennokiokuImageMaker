@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:main/Preference.dart';
 import 'package:main/main.dart';
 
+import '../Parent/SettingPage.dart';
 import '../Util.dart';
 
 class GeneralSettingPageRoot extends StatelessWidget {
@@ -22,7 +23,8 @@ class GeneralSettingPage extends StatefulWidget {
   GeneralSettingPageState createState() => GeneralSettingPageState();
 }
 
-class GeneralSettingPageState extends State<GeneralSettingPage> {
+class GeneralSettingPageState extends State<GeneralSettingPage>
+    with SettingPage {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,122 +140,55 @@ class GeneralSettingPageState extends State<GeneralSettingPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              Material(
-                color: settingPageMaterialColor(context),
-                borderRadius: settingPageBorderRadius(),
-                child: InkWell(
-                    borderRadius: settingPageBorderRadius(),
-                    onTap: () {
-                      setState(() {
-                        bool currentValue = HomeState.sharedPreferences
-                                ?.getBool(PreferenceKey
-                                    .generalIsWhiteBackgroundInDarkMode) ??
-                            false;
-                        HomeState.sharedPreferences?.setBool(
-                            PreferenceKey.generalIsWhiteBackgroundInDarkMode,
-                            !currentValue);
-                      });
-                    },
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: settingPageBorderRadius(),
-                        ),
-                        padding: settingPageEdgeInsets(),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  '深色主题下使用白色背景',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                                Text(
-                                  '在深色主题下使用白色背景，而不是深色背景',
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.grey[600]),
-                                ),
-                              ],
-                            )),
-                            Switch(
-                              value: HomeState.sharedPreferences?.getBool(
-                                    PreferenceKey
-                                        .generalIsWhiteBackgroundInDarkMode,
-                                  ) ??
-                                  false,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  HomeState.sharedPreferences?.setBool(
-                                      PreferenceKey
-                                          .generalIsWhiteBackgroundInDarkMode,
-                                      value);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-              ),
+              createSwitch(
+                  context,
+                  () {
+                    setState(() {
+                      bool currentValue = HomeState.sharedPreferences?.getBool(
+                              PreferenceKey
+                                  .generalIsWhiteBackgroundInDarkMode) ??
+                          false;
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.generalIsWhiteBackgroundInDarkMode,
+                          !currentValue);
+                    });
+                  },
+                  '深色主题下使用白色背景',
+                  '在深色主题下使用白色背景，而不是深色背景',
+                  HomeState.sharedPreferences?.getBool(
+                          PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
+                      false,
+                  (bool value) {
+                    setState(() {
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.generalIsWhiteBackgroundInDarkMode,
+                          value);
+                    });
+                  }),
               const SizedBox(height: 10.0),
-              Material(
-                color: settingPageMaterialColor(context),
-                borderRadius: settingPageBorderRadius(),
-                child: InkWell(
-                    borderRadius: settingPageBorderRadius(),
-                    onTap: () {
-                      setState(() {
-                        bool currentValue = HomeState.sharedPreferences
-                                ?.getBool(PreferenceKey.generalIsDevMode) ??
-                            false;
-                        HomeState.sharedPreferences?.setBool(
-                            PreferenceKey.generalIsDevMode, !currentValue);
-                      });
-                    },
-                    child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: settingPageBorderRadius(),
-                          ),
-                          padding: settingPageEdgeInsets(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '启用开发选项',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                              Switch(
-                                value: HomeState.sharedPreferences?.getBool(
-                                      PreferenceKey.generalIsDevMode,
-                                    ) ??
-                                    false,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    HomeState.sharedPreferences?.setBool(
-                                        PreferenceKey.generalIsDevMode, value);
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ))),
-              )
+              createSwitch(
+                  context,
+                  () {
+                    setState(() {
+                      bool currentValue = HomeState.sharedPreferences
+                              ?.getBool(PreferenceKey.generalIsDevMode) ??
+                          false;
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.generalIsDevMode, !currentValue);
+                    });
+                  },
+                  '启用开发选项',
+                  '',
+                  HomeState.sharedPreferences?.getBool(
+                        PreferenceKey.generalIsDevMode,
+                      ) ??
+                      false,
+                  (value) {
+                    setState(() {
+                      HomeState.sharedPreferences
+                          ?.setBool(PreferenceKey.generalIsDevMode, value);
+                    });
+                  })
             ],
           ),
         ),
@@ -270,7 +205,7 @@ class LCDSettingPage extends StatefulWidget {
   LCDSettingPageState createState() => LCDSettingPageState();
 }
 
-class LCDSettingPageState extends State<LCDSettingPage> {
+class LCDSettingPageState extends State<LCDSettingPage> with SettingPage {
   //设置各项参数的中间变量，用于不要在输入时直接修改参数，而是在按下确定按钮时修改
   String maxStationToSet = HomeState.sharedPreferences
           ?.getInt(PreferenceKey.lcdMaxStation)
@@ -393,69 +328,33 @@ class LCDSettingPageState extends State<LCDSettingPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              Material(
-                color: settingPageMaterialColor(context),
-                borderRadius: settingPageBorderRadius(),
-                child: InkWell(
-                    borderRadius: settingPageBorderRadius(),
-                    onTap: () {
-                      setState(() {
-                        bool currentValue = HomeState.sharedPreferences
-                                ?.getBool(PreferenceKey.lcdIsBoldFont) ??
-                            true;
-                        HomeState.sharedPreferences?.setBool(
-                            PreferenceKey.lcdIsBoldFont, !currentValue);
-                        Util.lcdBoldFont =
-                            !currentValue ? FontWeight.w600 : FontWeight.normal;
-                      });
-                    },
-                    child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: settingPageBorderRadius(),
-                          ),
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    '使用中粗体',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                  Text(
-                                    '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ],
-                              )),
-                              Switch(
-                                value: HomeState.sharedPreferences?.getBool(
-                                      PreferenceKey.lcdIsBoldFont,
-                                    ) ??
-                                    true,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    HomeState.sharedPreferences?.setBool(
-                                        PreferenceKey.lcdIsBoldFont, value);
-                                    Util.lcdBoldFont = value
-                                        ? FontWeight.w600
-                                        : FontWeight.normal;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ))),
-              )
+              createSwitch(
+                  context,
+                  () {
+                    setState(() {
+                      bool currentValue = HomeState.sharedPreferences
+                              ?.getBool(PreferenceKey.lcdIsBoldFont) ??
+                          true;
+                      HomeState.sharedPreferences
+                          ?.setBool(PreferenceKey.lcdIsBoldFont, !currentValue);
+                      Util.lcdBoldFont =
+                          !currentValue ? FontWeight.w600 : FontWeight.normal;
+                    });
+                  },
+                  '使用中粗体',
+                  '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
+                  HomeState.sharedPreferences?.getBool(
+                        PreferenceKey.lcdIsBoldFont,
+                      ) ??
+                      true,
+                  (bool value) {
+                    setState(() {
+                      HomeState.sharedPreferences
+                          ?.setBool(PreferenceKey.lcdIsBoldFont, value);
+                      Util.lcdBoldFont =
+                          value ? FontWeight.w600 : FontWeight.normal;
+                    });
+                  })
             ],
           ),
         ),
@@ -473,8 +372,8 @@ class ScreenDoorCoverSettingPage extends StatefulWidget {
       ScreenDoorCoverSettingPageState();
 }
 
-class ScreenDoorCoverSettingPageState
-    extends State<ScreenDoorCoverSettingPage> {
+class ScreenDoorCoverSettingPageState extends State<ScreenDoorCoverSettingPage>
+    with SettingPage {
   String maxStationToSet = HomeState.sharedPreferences
           ?.getInt(PreferenceKey.screenDoorCoverMaxStation)
           ?.toString() ??
@@ -603,86 +502,38 @@ class ScreenDoorCoverSettingPageState
                 ),
               ),
               const SizedBox(height: 10.0),
-              Material(
-                color: settingPageMaterialColor(context),
-                borderRadius: settingPageBorderRadius(),
-                child: InkWell(
-                    borderRadius: settingPageBorderRadius(),
-                    onTap: () {
-                      setState(() {
-                        bool currentValue = HomeState.sharedPreferences
-                                ?.getBool(
-                                    PreferenceKey.screenDoorCoverIsBoldFont) ??
-                            true;
-                        HomeState.sharedPreferences?.setBool(
-                            PreferenceKey.screenDoorCoverIsBoldFont,
-                            !currentValue);
-                        Util.screenDoorCoverBoldFont =
-                            !currentValue ? FontWeight.w600 : FontWeight.normal;
-                      });
-                    },
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: settingPageBorderRadius(),
-                        ),
-                        padding: settingPageEdgeInsets(),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  '使用中粗体',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                                Text(
-                                  '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.grey[600]),
-                                ),
-                              ],
-                            )),
-                            Switch(
-                              value: HomeState.sharedPreferences?.getBool(
-                                    PreferenceKey.screenDoorCoverIsBoldFont,
-                                  ) ??
-                                  true,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  HomeState.sharedPreferences?.setBool(
-                                      PreferenceKey.screenDoorCoverIsBoldFont,
-                                      value);
-                                  Util.screenDoorCoverBoldFont = value
-                                      ? FontWeight.w600
-                                      : FontWeight.normal;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-              )
+              createSwitch(
+                  context,
+                  () {
+                    setState(() {
+                      bool currentValue = HomeState.sharedPreferences?.getBool(
+                              PreferenceKey.screenDoorCoverIsBoldFont) ??
+                          true;
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.screenDoorCoverIsBoldFont,
+                          !currentValue);
+                      Util.screenDoorCoverBoldFont =
+                          !currentValue ? FontWeight.w600 : FontWeight.normal;
+                    });
+                  },
+                  '使用中粗体',
+                  '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
+                  HomeState.sharedPreferences?.getBool(
+                        PreferenceKey.screenDoorCoverIsBoldFont,
+                      ) ??
+                      true,
+                  (bool value) {
+                    setState(() {
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.screenDoorCoverIsBoldFont, value);
+                      Util.screenDoorCoverBoldFont =
+                          value ? FontWeight.w600 : FontWeight.normal;
+                    });
+                  })
             ],
           ),
         ),
       ),
     );
   }
-}
-
-EdgeInsets settingPageEdgeInsets() => const EdgeInsets.all(10.0);
-
-BorderRadius settingPageBorderRadius() => BorderRadius.circular(10.0);
-
-Color? settingPageMaterialColor(BuildContext context) {
-  return Theme.of(context).brightness == Brightness.light
-      ? Colors.pink[50]
-      : Util.darkColorScheme().onSecondary;
 }
