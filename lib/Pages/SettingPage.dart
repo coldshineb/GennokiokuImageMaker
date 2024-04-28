@@ -35,13 +35,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '通用',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              createHeading('通用'),
               const SizedBox(height: 10.0),
               Material(
                 color: settingPageMaterialColor(context),
@@ -222,111 +216,34 @@ class LCDSettingPageState extends State<LCDSettingPage> with SettingPage {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'LCD 显示屏',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              createHeading('LCD 显示屏'),
               const SizedBox(height: 10.0),
-              Material(
-                color: settingPageMaterialColor(context),
-                borderRadius: settingPageBorderRadius(),
-                child: InkWell(
-                  borderRadius: settingPageBorderRadius(),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('允许的最大站点数量'),
-                            content: TextField(
-                              decoration: const InputDecoration(
-                                hintText: '${DefaultPreference.lcdMaxStation}',
-                              ),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp("[0-9]")),
-                              ],
-                              controller: TextEditingController(
-                                  text: HomeState.sharedPreferences
-                                          ?.getInt(PreferenceKey.lcdMaxStation)
-                                          ?.toString() ??
-                                      "${DefaultPreference.lcdMaxStation}"),
-                              onChanged: (String value) {
-                                maxStationToSet = value;
-                              },
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    if (maxStationToSet.isEmpty) {
-                                      HomeState.sharedPreferences?.setInt(
-                                          PreferenceKey.lcdMaxStation,
-                                          DefaultPreference.lcdMaxStation);
-                                      Util.lcdMaxStation =
-                                          DefaultPreference.lcdMaxStation;
-                                    } else {
-                                      HomeState.sharedPreferences?.setInt(
-                                          PreferenceKey.lcdMaxStation,
-                                          int.parse(maxStationToSet));
-                                      Util.lcdMaxStation =
-                                          int.parse(maxStationToSet);
-                                    }
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('确定'),
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                  child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: settingPageBorderRadius(),
-                          ),
-                          padding: settingPageEdgeInsets(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    '允许的最大站点数量',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                  Text(
-                                    '限制导入的线路信息文件中站点数量，默认为 ${DefaultPreference.lcdMaxStation}。调整数量可能会导致降低美观程度，或出现显示异常',
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ],
-                              )),
-                              Container(
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: Text(
-                                  HomeState.sharedPreferences
-                                          ?.getInt(PreferenceKey.lcdMaxStation)
-                                          ?.toString() ??
-                                      "${DefaultPreference.lcdMaxStation}",
-                                  style: const TextStyle(
-                                      fontSize: 18.0, color: Colors.grey),
-                                ),
-                              )
-                            ],
-                          ))),
-                ),
-              ),
+              createChangeIntDialog(
+                  context,
+                  '允许的最大站点数量',
+                  '限制导入的线路信息文件中站点数量，默认为 ${DefaultPreference.lcdMaxStation}。调整数量可能会导致降低美观程度，或出现显示异常',
+                  '${DefaultPreference.lcdMaxStation}',
+                  HomeState.sharedPreferences
+                          ?.getInt(PreferenceKey.lcdMaxStation)
+                          ?.toString() ??
+                      '${DefaultPreference.lcdMaxStation}', (String value) {
+                maxStationToSet = value;
+              }, () {
+                setState(() {
+                  if (maxStationToSet.isEmpty) {
+                    HomeState.sharedPreferences?.setInt(
+                        PreferenceKey.lcdMaxStation,
+                        DefaultPreference.lcdMaxStation);
+                    Util.lcdMaxStation = DefaultPreference.lcdMaxStation;
+                  } else {
+                    HomeState.sharedPreferences?.setInt(
+                        PreferenceKey.lcdMaxStation,
+                        int.parse(maxStationToSet));
+                    Util.lcdMaxStation = int.parse(maxStationToSet);
+                  }
+                });
+                Navigator.of(context).pop();
+              }),
               const SizedBox(height: 10.0),
               createSwitch(
                   context,
@@ -389,118 +306,36 @@ class ScreenDoorCoverSettingPageState extends State<ScreenDoorCoverSettingPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '屏蔽门盖板',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              createHeading('屏蔽门盖板'),
               const SizedBox(height: 10.0),
-              Material(
-                color: settingPageMaterialColor(context),
-                borderRadius: settingPageBorderRadius(),
-                child: InkWell(
-                  borderRadius: settingPageBorderRadius(),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('允许的最大站点数量'),
-                            content: TextField(
-                              decoration: const InputDecoration(
-                                hintText:
-                                    '${DefaultPreference.screenDoorCoverMaxStation}',
-                              ),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp("[0-9]")),
-                              ],
-                              controller: TextEditingController(
-                                  text: HomeState.sharedPreferences
-                                          ?.getInt(PreferenceKey
-                                              .screenDoorCoverMaxStation)
-                                          ?.toString() ??
-                                      "${DefaultPreference.screenDoorCoverMaxStation}"),
-                              onChanged: (String value) {
-                                maxStationToSet = value;
-                              },
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    if (maxStationToSet.isEmpty) {
-                                      HomeState.sharedPreferences?.setInt(
-                                          PreferenceKey
-                                              .screenDoorCoverMaxStation,
-                                          DefaultPreference
-                                              .screenDoorCoverMaxStation);
-                                      Util.screenDoorCoverMaxStation =
-                                          DefaultPreference
-                                              .screenDoorCoverMaxStation;
-                                    } else {
-                                      HomeState.sharedPreferences?.setInt(
-                                          PreferenceKey
-                                              .screenDoorCoverMaxStation,
-                                          int.parse(maxStationToSet));
-                                      Util.screenDoorCoverMaxStation =
-                                          int.parse(maxStationToSet);
-                                    }
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('确定'),
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                  child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: settingPageBorderRadius(),
-                          ),
-                          padding: settingPageEdgeInsets(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    '允许的最大站点数量',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                  Text(
-                                    '限制导入的线路信息文件中站点数量，默认为 ${DefaultPreference.screenDoorCoverMaxStation}。调整数量可能会导致降低美观程度，或出现显示异常',
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ],
-                              )),
-                              Container(
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: Text(
-                                  HomeState.sharedPreferences
-                                          ?.getInt(PreferenceKey
-                                              .screenDoorCoverMaxStation)
-                                          ?.toString() ??
-                                      "${DefaultPreference.screenDoorCoverMaxStation}",
-                                  style: const TextStyle(
-                                      fontSize: 18.0, color: Colors.grey),
-                                ),
-                              )
-                            ],
-                          ))),
-                ),
-              ),
+              createChangeIntDialog(
+                  context,
+                  '允许的最大站点数量',
+                  '限制导入的线路信息文件中站点数量，默认为 ${DefaultPreference.screenDoorCoverMaxStation}。调整数量可能会导致降低美观程度，或出现显示异常',
+                  '${DefaultPreference.screenDoorCoverMaxStation}',
+                  HomeState.sharedPreferences
+                          ?.getInt(PreferenceKey.screenDoorCoverMaxStation)
+                          ?.toString() ??
+                      "${DefaultPreference.screenDoorCoverMaxStation}",
+                  (String value) {
+                maxStationToSet = value;
+              }, () {
+                setState(() {
+                  if (maxStationToSet.isEmpty) {
+                    HomeState.sharedPreferences?.setInt(
+                        PreferenceKey.screenDoorCoverMaxStation,
+                        DefaultPreference.screenDoorCoverMaxStation);
+                    Util.screenDoorCoverMaxStation =
+                        DefaultPreference.screenDoorCoverMaxStation;
+                  } else {
+                    HomeState.sharedPreferences?.setInt(
+                        PreferenceKey.screenDoorCoverMaxStation,
+                        int.parse(maxStationToSet));
+                    Util.screenDoorCoverMaxStation = int.parse(maxStationToSet);
+                  }
+                });
+                Navigator.of(context).pop();
+              }),
               const SizedBox(height: 10.0),
               createSwitch(
                   context,
