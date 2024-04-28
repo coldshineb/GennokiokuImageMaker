@@ -351,7 +351,7 @@ class ScreenDoorCoverSettingPageState extends State<ScreenDoorCoverSettingPage>
                     });
                   },
                   '使用中粗体',
-                  '下一站、当前站、终点站和站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
+                  '站名的中英文显示是否使用中粗体，默认为开启。关闭后则以常规字体显示',
                   HomeState.sharedPreferences?.getBool(
                         PreferenceKey.screenDoorCoverIsBoldFont,
                       ) ??
