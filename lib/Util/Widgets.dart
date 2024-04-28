@@ -30,7 +30,6 @@ class Widgets {
                 lineNumber,
                 style: TextStyle(
                     fontSize: 40,
-                    fontFamily: "GennokiokuLCDFont",
                     color: Util.getTextColorForBackground(lineColor)),
               ),
             ),
@@ -40,7 +39,6 @@ class Widgets {
                 "号线",
                 style: TextStyle(
                     fontSize: 20,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -53,7 +51,6 @@ class Widgets {
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 12,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -81,7 +78,6 @@ class Widgets {
                     style: TextStyle(
                         letterSpacing: -3,
                         fontSize: 40,
-                        fontFamily: "GennokiokuLCDFont",
                         color: Util.getTextColorForBackground(lineColor)),
                   )),
             ),
@@ -91,7 +87,6 @@ class Widgets {
                 "号线",
                 style: TextStyle(
                     fontSize: 20,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -104,7 +99,6 @@ class Widgets {
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 12,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -132,7 +126,6 @@ class Widgets {
                     style: TextStyle(
                         letterSpacing: -3,
                         fontSize: 40,
-                        fontFamily: "GennokiokuLCDFont",
                         color: Util.getTextColorForBackground(lineColor)),
                   )),
             ),
@@ -142,7 +135,6 @@ class Widgets {
                 "号线",
                 style: TextStyle(
                     fontSize: 20,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -155,7 +147,6 @@ class Widgets {
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 12,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -178,7 +169,6 @@ class Widgets {
                 style: TextStyle(
                     letterSpacing: 3,
                     fontSize: 18,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -193,7 +183,6 @@ class Widgets {
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -216,7 +205,6 @@ class Widgets {
                 style: TextStyle(
                     letterSpacing: -1.9,
                     fontSize: 18,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
@@ -231,7 +219,6 @@ class Widgets {
                 "Line $lineNumberEN",
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "GennokiokuLCDFont",
                     color: lineColor == Colors.transparent
                         ? Colors.transparent
                         : Util.getTextColorForBackground(lineColor)),
