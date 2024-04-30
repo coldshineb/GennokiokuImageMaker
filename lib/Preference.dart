@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
+//存储设置项的值，涉及到实际效果的在Util中
 class Preference {
   static late ThemeMode themeMode;
   static late bool generalIsDevMode;
   static late bool generalIsWhiteBackgroundInDarkMode;
-  static late int lcdMaxStation;
-  static late int screenDoorCoverMaxStation;
-  static late bool lcdIsBoldFont;
-  static late bool screenDoorCoverIsBoldFont;
 }
 
+//存储设置项的键
 class PreferenceKey {
   static const String generalThemeMode = 'general.themeMode';
   static const String generalIsDevMode = 'general.isDevMode';
@@ -21,11 +19,11 @@ class PreferenceKey {
   static const String screenDoorCoverIsBoldFont = 'screenDoorCover.isBoldFont';
 }
 
+//默认设置项的值
 class DefaultPreference {
-  static const int generalThemeMode = 0;
   static const bool generalIsDevMode = false;
   static const bool generalIsWhiteBackgroundInDarkMode = false;
-  static const int lcdMaxStation = 32;
+  static const int lcdMaxStation = 35;
   static const int screenDoorCoverMaxStation = 36;
   static const bool lcdIsBoldFont = true;
   static const bool screenDoorCoverIsBoldFont = true;

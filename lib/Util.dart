@@ -155,11 +155,12 @@ class Util {
         : Theme.of(context).scaffoldBackgroundColor;
   }
 
+  ///涉及到实际效果的设置项
   //LCD默认中粗体
   static FontWeight lcdBoldFont = HomeState.sharedPreferences?.getBool(
             PreferenceKey.lcdIsBoldFont,
           ) ??
-          true
+          DefaultPreference.lcdIsBoldFont
       ? FontWeight.w600
       : FontWeight.normal;
 
@@ -168,7 +169,7 @@ class Util {
       HomeState.sharedPreferences?.getBool(
                 PreferenceKey.screenDoorCoverIsBoldFont,
               ) ??
-              true
+              DefaultPreference.screenDoorCoverIsBoldFont
           ? FontWeight.w600
           : FontWeight.normal;
 
@@ -176,13 +177,13 @@ class Util {
   static int lcdMaxStation = HomeState.sharedPreferences?.getInt(
         PreferenceKey.lcdMaxStation,
       ) ??
-      32;
+      DefaultPreference.lcdMaxStation;
 
   //屏蔽门盖板默认最大站点数
   static int screenDoorCoverMaxStation = HomeState.sharedPreferences?.getInt(
         PreferenceKey.screenDoorCoverMaxStation,
       ) ??
-      36;
+      DefaultPreference.screenDoorCoverMaxStation;
 
   static Color hexToColor(String hexColor) {
     return Color(int.parse('FF${hexColor.replaceAll('#', '')}', radix: 16));

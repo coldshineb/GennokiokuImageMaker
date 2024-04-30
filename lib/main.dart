@@ -46,26 +46,13 @@ class HomeState extends State<Home> {
     sharedPreferences = await SharedPreferences.getInstance(); // 获取持久化数据
     setState(() {
       //深色主题下使用白色背景
-      Preference.generalIsWhiteBackgroundInDarkMode =
-          sharedPreferences!.getBool(PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
-              false;
+      Preference.generalIsWhiteBackgroundInDarkMode = sharedPreferences!
+              .getBool(PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
+          DefaultPreference.generalIsWhiteBackgroundInDarkMode;
       //启用开发选项
       Preference.generalIsDevMode =
-          sharedPreferences!.getBool(PreferenceKey.generalIsDevMode) ?? false;
-      //LCD最大站点数
-      Preference.lcdMaxStation =
-          sharedPreferences!.getInt(PreferenceKey.lcdMaxStation) ?? 32;
-      //屏蔽门盖板最大站点数
-      Preference.screenDoorCoverMaxStation =
-          sharedPreferences!.getInt(PreferenceKey.screenDoorCoverMaxStation) ??
-              36;
-      //LCD是否使用粗体
-      Preference.lcdIsBoldFont =
-          sharedPreferences!.getBool(PreferenceKey.lcdIsBoldFont) ?? true;
-      //屏蔽门盖板是否使用粗体
-      Preference.screenDoorCoverIsBoldFont =
-          sharedPreferences!.getBool(PreferenceKey.screenDoorCoverIsBoldFont) ??
-              true;
+          sharedPreferences!.getBool(PreferenceKey.generalIsDevMode) ??
+              DefaultPreference.generalIsDevMode;
     });
   }
 

@@ -88,7 +88,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   int exportWidthValue = 2560;
 
   //线路线条宽度
-  int lineLength = 1330;
+  int lineLength = 1470;
 
   @override
   Widget build(BuildContext context) {
@@ -345,24 +345,24 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                   )),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 165, 0, 0),
+                                    const EdgeInsets.fromLTRB(50, 165, 0, 0),
                                 child: showStationName(),
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(200, 195, 0, 0),
+                                    const EdgeInsets.fromLTRB(60, 195, 0, 0),
                                 child: showRouteLine(),
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
                                 child: showRouteIcon(),
                               ),
                               Container(
                                 width: imageWidth,
                                 height: imageHeight,
                                 padding:
-                                    const EdgeInsets.fromLTRB(183, 221.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
                                 child: showTransferIcon(),
                               ),
                             ],
@@ -382,7 +382,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                               ),
                               Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(190, 202.5, 0, 0),
+                                    const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
                                 child: showPassingRouteIcon(),
                               ),
                             ],
