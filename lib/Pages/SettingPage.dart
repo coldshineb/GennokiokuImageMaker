@@ -46,7 +46,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('主题'),
+                            title: const Text('应用主题'),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -103,17 +103,16 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Container(
+                                  padding: const EdgeInsets.only(top: 8.0)),
                               const Text(
-                                '主题',
+                                '应用主题',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                 ),
                               ),
-                              Text(
-                                '选择应用的主题',
-                                style: TextStyle(
-                                    fontSize: 14.0, color: Colors.grey[600]),
-                              ),
+                              Container(
+                                  padding: const EdgeInsets.only(top: 8.0))
                             ],
                           )),
                           Container(
@@ -147,7 +146,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                     });
                   },
                   '深色主题下使用白色背景',
-                  '在深色主题下使用白色背景，而不是深色背景',
+                  '',
                   HomeState.sharedPreferences?.getBool(
                           PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
                       false,
