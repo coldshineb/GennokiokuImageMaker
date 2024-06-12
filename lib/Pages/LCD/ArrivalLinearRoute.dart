@@ -312,6 +312,13 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                 child: showStationName(),
                               ),
                               Container(
+                                width: imageWidth,
+                                height: imageHeight,
+                                padding:
+                                    const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
+                                child: showTransferIcon(),
+                              ),
+                              Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(60, 195, 0, 0),
                                 child: showRouteLine(),
@@ -320,13 +327,6 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                                 padding:
                                     const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
                                 child: showRouteIcon(),
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                padding:
-                                    const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
-                                child: showTransferIcon(),
                               ),
                             ],
                           ),
