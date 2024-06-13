@@ -880,7 +880,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "运行中 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
+              "已到站 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
           true);
     } else {
       noStationsSnackbar();

@@ -842,7 +842,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
       await exportImage(
           _mainImageKey,
           await getExportPath(context, "保存",
-              "五站图 已到站 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
+              "已到站 站点信息图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
           true);
     } else {
       noStationsSnackbar();
