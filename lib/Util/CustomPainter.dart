@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:main/Pages/ScreenDoorCover.dart';
 
@@ -28,13 +27,19 @@ class LCDStationIconSmallPainter extends CustomPainter {
       ..color = lineColor!
       ..style = PaintingStyle.fill;
 
+    final Paint shadowCircle = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+
     if (shadow) {
       //边缘阴影
-      outerCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+      shadowCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 3);
+      // 阴影圈圆
+      canvas.drawCircle(
+          Offset(size.width / 2, size.height / 2), 16, shadowCircle);
     }
     // 外圈圆
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), 17, outerCircle);
-
     // 中圈圆
     canvas.drawCircle(
         Offset(size.width / 2, size.height / 2), 12, mediumCircle);
@@ -76,9 +81,16 @@ class LCDStationIconMediumPainter extends CustomPainter {
       ..color = lineColor!
       ..style = PaintingStyle.fill;
 
+    final Paint shadowCircle = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+
     if (shadow) {
       //边缘阴影
-      outerCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+      shadowCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 3);
+      // 阴影圈圆
+      canvas.drawCircle(
+          Offset(size.width / 2, size.height / 2), 40, shadowCircle);
     }
     // 外圈圆
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), 41, outerCircle);
@@ -123,9 +135,16 @@ class LCDStationIconBigPainter extends CustomPainter {
       ..color = lineColor!
       ..style = PaintingStyle.fill;
 
+    final Paint shadowCircle = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+
     if (shadow) {
       //边缘阴影
-      outerCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+      shadowCircle.maskFilter = const MaskFilter.blur(BlurStyle.solid, 3);
+      // 阴影圈圆
+      canvas.drawCircle(
+          Offset(size.width / 2, size.height / 2), 54, shadowCircle);
     }
     // 外圈圆
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), 55, outerCircle);
