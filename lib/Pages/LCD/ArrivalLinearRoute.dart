@@ -813,7 +813,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
 
           //文件成功导入后将下拉菜单默认值设为第一站
           currentStationListValue = stationList[0].stationNameCN;
-          terminusListValue = stationList[0].stationNameCN;
+          terminusListValue = stationList[stationList.length - 1].stationNameCN;
+          terminusListIndex = stationList.length - 1;
           // 刷新页面状态
           setState(() {});
         } else if (stationsFromJson.length < 2) {
