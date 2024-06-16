@@ -164,6 +164,12 @@ class Util {
       ? FontWeight.w600
       : FontWeight.normal;
 
+  //LCD默认线路颜色与站点颜色相同
+  static bool lcdRouteColorSameAsLineColor = HomeState.sharedPreferences?.getBool(
+            PreferenceKey.lcdIsRouteColorSameAsLineColor,
+          ) ??
+          DefaultPreference.lcdIsRouteColorSameAsLineColor;
+
   //屏蔽门盖板默认中粗体
   static FontWeight screenDoorCoverBoldFont =
       HomeState.sharedPreferences?.getBool(

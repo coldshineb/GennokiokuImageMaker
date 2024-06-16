@@ -16,6 +16,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
+import '../../main.dart';
 
 class ArrivalLinearRouteRoot extends StatelessWidget {
   const ArrivalLinearRouteRoot({super.key});
@@ -85,6 +86,11 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
 
   //线路线条宽度
   int lineLength = 1470;
+
+  //未过站站点图标与线路线条使用线路标识色
+  bool isRouteColorSameAsLineColor = HomeState.sharedPreferences
+          ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
+      DefaultPreference.lcdIsRouteColorSameAsLineColor;
 
   @override
   Widget build(BuildContext context) {
@@ -443,6 +449,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
   //显示线路
   Stack showRouteLine() {
     List<Container> lineList = [];
+    Color routeLineColor =
+        isRouteColorSameAsLineColor ? lineColor : Colors.green;
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
       lineList.add(
@@ -458,7 +466,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         if (currentStationListIndex != 0) {
           for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
             //nextStationListIndex-1：当前站前的线条
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           //替换原集合
           lineList.replaceRange(
@@ -467,7 +475,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         //当前站为起始站
         {
           for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           lineList.replaceRange(
               currentStationListIndex!, terminusListIndex!, replaceList);
@@ -478,7 +486,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         //当前站不为终点站
         if (currentStationListIndex != stationList.length - 1) {
           for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           lineList.replaceRange(
               terminusListIndex!, currentStationListIndex!, replaceList);
@@ -486,7 +494,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         //当前站为终点站
         {
           for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           lineList.replaceRange(
               terminusListIndex!, currentStationListIndex!, replaceList);
@@ -515,6 +523,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
+    Color routeIconColor =
+        isRouteColorSameAsLineColor ? lineColor : Colors.green;
+    Color? routeIconVariantColor =
+        isRouteColorSameAsLineColor ? lineVariantColor : Colors.green[300];
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
@@ -538,8 +550,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
                 painter: LCDStationIconSmallPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
+                    lineColor: routeIconColor,
+                    lineVariantColor: routeIconVariantColor,
                     shadow: true),
               )));
         }
@@ -553,8 +565,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
                 painter: LCDStationIconSmallPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
+                    lineColor: routeIconColor,
+                    lineVariantColor: routeIconVariantColor,
                     shadow: true),
               )));
         }

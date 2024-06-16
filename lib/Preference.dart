@@ -16,6 +16,7 @@ class PreferenceKey {
   static const String lcdMaxStation = 'lcd.maxStation';
   static const String screenDoorCoverMaxStation = 'screenDoorCover.maxStation';
   static const String lcdIsBoldFont = 'lcd.isBoldFont';
+  static const String lcdIsRouteColorSameAsLineColor = 'lcd.isRouteColorSameAsLineColor';
   static const String screenDoorCoverIsBoldFont = 'screenDoorCover.isBoldFont';
 }
 
@@ -26,5 +27,6 @@ class DefaultPreference {
   static const int lcdMaxStation = 35;
   static const int screenDoorCoverMaxStation = 36;
   static const bool lcdIsBoldFont = true;
+  static const bool lcdIsRouteColorSameAsLineColor = true;
   static const bool screenDoorCoverIsBoldFont = true;
 }

@@ -17,6 +17,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
+import '../../main.dart';
 
 class ArrivalFiveStationsRoot extends StatelessWidget {
   const ArrivalFiveStationsRoot({super.key});
@@ -84,6 +85,11 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   //默认导出宽度
   int exportWidthValue = 2560;
+
+  //未过站站点图标与线路线条使用线路标识色
+  bool isRouteColorSameAsLineColor = HomeState.sharedPreferences
+      ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
+      DefaultPreference.lcdIsRouteColorSameAsLineColor;
 
   @override
   Widget build(BuildContext context) {
@@ -516,24 +522,26 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   //显示线路
   Stack showRouteLine() {
     List<Container> lineList = [];
+    Color routeLineColor =
+    isRouteColorSameAsLineColor ? lineColor : Colors.green;
     if (currentStationListIndex != null && terminusListIndex != null) {
       if (currentStationListIndex! < terminusListIndex!) {
         if (currentStationListIndex == 0) {
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
-                child: routeLine(lineColor, true),
+                child: routeLine(routeLineColor, true),
               )));
         } else if (currentStationListIndex == 1) {
           lineList.add(Container(
@@ -541,18 +549,18 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
-                child: routeLine(lineColor, true),
+                child: routeLine(routeLineColor, true),
               )));
         } else if (currentStationListIndex == 2) {
           lineList.add(Container(
@@ -564,15 +572,15 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
-                child: routeLine(lineColor, true),
+                child: routeLine(routeLineColor, true),
               )));
         } else if (currentStationListIndex == terminusListIndex! - 2) {
           lineList.add(Container(
@@ -587,10 +595,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
         } else if (currentStationListIndex == terminusListIndex! - 1) {
           lineList.add(Container(
               child: routeLine(
@@ -608,7 +616,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
         } else {
           lineList.add(Container(
               child: routeLine(
@@ -622,49 +630,49 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
-                child: routeLine(lineColor, true),
+                child: routeLine(routeLineColor, true),
               )));
         }
       } else if (currentStationListIndex! > terminusListIndex!) {
         if (currentStationListIndex == stationList.length - 1) {
-          lineList.add(Container(child: routeLine(lineColor, true)));
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, true)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
         } else if (currentStationListIndex == stationList.length - 2) {
-          lineList.add(Container(child: routeLine(lineColor, true)));
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, true)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
         } else if (currentStationListIndex == stationList.length - 3) {
-          lineList.add(Container(child: routeLine(lineColor, true)));
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, true)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
@@ -674,10 +682,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               child: routeLine(
                   Util.hexToColor(CustomColors.passedStationVariant), false)));
         } else if (currentStationListIndex == terminusListIndex! + 2) {
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
@@ -694,7 +702,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                     Util.hexToColor(CustomColors.passedStationVariant), true),
               )));
         } else if (currentStationListIndex == terminusListIndex! + 1) {
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
@@ -715,11 +723,11 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                     Util.hexToColor(CustomColors.passedStationVariant), true),
               )));
         } else {
-          lineList.add(Container(child: routeLine(lineColor, true)));
-          lineList.add(Container(child: routeLine(lineColor, false)));
+          lineList.add(Container(child: routeLine(routeLineColor, true)));
+          lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
-              child: routeLine(lineColor, false)));
+              child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
@@ -816,8 +824,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   CustomPaint nextStationIconMediumPainter() {
     return CustomPaint(
       painter: LCDStationIconMediumPainter(
-          lineColor: lineColor,
-          lineVariantColor: lineVariantColor,
+          lineColor: isRouteColorSameAsLineColor ? lineColor : Colors.green,
+          lineVariantColor: isRouteColorSameAsLineColor ? lineVariantColor : Colors.green[300],
           shadow: true),
     );
   }

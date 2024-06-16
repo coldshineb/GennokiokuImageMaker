@@ -16,6 +16,7 @@ import '../../Util.dart';
 import '../../Util/CustomColors.dart';
 import '../../Util/CustomPainter.dart';
 import '../../Util/Widgets.dart';
+import '../../main.dart';
 
 class RunningLinearRouteRoot extends StatelessWidget {
   const RunningLinearRouteRoot({super.key});
@@ -89,6 +90,11 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   //线路线条宽度
   int lineLength = 1470;
+
+  //未过站站点图标与线路线条使用线路标识色
+  bool isRouteColorSameAsLineColor = HomeState.sharedPreferences
+          ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
+      DefaultPreference.lcdIsRouteColorSameAsLineColor;
 
   @override
   Widget build(BuildContext context) {
@@ -521,6 +527,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //显示线路
   Stack showRouteLine() {
     List<Container> lineList = [];
+    Color routeLineColor =
+        isRouteColorSameAsLineColor ? lineColor : Colors.green;
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
       lineList.add(
@@ -536,7 +544,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         if (nextStationListIndex != 0) {
           for (int i = nextStationListIndex! - 1; i < terminusListIndex!; i++) {
             //nextStationListIndex-1：下一站前的线条
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           //替换原集合
           lineList.replaceRange(
@@ -545,7 +553,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         //下一站为起始站
         {
           for (int i = nextStationListIndex!; i < terminusListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           lineList.replaceRange(
               nextStationListIndex!, terminusListIndex!, replaceList);
@@ -556,7 +564,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         //下一站不为终点站
         if (nextStationListIndex != stationList.length - 1) {
           for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           lineList.replaceRange(
               terminusListIndex!, nextStationListIndex! + 1, replaceList);
@@ -564,7 +572,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         //下一站为终点站
         {
           for (int i = terminusListIndex!; i < nextStationListIndex!; i++) {
-            replaceList.add(routeLine(i, lineColor));
+            replaceList.add(routeLine(i, routeLineColor));
           }
           lineList.replaceRange(
               terminusListIndex!, nextStationListIndex!, replaceList);
@@ -578,7 +586,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             height: 15,
             child: Container(
               width: (lineLength / (stationList.length - 1)),
-              color: lineColor,
+              color: routeLineColor,
             ),
           ));
           lineList.replaceRange(0, 1, replaceList);
@@ -593,7 +601,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             height: 15,
             child: Container(
               width: (lineLength / (stationList.length - 1)),
-              color: lineColor,
+              color: routeLineColor,
             ),
           ));
           lineList.replaceRange(
@@ -610,7 +618,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               height: 15,
               child: Container(
                 width: (lineLength / (stationList.length - 1)),
-                color: lineColor,
+                color: routeLineColor,
               ),
             ));
             lineList.replaceRange(
@@ -625,7 +633,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               height: 15,
               child: Container(
                 width: (lineLength / (stationList.length - 1)),
-                color: lineColor,
+                color: routeLineColor,
               ),
             ));
             lineList.replaceRange(
@@ -656,7 +664,10 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
-
+    Color routeIconColor =
+        isRouteColorSameAsLineColor ? lineColor : Colors.green;
+    Color? routeIconVariantColor =
+        isRouteColorSameAsLineColor ? lineVariantColor : Colors.green[300];
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
@@ -678,8 +689,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
                 painter: LCDStationIconSmallPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
+                    lineColor: routeIconColor,
+                    lineVariantColor: routeIconVariantColor,
                     shadow: true),
               )));
         }
@@ -693,8 +704,8 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
               child: CustomPaint(
                 painter: LCDStationIconSmallPainter(
-                    lineColor: lineColor,
-                    lineVariantColor: lineVariantColor,
+                    lineColor: routeIconColor,
+                    lineVariantColor: routeIconVariantColor,
                     shadow: true),
               )));
         }

@@ -139,7 +139,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                       bool currentValue = HomeState.sharedPreferences?.getBool(
                               PreferenceKey
                                   .generalIsWhiteBackgroundInDarkMode) ??
-                          false;
+                          DefaultPreference.generalIsWhiteBackgroundInDarkMode;
                       HomeState.sharedPreferences?.setBool(
                           PreferenceKey.generalIsWhiteBackgroundInDarkMode,
                           !currentValue);
@@ -149,7 +149,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                   '',
                   HomeState.sharedPreferences?.getBool(
                           PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
-                      false,
+                      DefaultPreference.generalIsWhiteBackgroundInDarkMode,
                   (bool value) {
                     setState(() {
                       HomeState.sharedPreferences?.setBool(
@@ -164,7 +164,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                     setState(() {
                       bool currentValue = HomeState.sharedPreferences
                               ?.getBool(PreferenceKey.generalIsDevMode) ??
-                          false;
+                          DefaultPreference.generalIsDevMode;
                       HomeState.sharedPreferences?.setBool(
                           PreferenceKey.generalIsDevMode, !currentValue);
                     });
@@ -174,7 +174,7 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                   HomeState.sharedPreferences?.getBool(
                         PreferenceKey.generalIsDevMode,
                       ) ??
-                      false,
+                      DefaultPreference.generalIsDevMode,
                   (value) {
                     setState(() {
                       HomeState.sharedPreferences
@@ -249,7 +249,7 @@ class LCDSettingPageState extends State<LCDSettingPage> with SettingPage {
                     setState(() {
                       bool currentValue = HomeState.sharedPreferences
                               ?.getBool(PreferenceKey.lcdIsBoldFont) ??
-                          true;
+                          DefaultPreference.lcdIsBoldFont;
                       HomeState.sharedPreferences
                           ?.setBool(PreferenceKey.lcdIsBoldFont, !currentValue);
                       Util.lcdBoldFont =
@@ -261,7 +261,7 @@ class LCDSettingPageState extends State<LCDSettingPage> with SettingPage {
                   HomeState.sharedPreferences?.getBool(
                         PreferenceKey.lcdIsBoldFont,
                       ) ??
-                      true,
+                      DefaultPreference.lcdIsBoldFont,
                   (bool value) {
                     setState(() {
                       HomeState.sharedPreferences
@@ -269,7 +269,34 @@ class LCDSettingPageState extends State<LCDSettingPage> with SettingPage {
                       Util.lcdBoldFont =
                           value ? FontWeight.w600 : FontWeight.normal;
                     });
-                  })
+                  }),
+              const SizedBox(height: 10.0),
+              createSwitch(
+                  context,
+                  () {
+                    setState(() {
+                      bool currentValue = HomeState.sharedPreferences?.getBool(
+                              PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
+                          DefaultPreference.lcdIsRouteColorSameAsLineColor;
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.lcdIsRouteColorSameAsLineColor,
+                          !currentValue);
+                      Util.lcdRouteColorSameAsLineColor = !currentValue;
+                    });
+                  },
+                  '使用线路标识色作为未过站站点图标与线路线条颜色',
+                  '默认为开启。关闭后则使用绿色，在一些线路标识色与已过站、下一站站点图标等预设颜色相近时，有助于颜色区分',
+                  HomeState.sharedPreferences?.getBool(
+                        PreferenceKey.lcdIsRouteColorSameAsLineColor,
+                      ) ??
+                      DefaultPreference.lcdIsRouteColorSameAsLineColor,
+                  (bool value) {
+                    setState(() {
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.lcdIsRouteColorSameAsLineColor, value);
+                      Util.lcdRouteColorSameAsLineColor = value;
+                    });
+                  }),
             ],
           ),
         ),
@@ -341,7 +368,7 @@ class ScreenDoorCoverSettingPageState extends State<ScreenDoorCoverSettingPage>
                     setState(() {
                       bool currentValue = HomeState.sharedPreferences?.getBool(
                               PreferenceKey.screenDoorCoverIsBoldFont) ??
-                          true;
+                          DefaultPreference.screenDoorCoverIsBoldFont;
                       HomeState.sharedPreferences?.setBool(
                           PreferenceKey.screenDoorCoverIsBoldFont,
                           !currentValue);
@@ -354,7 +381,7 @@ class ScreenDoorCoverSettingPageState extends State<ScreenDoorCoverSettingPage>
                   HomeState.sharedPreferences?.getBool(
                         PreferenceKey.screenDoorCoverIsBoldFont,
                       ) ??
-                      true,
+                      DefaultPreference.screenDoorCoverIsBoldFont,
                   (bool value) {
                     setState(() {
                       HomeState.sharedPreferences?.setBool(
