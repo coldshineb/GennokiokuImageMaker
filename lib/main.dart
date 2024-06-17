@@ -20,6 +20,7 @@ void main() async {
               ? ThemeMode.light
               : ThemeMode.system; //设置主题
   runApp(MaterialApp(
+      title: 'Gennokioku 原忆轨道交通图片生成器',
       theme: Util.themeData(),
       darkTheme: Util.darkThemeData(),
       themeMode: Preference.themeMode,
