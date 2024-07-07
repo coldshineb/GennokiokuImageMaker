@@ -98,7 +98,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
+    //loadFont();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(

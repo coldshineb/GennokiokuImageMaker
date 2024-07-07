@@ -93,7 +93,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
+    //loadFont();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(

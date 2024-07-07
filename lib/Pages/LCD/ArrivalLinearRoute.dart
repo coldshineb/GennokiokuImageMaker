@@ -94,7 +94,7 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
+    //loadFont();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(

@@ -71,7 +71,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
 
   @override
   Widget build(BuildContext context) {
-    loadFont();
+    //loadFont();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(

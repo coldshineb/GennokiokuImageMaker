@@ -8,7 +8,7 @@ import '../Object/Station.dart';
 import '../Util/Widgets.dart';
 
 mixin class LCD {
-  //加载字体
+  //加载字体，最初用于加载 svg 中的文字字体，现在看起来不需要了
   void loadFont() async {
     var fontLoader1 = FontLoader("GennokiokuLCDFont");
     fontLoader1
