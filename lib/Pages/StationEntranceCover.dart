@@ -669,34 +669,35 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
           //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
           //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
           await exportImage(
+              context,
+              entranceList,
               _mainImageKey,
-              "$path\\出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
-              false);
+              "$path${Util.pathSlash}出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
+              true,
+              exportWidthValue: exportWidthValue);
           await exportImage(
+              context,
+              entranceList,
               _mainImageKey,
-              "$path\\出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
-              false);
+              "$path${Util.pathSlash}出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
+              true,
+              exportWidthValue: exportWidthValue);
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("图片已成功保存至: $path"),
         ));
       }
     } else {
-      noStationsSnackbar();
+      noStationsSnackbar(context);
     }
   }
 
   //导出当前图
   Future<void> exportMainImage() async {
-    if (entranceList.isNotEmpty) {
-      await exportImage(
-          _mainImageKey,
-          await getExportPath(context, "保存",
-              "出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png";
+    await exportImage(context, entranceList, _mainImageKey, fileName, false,
+        exportWidthValue: exportWidthValue);
   }
 
   //通用提示对话框方法
@@ -717,48 +718,6 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
             ],
           );
         });
-  }
-
-  //无站名信息 snackbar
-  void noStationsSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无站名信息"),
-    ));
-  }
-
-  //通用导出方法
-  @override
-  Future<void> exportImage(
-      GlobalKey key, String? path, bool showSnackbar) async {
-    //路径检验有效，保存
-    if (path != null) {
-      try {
-        //获取 key 对应的 stack 用于获取宽度
-        RenderBox findRenderObject =
-            key.currentContext!.findRenderObject() as RenderBox;
-
-        //获取 key 对应的 stack 用于获取图片
-        RenderRepaintBoundary boundary =
-            key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-        ui.Image image = await boundary.toImage(
-            pixelRatio: exportWidthValue /
-                findRenderObject
-                    .size.width); //确保导出的图片宽高默认为2560*500，可通过下拉列表选择其他预设分辨率
-        ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
-        Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-        File imgFile = File(path);
-        await imgFile.writeAsBytes(pngBytes);
-      } catch (e) {
-        print('导出图片失败: $e');
-      }
-      if (showSnackbar) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path"),
-        ));
-      }
-    }
   }
 
   void nextStation() {

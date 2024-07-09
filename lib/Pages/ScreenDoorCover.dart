@@ -1186,36 +1186,54 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
           //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
           await exportImage(
+              context,
+              stationList,
               routeUpImageKey,
-              "$path\\屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
-              false);
+              "$path${Util.pathSlash}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              true,
+              exportHeightValue: exportHeightValue);
           await exportImage(
+              context,
+              stationList,
               routeUpImageKey,
-              "$path\\屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
-              false);
+              "$path${Util.pathSlash}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              true,
+              exportHeightValue: exportHeightValue);
           await exportImage(
+              context,
+              stationList,
               routeDownImageKey,
-              "$path\\屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
-              false);
+              "$path${Util.pathSlash}屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
+              true,
+              exportHeightValue: exportHeightValue);
           await exportImage(
+              context,
+              stationList,
               stationImageKey,
-              "$path\\屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
-              false);
+              "$path${Util.pathSlash}屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+              true,
+              exportHeightValue: exportHeightValue);
           await exportImage(
+              context,
+              stationList,
               directionUpImageKey,
-              "$path\\屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
-              false);
+              "$path${Util.pathSlash}屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              true,
+              exportHeightValue: exportHeightValue);
           await exportImage(
+              context,
+              stationList,
               directionDownImageKey,
-              "$path\\屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
-              false);
+              "$path${Util.pathSlash}屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
+              true,
+              exportHeightValue: exportHeightValue);
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("图片已成功保存至: $path"),
         ));
       }
     } else {
-      noStationsSnackbar();
+      noStationsSnackbar(context);
     }
   }
 
@@ -1228,73 +1246,48 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       await exportDirectionUpImage();
       await exportDirectionDownImage();
     } else {
-      noStationsSnackbar();
+      noStationsSnackbar(context);
     }
   }
 
   //导出上行主线路图
   Future<void> exportRouteUpImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          routeUpImageKey,
-          await getExportPath(context, "保存",
-              "屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png";
+    await exportImage(context, stationList, routeUpImageKey, fileName, false,
+        exportHeightValue: exportHeightValue);
   }
 
   //导出下行主线路图
   Future<void> exportRouteDownImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          routeDownImageKey,
-          await getExportPath(context, "保存",
-              "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png";
+    await exportImage(context, stationList, routeDownImageKey, fileName, false,
+        exportHeightValue: exportHeightValue);
   }
 
   //导出站名图
   Future<void> exportStationImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          stationImageKey,
-          await getExportPath(context, "保存",
-              "屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png";
+    await exportImage(context, stationList, stationImageKey, fileName, false,
+        exportHeightValue: exportHeightValue);
   }
 
   //导出上行运行方向图
   Future<void> exportDirectionUpImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          directionUpImageKey,
-          await getExportPath(context, "保存",
-              "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png";
+    await exportImage(context, stationList, directionUpImageKey, fileName,
+        false, exportHeightValue: exportHeightValue);
   }
 
   //导出下行运行方向图
   Future<void> exportDirectionDownImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          directionDownImageKey,
-          await getExportPath(context, "保存",
-              "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png";
+    await exportImage(context, stationList, directionDownImageKey, fileName,
+        false, exportHeightValue: exportHeightValue);
   }
 
   //通用提示对话框方法
@@ -1315,47 +1308,6 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             ],
           );
         });
-  }
-
-  //无线路信息 snackbar
-  void noStationsSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无线路信息"),
-    ));
-  }
-
-  //通用导出方法
-  @override
-  Future<void> exportImage(
-      GlobalKey key, String? path, bool showSnackbar) async {
-    //路径检验有效，保存
-    if (path != null) {
-      try {
-        //获取 key 对应的 stack 用于获取宽度
-        RenderBox findRenderObject =
-            key.currentContext!.findRenderObject() as RenderBox;
-
-        //获取 key 对应的 stack 用于获取图片
-        RenderRepaintBoundary boundary =
-            key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-        ui.Image image = await boundary.toImage(
-            pixelRatio: exportHeightValue /
-                findRenderObject.size.height); //确保导出的图片高度为1280
-        ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
-        Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-        File imgFile = File(path);
-        await imgFile.writeAsBytes(pngBytes);
-      } catch (e) {
-        print('导出图片失败: $e');
-      }
-      if (showSnackbar) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path"),
-        ));
-      }
-    }
   }
 
   void nextStation() {

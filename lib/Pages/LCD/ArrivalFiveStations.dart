@@ -88,7 +88,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
 
   //未过站站点图标与线路线条使用线路标识色
   bool isRouteColorSameAsLineColor = HomeState.sharedPreferences
-      ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
+          ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
       DefaultPreference.lcdIsRouteColorSameAsLineColor;
 
   @override
@@ -523,7 +523,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   Stack showRouteLine() {
     List<Container> lineList = [];
     Color routeLineColor =
-    isRouteColorSameAsLineColor ? lineColor : Colors.green;
+        isRouteColorSameAsLineColor ? lineColor : Colors.green;
     if (currentStationListIndex != null && terminusListIndex != null) {
       if (currentStationListIndex! < terminusListIndex!) {
         if (currentStationListIndex == 0) {
@@ -825,7 +825,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
     return CustomPaint(
       painter: LCDStationIconMediumPainter(
           lineColor: isRouteColorSameAsLineColor ? lineColor : Colors.green,
-          lineVariantColor: isRouteColorSameAsLineColor ? lineVariantColor : Colors.green[300],
+          lineVariantColor: isRouteColorSameAsLineColor
+              ? lineVariantColor
+              : Colors.green[300],
           shadow: true),
     );
   }
@@ -1828,35 +1830,51 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
             //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
             //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
             await exportImage(
+                context,
+                stationList,
                 _passingImageKey,
-                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
-                false);
+                "$path${Util.pathSlash}已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                true,
+                exportWidthValue: exportWidthValue);
             await exportImage(
+                context,
+                stationList,
                 _passingImageKey,
-                "$path\\已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
-                false);
+                "$path${Util.pathSlash}已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                true,
+                exportWidthValue: exportWidthValue);
             await exportImage(
+                context,
+                stationList,
                 _mainImageKey,
-                "$path\\已到站 五站图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
-                false);
+                "$path${Util.pathSlash}已到站 五站图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                true,
+                exportWidthValue: exportWidthValue);
           }
         } else if (currentStationListIndex! > terminusListIndex!) {
           for (int i = terminusListIndex!; i < stationList.length; i++) {
             currentStationListIndex = i;
             setState(() {});
-            //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
             await exportImage(
+                context,
+                stationList,
                 _passingImageKey,
-                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
-                false);
-            await exportImage(
+                "$path${Util.pathSlash}已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                true,
+                exportWidthValue: exportWidthValue);            await exportImage(
+                context,
+                stationList,
                 _passingImageKey,
-                "$path\\已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
-                false);
+                "$path${Util.pathSlash}已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}.png",
+                true,
+                exportWidthValue: exportWidthValue);
             await exportImage(
+                context,
+                stationList,
                 _mainImageKey,
-                "$path\\已到站 五站图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
-                false);
+                "$path${Util.pathSlash}已到站 五站图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                true,
+                exportWidthValue: exportWidthValue);
           }
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -1864,7 +1882,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         ));
       }
     } else {
-      noStationsSnackbar();
+      noStationsSnackbar(context);
     }
   }
 
@@ -1874,34 +1892,24 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
       await exportMainImage();
       await exportPassingImage();
     } else {
-      noStationsSnackbar();
+      noStationsSnackbar(context);
     }
   }
 
   //导出主线路图
   Future<void> exportMainImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          _mainImageKey,
-          await getExportPath(context, "保存",
-              "已到站 五站图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "已到站 五站图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
+    await exportImage(context, stationList, _mainImageKey, fileName, false,
+        exportWidthValue: exportWidthValue);
   }
 
   //导出已到站图
   Future<void> exportPassingImage() async {
-    if (stationList.isNotEmpty) {
-      await exportImage(
-          _passingImageKey,
-          await getExportPath(context, "保存",
-              "已到站 ${currentStationListIndex! + 1} $currentStationListValue.png"),
-          true);
-    } else {
-      noStationsSnackbar();
-    }
+    String fileName =
+        "已到站 ${currentStationListIndex! + 1} $currentStationListValue.png";
+    await exportImage(context, stationList, _passingImageKey, fileName, false,
+        exportWidthValue: exportWidthValue);
   }
 
   //通用提示对话框方法
@@ -1922,48 +1930,6 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
             ],
           );
         });
-  }
-
-  //无线路信息 snackbar
-  void noStationsSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无线路信息"),
-    ));
-  }
-
-  //通用导出方法
-  @override
-  Future<void> exportImage(
-      GlobalKey key, String? path, bool showSnackbar) async {
-    //路径检验有效，保存
-    if (path != null) {
-      try {
-        //获取 key 对应的 stack 用于获取宽度
-        RenderBox findRenderObject =
-            key.currentContext!.findRenderObject() as RenderBox;
-
-        //获取 key 对应的 stack 用于获取图片
-        RenderRepaintBoundary boundary =
-            key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-        ui.Image image = await boundary.toImage(
-            pixelRatio: exportWidthValue /
-                findRenderObject
-                    .size.width); //确保导出的图片宽高默认为2560*500，可通过下拉列表选择其他预设分辨率
-        ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
-        Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-        File imgFile = File(path);
-        await imgFile.writeAsBytes(pngBytes);
-      } catch (e) {
-        print('导出图片失败: $e');
-      }
-      if (showSnackbar) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("图片已成功保存至: $path"),
-        ));
-      }
-    }
   }
 
   void nextStation() {

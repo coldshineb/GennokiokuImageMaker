@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'Preference.dart';
 import 'main.dart';
 
 class Util {
-  static const String appVersion = '1.2.4';
+  static const String appVersion = '1.2.5';
   static const String copyright =
       '版权所有 © Calicy LLC 2022-2024 Gennokioku 原忆 2022-2024 Coldshine 2020-2024，由 Flutter 强力驱动';
 
@@ -117,6 +119,9 @@ class Util {
    </g>
 </svg>
   ''';
+
+  //获取当前平台的路径分隔符
+  static String pathSlash = Platform.isAndroid?"/":"\\";
 
   //浅色主题
   static ThemeData themeData() {
