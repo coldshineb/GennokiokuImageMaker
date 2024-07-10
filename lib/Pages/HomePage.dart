@@ -100,7 +100,40 @@ class HomePageState extends State<HomePage> {
                   fontSize: 14.0,
                 ),
               ),
+              const SizedBox(height: 10.0),
+              ElevatedButton(
+                  onPressed: () {
+                    launchUrl(Uri.parse(
+                        "https://github.com/coldshineb/GennokiokuImageMaker/issues/new?assignees=&labels=&projects=&template=%E9%94%99%E8%AF%AF%E6%8A%A5%E5%91%8A.md&title="));
+                  },
+                  child: const Text("项目地址")),
               const SizedBox(height: 20.0),
+              const Text(
+                '软件更新',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Row(children: [
+                ElevatedButton(
+                    onPressed: () {
+                      launchUrl(Uri.parse(
+                          "https://github.com/coldshineb/GennokiokuImageMaker/actions/workflows/build_app.yml"));
+                    },
+                    child: const Text("下载开发版")),
+                ElevatedButton(
+                    onPressed: () {
+                      launchUrl(Uri.parse(
+                          "https://github.com/coldshineb/GennokiokuImageMaker/releases/latest"));
+                    },
+                    child: const Text("下载稳定版"))
+              ]),
+              const Divider(
+                height: 20.0,
+                thickness: 1.0,
+              ),
               ElevatedButton(
                   onPressed: () {
                     launchUrl(Uri.parse(
