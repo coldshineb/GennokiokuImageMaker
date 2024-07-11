@@ -497,7 +497,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         child: const Text("导出分辨率"),
       ),
       DropdownButton(
-        items: Widgets.resolutionListLCD(),
+        items: LCD.resolutionList(),
         onChanged: (value) {
           setState(() {
             exportWidthValue = value!;

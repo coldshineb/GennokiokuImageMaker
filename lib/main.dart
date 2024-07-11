@@ -5,7 +5,7 @@ import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
-import 'Pages/StationEntranceCover.dart';
+import 'Pages/StationEntrance/StationEntranceCover.dart';
 import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
 
@@ -69,7 +69,7 @@ class HomeState extends State<Home> {
         page = const LCDRoot();
         break;
       case 2:
-        page = const StationEntranceCover();
+        page = const StationEntranceRoot();
         break;
       case 3:
         page = const ScreenDoorCover();
@@ -115,7 +115,7 @@ class HomeState extends State<Home> {
               NavigationRailDestination(
                 icon: Icon(Icons.signpost_outlined),
                 selectedIcon: Icon(Icons.signpost),
-                label: Text('出入口盖板', style: TextStyle(fontSize: 15)),
+                label: Text('出入口图片', style: TextStyle(fontSize: 15)),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.splitscreen_outlined),

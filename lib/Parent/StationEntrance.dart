@@ -8,10 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/EntranceCover.dart';
 
-import '../Object/Station.dart';
-import '../Util/Widgets.dart';
-
-mixin class LCD {
+mixin class StationEntrance {
   //加载字体，最初用于加载 svg 中的文字字体，现在看起来不需要了
   void loadFont() async {
     var fontLoader1 = FontLoader("GennokiokuLCDFont");
@@ -24,43 +21,19 @@ mixin class LCD {
   }
 
   //显示下一站、当前站和终点站下拉菜单内容
-  List<DropdownMenuItem> showStationList(List<Station> stationList) {
+  List<DropdownMenuItem> showEntranceList(List<EntranceCover> stationList) {
     List<DropdownMenuItem> tempList = [];
     try {
-      for (Station value in stationList) {
+      for (EntranceCover value in stationList) {
         tempList.add(DropdownMenuItem(
-          value: value.stationNameCN,
-          child: Text(value.stationNameCN),
+          value: "${value.stationNameCN} ${value.entranceNumber}",
+          child: Text("${value.stationNameCN} ${value.entranceNumber}"),
         ));
       }
     } on Exception catch (e) {
       print(e);
     }
     return tempList;
-  }
-
-  //导出分辨率选择下拉列表
-  static List<DropdownMenuItem> resolutionList() {
-    return [
-      const DropdownMenuItem(
-        value: 2560,
-        child: Text(
-            "2560*500"
-        ),
-      ),
-      const DropdownMenuItem(
-        value: 5120,
-        child: Text(
-            "5120*1000"
-        ),
-      ),
-      const DropdownMenuItem(
-        value: 10240,
-        child: Text(
-            "10240*2000"
-        ),
-      )
-    ];
   }
 
   //菜单样式
@@ -85,15 +58,6 @@ mixin class LCD {
         : Container();
   }
 
-  //线路标识
-  Container lineNumberIconWidget(
-      Color lineColor, String lineNumber, String lineNumberEN) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(270, 16, 0, 0),
-      child: Widgets.lineNumberIcon(lineColor, lineNumber, lineNumberEN),
-    );
-  }
-
   //导入线路文件
   void importLineJson() async {}
 
@@ -106,6 +70,26 @@ mixin class LCD {
   //导入导出菜单栏
   MenuBar importAndExportMenubar() {
     return const MenuBar(children: []);
+  }
+
+  //通用提示对话框方法
+  void alertDialog(BuildContext context, String title, String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("好"),
+              )
+            ],
+          );
+        });
   }
 
   //获取导出的图片数据
@@ -122,10 +106,9 @@ mixin class LCD {
         pixelRatio: exportWidthValue != null
             ? exportWidthValue / findRenderObject.size.width
             : exportHeightValue! /
-                findRenderObject
-                    .size.height); //根据传入的是宽度还是高度确定以哪个值计算 pixelRatio
+                findRenderObject.size.height); //根据传入的是宽度还是高度确定以哪个值计算 pixelRatio
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData!.buffer.asUint8List();//返回图片数据
+    return byteData!.buffer.asUint8List(); //返回图片数据
   }
 
   //获取文件夹路径并（Android）导出
@@ -159,7 +142,7 @@ mixin class LCD {
       String? path;
       Uint8List imageBytes = await getExportImageBytes(key,
           exportWidthValue: exportWidthValue,
-          exportHeightValue: exportHeightValue);//获取图片数据
+          exportHeightValue: exportHeightValue); //获取图片数据
       try {
         if (isBatchExport) {
           //批量导出直接使用选择的路径+文件名写入

@@ -229,54 +229,6 @@ class Widgets {
     return container;
   }
 
-  //导出分辨率选择下拉列表
-  static List<DropdownMenuItem> resolutionListLCD() {
-    return [
-      const DropdownMenuItem(
-        value: 2560,
-        child: Text(
-          "2560*500"
-        ),
-      ),
-      const DropdownMenuItem(
-        value: 5120,
-        child: Text(
-          "5120*1000"
-        ),
-      ),
-      const DropdownMenuItem(
-        value: 10240,
-        child: Text(
-          "10240*2000"
-        ),
-      )
-    ];
-  }
-
-  //导出分辨率选择下拉列表
-  static List<DropdownMenuItem> resolutionListStationEntranceCover() {
-    return [
-      const DropdownMenuItem(
-        value: 1920,
-        child: Text(
-          "1920*320"
-        ),
-      ),
-      const DropdownMenuItem(
-        value: 3840,
-        child: Text(
-          "3840*640"
-        ),
-      ),
-      const DropdownMenuItem(
-        value: 7680,
-        child: Text(
-          "7680*1280"
-        ),
-      )
-    ];
-  }
-
   //一系列换乘线路图标中的文字，因为后期有 U 型线路图，因此文字部分单独抽出来，没有抽出整个 Stack
   static Container transferLineIcon(Line transferLine) {
     return Container(

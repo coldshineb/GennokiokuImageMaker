@@ -1,23 +1,19 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'dart:convert';
-import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/EntranceCover.dart';
 import 'package:main/Util/CustomRegExp.dart';
 
-import '../../Parent/LCD.dart';
-import '../../Util.dart';
-import '../../Util/CustomColors.dart';
-import '../../Util/Widgets.dart';
-import '../Object/Line.dart';
-import '../Preference.dart';
+import '../../../Util.dart';
+import '../../../Util/CustomColors.dart';
+import '../../Object/Line.dart';
+import '../../Parent/StationEntrance.dart';
+import '../../Preference.dart';
 
 class StationEntranceCoverRoot extends StatelessWidget {
   const StationEntranceCoverRoot({super.key});
@@ -44,7 +40,8 @@ class StationEntranceCover extends StatefulWidget {
   StationEntranceCoverState createState() => StationEntranceCoverState();
 }
 
-class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
+class StationEntranceCoverState extends State<StationEntranceCover>
+    with StationEntrance {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 240;
   static const double imageWidth = 1440;
@@ -548,7 +545,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
       Container(
           padding: const EdgeInsets.only(top: 14), child: const Text("导出分辨率")),
       DropdownButton(
-        items: Widgets.resolutionListStationEntranceCover(),
+        items: resolutionList(),
         onChanged: (value) {
           setState(() {
             exportWidthValue = value!;
@@ -651,7 +648,7 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         }
       } catch (e) {
         print('读取文件失败: $e');
-        alertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
+        alertDialog(context, "错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
   }
@@ -700,24 +697,22 @@ class StationEntranceCoverState extends State<StationEntranceCover> with LCD {
         exportWidthValue: exportWidthValue);
   }
 
-  //通用提示对话框方法
-  void alertDialog(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("好"),
-              )
-            ],
-          );
-        });
+  //导出分辨率选择下拉列表
+  static List<DropdownMenuItem> resolutionList() {
+    return [
+      const DropdownMenuItem(
+        value: 1920,
+        child: Text("1920*320"),
+      ),
+      const DropdownMenuItem(
+        value: 3840,
+        child: Text("3840*640"),
+      ),
+      const DropdownMenuItem(
+        value: 7680,
+        child: Text("7680*1280"),
+      )
+    ];
   }
 
   void nextStation() {
