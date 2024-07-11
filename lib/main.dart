@@ -85,6 +85,7 @@ class HomeState extends State<Home> {
         backgroundColor: Theme.of(context).brightness == Brightness.light
             ? Colors.pink[50]
             : Util.darkColorScheme().surface,
+        centerTitle: false,
         title: const Text('Gennokioku 原忆轨道交通图片生成器'),
       ),
       body: Row(
