@@ -15,11 +15,14 @@ class PreferenceKey {
   static const String generalIsDevMode = 'general.isDevMode';
   static const String generalIsWhiteBackgroundInDarkMode =
       'general.isWhiteBackgroundInDarkMode';
-  static const String lcdMaxStation = 'lcd.maxStation';
-  static const String screenDoorCoverMaxStation = 'screenDoorCover.maxStation';
-  static const String lcdIsBoldFont = 'lcd.isBoldFont';
-  static const String lcdIsRouteColorSameAsLineColor = 'lcd.isRouteColorSameAsLineColor';
-  static const String screenDoorCoverIsBoldFont = 'screenDoorCover.isBoldFont';
+  static const String lcdMaxStation = 'railwayTransit.lcd.maxStation';
+  static const String screenDoorCoverMaxStation =
+      'railwayTransit.screenDoorCover.maxStation';
+  static const String lcdIsBoldFont = 'railwayTransit.lcd.isBoldFont';
+  static const String lcdIsRouteColorSameAsLineColor =
+      'railwayTransit.lcd.isRouteColorSameAsLineColor';
+  static const String screenDoorCoverIsBoldFont =
+      'railwayTransit.screenDoorCover.isBoldFont';
 }
 
 //默认设置项的值

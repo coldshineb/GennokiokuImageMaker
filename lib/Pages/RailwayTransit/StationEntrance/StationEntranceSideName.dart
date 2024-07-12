@@ -9,14 +9,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/EntranceCover.dart';
 import 'package:main/Util/CustomRegExp.dart';
 
-import '../../../Util.dart';
-import '../../../Util/CustomColors.dart';
-import '../../Object/Line.dart';
-import '../../Parent/StationEntrance.dart';
-import '../../Preference.dart';
+import '../../../../Util.dart';
+import '../../../Object/Line.dart';
+import '../../../Parent/RailwayTransit/StationEntrance.dart';
+import '../../../Preference.dart';
 
-class StationEntranceCoverRoot extends StatelessWidget {
-  const StationEntranceCoverRoot({super.key});
+class StationEntranceSideNameRoot extends StatelessWidget {
+  const StationEntranceSideNameRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +27,23 @@ class StationEntranceCoverRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: const StationEntranceCover(),
+      home: const StationEntranceSideName(),
     );
   }
 }
 
-class StationEntranceCover extends StatefulWidget {
-  const StationEntranceCover({super.key});
+class StationEntranceSideName extends StatefulWidget {
+  const StationEntranceSideName({super.key});
 
   @override
-  StationEntranceCoverState createState() => StationEntranceCoverState();
+  StationEntranceSideNameState createState() => StationEntranceSideNameState();
 }
 
-class StationEntranceCoverState extends State<StationEntranceCover>
+class StationEntranceSideNameState extends State<StationEntranceSideName>
     with StationEntrance {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
-  static const double imageHeight = 240;
-  static const double imageWidth = 1440;
+  static const double imageHeight = 540;
+  static const double imageWidth = 1080;
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
@@ -60,11 +59,8 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   //站名和出入口编号集合
   List<EntranceCover> entranceList = [];
 
-  //是否显示原忆轨道交通品牌图标
-  bool showLogo = true;
-
   //默认导出宽度
-  int exportWidthValue = 1920;
+  int exportWidthValue = 2160;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +158,6 @@ class StationEntranceCoverState extends State<StationEntranceCover>
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.backgroundColorCover),
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -177,7 +172,6 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                               ),
                             )
                           : const SizedBox(),
-                      gennokiokuRailwayTransitLogoWidgetVertical(showLogo),
                       Container(
                         width: imageWidth,
                         height: imageHeight,
@@ -185,13 +179,13 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                           children: line(),
                         ),
                       ),
-                      // Container(
-                      //   width: imageWidth,
-                      //   height: imageHeight,
-                      //   child: Stack(
-                      //     children: entrance(),
-                      //   ),
-                      // ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: entrance(),
+                        ),
+                      ),
                       Container(
                         width: imageWidth,
                         height: imageHeight,
@@ -215,54 +209,54 @@ class StationEntranceCoverState extends State<StationEntranceCover>
     );
   }
 
-  Container gennokiokuRailwayTransitLogoWidgetVertical(bool show) {
-    return show
-        ? Container(
-            padding: const EdgeInsets.only(left: 18, top: 39),
-            child: SvgPicture.asset(
-                height: 167,
-                width: 167,
-                "assets/image/railwayTransitLogoVertical.svg"))
-        : Container();
-  }
-
   //线路标识
   List<Positioned> line() {
     List<Positioned> list = [];
     if (entranceList.isNotEmpty) {
-      for (int i = 0; i < entranceList[entranceIndex!].lines.length; i++) {
-        var value = entranceList[entranceIndex!].lines[i];
+      List entranceListForLine = entranceList[entranceIndex!]
+          .lines
+          .reversed
+          .toList(); //将线路信息倒序排列，以便从右向左显示
+      for (int i = 0; i < entranceListForLine.length; i++) {
+        var value = entranceListForLine[i];
+        //经过测试，出入口侧方站名下的线路标识大小为出入口盖板中的0.6倍，间距为0.525倍
         list.add(Positioned(
-          left: 217 + 109.0 * i,
-          child: Container(height: 198, width: 95, color: Colors.white),
-        ));
+            top: 160,
+            left: 360 - 95.0 * 0.6 * i,
+            child: Container(
+              height: 198.0 * 0.6,
+              width: 95.0 * 0.6,
+              color: Util.hexToColor(value.lineColor),
+            )));
         if (CustomRegExp.oneDigit.hasMatch(value.lineNumber)) {
           list.add(Positioned(
-            top: 7,
-            left: -911 + 218.0 * i,
+            top: 165,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Text(
                 value.lineNumber,
                 style: TextStyle(
-                  fontSize: 95,
-                  color: Util.hexToColor(value.lineColor),
+                  fontSize: 95 * 0.6,
+                  color: Util.getTextColorForBackground(
+                      Util.hexToColor(value.lineColor)),
                 ),
               ),
             ),
           ));
           list.add(Positioned(
-            top: 120,
-            left: -911 + 218.0 * i,
+            top: 232,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Center(
                 child: Text(
                   "号线",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20 * 0.6,
                     letterSpacing: 3,
-                    color: Util.hexToColor(value.lineColor),
+                    color: Util.getTextColorForBackground(
+                        Util.hexToColor(value.lineColor)),
                   ),
                 ),
               ),
@@ -271,8 +265,8 @@ class StationEntranceCoverState extends State<StationEntranceCover>
         } else if (CustomRegExp.twoDigits.hasMatch(value.lineNumber) ||
             CustomRegExp.oneDigitOneCharacter.hasMatch(value.lineNumber)) {
           list.add(Positioned(
-            top: 7,
-            left: -895 + 218.0 * i,
+            top: 165,
+            left: -293 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Transform(
@@ -281,25 +275,27 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                   value.lineNumber,
                   style: TextStyle(
                     letterSpacing: -5,
-                    fontSize: 95,
-                    color: Util.hexToColor(value.lineColor),
+                    fontSize: 95 * 0.6,
+                    color: Util.getTextColorForBackground(
+                        Util.hexToColor(value.lineColor)),
                   ),
                 ),
               ),
             ),
           ));
           list.add(Positioned(
-            top: 120,
-            left: -911 + 218.0 * i,
+            top: 232,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Center(
                 child: Text(
                   "号线",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20 * 0.6,
                     letterSpacing: 3,
-                    color: Util.hexToColor(value.lineColor),
+                    color: Util.getTextColorForBackground(
+                        Util.hexToColor(value.lineColor)),
                   ),
                 ),
               ),
@@ -308,29 +304,31 @@ class StationEntranceCoverState extends State<StationEntranceCover>
         } else if (CustomRegExp.fourChineseCharacters
             .hasMatch(value.lineNumber)) {
           list.add(Positioned(
-            top: 43.5,
-            left: -909 + 218.0 * i,
+            top: 186,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Text(
                 value.lineNumber.substring(0, 2),
                 style: TextStyle(
-                  fontSize: 38,
-                  color: Util.hexToColor(value.lineColor),
+                  fontSize: 38 * 0.6,
+                  color: Util.getTextColorForBackground(
+                      Util.hexToColor(value.lineColor)),
                 ),
               ),
             ),
           ));
           list.add(Positioned(
-            top: 89.5,
-            left: -909 + 218.0 * i,
+            top: 214,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Text(
                 value.lineNumber.substring(2, 4),
                 style: TextStyle(
-                  fontSize: 38,
-                  color: Util.hexToColor(value.lineColor),
+                  fontSize: 38 * 0.6,
+                  color: Util.getTextColorForBackground(
+                      Util.hexToColor(value.lineColor)),
                 ),
               ),
             ),
@@ -338,46 +336,48 @@ class StationEntranceCoverState extends State<StationEntranceCover>
         } else if (CustomRegExp.fiveChineseCharacters
             .hasMatch(value.lineNumber)) {
           list.add(Positioned(
-            top: 51,
-            left: -909 + 218.0 * i,
+            top: 190,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Text(
                 value.lineNumber.substring(0, 3),
                 style: TextStyle(
-                  fontSize: 30,
-                  color: Util.hexToColor(value.lineColor),
+                  fontSize: 30 * 0.6,
+                  color: Util.getTextColorForBackground(
+                      Util.hexToColor(value.lineColor)),
                 ),
               ),
             ),
           ));
           list.add(Positioned(
-            top: 89.5,
-            left: -909 + 218.0 * i,
+            top: 214,
+            left: -302 - 218.0 * 0.525 * i,
             right: 0,
             child: Center(
               child: Text(
                 value.lineNumber.substring(3, 5),
                 style: TextStyle(
-                  fontSize: 38,
-                  color: Util.hexToColor(value.lineColor),
+                  fontSize: 38 * 0.6,
+                  color: Util.getTextColorForBackground(
+                      Util.hexToColor(value.lineColor)),
                 ),
               ),
             ),
           ));
         }
-
         list.add(Positioned(
-          top: 143,
-          left: -911 + 218.0 * i,
+          top: 143 + 104,
+          left: -302 - 218.0 * 0.525 * i,
           right: 0,
           child: Center(
             child: Center(
               child: Text(
                 "Line ${value.lineNumberEN}",
                 style: TextStyle(
-                  fontSize: 18.5,
-                  color: Util.hexToColor(value.lineColor),
+                  fontSize: 18.5 * 0.6,
+                  color: Util.getTextColorForBackground(
+                      Util.hexToColor(value.lineColor)),
                 ),
               ),
             ),
@@ -392,82 +392,49 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   List<Positioned> stationName() {
     List<Positioned> list = [];
     if (entranceList.isNotEmpty) {
-      //根据不同线路个数调整站名位置
-      if (entranceList[entranceIndex!].lines.length == 3) {
-        list.add(Positioned(
-            top: 43,
-            left: 195,
-            right: 0,
-            child: Text(
-              textAlign: TextAlign.center,
-              entranceList[entranceIndex!].stationNameCN,
-              style: const TextStyle(
-                  letterSpacing: 4,
-                  color: Colors.white,
-                  fontSize: 80,
-                  fontFamily: "HYYanKaiW"),
-            )));
-        list.add(Positioned(
-            top: 131,
-            left: 191.5,
-            right: 0,
-            child: Text(
-              textAlign: TextAlign.center,
-              entranceList[entranceIndex!].stationNameEN,
-              style: const TextStyle(
-                  wordSpacing: 2, color: Colors.white, fontSize: 30),
-            )));
-      } else if (entranceList[entranceIndex!].lines.length == 4) {
-        list.add(Positioned(
-            top: 43,
-            left: 455,
-            right: 0,
-            child: Text(
-              textAlign: TextAlign.center,
-              entranceList[entranceIndex!].stationNameCN,
-              style: const TextStyle(
-                  letterSpacing: 4,
-                  color: Colors.white,
-                  fontSize: 80,
-                  fontFamily: "HYYanKaiW"),
-            )));
-        list.add(Positioned(
-            top: 131,
-            left: 451.5,
-            right: 0,
-            child: Text(
-              textAlign: TextAlign.center,
-              entranceList[entranceIndex!].stationNameEN,
-              style: const TextStyle(
-                  wordSpacing: 2, color: Colors.white, fontSize: 30),
-            )));
-      } else {
-        list.add(Positioned(
-            top: 43,
-            left: 65,
-            right: 0,
-            child: Text(
-              textAlign: TextAlign.center,
-              entranceList[entranceIndex!].stationNameCN,
-              style: const TextStyle(
-                  letterSpacing: 4,
-                  color: Colors.white,
-                  fontSize: 80,
-                  fontFamily: "HYYanKaiW"),
-            )));
-        list.add(Positioned(
-            top: 131,
-            left: 61.5,
-            right: 0,
-            child: Text(
-              textAlign: TextAlign.center,
-              entranceList[entranceIndex!].stationNameEN,
-              style: const TextStyle(
-                  wordSpacing: 2, color: Colors.white, fontSize: 30),
-            )));
-      }
+      list.add(Positioned(
+          top: 145,
+          left: 432,
+          child: Text(
+            textAlign: TextAlign.center,
+            entranceList[entranceIndex!].stationNameCN,
+            style: const TextStyle(
+                letterSpacing: 4,
+                color: Colors.black,
+                fontSize: 81,
+                fontFamily: "HYYanKaiW"),
+          )));
+      list.add(Positioned(
+          top: 240,
+          left: 444,
+          child: Text(
+            textAlign: TextAlign.center,
+            entranceList[entranceIndex!].stationNameEN,
+            style: const TextStyle(
+                wordSpacing: 2, color: Colors.black, fontSize: 30),
+          )));
     }
     return list;
+  }
+
+  //"出入口 Exit & Entrance"标识
+  List<Positioned> entrance() {
+    return <Positioned>[
+      const Positioned(
+          top: 335,
+          left: 475,
+          child: Text(
+            "出入口",
+            style: TextStyle(color: Colors.black, fontSize: 33),
+          )),
+      const Positioned(
+          top: 375,
+          left: 475,
+          child: Text(
+            "Exit & Entrance",
+            style: TextStyle(color: Colors.black, fontSize: 33),
+          ))
+    ];
   }
 
   //出入口编号
@@ -475,16 +442,16 @@ class StationEntranceCoverState extends State<StationEntranceCover>
     return entranceList.isNotEmpty
         ? <Positioned>[
             Positioned(
-                top: 24,
-                right: 63.5,
+                top: 310,
+                left: 380,
                 child: RichText(
                   text: TextSpan(
                     text: entranceList[entranceIndex!]
                         .entranceNumber
                         .substring(0, 1),
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 122,
+                        color: Colors.black,
+                        fontSize: 88,
                         fontFamily: "GennokiokuLCDFont"),
                     children: <TextSpan>[
                       TextSpan(
@@ -492,8 +459,8 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                             .entranceNumber
                             .substring(1),
                         style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 62,
+                            color: Colors.black,
+                            fontSize: 52,
                             fontFamily: "GennokiokuLCDFont"),
                       ),
                     ],
@@ -501,28 +468,6 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                 )),
           ]
         : <Positioned>[];
-  }
-
-  //"入口 Entrance"标识
-  List<Positioned> entrance() {
-    return <Positioned>[
-      const Positioned(
-          top: 54,
-          left: 1181.5,
-          child: Text(
-            "入口",
-            style:
-                TextStyle(letterSpacing: 3, color: Colors.white, fontSize: 48),
-          )),
-      const Positioned(
-          top: 112,
-          left: 1181.5,
-          child: Text(
-            "Entrance",
-            style: TextStyle(
-                letterSpacing: 2.45, color: Colors.white, fontSize: 48),
-          ))
-    ];
   }
 
   @override
@@ -563,17 +508,6 @@ class StationEntranceCoverState extends State<StationEntranceCover>
         },
         value: exportWidthValue,
       ),
-      const VerticalDivider(thickness: 2),
-      Container(
-          height: 48,
-          child: CheckboxMenuButton(
-            value: showLogo,
-            onChanged: (bool? value) {
-              showLogo = value!;
-              setState(() {});
-            },
-            child: const Text("显示品牌图标"),
-          )),
     ]);
   }
 
@@ -679,14 +613,14 @@ class StationEntranceCoverState extends State<StationEntranceCover>
               context,
               entranceList,
               _mainImageKey,
-              "$path${Util.pathSlash}出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
+              "$path${Util.pathSlash}出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
               true,
               exportWidthValue: exportWidthValue);
           await exportImage(
               context,
               entranceList,
               _mainImageKey,
-              "$path${Util.pathSlash}出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
+              "$path${Util.pathSlash}出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
               true,
               exportWidthValue: exportWidthValue);
         }
@@ -702,7 +636,7 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   //导出当前图
   Future<void> exportMainImage() async {
     String fileName =
-        "出入口盖板 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png";
+        "出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png";
     await exportImage(context, entranceList, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }
@@ -711,16 +645,16 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   static List<DropdownMenuItem> resolutionList() {
     return [
       const DropdownMenuItem(
-        value: 1920,
-        child: Text("1920*320"),
+        value: 1080,
+        child: Text("1080*540"),
       ),
       const DropdownMenuItem(
-        value: 3840,
-        child: Text("3840*640"),
+        value: 2160,
+        child: Text("2160*1080"),
       ),
       const DropdownMenuItem(
-        value: 7680,
-        child: Text("7680*1280"),
+        value: 4320,
+        child: Text("4320*2160"),
       )
     ];
   }

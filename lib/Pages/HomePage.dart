@@ -67,7 +67,7 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
               const Text(
-                '批量生成原忆轨道交通中使用的 LCD 图片、设施告示牌、灯箱图片等资源',
+                '批量生成原忆中使用的轨道交通 LCD 图片、设施告示牌、灯箱图片等资源',
                 style: TextStyle(
                   fontSize: 14.0,
                 ),

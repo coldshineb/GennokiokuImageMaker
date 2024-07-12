@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/Roots.dart';
-import 'package:main/Pages/ScreenDoorCover.dart';
 import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
+import 'Pages/RailwayTransit/Roots.dart';
+import 'Pages/RailwayTransit/SettingPage.dart';
+import 'Pages/RoadSign/Roots.dart';
+import 'Pages/SettingPage.dart';
 import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
 
@@ -69,21 +71,14 @@ class HomeState extends State<Home> {
         page = const HomePage();
         break;
       case 1:
-        page = const LCDRoot();
+        page = const RailwayTransitRoot();
         break;
       case 2:
-        page = const StationEntranceRoot();
+        page = const RoadSignRoot();
         break;
       case 3:
-        page = const ScreenDoorCover();
+        page = const GeneralSettingPage();
         break;
-      case 4:
-        page = const ScreenDoorCover();
-        break;
-      case 5:
-        page = const SettingPageRoot();
-        break;
-
       default:
         throw UnimplementedError('no widget for $_selectedIndex');
     }
@@ -123,26 +118,14 @@ class HomeState extends State<Home> {
                             label: Text('欢迎', style: TextStyle(fontSize: 15)),
                           ),
                           NavigationRailDestination(
-                            icon: Icon(Icons.fit_screen_outlined),
-                            selectedIcon: Icon(Icons.fit_screen),
+                            icon: Icon(Icons.train_outlined),
+                            selectedIcon: Icon(Icons.train),
                             label:
-                                Text('LCD 显示屏', style: TextStyle(fontSize: 15)),
+                                Text('轨道交通', style: TextStyle(fontSize: 15)),
                           ),
                           NavigationRailDestination(
                             icon: Icon(Icons.signpost_outlined),
                             selectedIcon: Icon(Icons.signpost),
-                            label:
-                                Text('出入口图片', style: TextStyle(fontSize: 15)),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.splitscreen_outlined),
-                            selectedIcon: Icon(Icons.splitscreen),
-                            label:
-                                Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.splitscreen_outlined),
-                            selectedIcon: Icon(Icons.splitscreen),
                             label: Text('路牌', style: TextStyle(fontSize: 15)),
                           ),
                           NavigationRailDestination(

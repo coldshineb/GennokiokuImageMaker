@@ -1,14 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/LCD/RunningLinearRoute.dart';
-import 'package:main/Pages/SettingPage.dart';
-import 'package:main/Pages/StationEntrance/StationEntranceCover.dart';
-import 'package:main/Pages/StationEntrance/StationEntranceSideName.dart';
 
 import 'LCD/ArrivalFiveStations.dart';
 import 'LCD/ArrivalLinearRoute.dart';
 import 'LCD/ArrivalStationInfo.dart';
+import 'LCD/RunningLinearRoute.dart';
+import 'ScreenDoorCover.dart';
+import 'SettingPage.dart';
+import 'StationEntrance/StationEntranceCover.dart';
+import 'StationEntrance/StationEntranceSideName.dart';
 
-//LCD 显示屏二级导航
+//轨道交通二级导航
+class RailwayTransitRoot extends StatefulWidget {
+  const RailwayTransitRoot({super.key});
+
+  @override
+  State<RailwayTransitRoot> createState() => _RailwayTransitRootState();
+}
+
+class _RailwayTransitRootState extends State<RailwayTransitRoot> {
+  int _selectedIndex = 0;
+  double groupAlignment = -1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget page;
+    switch (_selectedIndex) {
+      case 0:
+        page = const LCDRoot();
+        break;
+      case 1:
+        page = const StationEntranceRoot();
+        break;
+      case 2:
+        page = const ScreenDoorCover();
+        break;
+      case 3:
+        page = const RailwayTransitSettingPageRoot();
+        break;
+      default:
+        throw UnimplementedError('no widget for $_selectedIndex');
+    }
+
+    return Scaffold(
+      body: Row(
+        children: <Widget>[
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: NavigationRail(
+                    selectedIndex: _selectedIndex,
+                    groupAlignment: groupAlignment,
+                    onDestinationSelected: (int index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    labelType: NavigationRailLabelType.all,
+                    destinations: const <NavigationRailDestination>[
+                      NavigationRailDestination(
+                        icon: Icon(Icons.fit_screen_outlined),
+                        selectedIcon: Icon(Icons.fit_screen),
+                        label: Text('LCD 显示屏', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.signpost_outlined),
+                        selectedIcon: Icon(Icons.signpost),
+                        label: Text('出入口图片', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.splitscreen_outlined),
+                        selectedIcon: Icon(Icons.splitscreen),
+                        label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.settings_outlined),
+                        selectedIcon: Icon(Icons.settings),
+                        label: Text('设置', style: TextStyle(fontSize: 15)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(
+              child: Container(
+            child: page,
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+//LCD 显示屏三级导航
 class LCDRoot extends StatefulWidget {
   const LCDRoot({super.key});
 
@@ -98,7 +186,7 @@ class _LCDRootState extends State<LCDRoot> {
   }
 }
 
-//出入口图片二级导航
+//出入口图片三级导航
 class StationEntranceRoot extends StatefulWidget {
   const StationEntranceRoot({super.key});
 
@@ -168,15 +256,17 @@ class _StationEntranceRootState extends State<StationEntranceRoot> {
   }
 }
 
-//出入口图片二级导航
-class RoadSignRoot extends StatefulWidget {
-  const RoadSignRoot({super.key});
+//轨道交通设置三级导航
+class RailwayTransitSettingPageRoot extends StatefulWidget {
+  const RailwayTransitSettingPageRoot({super.key});
 
   @override
-  State<RoadSignRoot> createState() => _RoadSignRootState();
+  State<RailwayTransitSettingPageRoot> createState() =>
+      _RailwayTransitSettingPageRootState();
 }
 
-class _RoadSignRootState extends State<RoadSignRoot> {
+class _RailwayTransitSettingPageRootState
+    extends State<RailwayTransitSettingPageRoot> {
   int _selectedIndex = 0;
   double groupAlignment = -1.0;
 
@@ -185,73 +275,9 @@ class _RoadSignRootState extends State<RoadSignRoot> {
     Widget page;
     switch (_selectedIndex) {
       case 0:
-        page = const RoadSignRoot();
-        break;
-      default:
-        throw UnimplementedError('no widget for $_selectedIndex');
-    }
-
-    return Scaffold(
-      body: Row(
-        children: <Widget>[
-          LayoutBuilder(builder: (context, constraints) {
-            return SingleChildScrollView(
-                child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: IntrinsicHeight(
-                child: NavigationRail(
-                  extended: true,
-                  selectedIndex: _selectedIndex,
-                  groupAlignment: groupAlignment,
-                  onDestinationSelected: (int index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  },
-                  destinations: const <NavigationRailDestination>[
-                    NavigationRailDestination(
-                      icon: Icon(Icons.signpost_outlined),
-                      selectedIcon: Icon(Icons.signpost),
-                      label: Text('路牌', style: TextStyle(fontSize: 15)),
-                    ),
-                  ],
-                ),
-              ),
-            ));
-          }),
-          const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-              child: Container(
-            child: page,
-          )),
-        ],
-      ),
-    );
-  }
-}
-
-class SettingPageRoot extends StatefulWidget {
-  const SettingPageRoot({super.key});
-
-  @override
-  State<SettingPageRoot> createState() => _SettingPageRootState();
-}
-
-class _SettingPageRootState extends State<SettingPageRoot> {
-  int _selectedIndex = 0;
-  double groupAlignment = -1.0;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget page;
-    switch (_selectedIndex) {
-      case 0:
-        page = const GeneralSettingPage();
-        break;
-      case 1:
         page = const LCDSettingPage();
         break;
-      case 2:
+      case 1:
         page = const ScreenDoorCoverSettingPage();
         break;
       default:
@@ -276,15 +302,6 @@ class _SettingPageRootState extends State<SettingPageRoot> {
                       });
                     },
                     destinations: const <NavigationRailDestination>[
-                      NavigationRailDestination(
-                        icon: Icon(
-                          Icons.settings_outlined,
-                        ),
-                        selectedIcon: Icon(
-                          Icons.settings,
-                        ),
-                        label: Text('通用', style: TextStyle(fontSize: 15)),
-                      ),
                       NavigationRailDestination(
                         icon: Icon(Icons.fit_screen_outlined),
                         selectedIcon: Icon(Icons.fit_screen),

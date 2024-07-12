@@ -12,7 +12,7 @@ import 'package:main/Util/CustomRegExp.dart';
 import '../../../Util.dart';
 import '../../../Util/CustomColors.dart';
 import '../../Object/Line.dart';
-import '../../Parent/StationEntrance.dart';
+import '../../Parent/RailwayTransit/StationEntrance.dart';
 import '../../Preference.dart';
 
 class RoadSignRoot extends StatelessWidget {
