@@ -93,46 +93,58 @@ class HomeState extends State<Home> {
       ),
       body: Row(
         children: <Widget>[
-          NavigationRail(
-            backgroundColor: Theme.of(context).brightness == Brightness.light
-                ? Colors.pink[50]
-                : Util.darkColorScheme().surface,
-            selectedIndex: _selectedIndex,
-            groupAlignment: groupAlignment,
-            onDestinationSelected: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            labelType: labelType,
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: Icon(Icons.assistant_outlined),
-                selectedIcon: Icon(Icons.assistant),
-                label: Text('欢迎', style: TextStyle(fontSize: 15)),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.fit_screen_outlined),
-                selectedIcon: Icon(Icons.fit_screen),
-                label: Text('LCD 显示屏', style: TextStyle(fontSize: 15)),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.signpost_outlined),
-                selectedIcon: Icon(Icons.signpost),
-                label: Text('出入口图片', style: TextStyle(fontSize: 15)),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.splitscreen_outlined),
-                selectedIcon: Icon(Icons.splitscreen),
-                label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('设置', style: TextStyle(fontSize: 15)),
-              ),
-            ],
-          ),
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+                child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: NavigationRail(
+                        backgroundColor:
+                            Theme.of(context).brightness == Brightness.light
+                                ? Colors.pink[50]
+                                : Util.darkColorScheme().surface,
+                        selectedIndex: _selectedIndex,
+                        groupAlignment: groupAlignment,
+                        onDestinationSelected: (int index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                        labelType: labelType,
+                        destinations: const <NavigationRailDestination>[
+                          NavigationRailDestination(
+                            icon: Icon(Icons.assistant_outlined),
+                            selectedIcon: Icon(Icons.assistant),
+                            label: Text('欢迎', style: TextStyle(fontSize: 15)),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.fit_screen_outlined),
+                            selectedIcon: Icon(Icons.fit_screen),
+                            label:
+                                Text('LCD 显示屏', style: TextStyle(fontSize: 15)),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.signpost_outlined),
+                            selectedIcon: Icon(Icons.signpost),
+                            label:
+                                Text('出入口图片', style: TextStyle(fontSize: 15)),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.splitscreen_outlined),
+                            selectedIcon: Icon(Icons.splitscreen),
+                            label:
+                                Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.settings_outlined),
+                            selectedIcon: Icon(Icons.settings),
+                            label: Text('设置', style: TextStyle(fontSize: 15)),
+                          ),
+                        ],
+                      ),
+                    )));
+          }),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
               child: Container(
