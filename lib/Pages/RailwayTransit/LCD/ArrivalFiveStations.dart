@@ -82,14 +82,27 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   //默认导出宽度
   int exportWidthValue = 2560;
 
-  //未过站站点图标与线路线条使用线路标识色
-  bool isRouteColorSameAsLineColor = HomeState.sharedPreferences
-          ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
-      DefaultPreference.lcdIsRouteColorSameAsLineColor;
+  //设置项
+  late bool generalIsDevMode;
+  late bool generalIsScaleEnabled;
+  late int railwayTransitLcdMaxStation;
+  late bool railwayTransitLcdIsRouteColorSameAsLineColor;
+
+  //获取设置项
+  void getSetting() {
+    generalIsDevMode = Preference.generalIsDevMode;
+    generalIsScaleEnabled = Preference.generalIsScaleEnabled;
+    railwayTransitLcdMaxStation = Util.railwayTransitLcdMaxStation;
+    railwayTransitLcdIsRouteColorSameAsLineColor = HomeState.sharedPreferences
+            ?.getBool(
+                PreferenceKey.railwayTransitLcdIsRouteColorSameAsLineColor) ??
+        DefaultPreference.railwayTransitLcdIsRouteColorSameAsLineColor;
+  }
 
   @override
   Widget build(BuildContext context) {
     //loadFont();
+    getSetting();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(
@@ -233,7 +246,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
             ],
           ),
           Expanded(
-            child: Preference.generalIsScaleEnabled
+            child: generalIsScaleEnabled
                 ? InteractiveViewer(
                     minScale: 1,
                     maxScale: Util.maxScale,
@@ -242,28 +255,44 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                   )
                 : body(),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      //重置所有变量
+                      _imageBytes = null;
+                      pattern = null;
+                      stationList.clear();
+                      lineColor = Colors.transparent;
+                      lineVariantColor = Colors.transparent;
+                      currentStationListIndex = null;
+                      terminusListIndex = null;
+                      currentStationListValue = null;
+                      terminusListValue = null;
+                      lineNumber = "";
+                      lineNumberEN = "";
+                      setState(() {});
+                    },
+                    tooltip: '重置',
+                    child: const Icon(Icons.refresh),
+                  )),
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    tooltip: '刷新设置',
+                    child: const Icon(Icons.settings_backup_restore),
+                  ))
+            ],
+          )
         ],
       ),
-      //重置按钮
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //重置所有变量
-          _imageBytes = null;
-          pattern = null;
-          stationList.clear();
-          lineColor = Colors.transparent;
-          lineVariantColor = Colors.transparent;
-          currentStationListIndex = null;
-          terminusListIndex = null;
-          currentStationListValue = null;
-          terminusListValue = null;
-          lineNumber = "";
-          lineNumberEN = "";
-          setState(() {});
-        },
-        tooltip: '重置',
-        child: const Icon(Icons.refresh),
-      ),
+      //重置按钮,
     );
   }
 
@@ -303,7 +332,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                             "当前站",
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -312,7 +341,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                             "Current station",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -321,7 +350,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                             "终点站",
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -330,7 +359,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                             "Terminus",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -343,7 +372,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                             //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -354,7 +383,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                 : stationList[terminusListIndex!].stationNameCN,
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -366,7 +395,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                     .stationNameEN,
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -377,7 +406,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                                 : stationList[terminusListIndex!].stationNameEN,
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -432,7 +461,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      Preference.generalIsDevMode
+      generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(
@@ -516,7 +545,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   Stack showRouteLine() {
     List<Container> lineList = [];
     Color routeLineColor =
-        isRouteColorSameAsLineColor ? lineColor : Colors.green;
+        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
     if (currentStationListIndex != null && terminusListIndex != null) {
       if (currentStationListIndex! < terminusListIndex!) {
         if (currentStationListIndex == 0) {
@@ -817,8 +846,10 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   CustomPaint nextStationIconMediumPainter() {
     return CustomPaint(
       painter: LCDStationIconMediumPainter(
-          lineColor: isRouteColorSameAsLineColor ? lineColor : Colors.green,
-          lineVariantColor: isRouteColorSameAsLineColor
+          lineColor: railwayTransitLcdIsRouteColorSameAsLineColor
+              ? lineColor
+              : Colors.green,
+          lineVariantColor: railwayTransitLcdIsRouteColorSameAsLineColor
               ? lineVariantColor
               : Colors.green[300],
           shadow: true),
@@ -1770,7 +1801,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         stationsFromJson = jsonData['stations'];
         // 站点不能少于 2 或大于 maxStation
         if (stationsFromJson.length >= 2 &&
-            stationsFromJson.length <= Util.lcdMaxStation) {
+            stationsFromJson.length <= railwayTransitLcdMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           currentStationListIndex = 0; //会导致显示的是前一个索引对应的站点
@@ -1799,8 +1830,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           setState(() {});
         } else if (stationsFromJson.length < 5) {
           alertDialog("错误", "站点数量不能小于 5");
-        } else if (stationsFromJson.length > Util.lcdMaxStation) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 ${Util.lcdMaxStation}，请使用 U 形线路图");
+        } else if (stationsFromJson.length > railwayTransitLcdMaxStation) {
+          alertDialog("错误", "直线型线路图站点数量不能大于 ${railwayTransitLcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');

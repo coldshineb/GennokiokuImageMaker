@@ -23,24 +23,6 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (_selectedIndex) {
-      case 0:
-        page = const LCDRoot();
-        break;
-      case 1:
-        page = const StationEntranceRoot();
-        break;
-      case 2:
-        page = const ScreenDoorCover();
-        break;
-      case 3:
-        page = const RailwayTransitSettingPageRoot();
-        break;
-      default:
-        throw UnimplementedError('no widget for $_selectedIndex');
-    }
-
     return Scaffold(
       body: Row(
         children: <Widget>[
@@ -87,9 +69,13 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
           }),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
-              child: Container(
-            child: page,
-          )),
+              child:
+                  IndexedStack(index: _selectedIndex, children: const <Widget>[
+            LCDRoot(),
+            StationEntranceRoot(),
+            ScreenDoorCover(),
+            RailwayTransitSettingPageRoot(),
+          ])),
         ],
       ),
     );
@@ -110,24 +96,6 @@ class _LCDRootState extends State<LCDRoot> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (_selectedIndex) {
-      case 0:
-        page = const RunningLinearRoute();
-        break;
-      case 1:
-        page = const ArrivalFiveStations();
-        break;
-      case 2:
-        page = const ArrivalStationInfo();
-        break;
-      case 3:
-        page = const ArrivalLinearRoute();
-        break;
-      default:
-        throw UnimplementedError('no widget for $_selectedIndex');
-    }
-
     return Scaffold(
       body: Row(
         children: <Widget>[
@@ -177,9 +145,15 @@ class _LCDRootState extends State<LCDRoot> {
           }),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
-              child: Container(
-            child: page,
-          )),
+              child: IndexedStack(
+            index: _selectedIndex,
+            children: const <Widget>[
+              RunningLinearRoute(),
+              ArrivalFiveStations(),
+              ArrivalStationInfo(),
+              ArrivalLinearRoute(),
+            ],
+              )),
         ],
       ),
     );

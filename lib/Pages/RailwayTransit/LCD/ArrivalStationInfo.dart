@@ -92,9 +92,20 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
   late Map<String, dynamic> jsonData;
 
+  //设置项
+  late bool generalIsDevMode;
+  late bool generalIsScaleEnabled;
+
+  //获取设置项
+  void getSetting() {
+    generalIsDevMode = Preference.generalIsDevMode;
+    generalIsScaleEnabled = Preference.generalIsScaleEnabled;
+  }
+
   @override
   Widget build(BuildContext context) {
     //loadFont();
+    getSetting();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(
@@ -212,7 +223,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
             ],
           ),
           Expanded(
-            child: Preference.generalIsScaleEnabled
+            child: generalIsScaleEnabled
                 ? InteractiveViewer(
                     minScale: 1,
                     maxScale: Util.maxScale,
@@ -221,29 +232,44 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                   )
                 : body(),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      //重置所有变量
+                      _imageBytes = null;
+                      pattern = null;
+                      stationList.clear();
+                      transferLineList.clear();
+                      lineColor = Colors.transparent;
+                      currentStationListIndex = null;
+                      terminusListIndex = null;
+                      currentStationListValue = null;
+                      terminusListValue = null;
+                      lineNumber = "";
+                      lineNumberEN = "";
+                      carriages = null;
+                      currentCarriage = null;
+                      setState(() {});
+                    },
+                    tooltip: '重置',
+                    child: const Icon(Icons.refresh),
+                  )),
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    tooltip: '刷新设置',
+                    child: const Icon(Icons.settings_backup_restore),
+                  ))
+            ],
+          )
         ],
-      ),
-      //重置按钮
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //重置所有变量
-          _imageBytes = null;
-          pattern = null;
-          stationList.clear();
-          transferLineList.clear();
-          lineColor = Colors.transparent;
-          currentStationListIndex = null;
-          terminusListIndex = null;
-          currentStationListValue = null;
-          terminusListValue = null;
-          lineNumber = "";
-          lineNumberEN = "";
-          carriages = null;
-          currentCarriage = null;
-          setState(() {});
-        },
-        tooltip: '重置',
-        child: const Icon(Icons.refresh),
       ),
     );
   }
@@ -284,7 +310,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                             "当前站",
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -293,7 +319,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                             "Current station",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -302,7 +328,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                             "终点站",
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -311,7 +337,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                             "Terminus",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -324,7 +350,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                             //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -335,7 +361,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                 : stationList[terminusListIndex!].stationNameCN,
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -347,7 +373,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                     .stationNameEN,
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -358,7 +384,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
                                 : stationList[terminusListIndex!].stationNameEN,
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       arrivalStationInfoBody(),
@@ -580,7 +606,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   Container arrivalStationInfoBody() {
     Container container = Container();
     if (lineColor != Colors.transparent) {
-      String bodyToShow = showEntrance?Util.arrivalStationInfoBody:Util.arrivalStationInfoBodyWithoutEntrance;
+      String bodyToShow = showEntrance
+          ? Util.arrivalStationInfoBody
+          : Util.arrivalStationInfoBodyWithoutEntrance;
       String colorStr = jsonData['lineColor'];
       colorStr = colorStr.replaceAll('#', '');
       String s = lineColor.computeLuminance() > 0.5
@@ -610,7 +638,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      Preference.generalIsDevMode
+      generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(

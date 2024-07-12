@@ -88,8 +88,22 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       fontFamily: "HYYanKaiW",
       color: Util.hexToColor(CustomColors.screenDoorCoverStationName));
 
+  //设置项
+  late bool generalIsDevMode;
+  late bool generalIsScaleEnabled;
+  late int railwayTransitScreenDoorCoverMaxStation;
+
+  //获取设置项
+  void getSetting() {
+    generalIsDevMode = Preference.generalIsDevMode;
+    generalIsScaleEnabled = Preference.generalIsScaleEnabled;
+    railwayTransitScreenDoorCoverMaxStation =
+        Util.railwayTransitScreenDoorCoverMaxStation;
+  }
+
   @override
   Widget build(BuildContext context) {
+    getSetting();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(
@@ -159,7 +173,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             ],
           ),
           Expanded(
-            child: Preference.generalIsScaleEnabled
+            child: generalIsScaleEnabled
                 ? InteractiveViewer(
                     minScale: 1,
                     maxScale: Util.maxScale,
@@ -168,24 +182,39 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   )
                 : body(),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      //重置所有变量
+                      _imageBytes = null;
+                      stationList.clear();
+                      transferLineList.clear();
+                      lineColor = Colors.transparent;
+                      currentStationListIndex = null;
+                      currentStationListValue = null;
+                      lineNumber = "";
+                      lineNumberEN = "";
+                      setState(() {});
+                    },
+                    tooltip: '重置',
+                    child: const Icon(Icons.refresh),
+                  )),
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    tooltip: '刷新设置',
+                    child: const Icon(Icons.settings_backup_restore),
+                  ))
+            ],
+          )
         ],
-      ),
-      //重置按钮
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //重置所有变量
-          _imageBytes = null;
-          stationList.clear();
-          transferLineList.clear();
-          lineColor = Colors.transparent;
-          currentStationListIndex = null;
-          currentStationListValue = null;
-          lineNumber = "";
-          lineNumberEN = "";
-          setState(() {});
-        },
-        tooltip: '重置',
-        child: const Icon(Icons.refresh),
       ),
     );
   }
@@ -509,7 +538,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      Preference.generalIsDevMode
+      generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(
@@ -1051,7 +1080,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameCN,
           style: TextStyle(
-            fontWeight: Util.screenDoorCoverBoldFont,
+            fontWeight: Util.railwayTransitScreenDoorCoverIsBoldFont,
             fontSize: 16,
             color: color,
           ),
@@ -1074,7 +1103,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         child: Text(
           stationList[i].stationNameEN,
           style: TextStyle(
-            fontWeight: Util.screenDoorCoverBoldFont,
+            fontWeight: Util.railwayTransitScreenDoorCoverIsBoldFont,
             fontSize: 12,
             color: color,
           ),
@@ -1124,7 +1153,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         stationsFromJson = jsonData['stations'];
         // 站点不能少于 3 或大于 maxStation
         if (stationsFromJson.length >= 3 &&
-            stationsFromJson.length <= Util.screenDoorCoverMaxStation) {
+            stationsFromJson.length <=
+                railwayTransitScreenDoorCoverMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -1166,9 +1196,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           setState(() {});
         } else if (stationsFromJson.length < 3) {
           alertDialog("错误", "站点数量不能小于 3");
-        } else if (stationsFromJson.length > Util.screenDoorCoverMaxStation) {
+        } else if (stationsFromJson.length >
+            railwayTransitScreenDoorCoverMaxStation) {
           alertDialog("错误",
-              "站点数量不能大于 ${Util.screenDoorCoverMaxStation}，过多的站点会导致显示不美观或显示异常");
+              "站点数量不能大于 ${railwayTransitScreenDoorCoverMaxStation}，过多的站点会导致显示不美观或显示异常");
         }
       } catch (e) {
         print('读取文件失败: $e');

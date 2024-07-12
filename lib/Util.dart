@@ -212,40 +212,40 @@ class Util {
 
   ///涉及到实际效果的设置项
   //LCD默认中粗体
-  static FontWeight lcdBoldFont = HomeState.sharedPreferences?.getBool(
-            PreferenceKey.lcdIsBoldFont,
+  static FontWeight railwayTransitLcdIsBoldFont = HomeState.sharedPreferences?.getBool(
+            PreferenceKey.railwayTransitLcdIsBoldFont,
           ) ??
-          DefaultPreference.lcdIsBoldFont
+          DefaultPreference.railwayTransitLcdIsBoldFont
       ? FontWeight.w600
       : FontWeight.normal;
 
   //LCD默认线路颜色与站点颜色相同
-  static bool lcdRouteColorSameAsLineColor =
+  static bool railwayTransitLcdIsRouteColorSameAsLineColor =
       HomeState.sharedPreferences?.getBool(
-            PreferenceKey.lcdIsRouteColorSameAsLineColor,
+            PreferenceKey.railwayTransitLcdIsRouteColorSameAsLineColor,
           ) ??
-          DefaultPreference.lcdIsRouteColorSameAsLineColor;
+          DefaultPreference.railwayTransitLcdIsRouteColorSameAsLineColor;
 
   //屏蔽门盖板默认中粗体
-  static FontWeight screenDoorCoverBoldFont =
+  static FontWeight railwayTransitScreenDoorCoverIsBoldFont =
       HomeState.sharedPreferences?.getBool(
-                PreferenceKey.screenDoorCoverIsBoldFont,
+                PreferenceKey.railwayTransitScreenDoorCoverIsBoldFont,
               ) ??
-              DefaultPreference.screenDoorCoverIsBoldFont
+              DefaultPreference.railwayTransitScreenDoorCoverIsBoldFont
           ? FontWeight.w600
           : FontWeight.normal;
 
   //LCD默认最大站点数
-  static int lcdMaxStation = HomeState.sharedPreferences?.getInt(
-        PreferenceKey.lcdMaxStation,
+  static int railwayTransitLcdMaxStation = HomeState.sharedPreferences?.getInt(
+        PreferenceKey.railwayTransitLcdMaxStation,
       ) ??
-      DefaultPreference.lcdMaxStation;
+      DefaultPreference.railwayTransitLcdMaxStation;
 
   //屏蔽门盖板默认最大站点数
-  static int screenDoorCoverMaxStation = HomeState.sharedPreferences?.getInt(
-        PreferenceKey.screenDoorCoverMaxStation,
+  static int railwayTransitScreenDoorCoverMaxStation = HomeState.sharedPreferences?.getInt(
+        PreferenceKey.railwayTransitScreenDoorCoverMaxStation,
       ) ??
-      DefaultPreference.screenDoorCoverMaxStation;
+      DefaultPreference.railwayTransitScreenDoorCoverMaxStation;
 
   static Color hexToColor(String hexColor) {
     return Color(int.parse('FF${hexColor.replaceAll('#', '')}', radix: 16));

@@ -88,14 +88,27 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   //线路线条宽度
   int lineLength = 1470;
 
-  //未过站站点图标与线路线条使用线路标识色
-  bool isRouteColorSameAsLineColor = HomeState.sharedPreferences
-          ?.getBool(PreferenceKey.lcdIsRouteColorSameAsLineColor) ??
-      DefaultPreference.lcdIsRouteColorSameAsLineColor;
+  //设置项
+  late bool generalIsDevMode;
+  late bool generalIsScaleEnabled;
+  late int railwayTransitLcdMaxStation;
+  late bool railwayTransitLcdIsRouteColorSameAsLineColor;
+
+  //获取设置项
+  void getSetting() {
+    generalIsDevMode = Preference.generalIsDevMode;
+    generalIsScaleEnabled = Preference.generalIsScaleEnabled;
+    railwayTransitLcdMaxStation = Util.railwayTransitLcdMaxStation;
+    railwayTransitLcdIsRouteColorSameAsLineColor = HomeState.sharedPreferences
+            ?.getBool(
+                PreferenceKey.railwayTransitLcdIsRouteColorSameAsLineColor) ??
+        DefaultPreference.railwayTransitLcdIsRouteColorSameAsLineColor;
+  }
 
   @override
   Widget build(BuildContext context) {
     //loadFont();
+    getSetting();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(
@@ -223,7 +236,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             ],
           ),
           Expanded(
-            child: Preference.generalIsScaleEnabled
+            child: generalIsScaleEnabled
                 ? InteractiveViewer(
                     minScale: 1,
                     maxScale: Util.maxScale,
@@ -232,28 +245,43 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                   )
                 : body(),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      //重置所有变量
+                      _imageBytes = null;
+                      pattern = null;
+                      stationList.clear();
+                      transferLineList.clear();
+                      lineColor = Colors.transparent;
+                      lineVariantColor = Colors.transparent;
+                      nextStationListIndex = null;
+                      terminusListIndex = null;
+                      nextStationListValue = null;
+                      terminusListValue = null;
+                      lineNumber = "";
+                      lineNumberEN = "";
+                      setState(() {});
+                    },
+                    tooltip: '重置',
+                    child: const Icon(Icons.refresh),
+                  )),
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    tooltip: '刷新设置',
+                    child: const Icon(Icons.settings_backup_restore),
+                  ))
+            ],
+          )
         ],
-      ),
-      //重置按钮
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //重置所有变量
-          _imageBytes = null;
-          pattern = null;
-          stationList.clear();
-          transferLineList.clear();
-          lineColor = Colors.transparent;
-          lineVariantColor = Colors.transparent;
-          nextStationListIndex = null;
-          terminusListIndex = null;
-          nextStationListValue = null;
-          terminusListValue = null;
-          lineNumber = "";
-          lineNumberEN = "";
-          setState(() {});
-        },
-        tooltip: '重置',
-        child: const Icon(Icons.refresh),
       ),
     );
   }
@@ -294,7 +322,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             "下一站",
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -303,7 +331,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             "Next station",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -312,7 +340,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             "终点站",
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -321,7 +349,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             "Terminus",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -334,7 +362,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                             //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -345,7 +373,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                 : stationList[terminusListIndex!].stationNameCN,
                             style: TextStyle(
                                 fontSize: 28,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -357,7 +385,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                     .stationNameEN,
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -368,7 +396,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
                                 : stationList[terminusListIndex!].stationNameEN,
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: Util.lcdBoldFont,
+                                fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
                       Container(
@@ -436,7 +464,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               Size(MediaQuery.of(context).size.width, 48)),
         ),
         children: [
-          Preference.generalIsDevMode
+          generalIsDevMode
               ? Container(
                   height: 48,
                   child: MenuItemButton(
@@ -520,7 +548,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   Stack showRouteLine() {
     List<Container> lineList = [];
     Color routeLineColor =
-        isRouteColorSameAsLineColor ? lineColor : Colors.green;
+        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
       lineList.add(
@@ -657,9 +685,10 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
   Stack showRouteIcon() {
     List<Container> iconList = [];
     Color routeIconColor =
-        isRouteColorSameAsLineColor ? lineColor : Colors.green;
-    Color? routeIconVariantColor =
-        isRouteColorSameAsLineColor ? lineVariantColor : Colors.green[300];
+        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
+    Color? routeIconVariantColor = railwayTransitLcdIsRouteColorSameAsLineColor
+        ? lineVariantColor
+        : Colors.green[300];
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
@@ -825,7 +854,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           child: Text(
             value.stationNameCN,
             style: TextStyle(
-              fontWeight: Util.lcdBoldFont,
+              fontWeight: Util.railwayTransitLcdIsBoldFont,
               fontSize: 14,
               color: Colors.black,
             ),
@@ -844,7 +873,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           child: Text(
             value.stationNameEN,
             style: TextStyle(
-              fontWeight: Util.lcdBoldFont,
+              fontWeight: Util.railwayTransitLcdIsBoldFont,
               fontSize: 12,
               color: Colors.black,
             ),
@@ -899,7 +928,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         stationsFromJson = jsonData['stations'];
         // 站点不能少于 2 或大于 maxStation
         if (stationsFromJson.length >= 2 &&
-            stationsFromJson.length <= Util.lcdMaxStation) {
+            stationsFromJson.length <= railwayTransitLcdMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -945,8 +974,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
           setState(() {});
         } else if (stationsFromJson.length < 2) {
           alertDialog("错误", "站点数量不能小于 2");
-        } else if (stationsFromJson.length > Util.lcdMaxStation) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 ${Util.lcdMaxStation}，请使用 U 形线路图");
+        } else if (stationsFromJson.length > railwayTransitLcdMaxStation) {
+          alertDialog(
+              "错误", "直线型线路图站点数量不能大于 ${railwayTransitLcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');

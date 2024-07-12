@@ -66,9 +66,20 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   //默认导出宽度
   int exportWidthValue = 1920;
 
+  //设置项
+  late bool generalIsDevMode;
+  late bool generalIsScaleEnabled;
+
+  //获取设置项
+  void getSetting() {
+    generalIsDevMode = Preference.generalIsDevMode;
+    generalIsScaleEnabled = Preference.generalIsScaleEnabled;
+  }
+
   @override
   Widget build(BuildContext context) {
     //loadFont();
+    getSetting();
     return Scaffold(
       backgroundColor: Util.backgroundColor(context),
       body: Column(
@@ -121,7 +132,7 @@ class StationEntranceCoverState extends State<StationEntranceCover>
             ],
           ),
           Expanded(
-            child: Preference.generalIsScaleEnabled
+            child: generalIsScaleEnabled
                 ? InteractiveViewer(
                     minScale: 1,
                     maxScale: Util.maxScale,
@@ -130,22 +141,38 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                   )
                 : body(),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      //重置所有变量
+                      _imageBytes = null;
+                      entranceIndex = null;
+                      entranceList.clear();
+                      stationValue = null;
+                      entranceValue = null;
+                      entranceListValue = null;
+                      setState(() {});
+                    },
+                    tooltip: '重置',
+                    child: const Icon(Icons.refresh),
+                  )),
+              Container(
+                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      getSetting();
+                      setState(() {});
+                    },
+                    tooltip: '刷新设置',
+                    child: const Icon(Icons.settings_backup_restore),
+                  ))
+            ],
+          )
         ],
-      ),
-      //重置按钮
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //重置所有变量
-          _imageBytes = null;
-          entranceIndex = null;
-          entranceList.clear();
-          stationValue = null;
-          entranceValue = null;
-          entranceListValue = null;
-          setState(() {});
-        },
-        tooltip: '重置',
-        child: const Icon(Icons.refresh),
       ),
     );
   }
@@ -528,7 +555,7 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      Preference.generalIsDevMode
+      generalIsDevMode
           ? Container(
               height: 48,
               child: MenuItemButton(

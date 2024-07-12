@@ -15,13 +15,15 @@ class PreferenceKey {
   static const String generalIsDevMode = 'general.isDevMode';
   static const String generalIsWhiteBackgroundInDarkMode =
       'general.isWhiteBackgroundInDarkMode';
-  static const String lcdMaxStation = 'railwayTransit.lcd.maxStation';
-  static const String screenDoorCoverMaxStation =
+  static const String railwayTransitLcdMaxStation =
+      'railwayTransit.lcd.maxStation';
+  static const String railwayTransitScreenDoorCoverMaxStation =
       'railwayTransit.screenDoorCover.maxStation';
-  static const String lcdIsBoldFont = 'railwayTransit.lcd.isBoldFont';
-  static const String lcdIsRouteColorSameAsLineColor =
+  static const String railwayTransitLcdIsBoldFont =
+      'railwayTransit.lcd.isBoldFont';
+  static const String railwayTransitLcdIsRouteColorSameAsLineColor =
       'railwayTransit.lcd.isRouteColorSameAsLineColor';
-  static const String screenDoorCoverIsBoldFont =
+  static const String railwayTransitScreenDoorCoverIsBoldFont =
       'railwayTransit.screenDoorCover.isBoldFont';
 }
 
@@ -30,9 +32,9 @@ class DefaultPreference {
   static const bool generalIsDevMode = false;
   static const bool generalIsScaleEnabled = false;
   static const bool generalIsWhiteBackgroundInDarkMode = false;
-  static const int lcdMaxStation = 35;
-  static const int screenDoorCoverMaxStation = 36;
-  static const bool lcdIsBoldFont = true;
-  static const bool lcdIsRouteColorSameAsLineColor = true;
-  static const bool screenDoorCoverIsBoldFont = true;
+  static const int railwayTransitLcdMaxStation = 35;
+  static const int railwayTransitScreenDoorCoverMaxStation = 36;
+  static const bool railwayTransitLcdIsBoldFont = true;
+  static const bool railwayTransitLcdIsRouteColorSameAsLineColor = true;
+  static const bool railwayTransitScreenDoorCoverIsBoldFont = true;
 }

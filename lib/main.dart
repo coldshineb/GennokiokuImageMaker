@@ -120,8 +120,7 @@ class HomeState extends State<Home> {
                           NavigationRailDestination(
                             icon: Icon(Icons.train_outlined),
                             selectedIcon: Icon(Icons.train),
-                            label:
-                                Text('轨道交通', style: TextStyle(fontSize: 15)),
+                            label: Text('轨道交通', style: TextStyle(fontSize: 15)),
                           ),
                           NavigationRailDestination(
                             icon: Icon(Icons.signpost_outlined),
