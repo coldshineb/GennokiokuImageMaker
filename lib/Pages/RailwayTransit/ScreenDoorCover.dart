@@ -1,11 +1,8 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'dart:convert';
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
@@ -229,7 +226,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   routeLineLeft(),
                   routeLineRight(),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(75, 286.5, 0, 0),
                     child: showRouteIcon(true),
                   ),
                   Container(
@@ -268,7 +265,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   routeLineLeft(),
                   routeLineRight(),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(75, 286.5, 0, 0),
                     child: showRouteIcon(false),
                   ),
                   Container(
@@ -921,7 +918,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           Line transferLine = value[j];
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
-                top: -47 * j + 223,
+                top: -47 * j + 223.5,
                 left: (lineLength / (stationList.length - 1)) * i + 68,
                 child: Transform.scale(
                     scale: 1.24,
@@ -936,7 +933,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           } else if (CustomRegExp.twoDigits
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
-                top: -47 * j + 223,
+                top: -47 * j + 223.5,
                 left: (lineLength / (stationList.length - 1)) * i + 68,
                 child: Transform.scale(
                     scale: 1.24,
@@ -949,7 +946,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           } else if (CustomRegExp.oneDigitOneCharacter
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
-                top: -47 * j + 223,
+                top: -47 * j + 223.5,
                 left: (lineLength / (stationList.length - 1)) * i + 68,
                 child: Transform.scale(
                     scale: 1.24,
@@ -964,7 +961,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               .hasMatch(transferLine.lineNumberEN)) {
             {
               iconList.add(Positioned(
-                  top: -47 * j + 223,
+                  top: -47 * j + 223.5,
                   left: (lineLength / (stationList.length - 1)) * i + 68,
                   child: Transform.scale(
                       scale: 1.24,

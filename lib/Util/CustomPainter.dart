@@ -204,14 +204,14 @@ class ScreenDoorCoverStationIconPainter extends CustomPainter {
 class ScreenDoorCoverRouteLineClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    final path = Path();
+    final Path path = Path();
     double radius = ScreenDoorCoverState.lineHeight;
     path.moveTo(0, size.height);
     path.arcToPoint(const Offset(0, 0),
-        radius: Radius.circular(radius), clockwise: false);
+        radius: Radius.circular(radius + 6), clockwise: false);
     path.lineTo(size.width, 0);
     path.arcToPoint(Offset(size.width, radius),
-        radius: Radius.circular(radius), clockwise: false);
+        radius: Radius.circular(radius + 6), clockwise: false);
     path.close();
     return path;
   }
