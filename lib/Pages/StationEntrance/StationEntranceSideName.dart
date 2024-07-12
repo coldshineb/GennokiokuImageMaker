@@ -117,65 +117,14 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
             ],
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
-                  child: Column(
-                    children: [
-                      //主线路图
-                      RepaintBoundary(
-                        key: _mainImageKey,
-                        child: Container(
-                          child: Stack(
-                            children: [
-                              const SizedBox(
-                                width: imageWidth,
-                                height: imageHeight,
-                              ),
-                              _imageBytes != null
-                                  ? SizedBox(
-                                      height: imageHeight,
-                                      child: Image.memory(
-                                        _imageBytes!,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: line(),
-                                ),
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: entrance(),
-                                ),
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: entranceNumber(),
-                                ),
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: stationName(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
+            child: Preference.generalIsScaleEnabled
+                ? InteractiveViewer(
+                    minScale: 1,
+                    maxScale: Util.maxScale,
+                    constrained: false,
+                    child: body(),
+                  )
+                : body(),
           ),
         ],
       ),
@@ -197,12 +146,77 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
     );
   }
 
+  //主体部分
+  SingleChildScrollView body() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
+          child: Column(
+            children: [
+              //主线路图
+              RepaintBoundary(
+                key: _mainImageKey,
+                child: Container(
+                  child: Stack(
+                    children: [
+                      const SizedBox(
+                        width: imageWidth,
+                        height: imageHeight,
+                      ),
+                      _imageBytes != null
+                          ? SizedBox(
+                              height: imageHeight,
+                              child: Image.memory(
+                                _imageBytes!,
+                              ),
+                            )
+                          : const SizedBox(),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: line(),
+                        ),
+                      ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: entrance(),
+                        ),
+                      ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: entranceNumber(),
+                        ),
+                      ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: stationName(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
   //线路标识
   List<Positioned> line() {
     List<Positioned> list = [];
     if (entranceList.isNotEmpty) {
-      List entranceListForLine =
-          entranceList[entranceIndex!].lines.reversed.toList();//将线路信息倒序排列，以便从右向左显示
+      List entranceListForLine = entranceList[entranceIndex!]
+          .lines
+          .reversed
+          .toList(); //将线路信息倒序排列，以便从右向左显示
       for (int i = 0; i < entranceListForLine.length; i++) {
         var value = entranceListForLine[i];
         //经过测试，出入口侧方站名下的线路标识大小为出入口盖板中的0.6倍，间距为0.525倍

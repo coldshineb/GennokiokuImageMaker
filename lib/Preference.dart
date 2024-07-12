@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class Preference {
   static late ThemeMode themeMode;
   static late bool generalIsDevMode;
+  static late bool generalIsScaleEnabled;
   static late bool generalIsWhiteBackgroundInDarkMode;
 }
 
 //存储设置项的键
 class PreferenceKey {
   static const String generalThemeMode = 'general.themeMode';
+  static const String generalIsScaleEnabled = 'general.isScaleEnabled';
   static const String generalIsDevMode = 'general.isDevMode';
   static const String generalIsWhiteBackgroundInDarkMode =
       'general.isWhiteBackgroundInDarkMode';
@@ -23,6 +25,7 @@ class PreferenceKey {
 //默认设置项的值
 class DefaultPreference {
   static const bool generalIsDevMode = false;
+  static const bool generalIsScaleEnabled = false;
   static const bool generalIsWhiteBackgroundInDarkMode = false;
   static const int lcdMaxStation = 35;
   static const int screenDoorCoverMaxStation = 36;

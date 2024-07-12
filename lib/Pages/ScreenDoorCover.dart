@@ -162,252 +162,14 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             ],
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
-                  child: Column(
-                    children: [
-                      //上行主线路图
-                      RepaintBoundary(
-                        key: routeUpImageKey,
-                        child: Stack(
-                          children: [
-                            const SizedBox(
-                              width: routeImageWidth,
-                              height: imageHeight,
-                            ),
-                            _imageBytes != null
-                                ? SizedBox(
-                                    height: imageHeight,
-                                    child: Image.memory(
-                                      _imageBytes!,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(72, 345, 0, 0),
-                              child: showStationName(true),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(106, 278, 0, 0),
-                              child: showRouteLine(true),
-                            ),
-                            routeLineLeft(),
-                            routeLineRight(),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
-                              child: showRouteIcon(true),
-                            ),
-                            Container(
-                              width: routeImageWidth,
-                              height: imageHeight,
-                              child: showTransferIcon(true),
-                            ),
-                          ],
-                        ),
-                      ),
-                      //下行主线路图
-                      RepaintBoundary(
-                        key: routeDownImageKey,
-                        child: Stack(
-                          children: [
-                            const SizedBox(
-                              width: routeImageWidth,
-                              height: imageHeight,
-                            ),
-                            _imageBytes != null
-                                ? SizedBox(
-                                    height: imageHeight,
-                                    child: Image.memory(
-                                      _imageBytes!,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(72, 345, 0, 0),
-                              child: showStationName(false),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(106, 278, 0, 0),
-                              child: showRouteLine(false),
-                            ),
-                            routeLineLeft(),
-                            routeLineRight(),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
-                              child: showRouteIcon(false),
-                            ),
-                            Container(
-                              width: routeImageWidth,
-                              height: imageHeight,
-                              child: showTransferIcon(false),
-                            ),
-                          ],
-                        ),
-                      ),
-                      //站名图
-                      RepaintBoundary(
-                        key: stationImageKey,
-                        child: Stack(
-                          children: [
-                            const SizedBox(
-                              width: stationImageWidth,
-                              height: imageHeight,
-                            ),
-                            _imageBytes != null
-                                ? SizedBox(
-                                    height: imageHeight,
-                                    child: Image.memory(
-                                      _imageBytes!,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(27, 32, 0, 0),
-                              child: Transform.scale(
-                                  alignment: Alignment.topLeft,
-                                  scale: 2.4,
-                                  child: Widgets.lineNumberIcon(
-                                      lineColor, lineNumber, lineNumberEN)),
-                            ),
-                            Container(
-                                height: imageHeight,
-                                width: stationImageWidth,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                        left: 0,
-                                        top: 158,
-                                        right: 0,
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          currentStationListIndex == null
-                                              ? ""
-                                              : stationList[
-                                                      currentStationListIndex!]
-                                                  .stationNameCN,
-                                          //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                          style: stationNameTextTextStyle,
-                                        )),
-                                    Positioned(
-                                        left: 0,
-                                        top: 300,
-                                        right: 0,
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          currentStationListIndex == null
-                                              ? ""
-                                              : stationList[
-                                                      currentStationListIndex!]
-                                                  .stationNameEN,
-                                          style: TextStyle(
-                                              fontSize: 43,
-                                              letterSpacing: 2,
-                                              color: Util.hexToColor(CustomColors
-                                                  .screenDoorCoverStationName)),
-                                        )),
-                                  ],
-                                )),
-                            Container(
-                                height: imageHeight,
-                                width: stationImageWidth,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      top: 278,
-                                      left: 0,
-                                      width: currentStationListIndex != null
-                                          ? (stationImageWidth -
-                                                      Util.getTextWidth(
-                                                          stationList[
-                                                                  currentStationListIndex!]
-                                                              .stationNameCN,
-                                                          stationNameTextTextStyle)) /
-                                                  2 -
-                                              110
-                                          : 0,
-                                      height: lineHeight,
-                                      child: Container(
-                                          decoration:
-                                              BoxDecoration(color: lineColor)),
-                                    ),
-                                    Positioned(
-                                      top: 278,
-                                      right: 0,
-                                      width: currentStationListIndex != null
-                                          ? (stationImageWidth -
-                                                      Util.getTextWidth(
-                                                          stationList[
-                                                                  currentStationListIndex!]
-                                                              .stationNameCN,
-                                                          stationNameTextTextStyle)) /
-                                                  2 -
-                                              110
-                                          : 0,
-                                      height: lineHeight,
-                                      child: Container(
-                                          decoration:
-                                              BoxDecoration(color: lineColor)),
-                                    ),
-                                  ],
-                                ))
-                          ],
-                        ),
-                      ),
-                      //上行运行方向图
-                      RepaintBoundary(
-                        key: directionUpImageKey,
-                        child: Stack(
-                          children: [
-                            const SizedBox(
-                              width: stationImageWidth,
-                              height: imageHeight,
-                            ),
-                            _imageBytes != null
-                                ? SizedBox(
-                                    height: imageHeight,
-                                    child: Image.memory(
-                                      _imageBytes!,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            directionImageTerminusLabel(true),
-                            directionArrow(true),
-                            directionImageLine(true),
-                            directionImageNextStationLabel(true)
-                          ],
-                        ),
-                      ),
-                      //下行运行方向图
-                      RepaintBoundary(
-                        key: directionDownImageKey,
-                        child: Stack(
-                          children: [
-                            const SizedBox(
-                              width: stationImageWidth,
-                              height: imageHeight,
-                            ),
-                            _imageBytes != null
-                                ? SizedBox(
-                                    height: imageHeight,
-                                    child: Image.memory(
-                                      _imageBytes!,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            directionImageTerminusLabel(false),
-                            directionArrow(false),
-                            directionImageLine(false),
-                            directionImageNextStationLabel(false)
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
+            child: Preference.generalIsScaleEnabled
+                ? InteractiveViewer(
+                    minScale: 1,
+                    maxScale: Util.maxScale,
+                    constrained: false,
+                    child: body(),
+                  )
+                : body(),
           ),
         ],
       ),
@@ -427,6 +189,251 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         },
         tooltip: '重置',
         child: const Icon(Icons.refresh),
+      ),
+    );
+  }
+
+  //主体部分
+  SingleChildScrollView body() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
+        child: Column(
+          children: [
+            //上行主线路图
+            RepaintBoundary(
+              key: routeUpImageKey,
+              child: Stack(
+                children: [
+                  const SizedBox(
+                    width: routeImageWidth,
+                    height: imageHeight,
+                  ),
+                  _imageBytes != null
+                      ? SizedBox(
+                          height: imageHeight,
+                          child: Image.memory(
+                            _imageBytes!,
+                          ),
+                        )
+                      : const SizedBox(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(72, 345, 0, 0),
+                    child: showStationName(true),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(106, 278, 0, 0),
+                    child: showRouteLine(true),
+                  ),
+                  routeLineLeft(),
+                  routeLineRight(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
+                    child: showRouteIcon(true),
+                  ),
+                  Container(
+                    width: routeImageWidth,
+                    height: imageHeight,
+                    child: showTransferIcon(true),
+                  ),
+                ],
+              ),
+            ),
+            //下行主线路图
+            RepaintBoundary(
+              key: routeDownImageKey,
+              child: Stack(
+                children: [
+                  const SizedBox(
+                    width: routeImageWidth,
+                    height: imageHeight,
+                  ),
+                  _imageBytes != null
+                      ? SizedBox(
+                          height: imageHeight,
+                          child: Image.memory(
+                            _imageBytes!,
+                          ),
+                        )
+                      : const SizedBox(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(72, 345, 0, 0),
+                    child: showStationName(false),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(106, 278, 0, 0),
+                    child: showRouteLine(false),
+                  ),
+                  routeLineLeft(),
+                  routeLineRight(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(75, 286, 0, 0),
+                    child: showRouteIcon(false),
+                  ),
+                  Container(
+                    width: routeImageWidth,
+                    height: imageHeight,
+                    child: showTransferIcon(false),
+                  ),
+                ],
+              ),
+            ),
+            //站名图
+            RepaintBoundary(
+              key: stationImageKey,
+              child: Stack(
+                children: [
+                  const SizedBox(
+                    width: stationImageWidth,
+                    height: imageHeight,
+                  ),
+                  _imageBytes != null
+                      ? SizedBox(
+                          height: imageHeight,
+                          child: Image.memory(
+                            _imageBytes!,
+                          ),
+                        )
+                      : const SizedBox(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(27, 32, 0, 0),
+                    child: Transform.scale(
+                        alignment: Alignment.topLeft,
+                        scale: 2.4,
+                        child: Widgets.lineNumberIcon(
+                            lineColor, lineNumber, lineNumberEN)),
+                  ),
+                  Container(
+                      height: imageHeight,
+                      width: stationImageWidth,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              left: 0,
+                              top: 158,
+                              right: 0,
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                currentStationListIndex == null
+                                    ? ""
+                                    : stationList[currentStationListIndex!]
+                                        .stationNameCN,
+                                //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
+                                style: stationNameTextTextStyle,
+                              )),
+                          Positioned(
+                              left: 0,
+                              top: 300,
+                              right: 0,
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                currentStationListIndex == null
+                                    ? ""
+                                    : stationList[currentStationListIndex!]
+                                        .stationNameEN,
+                                style: TextStyle(
+                                    fontSize: 43,
+                                    letterSpacing: 2,
+                                    color: Util.hexToColor(CustomColors
+                                        .screenDoorCoverStationName)),
+                              )),
+                        ],
+                      )),
+                  Container(
+                      height: imageHeight,
+                      width: stationImageWidth,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 278,
+                            left: 0,
+                            width: currentStationListIndex != null
+                                ? (stationImageWidth -
+                                            Util.getTextWidth(
+                                                stationList[
+                                                        currentStationListIndex!]
+                                                    .stationNameCN,
+                                                stationNameTextTextStyle)) /
+                                        2 -
+                                    110
+                                : 0,
+                            height: lineHeight,
+                            child: Container(
+                                decoration: BoxDecoration(color: lineColor)),
+                          ),
+                          Positioned(
+                            top: 278,
+                            right: 0,
+                            width: currentStationListIndex != null
+                                ? (stationImageWidth -
+                                            Util.getTextWidth(
+                                                stationList[
+                                                        currentStationListIndex!]
+                                                    .stationNameCN,
+                                                stationNameTextTextStyle)) /
+                                        2 -
+                                    110
+                                : 0,
+                            height: lineHeight,
+                            child: Container(
+                                decoration: BoxDecoration(color: lineColor)),
+                          ),
+                        ],
+                      ))
+                ],
+              ),
+            ),
+            //上行运行方向图
+            RepaintBoundary(
+              key: directionUpImageKey,
+              child: Stack(
+                children: [
+                  const SizedBox(
+                    width: stationImageWidth,
+                    height: imageHeight,
+                  ),
+                  _imageBytes != null
+                      ? SizedBox(
+                          height: imageHeight,
+                          child: Image.memory(
+                            _imageBytes!,
+                          ),
+                        )
+                      : const SizedBox(),
+                  directionImageTerminusLabel(true),
+                  directionArrow(true),
+                  directionImageLine(true),
+                  directionImageNextStationLabel(true)
+                ],
+              ),
+            ),
+            //下行运行方向图
+            RepaintBoundary(
+              key: directionDownImageKey,
+              child: Stack(
+                children: [
+                  const SizedBox(
+                    width: stationImageWidth,
+                    height: imageHeight,
+                  ),
+                  _imageBytes != null
+                      ? SizedBox(
+                          height: imageHeight,
+                          child: Image.memory(
+                            _imageBytes!,
+                          ),
+                        )
+                      : const SizedBox(),
+                  directionImageTerminusLabel(false),
+                  directionArrow(false),
+                  directionImageLine(false),
+                  directionImageNextStationLabel(false)
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1278,16 +1285,18 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   Future<void> exportDirectionUpImage() async {
     String fileName =
         "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png";
-    await exportImage(context, stationList, directionUpImageKey, fileName,
-        false, exportHeightValue: exportHeightValue);
+    await exportImage(
+        context, stationList, directionUpImageKey, fileName, false,
+        exportHeightValue: exportHeightValue);
   }
 
   //导出下行运行方向图
   Future<void> exportDirectionDownImage() async {
     String fileName =
         "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png";
-    await exportImage(context, stationList, directionDownImageKey, fileName,
-        false, exportHeightValue: exportHeightValue);
+    await exportImage(
+        context, stationList, directionDownImageKey, fileName, false,
+        exportHeightValue: exportHeightValue);
   }
 
   //通用提示对话框方法

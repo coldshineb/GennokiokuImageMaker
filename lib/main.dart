@@ -5,7 +5,6 @@ import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
-import 'Pages/StationEntrance/StationEntranceCover.dart';
 import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
 
@@ -50,6 +49,10 @@ class HomeState extends State<Home> {
       Preference.generalIsWhiteBackgroundInDarkMode = sharedPreferences!
               .getBool(PreferenceKey.generalIsWhiteBackgroundInDarkMode) ??
           DefaultPreference.generalIsWhiteBackgroundInDarkMode;
+      //启用缩放和自由滑动
+      Preference.generalIsScaleEnabled =
+          sharedPreferences!.getBool(PreferenceKey.generalIsScaleEnabled) ??
+              DefaultPreference.generalIsScaleEnabled;
       //启用开发选项
       Preference.generalIsDevMode =
           sharedPreferences!.getBool(PreferenceKey.generalIsDevMode) ??
