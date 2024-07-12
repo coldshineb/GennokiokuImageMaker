@@ -19,7 +19,7 @@ void main() async {
               ? ThemeMode.light
               : ThemeMode.system; //设置主题
   runApp(MaterialApp(
-      title: 'Gennokioku 原忆轨道交通图片生成器',
+      title: 'Gennokioku 原忆图片生成器',
       theme: Util.themeData(),
       darkTheme: Util.darkThemeData(),
       themeMode: Preference.themeMode,
@@ -78,8 +78,12 @@ class HomeState extends State<Home> {
         page = const ScreenDoorCover();
         break;
       case 4:
+        page = const ScreenDoorCover();
+        break;
+      case 5:
         page = const SettingPageRoot();
         break;
+
       default:
         throw UnimplementedError('no widget for $_selectedIndex');
     }
@@ -89,7 +93,7 @@ class HomeState extends State<Home> {
             ? Colors.pink[50]
             : Util.darkColorScheme().surface,
         centerTitle: false,
-        title: const Text('Gennokioku 原忆轨道交通图片生成器'),
+        title: const Text('Gennokioku 原忆图片生成器'),
       ),
       body: Row(
         children: <Widget>[
@@ -135,6 +139,11 @@ class HomeState extends State<Home> {
                             selectedIcon: Icon(Icons.splitscreen),
                             label:
                                 Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.splitscreen_outlined),
+                            selectedIcon: Icon(Icons.splitscreen),
+                            label: Text('路牌', style: TextStyle(fontSize: 15)),
                           ),
                           NavigationRailDestination(
                             icon: Icon(Icons.settings_outlined),

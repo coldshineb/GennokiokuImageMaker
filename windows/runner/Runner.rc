@@ -90,7 +90,7 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "Calicy LLC" "\0"
-            VALUE "FileDescription", "Gennokioku 原忆轨道交通图片生成器" "\0"
+            VALUE "FileDescription", "Gennokioku 原忆图片生成器" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "Gennokioku Image Maker" "\0"
             VALUE "LegalCopyright", "(C) 2024 Coldshine. All rights reserved." "\0"

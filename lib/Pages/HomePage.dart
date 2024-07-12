@@ -31,7 +31,7 @@ class HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
-                '欢迎使用 Gennokioku 原忆轨道交通图片生成器',
+                '欢迎使用 Gennokioku 原忆图片生成器',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
