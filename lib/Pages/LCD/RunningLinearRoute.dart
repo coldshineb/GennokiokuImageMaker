@@ -226,178 +226,14 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
             ],
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
-                  child: Column(
-                    children: [
-                      //主线路图
-                      RepaintBoundary(
-                        key: _mainImageKey,
-                        child: Container(
-                          color:
-                              Util.hexToColor(CustomColors.backgroundColorLCD),
-                          child: Stack(
-                            children: [
-                              const SizedBox(
-                                width: imageWidth,
-                                height: imageHeight,
-                              ),
-                              _imageBytes != null
-                                  ? SizedBox(
-                                      height: imageHeight,
-                                      child: Image.memory(
-                                        _imageBytes!,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              backgroundPattern(),
-                              gennokiokuRailwayTransitLogoWidget(showLogo),
-                              lineNumberIconWidget(
-                                  lineColor, lineNumber, lineNumberEN),
-                              Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
-                                  child: Text(
-                                    "下一站",
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(456, 41, 0, 0),
-                                  child: Text(
-                                    "Next station",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1111.5, 8, 0, 0),
-                                  child: Text(
-                                    "终点站",
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1124.5, 41, 0, 0),
-                                  child: Text(
-                                    "Terminus",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(549, 8, 0, 0),
-                                  child: Text(
-                                    nextStationListIndex == null
-                                        ? ""
-                                        : stationList[nextStationListIndex!]
-                                            .stationNameCN,
-                                    //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1210.5, 8, 0, 0),
-                                  child: Text(
-                                    terminusListIndex == null
-                                        ? ""
-                                        : stationList[terminusListIndex!]
-                                            .stationNameCN,
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      549.5, 41, 0, 0),
-                                  child: Text(
-                                    nextStationListIndex == null
-                                        ? ""
-                                        : stationList[nextStationListIndex!]
-                                            .stationNameEN,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      1210.5, 41, 0, 0),
-                                  child: Text(
-                                    terminusListIndex == null
-                                        ? ""
-                                        : stationList[terminusListIndex!]
-                                            .stationNameEN,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: Util.lcdBoldFont,
-                                        color: Colors.black),
-                                  )),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(50, 165, 0, 0),
-                                child: showStationName(),
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                padding:
-                                    const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
-                                child: showTransferIcon(),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(60, 195, 0, 0),
-                                child: showRouteLine(),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
-                                child: showRouteIcon(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //下一站图
-                      RepaintBoundary(
-                        key: _passingImageKey,
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Stack(
-                            children: [
-                              const SizedBox(
-                                width: imageWidth,
-                                height: imageHeight,
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
-                                child: showPassingRouteIcon(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
+            child: Preference.generalIsScaleEnabled
+                ? InteractiveViewer(
+                    minScale: 1,
+                    maxScale: Util.maxScale,
+                    constrained: false,
+                    child: body(),
+                  )
+                : body(),
           ),
         ],
       ),
@@ -422,6 +258,165 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
         tooltip: '重置',
         child: const Icon(Icons.refresh),
       ),
+    );
+  }
+
+  //主体部分
+  SingleChildScrollView body() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
+          child: Column(
+            children: [
+              //主线路图
+              RepaintBoundary(
+                key: _mainImageKey,
+                child: Container(
+                  color: Util.hexToColor(CustomColors.backgroundColorLCD),
+                  child: Stack(
+                    children: [
+                      const SizedBox(
+                        width: imageWidth,
+                        height: imageHeight,
+                      ),
+                      _imageBytes != null
+                          ? SizedBox(
+                              height: imageHeight,
+                              child: Image.memory(
+                                _imageBytes!,
+                              ),
+                            )
+                          : const SizedBox(),
+                      backgroundPattern(),
+                      gennokiokuRailwayTransitLogoWidget(showLogo),
+                      lineNumberIconWidget(lineColor, lineNumber, lineNumberEN),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
+                          child: Text(
+                            "下一站",
+                            style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(456, 41, 0, 0),
+                          child: Text(
+                            "Next station",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(1111.5, 8, 0, 0),
+                          child: Text(
+                            "终点站",
+                            style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(1124.5, 41, 0, 0),
+                          child: Text(
+                            "Terminus",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(549, 8, 0, 0),
+                          child: Text(
+                            nextStationListIndex == null
+                                ? ""
+                                : stationList[nextStationListIndex!]
+                                    .stationNameCN,
+                            //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
+                            style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(1210.5, 8, 0, 0),
+                          child: Text(
+                            terminusListIndex == null
+                                ? ""
+                                : stationList[terminusListIndex!].stationNameCN,
+                            style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(549.5, 41, 0, 0),
+                          child: Text(
+                            nextStationListIndex == null
+                                ? ""
+                                : stationList[nextStationListIndex!]
+                                    .stationNameEN,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(1210.5, 41, 0, 0),
+                          child: Text(
+                            terminusListIndex == null
+                                ? ""
+                                : stationList[terminusListIndex!].stationNameEN,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: Util.lcdBoldFont,
+                                color: Colors.black),
+                          )),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 165, 0, 0),
+                        child: showStationName(),
+                      ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        padding: const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
+                        child: showTransferIcon(),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(60, 195, 0, 0),
+                        child: showRouteLine(),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
+                        child: showRouteIcon(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              //下一站图
+              RepaintBoundary(
+                key: _passingImageKey,
+                child: Container(
+                  color: Colors.transparent,
+                  child: Stack(
+                    children: [
+                      const SizedBox(
+                        width: imageWidth,
+                        height: imageHeight,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
+                        child: showPassingRouteIcon(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 

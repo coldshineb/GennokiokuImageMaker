@@ -121,69 +121,14 @@ class StationEntranceCoverState extends State<StationEntranceCover>
             ],
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
-                  child: Column(
-                    children: [
-                      //主线路图
-                      RepaintBoundary(
-                        key: _mainImageKey,
-                        child: Container(
-                          color: Util.hexToColor(
-                              CustomColors.backgroundColorCover),
-                          child: Stack(
-                            children: [
-                              const SizedBox(
-                                width: imageWidth,
-                                height: imageHeight,
-                              ),
-                              _imageBytes != null
-                                  ? SizedBox(
-                                      height: imageHeight,
-                                      child: Image.memory(
-                                        _imageBytes!,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              gennokiokuRailwayTransitLogoWidgetVertical(
-                                  showLogo),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: line(),
-                                ),
-                              ),
-                              // Container(
-                              //   width: imageWidth,
-                              //   height: imageHeight,
-                              //   child: Stack(
-                              //     children: entrance(),
-                              //   ),
-                              // ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: entranceNumber(),
-                                ),
-                              ),
-                              Container(
-                                width: imageWidth,
-                                height: imageHeight,
-                                child: Stack(
-                                  children: stationName(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
+            child: Preference.generalIsScaleEnabled
+                ? InteractiveViewer(
+                    minScale: 1,
+                    maxScale: Util.maxScale,
+                    constrained: false,
+                    child: body(),
+                  )
+                : body(),
           ),
         ],
       ),
@@ -202,6 +147,71 @@ class StationEntranceCoverState extends State<StationEntranceCover>
         tooltip: '重置',
         child: const Icon(Icons.refresh),
       ),
+    );
+  }
+
+  //主体部分
+  SingleChildScrollView body() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
+          child: Column(
+            children: [
+              //主线路图
+              RepaintBoundary(
+                key: _mainImageKey,
+                child: Container(
+                  color: Util.hexToColor(CustomColors.backgroundColorCover),
+                  child: Stack(
+                    children: [
+                      const SizedBox(
+                        width: imageWidth,
+                        height: imageHeight,
+                      ),
+                      _imageBytes != null
+                          ? SizedBox(
+                              height: imageHeight,
+                              child: Image.memory(
+                                _imageBytes!,
+                              ),
+                            )
+                          : const SizedBox(),
+                      gennokiokuRailwayTransitLogoWidgetVertical(showLogo),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: line(),
+                        ),
+                      ),
+                      // Container(
+                      //   width: imageWidth,
+                      //   height: imageHeight,
+                      //   child: Stack(
+                      //     children: entrance(),
+                      //   ),
+                      // ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: entranceNumber(),
+                        ),
+                      ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        child: Stack(
+                          children: stationName(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 

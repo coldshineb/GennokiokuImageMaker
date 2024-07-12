@@ -162,6 +162,29 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                   context,
                   () {
                     setState(() {
+                      bool currentValue = HomeState.sharedPreferences?.getBool(
+                              PreferenceKey.generalIsScaleEnabled) ??
+                          DefaultPreference.generalIsScaleEnabled;
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.generalIsScaleEnabled, !currentValue);
+                    });
+                  },
+                  '启用缩放和自由滑动(实验性选项)',
+                  '通过手势或鼠标滚轮缩放及自由滑动图片，最高支持放大至 ${Util.maxScale.round()} 倍，默认为关闭。开启后则禁用滚轮页面滑动，部分图片经过缩放后最小显示比例异常，不影响导出分辨率及效果',
+                  HomeState.sharedPreferences?.getBool(
+                          PreferenceKey.generalIsScaleEnabled) ??
+                      DefaultPreference.generalIsScaleEnabled,
+                  (bool value) {
+                    setState(() {
+                      HomeState.sharedPreferences?.setBool(
+                          PreferenceKey.generalIsScaleEnabled, value);
+                    });
+                  }),
+              const SizedBox(height: 10.0),
+              createSwitch(
+                  context,
+                  () {
+                    setState(() {
                       bool currentValue = HomeState.sharedPreferences
                               ?.getBool(PreferenceKey.generalIsDevMode) ??
                           DefaultPreference.generalIsDevMode;
