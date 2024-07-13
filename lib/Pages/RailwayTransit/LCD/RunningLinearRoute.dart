@@ -110,180 +110,179 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     //loadFont();
     getSetting();
     return Scaffold(
-      backgroundColor: Util.backgroundColor(context),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              importAndExportMenubar(),
-              MenuBar(style: menuStyle(context), children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text("小交线路设置："),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text("运行方向"),
-                ),
-                Container(
-                  height: 48,
-                  child: RadioMenuButton(
-                      value: 0,
-                      groupValue: trainDirectionValue,
-                      onChanged: (v) {
-                        setState(() {
-                          trainDirectionValue = v!;
-                        });
-                      },
-                      child: const Text("向左行")),
-                ),
-                Container(
-                  height: 48,
-                  child: RadioMenuButton(
-                      value: 1,
-                      groupValue: trainDirectionValue,
-                      onChanged: (v) {
-                        setState(() {
-                          trainDirectionValue = v!;
-                        });
-                      },
-                      child: const Text("向右行")),
-                )
-              ]),
-              MenuBar(style: menuStyle(context), children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text("下一站"),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "下一站",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ), //设置空时的提示文字
-                  items: showStationList(stationList),
-                  onChanged: (value) {
-                    try {
-                      nextStationListIndex = stationList.indexWhere((element) =>
-                          element.stationNameCN ==
-                          value); //根据选择的站名，找到站名集合中对应的索引
-                      nextStationListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: nextStationListValue,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text("终点站"),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "终点站",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+        backgroundColor: Util.backgroundColor(context),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                importAndExportMenubar(),
+                MenuBar(style: menuStyle(context), children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 14, left: 7),
+                    child: const Text("小交线路设置："),
                   ),
-                  items: showStationList(stationList),
-                  onChanged: (value) {
-                    try {
-                      terminusListIndex = stationList.indexWhere(
-                          (element) => element.stationNameCN == value);
-                      terminusListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: terminusListValue,
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: previousStation,
-                    child: const Text("上一站"),
+                  Container(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: const Text("运行方向"),
                   ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: nextStation,
+                  Container(
+                    height: 48,
+                    child: RadioMenuButton(
+                        value: 0,
+                        groupValue: trainDirectionValue,
+                        onChanged: (v) {
+                          setState(() {
+                            trainDirectionValue = v!;
+                          });
+                        },
+                        child: const Text("向左行")),
+                  ),
+                  Container(
+                    height: 48,
+                    child: RadioMenuButton(
+                        value: 1,
+                        groupValue: trainDirectionValue,
+                        onChanged: (v) {
+                          setState(() {
+                            trainDirectionValue = v!;
+                          });
+                        },
+                        child: const Text("向右行")),
+                  )
+                ]),
+                MenuBar(style: menuStyle(context), children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 14, left: 7),
                     child: const Text("下一站"),
                   ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: () {
-                      setState(() {
-                        if (stationList.isNotEmpty) {
-                          stationList = stationList.reversed.toList();
-                          transferLineList = transferLineList.reversed.toList();
-                          nextStationListIndex = stationList.length -
-                              1 -
-                              nextStationListIndex!; //反转站点索引
-                          terminusListIndex = stationList.length -
-                              1 -
-                              terminusListIndex!; //反转站点索引
-                        }
-                      });
+                  DropdownButton(
+                    disabledHint: const Text(
+                      "下一站",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ), //设置空时的提示文字
+                    items: showStationList(stationList),
+                    onChanged: (value) {
+                      try {
+                        nextStationListIndex = stationList.indexWhere(
+                            (element) =>
+                                element.stationNameCN ==
+                                value); //根据选择的站名，找到站名集合中对应的索引
+                        nextStationListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
                     },
-                    child: const Text("反转站点"),
+                    value: nextStationListValue,
                   ),
-                ),
-              ])
-            ],
-          ),
-          Expanded(
-            child: generalIsScaleEnabled
-                ? InteractiveViewer(
-                    minScale: 1,
-                    maxScale: Util.maxScale,
-                    constrained: false,
-                    child: body(),
-                  )
-                : body(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      //重置所有变量
-                      _imageBytes = null;
-                      pattern = null;
-                      stationList.clear();
-                      transferLineList.clear();
-                      lineColor = Colors.transparent;
-                      lineVariantColor = Colors.transparent;
-                      nextStationListIndex = null;
-                      terminusListIndex = null;
-                      nextStationListValue = null;
-                      terminusListValue = null;
-                      lineNumber = "";
-                      lineNumberEN = "";
-                      setState(() {});
+                  Container(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: const Text("终点站"),
+                  ),
+                  DropdownButton(
+                    disabledHint: const Text(
+                      "终点站",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    items: showStationList(stationList),
+                    onChanged: (value) {
+                      try {
+                        terminusListIndex = stationList.indexWhere(
+                            (element) => element.stationNameCN == value);
+                        terminusListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
                     },
-                    tooltip: '重置',
-                    child: const Icon(Icons.refresh),
-                  )),
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    tooltip: '刷新设置',
-                    child: const Icon(Icons.settings_backup_restore),
-                  ))
-            ],
-          )
-        ],
-      ),
-    );
+                    value: terminusListValue,
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: previousStation,
+                      child: const Text("上一站"),
+                    ),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: nextStation,
+                      child: const Text("下一站"),
+                    ),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: () {
+                        setState(() {
+                          if (stationList.isNotEmpty) {
+                            stationList = stationList.reversed.toList();
+                            transferLineList =
+                                transferLineList.reversed.toList();
+                            nextStationListIndex = stationList.length -
+                                1 -
+                                nextStationListIndex!; //反转站点索引
+                            terminusListIndex = stationList.length -
+                                1 -
+                                terminusListIndex!; //反转站点索引
+                          }
+                        });
+                      },
+                      child: const Text("反转站点"),
+                    ),
+                  ),
+                ])
+              ],
+            ),
+            Expanded(
+              child: generalIsScaleEnabled
+                  ? InteractiveViewer(
+                      minScale: 1,
+                      maxScale: Util.maxScale,
+                      constrained: false,
+                      child: body(),
+                    )
+                  : body(),
+            ),
+          ],
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                padding: const EdgeInsets.only(right: 15),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    //重置所有变量
+                    _imageBytes = null;
+                    pattern = null;
+                    stationList.clear();
+                    transferLineList.clear();
+                    lineColor = Colors.transparent;
+                    lineVariantColor = Colors.transparent;
+                    nextStationListIndex = null;
+                    terminusListIndex = null;
+                    nextStationListValue = null;
+                    terminusListValue = null;
+                    lineNumber = "";
+                    lineNumberEN = "";
+                    setState(() {});
+                  },
+                  tooltip: '重置',
+                  child: const Icon(Icons.refresh),
+                )),
+            FloatingActionButton(
+              onPressed: () {
+                setState(() {});
+              },
+              tooltip: '刷新设置',
+              child: const Icon(Icons.settings_backup_restore),
+            )
+          ],
+        ));
   }
 
   //主体部分

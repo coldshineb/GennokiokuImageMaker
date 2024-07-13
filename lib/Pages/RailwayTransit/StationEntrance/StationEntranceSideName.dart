@@ -77,100 +77,97 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
     //loadFont();
     getSetting();
     return Scaffold(
-      backgroundColor: Util.backgroundColor(context),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              importAndExportMenubar(),
-              MenuBar(style: menuStyle(context), children: [
-                Container(
-                    padding: const EdgeInsets.only(top: 14, left: 7),
-                    child: const Text("站名与入口编号")),
-                DropdownButton(
-                  disabledHint: const Text("站名与入口编号",
-                      style: TextStyle(
-                          color: Colors.grey, fontSize: 14)), //设置空时的提示文字
-                  items: showEntranceList(entranceList),
-                  onChanged: (value) {
-                    try {
-                      entranceIndex = entranceList.indexWhere((element) =>
-                          element.stationNameCN ==
-                              value.toString().split(" ")[0] &&
-                          element.entranceNumber ==
-                              value.toString().split(
-                                  " ")[1]); //根据选择的站名和出入口编号，找到站名和出入口编号集合中对应的索引
-                      entranceListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
+        backgroundColor: Util.backgroundColor(context),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                importAndExportMenubar(),
+                MenuBar(style: menuStyle(context), children: [
+                  Container(
+                      padding: const EdgeInsets.only(top: 14, left: 7),
+                      child: const Text("站名与入口编号")),
+                  DropdownButton(
+                    disabledHint: const Text("站名与入口编号",
+                        style: TextStyle(
+                            color: Colors.grey, fontSize: 14)), //设置空时的提示文字
+                    items: showEntranceList(entranceList),
+                    onChanged: (value) {
+                      try {
+                        entranceIndex = entranceList.indexWhere((element) =>
+                            element.stationNameCN ==
+                                value.toString().split(" ")[0] &&
+                            element.entranceNumber ==
+                                value.toString().split(
+                                    " ")[1]); //根据选择的站名和出入口编号，找到站名和出入口编号集合中对应的索引
+                        entranceListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    value: entranceListValue,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 48,
+                        child: MenuItemButton(
+                            onPressed: previousStation,
+                            child: const Text("上一个")),
+                      ),
+                      Container(
+                        height: 48,
+                        child: MenuItemButton(
+                            onPressed: nextStation, child: const Text("下一个")),
+                      ),
+                    ],
+                  ),
+                ])
+              ],
+            ),
+            Expanded(
+              child: generalIsScaleEnabled
+                  ? InteractiveViewer(
+                      minScale: 1,
+                      maxScale: Util.maxScale,
+                      constrained: false,
+                      child: body(),
+                    )
+                  : body(),
+            ),
+          ],
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                padding: const EdgeInsets.only(right: 15),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    //重置所有变量
+                    _imageBytes = null;
+                    entranceIndex = null;
+                    entranceList.clear();
+                    stationValue = null;
+                    entranceValue = null;
+                    entranceListValue = null;
+                    setState(() {});
                   },
-                  value: entranceListValue,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      height: 48,
-                      child: MenuItemButton(
-                          onPressed: previousStation, child: const Text("上一个")),
-                    ),
-                    Container(
-                      height: 48,
-                      child: MenuItemButton(
-                          onPressed: nextStation, child: const Text("下一个")),
-                    ),
-                  ],
-                ),
-              ])
-            ],
-          ),
-          Expanded(
-            child: generalIsScaleEnabled
-                ? InteractiveViewer(
-                    minScale: 1,
-                    maxScale: Util.maxScale,
-                    constrained: false,
-                    child: body(),
-                  )
-                : body(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      //重置所有变量
-                      _imageBytes = null;
-                      entranceIndex = null;
-                      entranceList.clear();
-                      stationValue = null;
-                      entranceValue = null;
-                      entranceListValue = null;
-                      setState(() {});
-                    },
-                    tooltip: '重置',
-                    child: const Icon(Icons.refresh),
-                  )),
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      getSetting();
-                      setState(() {});
-                    },
-                    tooltip: '刷新设置',
-                    child: const Icon(Icons.settings_backup_restore),
-                  ))
-            ],
-          )
-        ],
-      ),
-    );
+                  tooltip: '重置',
+                  child: const Icon(Icons.refresh),
+                )),
+            FloatingActionButton(
+              onPressed: () {
+                setState(() {});
+              },
+              tooltip: '刷新设置',
+              child: const Icon(Icons.settings_backup_restore),
+            )
+          ],
+        ));
   }
 
   //主体部分

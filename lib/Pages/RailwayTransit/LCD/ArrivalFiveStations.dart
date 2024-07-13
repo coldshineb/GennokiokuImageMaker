@@ -104,196 +104,192 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
     //loadFont();
     getSetting();
     return Scaffold(
-      backgroundColor: Util.backgroundColor(context),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              importAndExportMenubar(),
-              MenuBar(style: menuStyle(context), children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text("（第一步）运行方向"),
-                ),
-                Container(
-                  height: 48,
-                  child: RadioMenuButton(
-                      value: 0,
-                      groupValue: trainDirectionValue,
-                      onChanged: (v) {
-                        setState(() {
-                          trainDirectionValue = v!;
-                        });
-                      },
-                      child: const Text("向左行")),
-                ),
-                Container(
-                  height: 48,
-                  child: RadioMenuButton(
-                      value: 1,
-                      groupValue: trainDirectionValue,
-                      onChanged: (v) {
-                        setState(() {
-                          trainDirectionValue = v!;
-                        });
-                      },
-                      child: const Text("向右行")),
-                )
-              ]),
-              MenuBar(style: menuStyle(context), children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 14, left: 7),
-                  child: const Text("（第三步）当前站"),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "当前站",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ), //设置空时的提示文字
-                  items: showStationList(stationList),
-                  onChanged: (value) {
-                    try {
-                      int indexWhere = stationList.indexWhere(
-                          (element) => element.stationNameCN == value);
-                      indexWhere;
-                      if (indexWhere == 2) {
-                        trainDirectionValue = 0;
-                      } else if (indexWhere == stationList.length - 3) {
-                        trainDirectionValue = 1;
-                      }
-                      currentStationListIndex =
-                          indexWhere; //根据选择的站名，找到站名集合中对应的索引
-                      currentStationListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: currentStationListValue,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text("（第二步）终点站"),
-                ),
-                DropdownButton(
-                  disabledHint: const Text(
-                    "终点站",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+        backgroundColor: Util.backgroundColor(context),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                importAndExportMenubar(),
+                MenuBar(style: menuStyle(context), children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 14, left: 7),
+                    child: const Text("（第一步）运行方向"),
                   ),
-                  items: showStationList(stationList),
-                  onChanged: (value) {
-                    try {
-                      int indexWhere = stationList.indexWhere(
-                          (element) => element.stationNameCN == value);
-                      indexWhere;
-                      if (indexWhere == 2) {
-                        trainDirectionValue = 0;
-                      } else if (indexWhere == stationList.length - 3) {
-                        trainDirectionValue = 1;
-                      }
-                      terminusListIndex = indexWhere;
-                      terminusListValue = value;
-                      setState(() {});
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  value: terminusListValue,
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: previousStation,
-                    child: const Text("上一站"),
+                  Container(
+                    height: 48,
+                    child: RadioMenuButton(
+                        value: 0,
+                        groupValue: trainDirectionValue,
+                        onChanged: (v) {
+                          setState(() {
+                            trainDirectionValue = v!;
+                          });
+                        },
+                        child: const Text("向左行")),
                   ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: nextStation,
-                    child: const Text("下一站"),
-                  ),
-                ),
-                Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: () {
-                      setState(() {
-                        if (stationList.isNotEmpty) {
-                          stationList = stationList.reversed.toList();
-                          currentStationListIndex = stationList.length -
-                              1 -
-                              currentStationListIndex!; //反转站点索引
-                          terminusListIndex = stationList.length -
-                              1 -
-                              terminusListIndex!; //反转站点索引
-                        }
-                      });
-                    },
-                    child: const Text("反转站点"),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: const Text(
-                    "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ])
-            ],
-          ),
-          Expanded(
-            child: generalIsScaleEnabled
-                ? InteractiveViewer(
-                    minScale: 1,
-                    maxScale: Util.maxScale,
-                    constrained: false,
-                    child: body(),
+                  Container(
+                    height: 48,
+                    child: RadioMenuButton(
+                        value: 1,
+                        groupValue: trainDirectionValue,
+                        onChanged: (v) {
+                          setState(() {
+                            trainDirectionValue = v!;
+                          });
+                        },
+                        child: const Text("向右行")),
                   )
-                : body(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      //重置所有变量
-                      _imageBytes = null;
-                      pattern = null;
-                      stationList.clear();
-                      lineColor = Colors.transparent;
-                      lineVariantColor = Colors.transparent;
-                      currentStationListIndex = null;
-                      terminusListIndex = null;
-                      currentStationListValue = null;
-                      terminusListValue = null;
-                      lineNumber = "";
-                      lineNumberEN = "";
-                      setState(() {});
+                ]),
+                MenuBar(style: menuStyle(context), children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 14, left: 7),
+                    child: const Text("（第三步）当前站"),
+                  ),
+                  DropdownButton(
+                    disabledHint: const Text(
+                      "当前站",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ), //设置空时的提示文字
+                    items: showStationList(stationList),
+                    onChanged: (value) {
+                      try {
+                        int indexWhere = stationList.indexWhere(
+                            (element) => element.stationNameCN == value);
+                        indexWhere;
+                        if (indexWhere == 2) {
+                          trainDirectionValue = 0;
+                        } else if (indexWhere == stationList.length - 3) {
+                          trainDirectionValue = 1;
+                        }
+                        currentStationListIndex =
+                            indexWhere; //根据选择的站名，找到站名集合中对应的索引
+                        currentStationListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
                     },
-                    tooltip: '重置',
-                    child: const Icon(Icons.refresh),
-                  )),
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      setState(() {});
+                    value: currentStationListValue,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: const Text("（第二步）终点站"),
+                  ),
+                  DropdownButton(
+                    disabledHint: const Text(
+                      "终点站",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    items: showStationList(stationList),
+                    onChanged: (value) {
+                      try {
+                        int indexWhere = stationList.indexWhere(
+                            (element) => element.stationNameCN == value);
+                        indexWhere;
+                        if (indexWhere == 2) {
+                          trainDirectionValue = 0;
+                        } else if (indexWhere == stationList.length - 3) {
+                          trainDirectionValue = 1;
+                        }
+                        terminusListIndex = indexWhere;
+                        terminusListValue = value;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
                     },
-                    tooltip: '刷新设置',
-                    child: const Icon(Icons.settings_backup_restore),
-                  ))
-            ],
-          )
-        ],
-      ),
-      //重置按钮,
-    );
+                    value: terminusListValue,
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: previousStation,
+                      child: const Text("上一站"),
+                    ),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: nextStation,
+                      child: const Text("下一站"),
+                    ),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: () {
+                        setState(() {
+                          if (stationList.isNotEmpty) {
+                            stationList = stationList.reversed.toList();
+                            currentStationListIndex = stationList.length -
+                                1 -
+                                currentStationListIndex!; //反转站点索引
+                            terminusListIndex = stationList.length -
+                                1 -
+                                terminusListIndex!; //反转站点索引
+                          }
+                        });
+                      },
+                      child: const Text("反转站点"),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: const Text(
+                      "注意：先选择终点站，再选择当前站，站名选择仅用于确定运行方向，不用于确定小交线区间",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ])
+              ],
+            ),
+            Expanded(
+              child: generalIsScaleEnabled
+                  ? InteractiveViewer(
+                      minScale: 1,
+                      maxScale: Util.maxScale,
+                      constrained: false,
+                      child: body(),
+                    )
+                  : body(),
+            ),
+          ],
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                padding: const EdgeInsets.only(right: 15),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    //重置所有变量
+                    _imageBytes = null;
+                    pattern = null;
+                    stationList.clear();
+                    lineColor = Colors.transparent;
+                    lineVariantColor = Colors.transparent;
+                    currentStationListIndex = null;
+                    terminusListIndex = null;
+                    currentStationListValue = null;
+                    terminusListValue = null;
+                    lineNumber = "";
+                    lineNumberEN = "";
+                    setState(() {});
+                  },
+                  tooltip: '重置',
+                  child: const Icon(Icons.refresh),
+                )),
+            FloatingActionButton(
+              onPressed: () {
+                setState(() {});
+              },
+              tooltip: '刷新设置',
+              child: const Icon(Icons.settings_backup_restore),
+            )
+          ],
+        ));
   }
 
   //主体部分
@@ -1831,7 +1827,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         } else if (stationsFromJson.length < 5) {
           alertDialog("错误", "站点数量不能小于 5");
         } else if (stationsFromJson.length > railwayTransitLcdMaxStation) {
-          alertDialog("错误", "直线型线路图站点数量不能大于 ${railwayTransitLcdMaxStation}，请使用 U 形线路图");
+          alertDialog(
+              "错误", "直线型线路图站点数量不能大于 ${railwayTransitLcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');

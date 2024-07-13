@@ -182,37 +182,35 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   )
                 : body(),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      //重置所有变量
-                      _imageBytes = null;
-                      stationList.clear();
-                      transferLineList.clear();
-                      lineColor = Colors.transparent;
-                      currentStationListIndex = null;
-                      currentStationListValue = null;
-                      lineNumber = "";
-                      lineNumberEN = "";
-                      setState(() {});
-                    },
-                    tooltip: '重置',
-                    child: const Icon(Icons.refresh),
-                  )),
-              Container(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    tooltip: '刷新设置',
-                    child: const Icon(Icons.settings_backup_restore),
-                  ))
-            ],
+        ],
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+              padding: const EdgeInsets.only(right: 15),
+              child: FloatingActionButton(
+                onPressed: () {
+                  //重置所有变量
+                  _imageBytes = null;
+                  stationList.clear();
+                  transferLineList.clear();
+                  lineColor = Colors.transparent;
+                  currentStationListIndex = null;
+                  currentStationListValue = null;
+                  lineNumber = "";
+                  lineNumberEN = "";
+                  setState(() {});
+                },
+                tooltip: '重置',
+                child: const Icon(Icons.refresh),
+              )),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {});
+            },
+            tooltip: '刷新设置',
+            child: const Icon(Icons.settings_backup_restore),
           )
         ],
       ),
