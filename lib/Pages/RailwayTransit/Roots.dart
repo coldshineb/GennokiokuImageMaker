@@ -56,7 +56,8 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         icon: Icon(Icons.splitscreen_outlined),
                         selectedIcon: Icon(Icons.splitscreen),
                         label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
-                      ),NavigationRailDestination(
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.directions_outlined),
                         selectedIcon: Icon(Icons.directions),
                         label: Text('运行方向图', style: TextStyle(fontSize: 15)),
@@ -159,7 +160,7 @@ class _LCDRootState extends State<LCDRoot> {
               ArrivalStationInfo(),
               ArrivalLinearRoute(),
             ],
-              )),
+          )),
         ],
       ),
     );
@@ -180,18 +181,6 @@ class _StationEntranceRootState extends State<StationEntranceRoot> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (_selectedIndex) {
-      case 0:
-        page = const StationEntranceCover();
-        break;
-      case 1:
-        page = const StationEntranceSideName();
-        break;
-      default:
-        throw UnimplementedError('no widget for $_selectedIndex');
-    }
-
     return Scaffold(
       body: Row(
         children: <Widget>[
@@ -227,8 +216,12 @@ class _StationEntranceRootState extends State<StationEntranceRoot> {
           }),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
-              child: Container(
-            child: page,
+              child: IndexedStack(
+            index: _selectedIndex,
+            children: const <Widget>[
+              StationEntranceCover(),
+              StationEntranceSideName(),
+            ],
           )),
         ],
       ),
