@@ -657,7 +657,7 @@ class OperationDirectionState extends State<OperationDirection>
       Container(
         height: 48,
         child: MenuItemButton(
-            onPressed: exportMainImage, child: const Text("导出当前图")),
+            onPressed: exportMainImage, child: const Text("导出图片")),
       ),
       Container(
           padding: const EdgeInsets.only(top: 14), child: const Text("导出分辨率")),

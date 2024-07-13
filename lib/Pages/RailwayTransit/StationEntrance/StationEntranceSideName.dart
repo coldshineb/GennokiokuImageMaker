@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -629,6 +630,7 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
       if (path != null) {
         for (int i = 0; i < entranceList.length; i++) {
           entranceIndex = i;
+          Directory("$path${Util.pathSlash}${entranceList[entranceIndex!].stationNameCN}").create();
           setState(() {});
           //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
           //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
@@ -637,17 +639,17 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
               context,
               entranceList,
               _mainImageKey,
-              "$path${Util.pathSlash}出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
+              "$path${Util.pathSlash}${entranceList[entranceIndex!].stationNameCN}${Util.pathSlash}出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
               true,
               exportWidthValue: exportWidthValue);
           await exportImage(
-              context,
-              entranceList,
-              _mainImageKey,
-              "$path${Util.pathSlash}出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
-              true,
-              exportWidthValue: exportWidthValue);
-        }
+            context,
+            entranceList,
+            _mainImageKey,
+            "$path${Util.pathSlash}${entranceList[entranceIndex!].stationNameCN}${Util.pathSlash}出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png",
+            true,
+            exportWidthValue: exportWidthValue);
+      }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("图片已成功保存至: $path"),
         ));

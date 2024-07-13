@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,6 +74,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
 
   //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
   int? currentStationListIndex;
+
+  //是否使用站名作为批量导出子文件夹名
+  bool useStationNameAsBatchExportFolderName = true;
 
   //默认导出高度
   int exportHeightValue = 1280;
@@ -561,6 +565,16 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           child: const Text("导出全部图"),
         ),
       ),
+      Container(
+          height: 48,
+          child: CheckboxMenuButton(
+            value: useStationNameAsBatchExportFolderName,
+            onChanged: (bool? value) {
+              useStationNameAsBatchExportFolderName = value!;
+              setState(() {});
+            },
+            child: const Text("使用站名作为导出子文件夹名"),
+          )),
       Container(
         height: 48,
         child: MenuItemButton(
@@ -1221,6 +1235,11 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       if (path != null) {
         for (int i = 0; i < stationList.length; i++) {
           currentStationListIndex = i;
+          useStationNameAsBatchExportFolderName
+              ? Directory(
+                      "$path${Util.pathSlash}${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}")
+                  .create()
+              : null;
           setState(() {});
           //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
           //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
@@ -1229,42 +1248,42 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               context,
               stationList,
               routeUpImageKey,
-              "$path${Util.pathSlash}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               routeUpImageKey,
-              "$path${Util.pathSlash}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               routeDownImageKey,
-              "$path${Util.pathSlash}屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               stationImageKey,
-              "$path${Util.pathSlash}屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               directionUpImageKey,
-              "$path${Util.pathSlash}屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               directionDownImageKey,
-              "$path${Util.pathSlash}屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
               true,
               exportHeightValue: exportHeightValue);
         }
