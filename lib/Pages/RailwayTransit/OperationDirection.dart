@@ -692,7 +692,7 @@ class OperationDirectionState extends State<OperationDirection>
   //导出当前图
   Future<void> exportMainImage() async {
     String fileName =
-        "运行方向图 ${lineNumberType == 0 ? "${digitLineNumberController.text}号线" : textLineNumberController.text} ${lineType == 0 ? "${generalStationNameLeftController.text.replaceAll(generalStationNameLeftHint, "")}--${generalStationNameRightController.text.replaceAll(generalStationNameRightHint, "")}" : "${loopStationNameLeftController.text.replaceAll(loopStationNameLeftHint, "")}--${loopStationNameRightController.text.replaceAll(loopStationNameRightHint, "")}"}.png";
+        "运行方向图 ${lineNumberType == 0 ? "${digitLineNumberController.text}号线" : textLineNumberController.text} ${lineType == 0 ? "${generalStationNameLeftController.text.replaceAll(generalStationNameLeftHint, "")}--${generalStationNameRightController.text.replaceAll(generalStationNameRightHint, "")}" : "${loopStationNameLeftController.text.replaceAll(loopStationNameLeftHint, "").replaceAll(loopStationNameRightHint, "")}--${loopStationNameRightController.text.replaceAll(loopStationNameRightHint, "").replaceAll(loopStationNameLeftHint, "")}"}.png";
     await exportImage(context, [0], _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }
