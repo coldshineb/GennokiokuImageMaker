@@ -175,14 +175,6 @@ class Util {
               fill="#lineColor" stroke-width="0"/>
         <path d="M1151.94,228.54h0c-6.86-.07-17.19-.12-29.86-.01-.61,0-1.19,0-1.76.01h-10.96v.07c-4,.01-5.73,0-6.98-.04-.6-.02-.9-.03-1.23-.04-4.8-.22-10.89-.97-17.68-3.01-10.16-3.06-17.73-7.77-22.59-11.38-9.86,10.07-19.72,20.15-29.58,30.22,28.77,20.64,49.15,25.36,62.73,25.63,1.15.02,2.35.01,15.33,0h0s810.64,0,810.64,0v-41.46h-768.06Z"
               fill="#lineColor" stroke-width="0"/>
-        <text transform="translate(1094.46 146.08)" fill="#fff"
-              font-family="GennokiokuLCDFont" font-size="60">
-            <tspan x="0" y="0">号线</tspan>
-        </text>
-        <text transform="translate(692.7 146.08)" fill="#fff"
-              font-family="GennokiokuLCDFont" font-size="60">
-            <tspan x="0" y="0">LINE</tspan>
-        </text>
         <polygon
                 points="64.82 109.6 94.76 79.66 75.22 79.6 38.67 116.14 75.02 152.43 94.76 152.56 64.82 122.68 122.09 122.68 122.09 109.6 64.82 109.6"
                 fill="#fff" stroke-width="0"/>

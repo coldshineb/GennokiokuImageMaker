@@ -47,30 +47,45 @@ class OperationDirectionState extends State<OperationDirection>
   //背景图片字节数据
   Uint8List? _imageBytes;
 
-  static String lineColor = "FF0000"; //线路标识色
+  static String defaultLineColor = "339CD0";
+  static String lineColor = defaultLineColor; //线路标识色
   String tempLineColor = lineColor; //线路标识色
 
   //线路编号、站名控制器
-  TextEditingController lineNumberController = TextEditingController();
+  TextEditingController generalLineNumberController = TextEditingController();
+  TextEditingController loopLineNumberController = TextEditingController();
+  TextEditingController loopLineNumberEnController =
+      TextEditingController(text: loopLineNumberEnHint);
   TextEditingController generalStationNameLeftController =
-      TextEditingController(text: "往 ");
+      TextEditingController(text: generalStationNameLeftHint);
   TextEditingController generalStationNameLeftEnController =
-      TextEditingController(text: "To   ");
+      TextEditingController(text: generalStationNameLeftEnHint);
   TextEditingController generalStationNameRightController =
-      TextEditingController(text: "往 ");
+      TextEditingController(text: generalStationNameRightHint);
   TextEditingController generalStationNameRightEnController =
-      TextEditingController(text: "To ");
+      TextEditingController(text: generalStationNameRightEnHint);
   TextEditingController loopStationNameLeftController =
-      TextEditingController(text: "内环 经 ");
+      TextEditingController(text: loopStationNameLeftHint);
   TextEditingController loopStationNameLeftEnController =
-      TextEditingController(text: "Inner Loop Via ");
+      TextEditingController(text: loopStationNameLeftEnHint);
   TextEditingController loopStationNameRightController =
-      TextEditingController(text: "外环 经 ");
+      TextEditingController(text: loopStationNameRightHint);
   TextEditingController loopStationNameRightEnController =
-      TextEditingController(text: "Outer Loop Via ");
+      TextEditingController(text: loopStationNameRightEnHint);
 
   int lineType = 0; //线路类型
   int lineNumberType = 0; //线路名称类型
+
+  //线路名称提示
+  static String loopLineNumberEnHint = "Line ";
+  static String generalStationNameLeftHint = "往 ";
+  static String generalStationNameLeftEnHint = "To   ";
+  static String generalStationNameRightHint = "往 ";
+  static String generalStationNameRightEnHint = "To ";
+  static String loopStationNameLeftHint = "内环 经 ";
+  static String loopStationNameLeftEnHint = "Inner Loop Via ";
+  static String loopStationNameRightHint = "外环 经 ";
+  static String loopStationNameRightEnHint = "Outer Loop Via ";
 
   //默认导出宽度
   int exportWidthValue = 1920;
@@ -225,16 +240,25 @@ class OperationDirectionState extends State<OperationDirection>
                 onPressed: () {
                   //重置所有变量
                   _imageBytes = null;
-                  lineColor = "FF0000";
-                  lineNumberController.clear();
-                  generalStationNameLeftController.text = "往 ";
-                  generalStationNameLeftEnController.text = "To   ";
-                  generalStationNameRightController.text = "往 ";
-                  generalStationNameRightEnController.text = "To ";
-                  loopStationNameLeftController.text = "内环 经 ";
-                  loopStationNameLeftEnController.text = "Inner Loop Via ";
-                  loopStationNameRightController.text = "外环 经 ";
-                  loopStationNameRightEnController.text = "Outer Loop Via ";
+                  lineColor = defaultLineColor;
+                  generalLineNumberController.clear();
+                  loopLineNumberController.clear();
+                  loopLineNumberEnController.text = loopLineNumberEnHint;
+                  generalStationNameLeftController.text =
+                      generalStationNameLeftHint;
+                  generalStationNameLeftEnController.text =
+                      generalStationNameLeftEnHint;
+                  generalStationNameRightController.text =
+                      generalStationNameRightHint;
+                  generalStationNameRightEnController.text =
+                      generalStationNameRightEnHint;
+                  loopStationNameLeftController.text = loopStationNameLeftHint;
+                  loopStationNameLeftEnController.text =
+                      loopStationNameLeftEnHint;
+                  loopStationNameRightController.text =
+                      loopStationNameRightHint;
+                  loopStationNameRightEnController.text =
+                      loopStationNameRightEnHint;
                   setState(() {});
                 },
                 tooltip: '重置',
@@ -281,29 +305,7 @@ class OperationDirectionState extends State<OperationDirection>
                             )
                           : const SizedBox(),
                       operationDirectionBody(),
-                      Positioned(
-                          top: 15,
-                          left: 637,
-                          child: Container(
-                            height: imageHeight,
-                            width: imageWidth / 8,
-                            child: TextField(
-                              controller: lineNumberController,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 120,
-                                  fontFamily: "GennokiokuLCDFont",
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                              decoration: const InputDecoration.collapsed(
-                                hintText: "线路编号",
-                                hintStyle: TextStyle(
-                                    fontSize: 40,
-                                    fontFamily: "GennokiokuLCDFont",
-                                    color: Colors.grey),
-                              ),
-                            ),
-                          )),
+                      lineName(),
                       stationName()
                     ],
                   ),
@@ -312,6 +314,119 @@ class OperationDirectionState extends State<OperationDirection>
             ],
           )),
     );
+  }
+
+  //线路名称
+  Container lineName() {
+    return lineNumberType == 0
+        ? Container(
+            height: imageHeight,
+            width: imageWidth,
+            child: Stack(
+              children: [
+                Positioned(
+                    left: imageWidth / 2 - 201,
+                    top: 85,
+                    child: Container(
+                      child: const Text(
+                        "LINE",
+                        style: TextStyle(
+                            fontSize: 45,
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.white),
+                      ),
+                    )),
+                Positioned(
+                    left: imageWidth / 2 + 101,
+                    top: 85,
+                    child: Container(
+                      child: const Text(
+                        "号线",
+                        style: TextStyle(
+                            fontSize: 45,
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.white),
+                      ),
+                    )),
+                Positioned(
+                    top: 20,
+                    left: 630,
+                    child: Container(
+                      height: imageHeight,
+                      width: imageWidth / 8,
+                      child: TextField(
+                        controller: generalLineNumberController,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 120,
+                            fontFamily: "GennokiokuLCDFont",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "线路编号",
+                          hintStyle: TextStyle(
+                              fontSize: 40,
+                              fontFamily: "GennokiokuLCDFont",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+          )
+        : Container(
+            height: imageHeight,
+            width: imageWidth,
+            child: Stack(
+              children: [
+                Positioned(
+                    top: 67,
+                    left: 541,
+                    child: Container(
+                      height: imageHeight,
+                      width: imageWidth / 4,
+                      child: TextField(
+                        controller: loopLineNumberController,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 45,
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.white),
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "线路编号",
+                          hintStyle: TextStyle(
+                              fontSize: 45,
+                              fontFamily: "GennokiokuLCDFont",
+                              color: Colors.grey),
+                        ),
+                      ),
+                    )),
+                Positioned(
+                    top: 121,
+                    left: 632,
+                    child: Container(
+                      height: imageHeight,
+                      width: imageWidth / 8,
+                      child: TextField(
+                        controller: loopLineNumberEnController,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 36,
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.white),
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "Line Number",
+                          hintStyle: TextStyle(
+                              fontSize: 25,
+                              fontFamily: "GennokiokuLCDFont",
+                              color: Colors.grey),
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+          );
   }
 
   //运行方向主体
@@ -349,15 +464,15 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         controller: generalStationNameLeftController,
                         style: const TextStyle(
                             fontSize: 38,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "往 ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: generalStationNameLeftHint,
+                          hintStyle: const TextStyle(
                               fontSize: 38,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -370,15 +485,15 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         controller: generalStationNameLeftEnController,
                         style: const TextStyle(
                             fontSize: 23,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "To   ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: generalStationNameLeftEnHint,
+                          hintStyle: const TextStyle(
                               fontSize: 23,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -391,16 +506,16 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         textAlign: TextAlign.right,
                         controller: generalStationNameRightController,
                         style: const TextStyle(
                             fontSize: 38,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "往 ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: generalStationNameRightHint,
+                          hintStyle: const TextStyle(
                               fontSize: 38,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -413,16 +528,16 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         textAlign: TextAlign.right,
                         controller: generalStationNameRightEnController,
                         style: const TextStyle(
                             fontSize: 23,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "To ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: generalStationNameRightEnHint,
+                          hintStyle: const TextStyle(
                               fontSize: 23,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -443,15 +558,15 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         controller: loopStationNameLeftController,
                         style: const TextStyle(
                             fontSize: 38,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "内环 经 ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: loopStationNameLeftHint,
+                          hintStyle: const TextStyle(
                               fontSize: 38,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -464,15 +579,15 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         controller: loopStationNameLeftEnController,
                         style: const TextStyle(
                             fontSize: 23,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "Inner Loop Via ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: loopStationNameLeftEnHint,
+                          hintStyle: const TextStyle(
                               fontSize: 23,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -485,16 +600,16 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         textAlign: TextAlign.right,
                         controller: loopStationNameRightController,
                         style: const TextStyle(
                             fontSize: 38,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "外环 经 ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: loopStationNameRightHint,
+                          hintStyle: const TextStyle(
                               fontSize: 38,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -507,16 +622,16 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child: TextFormField(
+                      child: TextField(
                         textAlign: TextAlign.right,
                         controller: loopStationNameRightEnController,
                         style: const TextStyle(
                             fontSize: 23,
                             fontFamily: "GennokiokuLCDFont",
                             color: Colors.white),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "Outer Loop Via ",
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration.collapsed(
+                          hintText: loopStationNameRightEnHint,
+                          hintStyle: const TextStyle(
                               fontSize: 23,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
@@ -577,7 +692,7 @@ class OperationDirectionState extends State<OperationDirection>
   //导出当前图
   Future<void> exportMainImage() async {
     String fileName =
-        "运行方向图 ${lineNumberController.text}号线 ${generalStationNameLeftController.text.replaceAll("往 ", "")}--${generalStationNameRightController.text.replaceAll("往 ", "")}.png";
+        "运行方向图 ${generalLineNumberController.text}号线 ${generalStationNameLeftController.text.replaceAll("往 ", "")}--${generalStationNameRightController.text.replaceAll("往 ", "")}.png";
     await exportImage(context, [0], _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }
