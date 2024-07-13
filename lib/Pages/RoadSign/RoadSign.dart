@@ -1,15 +1,10 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:main/Object/EntranceCover.dart';
 
 import '../../../Util.dart';
 import '../../Parent/RoadSign/RoadSign.dart' as RoadSignParent;
-import '../../Preference.dart';
 
 class RoadSignRoot extends StatelessWidget {
   const RoadSignRoot({super.key});
@@ -47,16 +42,27 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
   //背景图片字节数据
   Uint8List? _imageBytes;
 
-  TextEditingController roadNameController = TextEditingController(); //路名输入框控制器
+  //方向
+  int position = 0;
+
+  //是否反转方向
+  bool reversePosition = false;
+
+  //方向标记
+  late String positionMarkLeft;
+  late String positionMarkLeftEn;
+  late String positionMarkRight;
+  late String positionMarkRightEn;
+
+  //路名输入框控制器
+  TextEditingController roadNameController = TextEditingController();
 
   //默认导出宽度
   int exportWidthValue = 1920;
 
   @override
   Widget build(BuildContext context) {
-    //loadFont();
     return Scaffold(
-      backgroundColor: Util.backgroundColor(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,7 +73,41 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
               MenuBar(style: menuStyle(context), children: [
                 Container(
                     padding: const EdgeInsets.only(top: 14, left: 7),
-                    child: const Text("方向")),
+                    child: const Text("方位")),
+                Container(
+                  height: 48,
+                  child: RadioMenuButton(
+                      value: 0,
+                      groupValue: position,
+                      onChanged: (v) {
+                        setState(() {
+                          position = v!;
+                        });
+                      },
+                      child: const Text("东西")),
+                ),
+                Container(
+                  height: 48,
+                  child: RadioMenuButton(
+                      value: 1,
+                      groupValue: position,
+                      onChanged: (v) {
+                        setState(() {
+                          position = v!;
+                        });
+                      },
+                      child: const Text("南北")),
+                ),
+                Container(
+                    height: 48,
+                    child: CheckboxMenuButton(
+                      value: reversePosition,
+                      onChanged: (bool? value) {
+                        reversePosition = value!;
+                        setState(() {});
+                      },
+                      child: const Text("反转方位"),
+                    )),
               ])
             ],
           ),
@@ -126,69 +166,15 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
                   color: Colors.white,
                   child: Stack(
                     children: [
-                      const SizedBox(
-                        width: imageWidth,
-                        height: imageHeight,
-                      ),
-                      _imageBytes != null
-                          ? SizedBox(
-                              height: imageHeight,
-                              child: Image.memory(
-                                _imageBytes!,
-                              ),
-                            )
-                          : const SizedBox(),
                       Positioned(
                           child: Container(
                         height: imageHeight / 2,
                         width: imageWidth,
                         color: Util.hexToColor("a5e6ed"),
                       )),
-                      Positioned(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  height: imageHeight,
-                                  width: imageWidth,
-                                  child: TextField(
-                                    controller: roadNameController,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 60,
-                                        fontFamily: "HYYanKaiW"),
-                                    decoration: const InputDecoration.collapsed(
-                                      hintText: "中文路名",
-                                      hintStyle: TextStyle(
-                                          fontSize: 60,
-                                          fontFamily: "GennokiokuLCDFont"),
-                                    ),
-                                  ),
-                                ),
-                              ])),
-                      Positioned(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(top: 140),
-                                  height: imageHeight,
-                                  width: imageWidth,
-                                  child: const TextField(
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 50,
-                                        fontFamily: "HYYanKaiW",color: Colors.black),
-                                    decoration: InputDecoration.collapsed(
-                                      hintText: "英文路名",
-                                      hintStyle: TextStyle(
-                                          fontSize: 50,
-                                          fontFamily: "GennokiokuLCDFont",color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                              ]))
+                      roadName(),
+                      roadNameEn(),
+                      positionMark()
                     ],
                   ),
                 ),
@@ -198,9 +184,107 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
     );
   }
 
+  Container positionMark() {
+    positionMarkLeft = position == 0 ? "东" : "南";
+    positionMarkLeftEn = position == 0 ? "E" : "S";
+    positionMarkRight = position == 0 ? "西" : "北";
+    positionMarkRightEn = position == 0 ? "W" : "N";
+    if (reversePosition) {
+      String temp = positionMarkLeft;
+      positionMarkLeft = positionMarkRight;
+      positionMarkRight = temp;
+      temp = positionMarkLeftEn;
+      positionMarkLeftEn = positionMarkRightEn;
+      positionMarkRightEn = temp;
+    }
+    return Container(
+      height: imageHeight,
+      width: imageWidth,
+      child: Stack(
+        children: [
+          Positioned(
+              top: 15,
+              left: 20,
+              child: Text(positionMarkLeft,
+                  style: const TextStyle(
+                      fontSize: 50, fontFamily: "GennokiokuLCDFont"))),
+          Positioned(
+              top: 15,
+              right: 20,
+              child: Text(positionMarkRight,
+                  style: const TextStyle(
+                      fontSize: 50, fontFamily: "GennokiokuLCDFont"))),
+          Positioned(
+              top: 136,
+              left: 25,
+              child: Text(positionMarkLeftEn,
+                  style: const TextStyle(
+                      fontSize: 50,
+                      fontFamily: "GennokiokuLCDFont",
+                      color: Colors.black))),
+          Positioned(
+              top: 136,
+              right: 25,
+              child: Text(positionMarkRightEn,
+                  style: const TextStyle(
+                      fontSize: 50,
+                      fontFamily: "GennokiokuLCDFont",
+                      color: Colors.black)))
+        ],
+      ),
+    );
+  }
+
+  //英文路名
+  Positioned roadNameEn() {
+    return Positioned(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Container(
+        padding: const EdgeInsets.only(top: 140),
+        height: imageHeight,
+        width: imageWidth,
+        child: const TextField(
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 50,
+              fontFamily: "GennokiokuLCDFont",
+              color: Colors.black),
+          decoration: InputDecoration.collapsed(
+            hintText: "英文路名",
+            hintStyle: TextStyle(
+                fontSize: 50,
+                fontFamily: "GennokiokuLCDFont",
+                color: Colors.black),
+          ),
+        ),
+      ),
+    ]));
+  }
+
+  //路名
+  Positioned roadName() {
+    return Positioned(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Container(
+        padding: const EdgeInsets.only(top: 10),
+        height: imageHeight,
+        width: imageWidth,
+        child: TextField(
+          controller: roadNameController,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 60, fontFamily: "HYYanKaiW"),
+          decoration: const InputDecoration.collapsed(
+            hintText: "中文路名",
+            hintStyle: TextStyle(fontSize: 60, fontFamily: "GennokiokuLCDFont"),
+          ),
+        ),
+      ),
+    ]));
+  }
+
   //导出当前图
   Future<void> exportMainImage() async {
-    String fileName = "路牌 ${roadNameController.text}.png";
+    String fileName = "路牌 ${roadNameController.text} $positionMarkLeft$positionMarkRight.png";
     await exportImage(context, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }

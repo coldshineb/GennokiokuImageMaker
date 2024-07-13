@@ -5,47 +5,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:main/Object/EntranceCover.dart';
 
 mixin class RoadSign {
-
-  //显示下一站、当前站和终点站下拉菜单内容
-  List<DropdownMenuItem> showEntranceList(List<EntranceCover> stationList) {
-    List<DropdownMenuItem> tempList = [];
-    try {
-      for (EntranceCover value in stationList) {
-        tempList.add(DropdownMenuItem(
-          value: "${value.stationNameCN} ${value.entranceNumber}",
-          child: Text("${value.stationNameCN} ${value.entranceNumber}"),
-        ));
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
-    return tempList;
-  }
 
   //菜单样式
   MenuStyle menuStyle(BuildContext context) {
     return MenuStyle(
-      shape: MaterialStateProperty.all(
+      shape: WidgetStateProperty.all(
           const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-      fixedSize: MaterialStateProperty.all(
+      fixedSize: WidgetStateProperty.all(
           Size(MediaQuery.of(context).size.width, 48)),
     );
-  }
-
-  //原忆轨道交通图标
-  Container gennokiokuRailwayTransitLogoWidget(bool show) {
-    return show
-        ? Container(
-            padding: const EdgeInsets.fromLTRB(22.5, 5, 0, 0),
-            alignment: Alignment.topLeft,
-            height: 80,
-            width: 274,
-            child: SvgPicture.asset("assets/image/railwayTransitLogo.svg"))
-        : Container();
   }
 
   //导入线路文件
@@ -155,12 +125,5 @@ mixin class RoadSign {
       } catch (e) {
         print('导出图片失败: $e');
       }
-  }
-
-  //无线路信息 snackbar
-  void noStationsSnackbar(context) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("无线路信息"),
-    ));
   }
 }
