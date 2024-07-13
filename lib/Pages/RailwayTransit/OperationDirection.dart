@@ -68,10 +68,14 @@ class OperationDirectionState extends State<OperationDirection>
       TextEditingController(text: loopStationNameLeftHint);
   TextEditingController loopStationNameLeftEnController =
       TextEditingController(text: loopStationNameLeftEnHint);
+  TextEditingController loopStationNameLeftEnSecondController =
+      TextEditingController();
   TextEditingController loopStationNameRightController =
       TextEditingController(text: loopStationNameRightHint);
   TextEditingController loopStationNameRightEnController =
       TextEditingController(text: loopStationNameRightEnHint);
+  TextEditingController loopStationNameRightEnSecondController =
+      TextEditingController();
 
   int lineType = 0; //线路类型
   int lineNumberType = 0; //线路名称类型
@@ -82,10 +86,10 @@ class OperationDirectionState extends State<OperationDirection>
   static String generalStationNameLeftEnHint = "To   ";
   static String generalStationNameRightHint = "往 ";
   static String generalStationNameRightEnHint = "To ";
-  static String loopStationNameLeftHint = "内环 经 ";
-  static String loopStationNameLeftEnHint = "Inner Loop Via ";
-  static String loopStationNameRightHint = "外环 经 ";
-  static String loopStationNameRightEnHint = "Outer Loop Via ";
+  static String loopStationNameLeftHint = "经 ";
+  static String loopStationNameLeftEnHint = "Via  ";
+  static String loopStationNameRightHint = "经 ";
+  static String loopStationNameRightEnHint = "Via ";
 
   //默认导出宽度
   int exportWidthValue = 1920;
@@ -255,10 +259,12 @@ class OperationDirectionState extends State<OperationDirection>
                   loopStationNameLeftController.text = loopStationNameLeftHint;
                   loopStationNameLeftEnController.text =
                       loopStationNameLeftEnHint;
+                  loopStationNameLeftEnSecondController.clear();
                   loopStationNameRightController.text =
                       loopStationNameRightHint;
                   loopStationNameRightEnController.text =
                       loopStationNameRightEnHint;
+                  loopStationNameRightEnSecondController.clear();
                   setState(() {});
                 },
                 tooltip: '重置',
@@ -594,6 +600,24 @@ class OperationDirectionState extends State<OperationDirection>
                         ),
                       ),
                     )),
+                //站名左侧英文第二行
+                Positioned(
+                    left: 235,
+                    top: 149,
+                    child: Container(
+                      height: imageHeight,
+                      width: imageWidth / 3,
+                      child:  TextField(
+                        controller: loopStationNameLeftEnSecondController,
+                        style: const TextStyle(
+                            fontSize: 23,
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.white),
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "",
+                        ),
+                      ),
+                    )),
                 Positioned(
                     right: 186,
                     top: 78,
@@ -635,6 +659,25 @@ class OperationDirectionState extends State<OperationDirection>
                               fontSize: 23,
                               fontFamily: "GennokiokuLCDFont",
                               color: Colors.grey),
+                        ),
+                      ),
+                    )),
+                //站名右侧英文第二行
+                Positioned(
+                    right: 191,
+                    top: 149,
+                    child: Container(
+                      height: imageHeight,
+                      width: imageWidth / 3,
+                      child: TextField(
+                        controller: loopStationNameRightEnSecondController,
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(
+                            fontSize: 23,
+                            fontFamily: "GennokiokuLCDFont",
+                            color: Colors.white),
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "",
                         ),
                       ),
                     ))
