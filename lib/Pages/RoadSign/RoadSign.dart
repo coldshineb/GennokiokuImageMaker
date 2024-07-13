@@ -39,9 +39,6 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
 
-  //背景图片字节数据
-  Uint8List? _imageBytes;
-
   //方向
   int position = 0;
 
@@ -56,6 +53,7 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
 
   //路名输入框控制器
   TextEditingController roadNameController = TextEditingController();
+  TextEditingController roadNameEnController = TextEditingController();
 
   //默认导出宽度
   int exportWidthValue = 1920;
@@ -124,7 +122,10 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
               child: FloatingActionButton(
                 onPressed: () {
                   //重置所有变量
-                  _imageBytes = null;
+                  roadNameController.clear();
+                  roadNameEnController.clear();
+                  position = 0;
+                  reversePosition = false;
                   setState(() {});
                 },
                 tooltip: '重置',
@@ -243,13 +244,14 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
         padding: const EdgeInsets.only(top: 140),
         height: imageHeight,
         width: imageWidth,
-        child: const TextField(
+        child: TextField(
+          controller: roadNameEnController,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 50,
               fontFamily: "GennokiokuLCDFont",
               color: Colors.black),
-          decoration: InputDecoration.collapsed(
+          decoration: const InputDecoration.collapsed(
             hintText: "英文路名",
             hintStyle: TextStyle(
                 fontSize: 50,
@@ -284,7 +286,8 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
 
   //导出当前图
   Future<void> exportMainImage() async {
-    String fileName = "路牌 ${roadNameController.text} $positionMarkLeft$positionMarkRight.png";
+    String fileName =
+        "路牌 ${roadNameController.text} $positionMarkLeft$positionMarkRight.png";
     await exportImage(context, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }
