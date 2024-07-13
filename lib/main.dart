@@ -44,7 +44,7 @@ class HomeState extends State<Home> {
   static SharedPreferences? sharedPreferences; // 持久化数据
 
   // 设置持久化数据
-  void loadPref() async {
+  Future<int> loadPref() async {
     sharedPreferences = await SharedPreferences.getInstance(); // 获取持久化数据
     setState(() {
       //深色主题下使用白色背景
@@ -60,28 +60,11 @@ class HomeState extends State<Home> {
           sharedPreferences!.getBool(PreferenceKey.generalIsDevMode) ??
               DefaultPreference.generalIsDevMode;
     });
+    return 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    loadPref();
-    Widget page;
-    switch (_selectedIndex) {
-      case 0:
-        page = const HomePage();
-        break;
-      case 1:
-        page = const RailwayTransitRoot();
-        break;
-      case 2:
-        page = const RoadSignRoot();
-        break;
-      case 3:
-        page = const GeneralSettingPage();
-        break;
-      default:
-        throw UnimplementedError('no widget for $_selectedIndex');
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -90,59 +73,78 @@ class HomeState extends State<Home> {
         centerTitle: false,
         title: const Text('Gennokioku 原忆图片生成器'),
       ),
-      body: Row(
-        children: <Widget>[
-          LayoutBuilder(builder: (context, constraints) {
-            return SingleChildScrollView(
-                child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints(minHeight: constraints.maxHeight),
-                    child: IntrinsicHeight(
-                      child: NavigationRail(
-                        backgroundColor:
-                            Theme.of(context).brightness == Brightness.light
-                                ? Colors.pink[50]
-                                : Util.darkColorScheme().surface,
-                        selectedIndex: _selectedIndex,
-                        groupAlignment: groupAlignment,
-                        onDestinationSelected: (int index) {
-                          setState(() {
-                            _selectedIndex = index;
-                          });
-                        },
-                        labelType: labelType,
-                        destinations: const <NavigationRailDestination>[
-                          NavigationRailDestination(
-                            icon: Icon(Icons.assistant_outlined),
-                            selectedIcon: Icon(Icons.assistant),
-                            label: Text('欢迎', style: TextStyle(fontSize: 15)),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.train_outlined),
-                            selectedIcon: Icon(Icons.train),
-                            label: Text('轨道交通', style: TextStyle(fontSize: 15)),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.signpost_outlined),
-                            selectedIcon: Icon(Icons.signpost),
-                            label: Text('路牌', style: TextStyle(fontSize: 15)),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.settings_outlined),
-                            selectedIcon: Icon(Icons.settings),
-                            label: Text('设置', style: TextStyle(fontSize: 15)),
-                          ),
-                        ],
-                      ),
-                    )));
-          }),
-          const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-              child: Container(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: page,
-          )),
-        ],
+      body: FutureBuilder(
+        //因IndexedStack一次性加载所有页面，因此使用FutureBuilder提前读取设置
+        future: loadPref(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Row(
+              children: <Widget>[
+                LayoutBuilder(builder: (context, constraints) {
+                  return SingleChildScrollView(
+                      child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(minHeight: constraints.maxHeight),
+                          child: IntrinsicHeight(
+                            child: NavigationRail(
+                              backgroundColor: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.pink[50]
+                                  : Util.darkColorScheme().surface,
+                              selectedIndex: _selectedIndex,
+                              groupAlignment: groupAlignment,
+                              onDestinationSelected: (int index) {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                              },
+                              labelType: labelType,
+                              destinations: const <NavigationRailDestination>[
+                                NavigationRailDestination(
+                                  icon: Icon(Icons.assistant_outlined),
+                                  selectedIcon: Icon(Icons.assistant),
+                                  label: Text('欢迎',
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                                NavigationRailDestination(
+                                  icon: Icon(Icons.train_outlined),
+                                  selectedIcon: Icon(Icons.train),
+                                  label: Text('轨道交通',
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                                NavigationRailDestination(
+                                  icon: Icon(Icons.signpost_outlined),
+                                  selectedIcon: Icon(Icons.signpost),
+                                  label: Text('路牌',
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                                NavigationRailDestination(
+                                  icon: Icon(Icons.settings_outlined),
+                                  selectedIcon: Icon(Icons.settings),
+                                  label: Text('设置',
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                              ],
+                            ),
+                          )));
+                }),
+                const VerticalDivider(thickness: 1, width: 1),
+                Expanded(
+                    child: IndexedStack(
+                  index: _selectedIndex,
+                  children: const <Widget>[
+                    HomePage(),
+                    RailwayTransitRoot(),
+                    RoadSignRoot(),
+                    GeneralSettingPage(),
+                  ],
+                )),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
