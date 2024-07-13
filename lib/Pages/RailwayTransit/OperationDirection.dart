@@ -52,8 +52,8 @@ class OperationDirectionState extends State<OperationDirection>
   String tempLineColor = lineColor; //线路标识色
 
   //线路编号、站名控制器
-  TextEditingController generalLineNumberController = TextEditingController();
-  TextEditingController loopLineNumberController = TextEditingController();
+  TextEditingController digitLineNumberController = TextEditingController();
+  TextEditingController textLineNumberController = TextEditingController();
   TextEditingController loopLineNumberEnController =
       TextEditingController(text: loopLineNumberEnHint);
   TextEditingController generalStationNameLeftController =
@@ -241,8 +241,8 @@ class OperationDirectionState extends State<OperationDirection>
                   //重置所有变量
                   _imageBytes = null;
                   lineColor = defaultLineColor;
-                  generalLineNumberController.clear();
-                  loopLineNumberController.clear();
+                  digitLineNumberController.clear();
+                  textLineNumberController.clear();
                   loopLineNumberEnController.text = loopLineNumberEnHint;
                   generalStationNameLeftController.text =
                       generalStationNameLeftHint;
@@ -355,7 +355,7 @@ class OperationDirectionState extends State<OperationDirection>
                       height: imageHeight,
                       width: imageWidth / 8,
                       child: TextField(
-                        controller: generalLineNumberController,
+                        controller: digitLineNumberController,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 120,
@@ -387,7 +387,7 @@ class OperationDirectionState extends State<OperationDirection>
                       height: imageHeight,
                       width: imageWidth / 4,
                       child: TextField(
-                        controller: loopLineNumberController,
+                        controller: textLineNumberController,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 45,
@@ -692,7 +692,7 @@ class OperationDirectionState extends State<OperationDirection>
   //导出当前图
   Future<void> exportMainImage() async {
     String fileName =
-        "运行方向图 ${generalLineNumberController.text}号线 ${generalStationNameLeftController.text.replaceAll("往 ", "")}--${generalStationNameRightController.text.replaceAll("往 ", "")}.png";
+        "运行方向图 ${lineNumberType == 0 ? "${digitLineNumberController.text}号线" : textLineNumberController.text} ${lineType == 0 ? "${generalStationNameLeftController.text.replaceAll(generalStationNameLeftHint, "")}--${generalStationNameRightController.text.replaceAll(generalStationNameRightHint, "")}" : "${loopStationNameLeftController.text.replaceAll(loopStationNameLeftHint, "")}--${loopStationNameRightController.text.replaceAll(loopStationNameRightHint, "")}"}.png";
     await exportImage(context, [0], _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }
