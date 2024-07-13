@@ -297,7 +297,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.backgroundColorLCD),
+                  color: Util.hexToColor(CustomColors.railwayTransitLCDBackground),
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -551,7 +551,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
       lineList.add(
-          (routeLine(i, Util.hexToColor(CustomColors.passedStationVariant))));
+          (routeLine(i, Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant))));
     }
     //根据选择的下一站和终点站，替换已过站为未过站
     if (nextStationListIndex != null && terminusListIndex != null) {
@@ -694,9 +694,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: LCDStationIconSmallPainter(
-                lineColor: Util.hexToColor(CustomColors.passedStation),
+                lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassedStation),
                 lineVariantColor:
-                    Util.hexToColor(CustomColors.passedStationVariant),
+                    Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant),
                 shadow: true),
           )));
     }
@@ -752,9 +752,9 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD {
               0),
           child: CustomPaint(
               painter: LCDStationIconSmallPainter(
-                  lineColor: Util.hexToColor(CustomColors.passingStation),
+                  lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                   lineVariantColor:
-                      Util.hexToColor(CustomColors.passingStationVariant),
+                      Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                   shadow: false))));
     }
     return Stack(

@@ -283,7 +283,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.backgroundColorLCD),
+                  color: Util.hexToColor(CustomColors.railwayTransitLCDBackground),
                   child: Stack(
                     children: [
                       const SizedBox(

@@ -99,6 +99,8 @@ flutter:
         - asset: assets/font/FZLTHProGlobal-Regular.TTF
         - asset: assets/font/FZLTHProGlobal-Demibold.TTF
           weight: 600
+        - asset: assets/font/FZLTHProGlobal-Bold.TTF
+          weight: 800
     - family: STZongyi
       fonts:
         - asset: assets/font/STZongyi.ttf

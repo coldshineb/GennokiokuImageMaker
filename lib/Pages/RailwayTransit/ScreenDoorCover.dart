@@ -86,7 +86,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       fontSize: 118,
       letterSpacing: 4,
       fontFamily: "HYYanKaiW",
-      color: Util.hexToColor(CustomColors.screenDoorCoverStationName));
+      color: Util.hexToColor(
+          CustomColors.railwayTransitScreenDoorCoverStationName));
 
   //设置项
   late bool generalIsDevMode;
@@ -360,7 +361,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                     fontSize: 43,
                                     letterSpacing: 2,
                                     color: Util.hexToColor(CustomColors
-                                        .screenDoorCoverStationName)),
+                                        .railwayTransitScreenDoorCoverStationName)),
                               )),
                         ],
                       )),
@@ -513,8 +514,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                           width: 50,
                           //每个站与站之间线条的宽度
                           height: lineHeight,
-                          color: Util.hexToColor(
-                              CustomColors.screenDoorCoverPassedStation),
+                          color: Util.hexToColor(CustomColors
+                              .railwayTransitScreenDoorCoverPassedStation),
                         )))
                 : Container(),
             stationList.isNotEmpty
@@ -525,8 +526,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       width: 80,
                       //每个站与站之间线条的宽度
                       height: lineHeight,
-                      color: Util.hexToColor(
-                          CustomColors.screenDoorCoverPassedStation),
+                      color: Util.hexToColor(CustomColors
+                          .railwayTransitScreenDoorCoverPassedStation),
                     ))
                 : Container(),
           ],
@@ -689,7 +690,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                   TextStyle(
                                       fontSize: 77,
                                       color: Util.hexToColor(CustomColors
-                                          .screenDoorCoverStationName)))) /
+                                          .railwayTransitScreenDoorCoverStationName)))) /
                           2 -
                       130
                   : 0,
@@ -708,7 +709,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                                   TextStyle(
                                       fontSize: 77,
                                       color: Util.hexToColor(CustomColors
-                                          .screenDoorCoverStationName)))) /
+                                          .railwayTransitScreenDoorCoverStationName)))) /
                           2 -
                       130
                   : 0,
@@ -773,8 +774,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   terminusTextCN,
                   style: TextStyle(
                       fontSize: 77,
-                      color: Util.hexToColor(
-                          CustomColors.screenDoorCoverStationName)),
+                      color: Util.hexToColor(CustomColors
+                          .railwayTransitScreenDoorCoverStationName)),
                 )),
             Positioned(
                 left: leftPos,
@@ -786,8 +787,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                   style: TextStyle(
                       fontSize: 30,
                       letterSpacing: 2,
-                      color: Util.hexToColor(
-                          CustomColors.screenDoorCoverStationName)),
+                      color: Util.hexToColor(CustomColors
+                          .railwayTransitScreenDoorCoverStationName)),
                 )),
           ],
         ));
@@ -811,8 +812,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                             : "往 ${stationList[stationList.length - 1].stationNameCN}",
                         TextStyle(
                             fontSize: 77,
-                            color: Util.hexToColor(
-                                CustomColors.screenDoorCoverStationName))) -
+                            color: Util.hexToColor(CustomColors
+                                .railwayTransitScreenDoorCoverStationName))) -
                     138),
             top: 242,
             right: 0,
@@ -831,7 +832,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
       lineList.add(routeLine(
-          i, Util.hexToColor(CustomColors.screenDoorCoverPassedStation)));
+          i,
+          Util.hexToColor(
+              CustomColors.railwayTransitScreenDoorCoverPassedStation)));
     }
     //根据选择的当前站和终点站，替换已过站为未过站
     if (currentStationListIndex != null) {
@@ -884,8 +887,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             padding: EdgeInsets.fromLTRB(
                 10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
             child: CustomPaint(
-              painter: ScreenDoorCoverStationIconPainter(
-                  Util.hexToColor(CustomColors.screenDoorCoverPassedStation)),
+              painter: ScreenDoorCoverStationIconPainter(Util.hexToColor(
+                  CustomColors.railwayTransitScreenDoorCoverPassedStation)),
             )));
       }
       //上行
@@ -1016,11 +1019,13 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       for (int i = 0; i < stationList.length; i++) {
         tempList.add(stationNameCN(
             i,
-            Util.hexToColor(CustomColors.screenDoorCoverPassedStationText),
+            Util.hexToColor(
+                CustomColors.railwayTransitScreenDoorCoverPassedStationText),
             stationList));
         tempList.add(stationNameEN(
             i,
-            Util.hexToColor(CustomColors.screenDoorCoverPassedStationText),
+            Util.hexToColor(
+                CustomColors.railwayTransitScreenDoorCoverPassedStationText),
             stationList));
       }
       //根据选择的当前站，替换已过站为未过站
@@ -1039,11 +1044,13 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       for (int i = 0; i < stationList.length; i++) {
         tempList.add(stationNameCN(
             i,
-            Util.hexToColor(CustomColors.screenDoorCoverPassedStationText),
+            Util.hexToColor(
+                CustomColors.railwayTransitScreenDoorCoverPassedStationText),
             reversedStationList));
         tempList.add(stationNameEN(
             i,
-            Util.hexToColor(CustomColors.screenDoorCoverPassedStationText),
+            Util.hexToColor(
+                CustomColors.railwayTransitScreenDoorCoverPassedStationText),
             reversedStationList));
       }
       //根据选择的当前站，替换已过站为未过站

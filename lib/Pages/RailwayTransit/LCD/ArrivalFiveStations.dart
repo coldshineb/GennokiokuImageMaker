@@ -304,7 +304,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.backgroundColorLCD),
+                  color: Util.hexToColor(CustomColors.railwayTransitLCDBackground),
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -564,7 +564,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         } else if (currentStationListIndex == 1) {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(routeLineColor, false)));
@@ -583,11 +583,11 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         } else if (currentStationListIndex == 2) {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(routeLineColor, false)));
@@ -603,14 +603,14 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         } else if (currentStationListIndex == terminusListIndex! - 2) {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true)));
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(routeLineColor, false)));
@@ -620,32 +620,32 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
         } else if (currentStationListIndex == terminusListIndex! - 1) {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true)));
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(routeLineColor, false)));
         } else {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true)));
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(routeLineColor, false)));
@@ -684,7 +684,7 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
         } else if (currentStationListIndex == stationList.length - 3) {
           lineList.add(Container(child: routeLine(routeLineColor, true)));
           lineList.add(Container(child: routeLine(routeLineColor, false)));
@@ -694,11 +694,11 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
         } else if (currentStationListIndex == terminusListIndex! + 2) {
           lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
@@ -707,38 +707,38 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
                 child: routeLine(
-                    Util.hexToColor(CustomColors.passedStationVariant), true),
+                    Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true),
               )));
         } else if (currentStationListIndex == terminusListIndex! + 1) {
           lineList.add(Container(child: routeLine(routeLineColor, false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
                 child: routeLine(
-                    Util.hexToColor(CustomColors.passedStationVariant), true),
+                    Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true),
               )));
         } else {
           lineList.add(Container(child: routeLine(routeLineColor, true)));
@@ -749,62 +749,62 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
                 child: routeLine(
-                    Util.hexToColor(CustomColors.passedStationVariant), true),
+                    Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true),
               )));
         }
       } else {
         if (trainDirectionValue == 0) {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 1007),
               child: Transform.rotate(
                 angle: pi,
                 child: routeLine(
-                    Util.hexToColor(CustomColors.passedStationVariant), true),
+                    Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true),
               )));
         } else {
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), true)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), true)));
           lineList.add(Container(
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 1),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 2),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
           lineList.add(Container(
               padding: const EdgeInsets.only(left: 223 * 3),
               child: routeLine(
-                  Util.hexToColor(CustomColors.passedStationVariant), false)));
+                  Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant), false)));
         }
       }
     }
@@ -855,8 +855,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   CustomPaint passedStationIconMediumPainter() {
     return CustomPaint(
       painter: LCDStationIconMediumPainter(
-          lineColor: Util.hexToColor(CustomColors.passedStation),
-          lineVariantColor: Util.hexToColor(CustomColors.passedStationVariant),
+          lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassedStation),
+          lineVariantColor: Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant),
           shadow: true),
     );
   }
@@ -864,8 +864,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
   CustomPaint passedStationIconBigPainter() {
     return CustomPaint(
       painter: LCDStationIconBigPainter(
-          lineColor: Util.hexToColor(CustomColors.passedStation),
-          lineVariantColor: Util.hexToColor(CustomColors.passedStationVariant),
+          lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassedStation),
+          lineVariantColor: Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant),
           shadow: true),
     );
   }
@@ -1038,9 +1038,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //当前站为第2站
@@ -1049,9 +1049,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //当前站为末2站
@@ -1060,9 +1060,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //当前站为第3站~末3站
@@ -1071,9 +1071,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
       }
@@ -1085,9 +1085,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //当前站为末2站
@@ -1096,9 +1096,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //当前站为末1站
@@ -1107,9 +1107,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //当前站为第3站~末3站
@@ -1118,9 +1118,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(446, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
       }
@@ -1131,9 +1131,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
           tempList.add(Container(
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //第2站
@@ -1142,9 +1142,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //末1站
@@ -1154,18 +1154,18 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
                 padding: const EdgeInsets.fromLTRB(223 * 0, 0, 0, 0),
                 child: CustomPaint(
                     painter: LCDStationIconBigPainter(
-                        lineColor: Util.hexToColor(CustomColors.passingStation),
+                        lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                         lineVariantColor:
-                            Util.hexToColor(CustomColors.passingStationVariant),
+                            Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                         shadow: false))));
           } else {
             tempList.add(Container(
                 padding: const EdgeInsets.fromLTRB(223 * 4, 0, 0, 0),
                 child: CustomPaint(
                     painter: LCDStationIconBigPainter(
-                        lineColor: Util.hexToColor(CustomColors.passingStation),
+                        lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                         lineVariantColor:
-                            Util.hexToColor(CustomColors.passingStationVariant),
+                            Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                         shadow: false))));
           }
         }
@@ -1175,9 +1175,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223 * 3, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
         //第3站~末3站
@@ -1186,9 +1186,9 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD {
               padding: const EdgeInsets.fromLTRB(223 * 2, 0, 0, 0),
               child: CustomPaint(
                   painter: LCDStationIconBigPainter(
-                      lineColor: Util.hexToColor(CustomColors.passingStation),
+                      lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
                       lineVariantColor:
-                          Util.hexToColor(CustomColors.passingStationVariant),
+                          Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
                       shadow: false))));
         }
       }

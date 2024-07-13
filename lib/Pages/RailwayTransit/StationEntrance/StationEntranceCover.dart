@@ -186,7 +186,7 @@ class StationEntranceCoverState extends State<StationEntranceCover>
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.backgroundColorCover),
+                  color: Util.hexToColor(CustomColors.railwayTransitCoverBackground),
                   child: Stack(
                     children: [
                       const SizedBox(
