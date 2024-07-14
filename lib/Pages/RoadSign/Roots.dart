@@ -16,18 +16,6 @@ class _RoadSignRootState extends State<RoadSignRoot> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (_selectedIndex) {
-      case 0:
-        page = const RoadSign();
-        break;
-      case 1:
-        page = const RoadSign();
-        break;
-      default:
-        throw UnimplementedError('no widget for $_selectedIndex');
-    }
-
     return Scaffold(
       body: Row(
         children: <Widget>[
@@ -52,9 +40,9 @@ class _RoadSignRootState extends State<RoadSignRoot> {
                       label: Text('路牌', style: TextStyle(fontSize: 15)),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.signpost_outlined),
-                      selectedIcon: Icon(Icons.signpost),
-                      label: Text('路牌', style: TextStyle(fontSize: 15)),
+                      icon: Icon(Icons.question_mark_outlined),
+                      selectedIcon: Icon(Icons.question_mark),
+                      label: Text('其他功能', style: TextStyle(fontSize: 15)),
                     ),
                   ],
                 ),
@@ -63,9 +51,11 @@ class _RoadSignRootState extends State<RoadSignRoot> {
           }),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
-              child: Container(
-            child: page,
-          )),
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: const <Widget>[RoadSign(), Placeholder()],
+            ),
+          )
         ],
       ),
     );

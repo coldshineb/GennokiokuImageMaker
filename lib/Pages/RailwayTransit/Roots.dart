@@ -63,6 +63,11 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         label: Text('运行方向图', style: TextStyle(fontSize: 15)),
                       ),
                       NavigationRailDestination(
+                        icon: Icon(Icons.signpost_outlined),
+                        selectedIcon: Icon(Icons.signpost),
+                        label: Text('站内导向牌', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.settings_outlined),
                         selectedIcon: Icon(Icons.settings),
                         label: Text('设置', style: TextStyle(fontSize: 15)),
@@ -81,6 +86,7 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
             StationEntranceRoot(),
             ScreenDoorCover(),
             OperationDirection(),
+            Placeholder(),
             RailwayTransitSettingPageRoot(),
           ])),
         ],
