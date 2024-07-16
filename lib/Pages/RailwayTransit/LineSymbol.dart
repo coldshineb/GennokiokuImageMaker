@@ -192,15 +192,12 @@ class LineSymbolState extends State<LineSymbol> with LCD {
                 tooltip: '重置',
                 child: const Icon(Icons.refresh),
               )),
-          Container(
-            padding: const EdgeInsets.only(right: 15),
-            child: FloatingActionButton(
-              onPressed: () {
-                setState(() {});
-              },
-              tooltip: '刷新设置',
-              child: const Icon(Icons.settings_backup_restore),
-            ),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {});
+            },
+            tooltip: '刷新设置',
+            child: const Icon(Icons.settings_backup_restore),
           )
         ],
       ),
