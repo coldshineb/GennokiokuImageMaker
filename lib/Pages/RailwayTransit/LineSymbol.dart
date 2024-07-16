@@ -201,13 +201,6 @@ class LineSymbolState extends State<LineSymbol> with LCD {
               tooltip: '刷新设置',
               child: const Icon(Icons.settings_backup_restore),
             ),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              exportMainImage();
-            },
-            tooltip: '导出',
-            child: const Icon(Icons.save),
           )
         ],
       ),
@@ -227,13 +220,49 @@ class LineSymbolState extends State<LineSymbol> with LCD {
                 child: RepaintBoundary(
                   key: _mainImageKey,
                   child: Container(
-                      child: Widgets.lineNumberIcon(
-                          Util.hexToColor(lineColor), lineNumber, lineNumberEN)),
+                      child: Widgets.lineNumberIcon(Util.hexToColor(lineColor),
+                          lineNumber, lineNumberEN)),
                 ),
               ),
             ],
           )),
     );
+  }
+
+  @override
+  MenuBar importAndExportMenubar() {
+    return MenuBar(style: menuStyle(context), children: [
+      Container(
+        height: 48,
+        child: MenuItemButton(
+            onPressed: exportMainImage, child: const Text("导出图片")),
+      ),
+      Container(
+          padding: const EdgeInsets.only(top: 14), child: const Text("导出高度")),
+      DropdownButton(
+        items: heightList(),
+        onChanged: (value) {
+          setState(() {
+            exportHeightValue = value!;
+          });
+        },
+        value: exportHeightValue,
+      ),
+    ]);
+  }
+
+  //导出高度选择下拉列表
+  static List<DropdownMenuItem> heightList() {
+    return [
+      const DropdownMenuItem(
+        value: 180,
+        child: Text("180"),
+      ),
+      const DropdownMenuItem(
+        value: 1024,
+        child: Text("1024"),
+      )
+    ];
   }
 
   //导出当前图
