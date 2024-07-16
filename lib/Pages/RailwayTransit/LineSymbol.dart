@@ -222,11 +222,14 @@ class LineSymbolState extends State<LineSymbol> with LCD {
           scrollDirection: Axis.horizontal, //设置可水平、竖直滑动
           child: Column(
             children: [
-              RepaintBoundary(
-                key: _mainImageKey,
-                child: Container(
-                    child: Widgets.lineNumberIcon(
-                        Util.hexToColor(lineColor), lineNumber, lineNumberEN)),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: RepaintBoundary(
+                  key: _mainImageKey,
+                  child: Container(
+                      child: Widgets.lineNumberIcon(
+                          Util.hexToColor(lineColor), lineNumber, lineNumberEN)),
+                ),
               ),
             ],
           )),
