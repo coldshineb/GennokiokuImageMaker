@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/Pages/RailwayTransit/LineSymbol.dart';
 import 'package:main/Pages/RailwayTransit/OperationDirection.dart';
 
 import 'LCD/ArrivalFiveStations.dart';
@@ -65,6 +66,10 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                       NavigationRailDestination(
                         icon: Icon(Icons.signpost_outlined),
                         selectedIcon: Icon(Icons.signpost),
+                        label: Text('线路标识', style: TextStyle(fontSize: 15)),
+                      ),NavigationRailDestination(
+                        icon: Icon(Icons.signpost_outlined),
+                        selectedIcon: Icon(Icons.signpost),
                         label: Text('站内导向牌', style: TextStyle(fontSize: 15)),
                       ),
                       NavigationRailDestination(
@@ -86,6 +91,7 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
             StationEntranceRoot(),
             ScreenDoorCover(),
             OperationDirection(),
+            LineSymbol(),
             Placeholder(),
             RailwayTransitSettingPageRoot(),
           ])),
