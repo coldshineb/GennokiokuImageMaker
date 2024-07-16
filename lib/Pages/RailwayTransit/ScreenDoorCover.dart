@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,8 +76,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
   int? currentStationListIndex;
 
-  //是否使用站名作为批量导出子文件夹名
-  bool useStationNameAsBatchExportFolderName = true;
+  bool useStationNameAsBatchExportFolderName = true; //是否使用站名作为批量导出子文件夹名
+  int openSide = 0; //是否左侧开门
 
   //默认导出高度
   int exportHeightValue = 1280;
@@ -174,6 +175,36 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                     child: const Text("反转站点"),
                   ),
                 ),
+              ]),
+              MenuBar(style: menuStyle(context), children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 14, left: 7),
+                  child: const Text("开门方向"),
+                ),
+                Container(
+                  height: 48,
+                  child: RadioMenuButton(
+                      value: 0,
+                      groupValue: openSide,
+                      onChanged: (v) {
+                        setState(() {
+                          openSide = v!;
+                        });
+                      },
+                      child: const Text("左侧开门")),
+                ),
+                Container(
+                  height: 48,
+                  child: RadioMenuButton(
+                      value: 1,
+                      groupValue: openSide,
+                      onChanged: (v) {
+                        setState(() {
+                          openSide = v!;
+                        });
+                      },
+                      child: const Text("右侧开门")),
+                )
               ])
             ],
           ),
@@ -484,7 +515,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                           width: 50,
                           //每个站与站之间线条的宽度
                           height: lineHeight,
-                          color: lineColor,
+                          color: openSide == 0
+                              ? lineColor
+                              : Util.hexToColor(CustomColors
+                                  .railwayTransitScreenDoorCoverPassedStation),
                         )))
                 : Container(),
             stationList.isNotEmpty
@@ -494,7 +528,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       width: 50,
                       //每个站与站之间线条的宽度
                       height: lineHeight,
-                      color: lineColor,
+                      color: openSide == 0
+                          ? lineColor
+                          : Util.hexToColor(CustomColors
+                              .railwayTransitScreenDoorCoverPassedStation),
                     ))
                 : Container(),
           ],
@@ -518,8 +555,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                           width: 50,
                           //每个站与站之间线条的宽度
                           height: lineHeight,
-                          color: Util.hexToColor(CustomColors
-                              .railwayTransitScreenDoorCoverPassedStation),
+                          color: openSide == 1
+                              ? lineColor
+                              : Util.hexToColor(CustomColors
+                                  .railwayTransitScreenDoorCoverPassedStation),
                         )))
                 : Container(),
             stationList.isNotEmpty
@@ -530,8 +569,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
                       width: 80,
                       //每个站与站之间线条的宽度
                       height: lineHeight,
-                      color: Util.hexToColor(CustomColors
-                          .railwayTransitScreenDoorCoverPassedStation),
+                      color: openSide == 1
+                          ? lineColor
+                          : Util.hexToColor(CustomColors
+                              .railwayTransitScreenDoorCoverPassedStation),
                     ))
                 : Container(),
           ],
@@ -743,7 +784,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       //默认情况下不显示终点站标签
       terminusTextCN = "";
       terminusTextEN = "";
-    } else {
+    }
+    if (currentStationListIndex != null) {
       if (isToLeft) {
         //上行
         if (currentStationListIndex == 0) {
@@ -774,38 +816,73 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         }
       }
     }
-    return Container(
-        height: imageHeight,
-        width: stationImageWidth,
-        child: Stack(
-          children: [
-            Positioned(
-                left: leftPos,
-                top: 200,
-                right: 0,
-                child: Text(
-                  textAlign: TextAlign.center,
-                  terminusTextCN,
-                  style: TextStyle(
-                      fontSize: 77,
-                      color: Util.hexToColor(CustomColors
-                          .railwayTransitScreenDoorCoverStationName)),
-                )),
-            Positioned(
-                left: leftPos,
-                top: 305,
-                right: 0,
-                child: Text(
-                  textAlign: TextAlign.center,
-                  terminusTextEN,
-                  style: TextStyle(
-                      fontSize: 30,
-                      letterSpacing: 2,
-                      color: Util.hexToColor(CustomColors
-                          .railwayTransitScreenDoorCoverStationName)),
-                )),
-          ],
-        ));
+    if (openSide == 0) {
+      return Container(
+          height: imageHeight,
+          width: stationImageWidth,
+          child: Stack(
+            children: [
+              Positioned(
+                  left: leftPos,
+                  top: 200,
+                  right: 0,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    terminusTextCN,
+                    style: TextStyle(
+                        fontSize: 77,
+                        color: Util.hexToColor(CustomColors
+                            .railwayTransitScreenDoorCoverStationName)),
+                  )),
+              Positioned(
+                  left: leftPos,
+                  top: 305,
+                  right: 0,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    terminusTextEN,
+                    style: TextStyle(
+                        fontSize: 30,
+                        letterSpacing: 2,
+                        color: Util.hexToColor(CustomColors
+                            .railwayTransitScreenDoorCoverStationName)),
+                  )),
+            ],
+          ));
+    } else {
+      return Container(
+          height: imageHeight,
+          width: stationImageWidth,
+          child: Stack(
+            children: [
+              Positioned(
+                  left: 0,
+                  top: 200,
+                  right: leftPos,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    terminusTextCN,
+                    style: TextStyle(
+                        fontSize: 77,
+                        color: Util.hexToColor(CustomColors
+                            .railwayTransitScreenDoorCoverStationName)),
+                  )),
+              Positioned(
+                  left: 0,
+                  top: 305,
+                  right: leftPos,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    terminusTextEN,
+                    style: TextStyle(
+                        fontSize: 30,
+                        letterSpacing: 2,
+                        color: Util.hexToColor(CustomColors
+                            .railwayTransitScreenDoorCoverStationName)),
+                  )),
+            ],
+          ));
+    }
   }
 
   //方向箭头
@@ -818,24 +895,48 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         //上行且当前站为第一站，或下行且当前站为终点站时不显示箭头
         return Positioned(child: Container());
       } else {
-        return Positioned(
-            left: -200 -
-                (Util.getTextWidth(
-                        isToLeft
-                            ? "往 ${stationList[0].stationNameCN}"
-                            : "往 ${stationList[stationList.length - 1].stationNameCN}",
-                        TextStyle(
-                            fontSize: 77,
-                            color: Util.hexToColor(CustomColors
-                                .railwayTransitScreenDoorCoverStationName))) -
-                    138),
-            top: 242,
-            right: 0,
-            child: SvgPicture.string(
-              Util.screenDoorCoverDirectionArrow,
-              width: 90,
-              height: 90,
-            ));
+        if (openSide == 0) {
+          return Positioned(
+              left: -200 -
+                  (Util.getTextWidth(
+                          isToLeft
+                              ? "往 ${stationList[0].stationNameCN}"
+                              : "往 ${stationList[stationList.length - 1].stationNameCN}",
+                          TextStyle(
+                              fontSize: 77,
+                              color: Util.hexToColor(CustomColors
+                                  .railwayTransitScreenDoorCoverStationName))) -
+                      138),
+              top: 242,
+              right: 0,
+              child: SvgPicture.string(
+                Util.screenDoorCoverDirectionArrow,
+                width: 90,
+                height: 90,
+              ));
+        } else {
+          return Positioned(
+              right: -200 -
+                  (Util.getTextWidth(
+                          isToLeft
+                              ? "往 ${stationList[0].stationNameCN}"
+                              : "往 ${stationList[stationList.length - 1].stationNameCN}",
+                          TextStyle(
+                              fontSize: 77,
+                              color: Util.hexToColor(CustomColors
+                                  .railwayTransitScreenDoorCoverStationName))) -
+                      138),
+              top: 242,
+              left: 0,
+              child: Transform.rotate(
+                angle: pi,
+                child: SvgPicture.string(
+                  Util.screenDoorCoverDirectionArrow,
+                  width: 90,
+                  height: 90,
+                ),
+              ));
+        }
       }
     }
   }
@@ -854,22 +955,46 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
     if (currentStationListIndex != null) {
       //上行
       if (isToLeft) {
-        List<Container> replaceList = [];
-        for (int i = 0; i < currentStationListIndex!; i++) {
-          replaceList.add(routeLine(i, lineColor));
+        if (openSide == 0) {
+          List<Container> replaceList = [];
+          for (int i = 0; i < currentStationListIndex!; i++) {
+            replaceList.add(routeLine(i, lineColor));
+          }
+          lineList.replaceRange(0, currentStationListIndex!, replaceList);
+        } else {
+          List<Container> replaceList = [];
+          for (int i = stationList.length - 1 - currentStationListIndex!;
+              i < stationList.length - 1;
+              i++) {
+            replaceList.add(routeLine(i, lineColor));
+          }
+          lineList.replaceRange(
+              stationList.length - 1 - currentStationListIndex!,
+              stationList.length - 1,
+              replaceList);
         }
-        lineList.replaceRange(0, currentStationListIndex!, replaceList);
       }
       //下行
       else {
-        List<Container> replaceList = [];
-        for (int i = 0;
-            i < stationList.length - currentStationListIndex! - 1;
-            i++) {
-          replaceList.add(routeLine(i, lineColor));
+        if (openSide == 0) {
+          List<Container> replaceList = [];
+          for (int i = 0;
+              i < stationList.length - currentStationListIndex! - 1;
+              i++) {
+            replaceList.add(routeLine(i, lineColor));
+          }
+          lineList.replaceRange(0,
+              stationList.length - currentStationListIndex! - 1, replaceList);
+        } else {
+          List<Container> replaceList = [];
+          for (int i = currentStationListIndex!;
+              i < stationList.length - 1;
+              i++) {
+            replaceList.add(routeLine(i, lineColor));
+          }
+          lineList.replaceRange(
+              currentStationListIndex!, stationList.length - 1, replaceList);
         }
-        lineList.replaceRange(
-            0, stationList.length - currentStationListIndex! - 1, replaceList);
       }
     }
     return Stack(
@@ -907,32 +1032,64 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
       }
       //上行
       if (isToLeft) {
-        List<Container> replaceList = [];
-        for (int i = 0; i < currentStationListIndex!; i++) {
-          replaceList.add(Container(
-              padding: EdgeInsets.fromLTRB(
-                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
-              child: CustomPaint(
-                painter: ScreenDoorCoverStationIconPainter(lineColor),
-              )));
+        if (openSide == 0) {
+          List<Container> replaceList = [];
+          for (int i = 0; i < currentStationListIndex!; i++) {
+            replaceList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+                child: CustomPaint(
+                  painter: ScreenDoorCoverStationIconPainter(lineColor),
+                )));
+          }
+          iconList.replaceRange(0, currentStationListIndex!, replaceList);
+        } else {
+          List<Container> replaceList = [];
+          for (int i = stationList.length - currentStationListIndex!;
+              i < stationList.length;
+              i++) {
+            replaceList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+                child: CustomPaint(
+                  painter: ScreenDoorCoverStationIconPainter(lineColor),
+                )));
+          }
+          iconList.replaceRange(stationList.length - currentStationListIndex!,
+              stationList.length, replaceList);
         }
-        iconList.replaceRange(0, currentStationListIndex!, replaceList);
       }
       //下行
       else {
-        List<Container> replaceList = [];
-        for (int i = 0;
-            i < stationList.length - currentStationListIndex! - 1;
-            i++) {
-          replaceList.add(Container(
-              padding: EdgeInsets.fromLTRB(
-                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
-              child: CustomPaint(
-                painter: ScreenDoorCoverStationIconPainter(lineColor),
-              )));
+        if (openSide == 0) {
+          List<Container> replaceList = [];
+          for (int i = 0;
+              i < stationList.length - currentStationListIndex! - 1;
+              i++) {
+            replaceList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+                child: CustomPaint(
+                  painter: ScreenDoorCoverStationIconPainter(lineColor),
+                )));
+          }
+          iconList.replaceRange(0,
+              stationList.length - currentStationListIndex! - 1, replaceList);
+        } else {
+          List<Container> replaceList = [];
+          for (int i = currentStationListIndex! + 1;
+              i < stationList.length;
+              i++) {
+            replaceList.add(Container(
+                padding: EdgeInsets.fromLTRB(
+                    10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+                child: CustomPaint(
+                  painter: ScreenDoorCoverStationIconPainter(lineColor),
+                )));
+          }
+          iconList.replaceRange(
+              currentStationListIndex! + 1, stationList.length, replaceList);
         }
-        iconList.replaceRange(
-            0, stationList.length - currentStationListIndex! - 1, replaceList);
       }
     }
     return Stack(
@@ -944,12 +1101,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   Stack showTransferIcon(bool isToLeft) {
     List<Positioned> iconList = [];
     List<List<Line>> transferLineListToShow = [];
-    //上行
-    if (isToLeft) {
+    if ((isToLeft && openSide == 0) || (!isToLeft && openSide == 1)) {
       transferLineListToShow = transferLineList;
-    }
-    //下行
-    else {
+    } else {
       transferLineListToShow = transferLineList.reversed.toList();
     }
 
@@ -1035,21 +1189,38 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             i,
             Util.hexToColor(
                 CustomColors.railwayTransitScreenDoorCoverPassedStationText),
-            stationList));
+            openSide == 0 ? stationList : stationList.reversed.toList()));
         tempList.add(stationNameEN(
             i,
             Util.hexToColor(
                 CustomColors.railwayTransitScreenDoorCoverPassedStationText),
-            stationList));
+            openSide == 0 ? stationList : stationList.reversed.toList()));
       }
       //根据选择的当前站，替换已过站为未过站
       if (currentStationListIndex != null) {
-        List<Container> replaceList = [];
-        for (int i = 0; i < currentStationListIndex!; i++) {
-          replaceList.add(stationNameCN(i, Colors.black, stationList));
-          replaceList.add(stationNameEN(i, Colors.black, stationList));
+        if (openSide == 0) {
+          List<Container> replaceList = [];
+          for (int i = 0; i < currentStationListIndex!; i++) {
+            replaceList.add(stationNameCN(i, Colors.black, stationList));
+            replaceList.add(stationNameEN(i, Colors.black, stationList));
+          }
+          tempList.replaceRange(0, 2 * currentStationListIndex!, replaceList);
+        } else {
+          List<Station> reversedStationList = stationList.reversed.toList();
+          List<Container> replaceList = [];
+          for (int i = stationList.length - currentStationListIndex!;
+              i < stationList.length;
+              i++) {
+            replaceList
+                .add(stationNameCN(i, Colors.black, reversedStationList));
+            replaceList
+                .add(stationNameEN(i, Colors.black, reversedStationList));
+          }
+          tempList.replaceRange(
+              2 * (stationList.length - currentStationListIndex!),
+              2 * (stationList.length),
+              replaceList);
         }
-        tempList.replaceRange(0, 2 * currentStationListIndex!, replaceList);
       }
     }
     //下行
@@ -1060,26 +1231,40 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
             i,
             Util.hexToColor(
                 CustomColors.railwayTransitScreenDoorCoverPassedStationText),
-            reversedStationList));
+            openSide == 0 ? reversedStationList : stationList));
         tempList.add(stationNameEN(
             i,
             Util.hexToColor(
                 CustomColors.railwayTransitScreenDoorCoverPassedStationText),
-            reversedStationList));
+            openSide == 0 ? reversedStationList : stationList));
       }
       //根据选择的当前站，替换已过站为未过站
       if (currentStationListIndex != null) {
-        List<Container> replaceList = [];
-        for (int i = 0;
-            i < stationList.length - 1 - currentStationListIndex!;
-            i++) {
-          replaceList.add(stationNameCN(i, Colors.black, reversedStationList));
-          replaceList.add(stationNameEN(i, Colors.black, reversedStationList));
+        if (openSide == 0) {
+          List<Container> replaceList = [];
+          for (int i = 0;
+              i < stationList.length - 1 - currentStationListIndex!;
+              i++) {
+            replaceList
+                .add(stationNameCN(i, Colors.black, reversedStationList));
+            replaceList
+                .add(stationNameEN(i, Colors.black, reversedStationList));
+          }
+          tempList.replaceRange(
+              0,
+              2 * (stationList.length - 1 - currentStationListIndex!),
+              replaceList);
+        } else {
+          List<Container> replaceList = [];
+          for (int i = currentStationListIndex! + 1;
+              i < stationList.length;
+              i++) {
+            replaceList.add(stationNameCN(i, Colors.black, stationList));
+            replaceList.add(stationNameEN(i, Colors.black, stationList));
+          }
+          tempList.replaceRange(2 * (currentStationListIndex! + 1),
+              2 * (stationList.length), replaceList);
         }
-        tempList.replaceRange(
-            0,
-            2 * (stationList.length - 1 - currentStationListIndex!),
-            replaceList);
       }
     }
 
@@ -1248,21 +1433,21 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               context,
               stationList,
               routeUpImageKey,
-              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               routeUpImageKey,
-              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               routeDownImageKey,
-              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
@@ -1276,14 +1461,14 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
               context,
               stationList,
               directionUpImageKey,
-              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png",
               true,
               exportHeightValue: exportHeightValue);
           await exportImage(
               context,
               stationList,
               directionDownImageKey,
-              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png",
+              "$path${Util.pathSlash}${useStationNameAsBatchExportFolderName ? "${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}${Util.pathSlash}" : ""}屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png",
               true,
               exportHeightValue: exportHeightValue);
         }
@@ -1312,7 +1497,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //导出上行主线路图
   Future<void> exportRouteUpImage() async {
     String fileName =
-        "屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png";
+        "屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
     await exportImage(context, stationList, routeUpImageKey, fileName, false,
         exportHeightValue: exportHeightValue);
   }
@@ -1320,7 +1505,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //导出下行主线路图
   Future<void> exportRouteDownImage() async {
     String fileName =
-        "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png";
+        "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
     await exportImage(context, stationList, routeDownImageKey, fileName, false,
         exportHeightValue: exportHeightValue);
   }
@@ -1336,7 +1521,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //导出上行运行方向图
   Future<void> exportDirectionUpImage() async {
     String fileName =
-        "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向.png";
+        "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
     await exportImage(
         context, stationList, directionUpImageKey, fileName, false,
         exportHeightValue: exportHeightValue);
@@ -1345,7 +1530,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   //导出下行运行方向图
   Future<void> exportDirectionDownImage() async {
     String fileName =
-        "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向.png";
+        "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
     await exportImage(
         context, stationList, directionDownImageKey, fileName, false,
         exportHeightValue: exportHeightValue);
