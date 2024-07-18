@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,13 +67,15 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? Colors.pink[50]
-            : Util.darkColorScheme().surface,
-        centerTitle: false,
-        title: const Text('Gennokioku 原忆图片生成器'),
-      ),
+      appBar: !kIsWeb
+          ? AppBar(
+              backgroundColor: Theme.of(context).brightness == Brightness.light
+                  ? Colors.pink[50]
+                  : Util.darkColorScheme().surface,
+              centerTitle: false,
+              title: const Text('Gennokioku 原忆图片生成器'),
+            )
+          : null,
       body: FutureBuilder(
         //因IndexedStack一次性加载所有页面，因此使用FutureBuilder提前读取设置
         future: loadPref(),

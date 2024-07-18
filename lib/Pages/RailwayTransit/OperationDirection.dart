@@ -116,6 +116,18 @@ class OperationDirectionState extends State<OperationDirection>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              MenuBar(
+                style: menuStyle(context),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 14, left: 7),
+                    height: 48,
+                    child: const Text("纪念版，不要在生产环境使用",
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold)),
+                  )
+                ],
+              ),
               importAndExportMenubar(),
               MenuBar(style: menuStyle(context), children: [
                 Container(
@@ -607,7 +619,7 @@ class OperationDirectionState extends State<OperationDirection>
                     child: Container(
                       height: imageHeight,
                       width: imageWidth / 3,
-                      child:  TextField(
+                      child: TextField(
                         controller: loopStationNameLeftEnSecondController,
                         style: const TextStyle(
                             fontSize: 23,

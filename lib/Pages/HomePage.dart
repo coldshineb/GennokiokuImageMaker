@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -81,7 +82,7 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
               const Text(
-                Util.appVersion,
+                !kIsWeb ? Util.appVersion : '滚动更新',
                 style: TextStyle(
                   fontSize: 14.0,
                 ),
@@ -109,7 +110,7 @@ class HomePageState extends State<HomePage> {
                   child: const Text("项目地址")),
               const SizedBox(height: 20.0),
               const Text(
-                '软件更新',
+                !kIsWeb ? '软件更新' : '软件下载',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
