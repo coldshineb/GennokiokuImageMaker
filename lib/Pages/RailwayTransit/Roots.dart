@@ -67,7 +67,8 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         icon: Icon(Icons.signpost_outlined),
                         selectedIcon: Icon(Icons.signpost),
                         label: Text('线路标识', style: TextStyle(fontSize: 15)),
-                      ),NavigationRailDestination(
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.signpost_outlined),
                         selectedIcon: Icon(Icons.signpost),
                         label: Text('站内导向牌', style: TextStyle(fontSize: 15)),
@@ -134,6 +135,11 @@ class _LCDRootState extends State<LCDRoot> {
                     },
                     destinations: const <NavigationRailDestination>[
                       NavigationRailDestination(
+                        icon: Icon(Icons.announcement_outlined),
+                        selectedIcon: Icon(Icons.announcement),
+                        label: Text('重要通知', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.flight_takeoff),
                         selectedIcon: Icon(Icons.flight_takeoff),
                         label:
@@ -167,6 +173,7 @@ class _LCDRootState extends State<LCDRoot> {
               child: IndexedStack(
             index: _selectedIndex,
             children: const <Widget>[
+              Center(child: Text('LCD 显示屏已弃用，今后不会在 POV 视频中使用，生成功能现为纪念版，不会再做后续维护，不要在生产环境使用')),
               RunningLinearRoute(),
               ArrivalFiveStations(),
               ArrivalStationInfo(),
