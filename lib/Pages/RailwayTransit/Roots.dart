@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main/Pages/RailwayTransit/LineSymbol.dart';
 import 'package:main/Pages/RailwayTransit/OperationDirection.dart';
+import 'package:main/Pages/RailwayTransit/PlatformLevelSideName.dart';
 
 import 'LCD/ArrivalFiveStations.dart';
 import 'LCD/ArrivalLinearRoute.dart';
@@ -54,6 +55,11 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         label: Text('出入口图片', style: TextStyle(fontSize: 15)),
                       ),
                       NavigationRailDestination(
+                        icon: Icon(Icons.signpost_outlined),
+                        selectedIcon: Icon(Icons.signpost),
+                        label: Text('站台层侧方站名', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.splitscreen_outlined),
                         selectedIcon: Icon(Icons.splitscreen),
                         label: Text('屏蔽门盖板', style: TextStyle(fontSize: 15)),
@@ -90,6 +96,7 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                   IndexedStack(index: _selectedIndex, children: const <Widget>[
             LCDRoot(),
             StationEntranceRoot(),
+            PlatformLevelSideName(),
             ScreenDoorCover(),
             OperationDirection(),
             LineSymbol(),
@@ -173,7 +180,9 @@ class _LCDRootState extends State<LCDRoot> {
               child: IndexedStack(
             index: _selectedIndex,
             children: const <Widget>[
-              Center(child: Text('LCD 显示屏已弃用，今后不会在 POV 视频中使用，生成功能现为纪念版，不会再做后续维护，不要在生产环境使用')),
+              Center(
+                  child: Text(
+                      'LCD 显示屏已弃用，今后不会在 POV 视频中使用，生成功能现为纪念版，不会再做后续维护，不要在生产环境使用')),
               RunningLinearRoute(),
               ArrivalFiveStations(),
               ArrivalStationInfo(),

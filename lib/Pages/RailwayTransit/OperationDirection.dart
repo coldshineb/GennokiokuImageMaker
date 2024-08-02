@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../Util.dart';
 import '../../../../Util/CustomColors.dart';
-import '../../../Parent/RailwayTransit/StationEntrance.dart';
+import '../../Parent/ImageMaker/ImageMaker.dart';
 import '../../../Preference.dart';
 
 class OperationDirectionRoot extends StatelessWidget {
@@ -36,7 +36,7 @@ class OperationDirection extends StatefulWidget {
 }
 
 class OperationDirectionState extends State<OperationDirection>
-    with StationEntrance {
+    with ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 240;
   static const double imageWidth = 1440;

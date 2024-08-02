@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Util/CustomRegExp.dart';
 import '../../../Object/Line.dart';
-import '../../Parent/RailwayTransit/LCD.dart';
+import '../../Parent/ImageMaker/ImageMaker.dart';
 import '../../../Util.dart';
 import '../../../Util/CustomColors.dart';
 import '../../../Util/CustomPainter.dart';
@@ -42,7 +42,7 @@ class ScreenDoorCover extends StatefulWidget {
   ScreenDoorCoverState createState() => ScreenDoorCoverState();
 }
 
-class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
+class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 640;
   static const double routeImageWidth = 1920;
@@ -1333,7 +1333,6 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
   }
 
   //导入线路文件
-  @override
   void importLineJson() async {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
@@ -1399,21 +1398,20 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
           // 刷新页面状态
           setState(() {});
         } else if (stationsFromJson.length < 3) {
-          alertDialog("错误", "站点数量不能小于 3");
+          alertDialog(context, "错误", "站点数量不能小于 3");
         } else if (stationsFromJson.length >
             railwayTransitScreenDoorCoverMaxStation) {
-          alertDialog("错误",
+          alertDialog(context, "错误",
               "站点数量不能大于 ${railwayTransitScreenDoorCoverMaxStation}，过多的站点会导致显示不美观或显示异常");
         }
       } catch (e) {
         print('读取文件失败: $e');
-        alertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
+        alertDialog(context, "错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
   }
 
   //导出全部图
-  @override
   void exportAllImage() async {
     if (stationList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
@@ -1536,24 +1534,20 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with LCD {
         exportHeightValue: exportHeightValue);
   }
 
-  //通用提示对话框方法
-  void alertDialog(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("好"),
-              )
-            ],
-          );
-        });
+  //显示下一站、当前站和终点站下拉菜单内容
+  List<DropdownMenuItem> showStationList(List<Station> stationList) {
+    List<DropdownMenuItem> tempList = [];
+    try {
+      for (Station value in stationList) {
+        tempList.add(DropdownMenuItem(
+          value: value.stationNameCN,
+          child: Text(value.stationNameCN),
+        ));
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return tempList;
   }
 
   void nextStation() {

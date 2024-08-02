@@ -13,7 +13,8 @@ import 'package:main/Util/CustomRegExp.dart';
 import '../../../../Util.dart';
 import '../../../../Util/CustomColors.dart';
 import '../../../Object/Line.dart';
-import '../../../Parent/RailwayTransit/StationEntrance.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../Parent/ImageMaker/RailwayTransit/StationEntrance.dart';
 import '../../../Preference.dart';
 
 class StationEntranceCoverRoot extends StatelessWidget {
@@ -42,7 +43,7 @@ class StationEntranceCover extends StatefulWidget {
 }
 
 class StationEntranceCoverState extends State<StationEntranceCover>
-    with StationEntrance {
+    with StationEntrance, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 240;
   static const double imageWidth = 1440;

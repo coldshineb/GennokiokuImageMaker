@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../Parent/RailwayTransit/LCD.dart';
+import '../../Parent/ImageMaker/ImageMaker.dart';
 import '../../Preference.dart';
 import '../../Util.dart';
 import '../../Util/Widgets.dart';
@@ -32,7 +32,7 @@ class LineSymbol extends StatefulWidget {
   LineSymbolState createState() => LineSymbolState();
 }
 
-class LineSymbolState extends State<LineSymbol> with LCD {
+class LineSymbolState extends State<LineSymbol> with ImageMaker {
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
 

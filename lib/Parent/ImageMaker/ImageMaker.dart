@@ -1,48 +1,21 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:main/Object/EntranceCover.dart';
 
-mixin class StationEntrance {
-  //加载字体，最初用于加载 svg 中的文字字体，现在看起来不需要了
-  void loadFont() async {
-    var fontLoader1 = FontLoader("GennokiokuLCDFont");
-    fontLoader1
-        .addFont(rootBundle.load('assets/font/FZLTHProGlobal-Regular.TTF'));
-    var fontLoader2 = FontLoader("STZongyi");
-    fontLoader2.addFont(rootBundle.load('assets/font/STZongyi.ttf'));
-    await fontLoader1.load();
-    await fontLoader2.load();
-  }
-
-  //显示下一站、当前站和终点站下拉菜单内容
-  List<DropdownMenuItem> showEntranceList(List<EntranceCover> stationList) {
-    List<DropdownMenuItem> tempList = [];
-    try {
-      for (EntranceCover value in stationList) {
-        tempList.add(DropdownMenuItem(
-          value: "${value.stationNameCN} ${value.entranceNumber}",
-          child: Text("${value.stationNameCN} ${value.entranceNumber}"),
-        ));
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
-    return tempList;
-  }
-
+//图片生成器大类接口
+mixin class ImageMaker {
   //菜单样式
   MenuStyle menuStyle(BuildContext context) {
     return MenuStyle(
-      shape: MaterialStateProperty.all(
+      shape: WidgetStateProperty.all(
           const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-      fixedSize: MaterialStateProperty.all(
-          Size(MediaQuery.of(context).size.width, 48)),
+      fixedSize:
+          WidgetStateProperty.all(Size(MediaQuery.of(context).size.width, 48)),
     );
   }
 
@@ -56,20 +29,6 @@ mixin class StationEntrance {
             width: 274,
             child: SvgPicture.asset("assets/image/railwayTransitLogo.svg"))
         : Container();
-  }
-
-  //导入线路文件
-  void importLineJson() async {}
-
-  //导入纹理
-  void importPattern() async {}
-
-  //导出全部图
-  void exportAllImage() async {}
-
-  //导入导出菜单栏
-  MenuBar importAndExportMenubar() {
-    return const MenuBar(children: []);
   }
 
   //通用提示对话框方法
@@ -169,6 +128,11 @@ mixin class StationEntrance {
     } else {
       noStationsSnackbar(context);
     }
+  }
+
+  //导入导出菜单栏
+  MenuBar importAndExportMenubar() {
+    return const MenuBar(children: []);
   }
 
   //无线路信息 snackbar

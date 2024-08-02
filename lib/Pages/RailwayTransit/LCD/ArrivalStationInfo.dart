@@ -9,7 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
 
 import '../../../Object/Line.dart';
-import '../../../Parent/RailwayTransit/LCD.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
 import '../../../Preference.dart';
 import '../../../Util.dart';
 import '../../../Util/CustomColors.dart';
@@ -40,7 +41,7 @@ class ArrivalStationInfo extends StatefulWidget {
   ArrivalStationInfoState createState() => ArrivalStationInfoState();
 }
 
-class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
+class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -283,7 +284,8 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.railwayTransitLCDBackground),
+                  color:
+                      Util.hexToColor(CustomColors.railwayTransitLCDBackground),
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -772,7 +774,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
 
         if (currentCarriageFromJson > carriagesFromJson ||
             currentCarriageFromJson < 1) {
-          alertDialog("错误", "当前车厢不在车厢总数范围内");
+          alertDialog(context, "错误", "当前车厢不在车厢总数范围内");
         } else {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
@@ -822,7 +824,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         }
       } catch (e) {
         print('读取文件失败: $e');
-        alertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
+        alertDialog(context, "错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
   }
@@ -890,26 +892,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD {
         "已到站 站点信息图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
     await exportImage(context, stationList, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
-  }
-
-  //通用提示对话框方法
-  void alertDialog(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("好"),
-              )
-            ],
-          );
-        });
   }
 
   void nextStation() {

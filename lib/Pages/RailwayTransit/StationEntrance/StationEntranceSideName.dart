@@ -6,13 +6,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/EntranceCover.dart';
 import 'package:main/Util/CustomRegExp.dart';
 
 import '../../../../Util.dart';
 import '../../../Object/Line.dart';
-import '../../../Parent/RailwayTransit/StationEntrance.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../Parent/ImageMaker/RailwayTransit/StationEntrance.dart';
 import '../../../Preference.dart';
 
 class StationEntranceSideNameRoot extends StatelessWidget {
@@ -41,7 +41,7 @@ class StationEntranceSideName extends StatefulWidget {
 }
 
 class StationEntranceSideNameState extends State<StationEntranceSideName>
-    with StationEntrance {
+    with StationEntrance, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 540;
   static const double imageWidth = 1080;

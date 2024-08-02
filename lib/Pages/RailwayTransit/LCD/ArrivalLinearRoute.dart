@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Util/CustomRegExp.dart';
 import '../../../Object/Line.dart';
-import '../../../Parent/RailwayTransit/LCD.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
 import '../../../Preference.dart';
 import '../../../Util.dart';
 import '../../../Util/CustomColors.dart';
@@ -40,7 +41,7 @@ class ArrivalLinearRoute extends StatefulWidget {
   ArrivalLinearRouteState createState() => ArrivalLinearRouteState();
 }
 
-class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
+class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -257,7 +258,8 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.railwayTransitLCDBackground),
+                  color:
+                      Util.hexToColor(CustomColors.railwayTransitLCDBackground),
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -470,8 +472,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
     //显示整条线，默认为已过站
     for (int i = 0; i < stationList.length - 1; i++) {
-      lineList.add(
-          (routeLine(i, Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant))));
+      lineList.add((routeLine(
+          i,
+          Util.hexToColor(
+              CustomColors.railwayTransitLCDPassedStationVariant))));
     }
     //根据选择的当前站和终点站，替换已过站为未过站
     if (currentStationListIndex != null && terminusListIndex != null) {
@@ -551,9 +555,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: LCDStationIconSmallPainter(
-                lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassedStation),
-                lineVariantColor:
-                    Util.hexToColor(CustomColors.railwayTransitLCDPassedStationVariant),
+                lineColor: Util.hexToColor(
+                    CustomColors.railwayTransitLCDPassedStation),
+                lineVariantColor: Util.hexToColor(
+                    CustomColors.railwayTransitLCDPassedStationVariant),
                 shadow: true),
           )));
     }
@@ -611,9 +616,10 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
               0),
           child: CustomPaint(
               painter: LCDStationIconSmallPainter(
-                  lineColor: Util.hexToColor(CustomColors.railwayTransitLCDPassingStation),
-                  lineVariantColor:
-                      Util.hexToColor(CustomColors.railwayTransitLCDPassingStationVariant),
+                  lineColor: Util.hexToColor(
+                      CustomColors.railwayTransitLCDPassingStation),
+                  lineVariantColor: Util.hexToColor(
+                      CustomColors.railwayTransitLCDPassingStationVariant),
                   shadow: false))));
     }
     return Stack(
@@ -848,14 +854,14 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
           // 刷新页面状态
           setState(() {});
         } else if (stationsFromJson.length < 2) {
-          alertDialog("错误", "站点数量不能小于 2");
+          alertDialog(context, "错误", "站点数量不能小于 2");
         } else if (stationsFromJson.length > Util.railwayTransitLcdMaxStation) {
-          alertDialog("错误",
+          alertDialog(context, "错误",
               "直线型线路图站点数量不能大于 ${Util.railwayTransitLcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');
-        alertDialog("错误", "选择的文件格式错误，或文件内容格式未遵循规范");
+        alertDialog(context, "错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
     }
   }
@@ -923,26 +929,6 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD {
         "已到站 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
     await exportImage(context, stationList, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
-  }
-
-  //通用提示对话框方法
-  void alertDialog(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("好"),
-              )
-            ],
-          );
-        });
   }
 
   void nextStation() {
