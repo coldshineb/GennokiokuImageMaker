@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/Pages/RailwayTransit/GeneralSign/StationNameSign.dart';
 import 'package:main/Pages/RailwayTransit/LineSymbol.dart';
 import 'package:main/Pages/RailwayTransit/OperationDirection.dart';
 import 'package:main/Pages/RailwayTransit/PlatformLevelSideName.dart';
@@ -100,7 +101,7 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
             ScreenDoorCover(),
             OperationDirection(),
             LineSymbol(),
-            Placeholder(),
+            GeneralSignRoot(),
             RailwayTransitSettingPageRoot(),
           ])),
         ],
@@ -250,6 +251,65 @@ class _StationEntranceRootState extends State<StationEntranceRoot> {
               StationEntranceCover(),
               StationEntranceSideName(),
             ],
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+//站内导向牌三级导航
+class GeneralSignRoot extends StatefulWidget {
+  const GeneralSignRoot({super.key});
+
+  @override
+  State<GeneralSignRoot> createState() => _GeneralSignRootState();
+}
+
+class _GeneralSignRootState extends State<GeneralSignRoot> {
+  int _selectedIndex = 0;
+  double groupAlignment = -1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: <Widget>[
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+                child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: NavigationRail(
+                  extended: true,
+                  selectedIndex: _selectedIndex,
+                  groupAlignment: groupAlignment,
+                  onDestinationSelected: (int index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                  destinations: const <NavigationRailDestination>[
+                    NavigationRailDestination(
+                      icon: Icon(Icons.signpost_outlined),
+                      selectedIcon: Icon(Icons.signpost),
+                      label: Text('站名', style: TextStyle(fontSize: 15)),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.question_mark_outlined),
+                      selectedIcon: Icon(Icons.question_mark),
+                      label: Text('其他功能', style: TextStyle(fontSize: 15)),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+          }),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(
+              child: IndexedStack(
+            index: _selectedIndex,
+            children: const <Widget>[StationNameSign(), Placeholder()],
           )),
         ],
       ),

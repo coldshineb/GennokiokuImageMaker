@@ -116,19 +116,15 @@ class StationEntranceCoverState extends State<StationEntranceCover>
                   },
                   value: entranceListValue,
                 ),
-                Row(
-                  children: [
-                    Container(
-                      height: 48,
-                      child: MenuItemButton(
-                          onPressed: previousStation, child: const Text("上一个")),
-                    ),
-                    Container(
-                      height: 48,
-                      child: MenuItemButton(
-                          onPressed: nextStation, child: const Text("下一个")),
-                    ),
-                  ],
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                      onPressed: previousStation, child: const Text("上一个")),
+                ),
+                Container(
+                  height: 48,
+                  child: MenuItemButton(
+                      onPressed: nextStation, child: const Text("下一个")),
                 ),
               ])
             ],
@@ -188,7 +184,8 @@ class StationEntranceCoverState extends State<StationEntranceCover>
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color: Util.hexToColor(CustomColors.railwayTransitCoverBackground),
+                  color: Util.hexToColor(
+                      CustomColors.railwayTransitCoverBackground),
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -697,7 +694,9 @@ class StationEntranceCoverState extends State<StationEntranceCover>
       if (path != null) {
         for (int i = 0; i < entranceList.length; i++) {
           entranceIndex = i;
-          Directory("$path${Util.pathSlash}${entranceList[entranceIndex!].stationNameCN}").create();
+          Directory(
+                  "$path${Util.pathSlash}${entranceList[entranceIndex!].stationNameCN}")
+              .create();
           setState(() {});
           //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
           //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态

@@ -1,20 +1,19 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Util/CustomColors.dart';
 
-import '../../../../Util.dart';
-import '../../../Preference.dart';
-import '../../Object/Station.dart';
-import '../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../../Util.dart';
+import '../../../../Preference.dart';
+import '../../../Object/Station.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
 
-class PlatformLevelSideNameRoot extends StatelessWidget {
-  const PlatformLevelSideNameRoot({super.key});
+class StationNameSignRoot extends StatelessWidget {
+  const StationNameSignRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +25,22 @@ class PlatformLevelSideNameRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: const PlatformLevelSideName(),
+      home: const StationNameSign(),
     );
   }
 }
 
-class PlatformLevelSideName extends StatefulWidget {
-  const PlatformLevelSideName({super.key});
+class StationNameSign extends StatefulWidget {
+  const StationNameSign({super.key});
 
   @override
-  PlatformLevelSideNameState createState() => PlatformLevelSideNameState();
+  StationNameSignState createState() => StationNameSignState();
 }
 
-class PlatformLevelSideNameState extends State<PlatformLevelSideName>
-    with ImageMaker {
+class StationNameSignState extends State<StationNameSign> with ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
-  static const double imageHeight = 540;
-  static const double imageWidth = 1080;
+  static const double imageHeight = 240;
+  static const double imageWidth = 1440;
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
@@ -52,12 +50,13 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
 
   int? stationListIndex; //站名索引
   String? stationListValue; //下拉列表选择站名
+  bool isReversed = true; //是否反转颜色
 
   //站名集合
   List<Station> stationList = [];
 
   //默认导出宽度
-  int exportWidthValue = 2160;
+  int exportWidthValue = 1920;
 
   //设置项
   late bool generalIsDevMode;
@@ -104,20 +103,26 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
                     },
                     value: stationListValue,
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        height: 48,
-                        child: MenuItemButton(
-                            onPressed: previousStation,
-                            child: const Text("上一个")),
-                      ),
-                      Container(
-                        height: 48,
-                        child: MenuItemButton(
-                            onPressed: nextStation, child: const Text("下一个")),
-                      ),
-                    ],
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                        onPressed: previousStation, child: const Text("上一个")),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                        onPressed: nextStation, child: const Text("下一个")),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: () {
+                        setState(() {
+                          isReversed = !isReversed;
+                        });
+                      },
+                      child: const Text("反转颜色"),
+                    ),
                   ),
                 ])
               ],
@@ -174,6 +179,10 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
+                  color: isReversed
+                      ? Util.hexToColor(
+                          CustomColors.railwayTransitGeneralSignBackground)
+                      : Colors.white,
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -209,7 +218,7 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
     List<Positioned> list = [];
     if (stationList.isNotEmpty) {
       list.add(Positioned(
-          top: 145,
+          top: 40,
           left: 0,
           right: 0,
           child: Text(
@@ -217,13 +226,12 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
             stationList[stationListIndex!].stationNameCN,
             style: TextStyle(
                 letterSpacing: 4,
-                color: Util.hexToColor(
-                    CustomColors.railwayTransitGeneralSignBackground),
-                fontSize: 81,
+                color: isReversed ? Colors.white : Colors.black,
+                fontSize: 85,
                 fontFamily: "HYYanKaiW"),
           )));
       list.add(Positioned(
-          top: 240,
+          top: 145,
           left: 0,
           right: 0,
           child: Text(
@@ -231,9 +239,8 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
             stationList[stationListIndex!].stationNameEN,
             style: TextStyle(
                 wordSpacing: 2,
-                color: Util.hexToColor(
-                    CustomColors.railwayTransitGeneralSignBackground),
-                fontSize: 30),
+                color: isReversed ? Colors.white : Colors.black,
+                fontSize: 35),
           )));
     }
     return list;
@@ -333,14 +340,14 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
               context,
               stationList,
               _mainImageKey,
-              "$path${Util.pathSlash}站台层侧方站名 ${stationList[stationListIndex!].stationNameCN}.png",
+              "$path${Util.pathSlash}站名 ${stationList[stationListIndex!].stationNameCN}.png",
               true,
               exportWidthValue: exportWidthValue);
           await exportImage(
               context,
               stationList,
               _mainImageKey,
-              "$path${Util.pathSlash}站台层侧方站名 ${stationList[stationListIndex!].stationNameCN}.png",
+              "$path${Util.pathSlash}站名 ${stationList[stationListIndex!].stationNameCN}.png",
               true,
               exportWidthValue: exportWidthValue);
         }
@@ -355,7 +362,7 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
 
   //导出当前图
   Future<void> exportMainImage() async {
-    String fileName = "站台层侧方站名 ${stationList[stationListIndex!].stationNameCN}.png";
+    String fileName = "站名 ${stationList[stationListIndex!].stationNameCN}.png";
     await exportImage(context, stationList, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }
@@ -364,16 +371,16 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
   static List<DropdownMenuItem> resolutionList() {
     return [
       const DropdownMenuItem(
-        value: 1080,
-        child: Text("1080*540"),
+        value: 1920,
+        child: Text("1920*320"),
       ),
       const DropdownMenuItem(
-        value: 2160,
-        child: Text("2160*1080"),
+        value: 3840,
+        child: Text("3840*640"),
       ),
       const DropdownMenuItem(
-        value: 4320,
-        child: Text("4320*2160"),
+        value: 7680,
+        child: Text("7680*1280"),
       )
     ];
   }
