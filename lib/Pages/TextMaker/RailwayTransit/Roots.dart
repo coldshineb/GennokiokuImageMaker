@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/Pages/TextMaker/RailwayTransit/Arrival.dart';
 import 'package:main/Pages/TextMaker/RailwayTransit/Departure.dart';
 import 'package:main/Pages/TextMaker/RailwayTransit/Platform.dart';
 
@@ -42,6 +43,10 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         icon: Icon(Icons.flight_takeoff),
                         selectedIcon: Icon(Icons.flight_takeoff),
                         label: Text('出发', style: TextStyle(fontSize: 15)),
+                      ),NavigationRailDestination(
+                        icon: Icon(Icons.flight_land),
+                        selectedIcon: Icon(Icons.flight_land),
+                        label: Text('到站', style: TextStyle(fontSize: 15)),
                       ),
                     ],
                   ),
@@ -53,7 +58,7 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
           Expanded(
               child: IndexedStack(
                   index: _selectedIndex,
-                  children: const <Widget>[Platform(), Departure()])),
+                  children: const <Widget>[Platform(), Departure(),Arrival()])),
         ],
       ),
     );

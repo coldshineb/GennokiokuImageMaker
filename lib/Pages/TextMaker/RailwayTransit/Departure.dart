@@ -656,7 +656,7 @@ class _DepartureState extends State<Departure> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通16号线。本次列车开往黄川枢纽中心方向。下一站，终点站，黄川枢纽中心，可换乘17号线，请全体乘客带齐行李物品，做好下车准备。This train is bound for 黄川 hub, the next station is the terminus, 黄川 hub, you can transfer to line 17, please take all your belongings and get ready to exit.'));
-                                ScaffoldMessenger.of(context)
+                            ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               margin: EdgeInsets.all(10.0),
                               behavior: SnackBarBehavior.floating,
@@ -751,7 +751,7 @@ class _DepartureState extends State<Departure> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，虹尚路。This train is running in inner ring, the next station is 虹尚 road.'));
-                                ScaffoldMessenger.of(context)
+                            ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               margin: EdgeInsets.all(10.0),
                               behavior: SnackBarBehavior.floating,
@@ -800,7 +800,7 @@ class _DepartureState extends State<Departure> {
                       children: [
                         const Expanded(
                           child: Text(
-                            '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘23号线。\nThis train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 23.',
+                            '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘20号线。\nThis train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 20.',
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
@@ -810,7 +810,7 @@ class _DepartureState extends State<Departure> {
                           onPressed: () {
                             Clipboard.setData(const ClipboardData(
                                 text:
-                                '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘23号线。This train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 23.'));
+                                    '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘20号线。This train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 20.'));
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               margin: EdgeInsets.all(10.0),
