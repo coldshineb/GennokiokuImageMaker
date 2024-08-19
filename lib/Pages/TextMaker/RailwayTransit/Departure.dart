@@ -10,7 +10,7 @@ class Departure extends StatefulWidget {
   State<Departure> createState() => _DepartureState();
 }
 
-class _DepartureState extends State<Departure> with TextMaker{
+class _DepartureState extends State<Departure> with TextMaker {
   TextEditingController commonLineController = TextEditingController();
   TextEditingController commonTerminusController = TextEditingController();
   TextEditingController commonTerminusENController = TextEditingController();
@@ -537,12 +537,7 @@ class _DepartureState extends State<Departure> with TextMaker{
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通4号线。本次列车开往红糖西城方向。下一站，终点站，红糖西城，请全体乘客带齐行李物品，做好下车准备。This train is bound for 红糖西 city, the next station is the terminus, 红糖西 city, please take all your belongings and get ready to exit.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
                           child: const Text('复制'),
@@ -567,12 +562,7 @@ class _DepartureState extends State<Departure> with TextMaker{
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通18号线。本次列车开往洋红小镇方向。终点站，舫城寨。下一站，终点站，舫城寨，请全体乘客带齐行李物品，做好下车准备。This train is bound for 洋红小镇, the terminus is 舫城寨, the next station is the terminus, 舫城寨, please take all your belongings and get ready to exit.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
                           child: const Text('复制'),
@@ -624,12 +614,7 @@ class _DepartureState extends State<Departure> with TextMaker{
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通16号线。本次列车开往黄川枢纽中心方向。下一站，终点站，黄川枢纽中心，可换乘17号线，请全体乘客带齐行李物品，做好下车准备。This train is bound for 黄川 hub, the next station is the terminus, 黄川 hub, you can transfer to line 17, please take all your belongings and get ready to exit.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
                           child: const Text('复制'),
@@ -654,12 +639,7 @@ class _DepartureState extends State<Departure> with TextMaker{
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通3号线。本次列车开往草风佳地方向。终点站，嘉橙体育中心。下一站，终点站，嘉橙体育中心，可换乘21号线，请全体乘客带齐行李物品，做好下车准备。This train is bound for 草风佳地, the terminus is 嘉橙体育中心, the next station is the terminus, 嘉橙体育中心, you can transfer to line 21, please take all your belongings and get ready to exit.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
                           child: const Text('复制'),
@@ -709,12 +689,7 @@ class _DepartureState extends State<Departure> with TextMaker{
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，虹尚路。This train is running in inner ring, the next station is 虹尚 road.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
                           child: const Text('复制'),
@@ -764,12 +739,7 @@ class _DepartureState extends State<Departure> with TextMaker{
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘20号线。This train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 20.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
                           child: const Text('复制'),
