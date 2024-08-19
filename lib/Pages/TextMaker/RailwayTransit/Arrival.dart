@@ -11,36 +11,6 @@ class Arrival extends StatefulWidget {
 }
 
 class _ArrivalState extends State<Arrival> with TextMaker {
-  TextEditingController commonLineController = TextEditingController();
-  TextEditingController commonTerminusController = TextEditingController();
-  TextEditingController commonTerminusENController = TextEditingController();
-  TextEditingController commonNextController = TextEditingController();
-  TextEditingController commonNextENController = TextEditingController();
-  TextEditingController commonResultController = TextEditingController();
-  bool isPartRouteCommon = false;
-  TextEditingController commonPartTerminusController = TextEditingController();
-  TextEditingController commonPartTerminusENController =
-      TextEditingController();
-  TextEditingController commonTransferLineController = TextEditingController();
-  TextEditingController commonTransferTerminusController =
-      TextEditingController();
-  TextEditingController commonTransferTerminusENController =
-      TextEditingController();
-  TextEditingController commonTransferNextController = TextEditingController();
-  TextEditingController commonTransferNextENController =
-      TextEditingController();
-  TextEditingController commonTransferTransferLineController =
-      TextEditingController();
-  TextEditingController commonTransferTransferLineENController =
-      TextEditingController();
-  TextEditingController commonTransferResultController =
-      TextEditingController();
-  bool isPartRouteTransfer = false;
-  TextEditingController commonTransferPartTerminusController =
-      TextEditingController();
-  TextEditingController commonTransferPartTerminusENController =
-      TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +43,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("方向开门",
+                    const Text("常规线路 方向开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -98,7 +68,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("两侧开门",
+                    const Text("常规线路 两侧开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -123,7 +93,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("终点站 方向开门",
+                    const Text("常规线路 终点站 方向开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -148,7 +118,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("终点站 两侧开门",
+                    const Text("常规线路 终点站 两侧开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -165,6 +135,55 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '终点站，樱花谷站到了。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。We are now at the terminus, 樱花谷 station, please take all your belongings and exit, mind the step between the train and the platform.'));
+                            copiedSnackbar(context);
+                          },
+                          style: buttonStyle(context),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),const SizedBox(height: 10.0),
+                    const Text("小交线路 终点站 方向开门",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '终点站，青玉口站到了。请全体乘客带齐行李物品，从列车运行方向的左侧车门下车，注意列车与站台之间的空隙。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, please take all your belongings and exit on the left, mind the step between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '终点站，青玉口站到了。请全体乘客带齐行李物品，从列车运行方向的左侧车门下车，注意列车与站台之间的空隙。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, please take all your belongings and exit on the left, mind the step between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
+                                copiedSnackbar(context);
+                          },
+                          style: buttonStyle(context),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10.0),
+                    const Text("小交线路 终点站 两侧开门",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '终点站，舫城寨站到了。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙。前往洋红小镇方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 舫城寨 station, please take all your belongings and exit, mind the step between the train and the platform. Passengers wishing to go to 洋红小镇, please disembark and wait for the next train.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '终点站，舫城寨站到了。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙。前往洋红小镇方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 舫城寨 station, please take all your belongings and exit, mind the step between the train and the platform. Passengers wishing to go to 洋红小镇, please disembark and wait for the next train.'));
                             copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
@@ -200,7 +219,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("方向开门",
+                    const Text("常规线路 方向开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -225,7 +244,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("两侧开门",
+                    const Text("常规线路 两侧开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -250,7 +269,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("终点站 方向开门",
+                    const Text("常规线路 终点站 方向开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -275,7 +294,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    const Text("终点站 两侧开门",
+                    const Text("常规线路 终点站 两侧开门",
                         style: TextStyle(fontSize: 18.0, color: Colors.grey)),
                     Row(
                       children: [
@@ -299,10 +318,61 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                         )
                       ],
                     ),
+                    const SizedBox(height: 10.0),
+                    const Text("小交线路 终点站 方向开门",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit on the right, mind the step between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit on the right, mind the step between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
+                                copiedSnackbar(context);
+                          },
+                          style: buttonStyle(context),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10.0),
+                    const Text("小交线路 终点站 两侧开门",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit, mind the step between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit, mind the step between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
+                                copiedSnackbar(context);
+                          },
+                          style: buttonStyle(context),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),

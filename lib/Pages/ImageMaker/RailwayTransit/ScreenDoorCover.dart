@@ -1496,44 +1496,65 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
 
   //导出上行主线路图
   Future<void> exportRouteUpImage() async {
-    String fileName =
-        "屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
-    await exportImage(context, stationList, routeUpImageKey, fileName, false,
-        exportHeightValue: exportHeightValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "屏蔽门盖板 上行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
+      await exportImage(context, stationList, routeUpImageKey, fileName, false,
+          exportHeightValue: exportHeightValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出下行主线路图
   Future<void> exportRouteDownImage() async {
-    String fileName =
-        "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
-    await exportImage(context, stationList, routeDownImageKey, fileName, false,
-        exportHeightValue: exportHeightValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "屏蔽门盖板 下行线路图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
+      await exportImage(
+          context, stationList, routeDownImageKey, fileName, false,
+          exportHeightValue: exportHeightValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出站名图
   Future<void> exportStationImage() async {
-    String fileName =
-        "屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png";
-    await exportImage(context, stationList, stationImageKey, fileName, false,
-        exportHeightValue: exportHeightValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "屏蔽门盖板 站名 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}.png";
+      await exportImage(context, stationList, stationImageKey, fileName, false,
+          exportHeightValue: exportHeightValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出上行运行方向图
   Future<void> exportDirectionUpImage() async {
-    String fileName =
-        "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
-    await exportImage(
-        context, stationList, directionUpImageKey, fileName, false,
-        exportHeightValue: exportHeightValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "屏蔽门盖板 上行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[0].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
+      await exportImage(
+          context, stationList, directionUpImageKey, fileName, false,
+          exportHeightValue: exportHeightValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出下行运行方向图
   Future<void> exportDirectionDownImage() async {
-    String fileName =
-        "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
-    await exportImage(
-        context, stationList, directionDownImageKey, fileName, false,
-        exportHeightValue: exportHeightValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "屏蔽门盖板 下行运行方向图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, ${stationList[stationList.length - 1].stationNameCN}方向 ${openSide == 0 ? "左侧" : "右侧"}.png";
+      await exportImage(
+          context, stationList, directionDownImageKey, fileName, false,
+          exportHeightValue: exportHeightValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //显示下一站、当前站和终点站下拉菜单内容

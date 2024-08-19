@@ -357,9 +357,14 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
 
   //导出当前图
   Future<void> exportMainImage() async {
-    String fileName = "站台层侧方站名 ${stationList[stationListIndex!].stationNameCN}.png";
-    await exportImage(context, stationList, _mainImageKey, fileName, false,
-        exportWidthValue: exportWidthValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "站台层侧方站名 ${stationList[stationListIndex!].stationNameCN}.png";
+      await exportImage(context, stationList, _mainImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出分辨率选择下拉列表

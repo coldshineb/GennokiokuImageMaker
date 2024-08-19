@@ -104,6 +104,7 @@ class _RuleState extends State<Rule> with TextMaker {
                   ),
                 ),
               ),
+              SizedBox(height: 20.0),
             ],
           )),
     );

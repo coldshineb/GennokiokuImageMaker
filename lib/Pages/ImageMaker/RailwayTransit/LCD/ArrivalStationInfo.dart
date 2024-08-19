@@ -41,7 +41,8 @@ class ArrivalStationInfo extends StatefulWidget {
   ArrivalStationInfoState createState() => ArrivalStationInfoState();
 }
 
-class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageMaker {
+class ArrivalStationInfoState extends State<ArrivalStationInfo>
+    with LCD, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -890,10 +891,14 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
 
   //导出主线路图
   Future<void> exportMainImage() async {
-    String fileName =
-        "已到站 站点信息图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
-    await exportImage(context, stationList, _mainImageKey, fileName, false,
-        exportWidthValue: exportWidthValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "已到站 站点信息图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
+      await exportImage(context, stationList, _mainImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   void nextStation() {

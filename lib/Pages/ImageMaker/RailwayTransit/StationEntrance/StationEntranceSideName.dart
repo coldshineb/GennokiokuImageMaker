@@ -658,10 +658,14 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
 
   //导出当前图
   Future<void> exportMainImage() async {
-    String fileName =
-        "出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png";
-    await exportImage(context, entranceList, _mainImageKey, fileName, false,
-        exportWidthValue: exportWidthValue);
+    if (entranceList.isNotEmpty) {
+      String fileName =
+          "出入口侧方站名 ${entranceList[entranceIndex!].stationNameCN} ${entranceList[entranceIndex!].entranceNumber}.png";
+      await exportImage(context, entranceList, _mainImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出分辨率选择下拉列表

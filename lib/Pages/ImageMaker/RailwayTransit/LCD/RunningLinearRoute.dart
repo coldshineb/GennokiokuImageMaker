@@ -41,7 +41,8 @@ class RunningLinearRoute extends StatefulWidget {
   RunningLinearRouteState createState() => RunningLinearRouteState();
 }
 
-class RunningLinearRouteState extends State<RunningLinearRoute> with LCD, ImageMaker {
+class RunningLinearRouteState extends State<RunningLinearRoute>
+    with LCD, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -457,87 +458,85 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD, ImageM
 
   @override
   MenuBar importAndExportMenubar() {
-    return MenuBar(
-        style: menuStyle(context),
-        children: [
-          generalIsDevMode
-              ? Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: _importImage,
-                    child: const Text("导入图片"),
-                  ),
-                )
-              : Container(),
-          Container(
-            height: 48,
-            child: MenuItemButton(
-              onPressed: importLineJson,
-              child: const Text("导入线路"),
-            ),
-          ),
-          Container(
-            height: 48,
-            child: MenuItemButton(
-              onPressed: importPattern,
-              child: const Text("导入纹理"),
-            ),
-          ),
-          const VerticalDivider(thickness: 2),
-          Container(
-            height: 48,
-            child: MenuItemButton(
-              onPressed: exportAllImage,
-              child: const Text("导出全部图"),
-            ),
-          ),
-          Container(
-            height: 48,
-            child: MenuItemButton(
-              onPressed: exportDynamicImage,
-              child: const Text("导出当前站全部图"),
-            ),
-          ),
-          const VerticalDivider(),
-          Container(
-            height: 48,
-            child: MenuItemButton(
-              onPressed: exportMainImage,
-              child: const Text("导出主线路图"),
-            ),
-          ),
-          Container(
-            height: 48,
-            child: MenuItemButton(
-              onPressed: exportPassingImage,
-              child: const Text("导出下一站图"),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 14),
-            child: const Text("导出分辨率"),
-          ),
-          DropdownButton(
-            items: LCD.resolutionList(),
-            onChanged: (value) {
-              setState(() {
-                exportWidthValue = value!;
-              });
-            },
-            value: exportWidthValue,
-          ),
-          const VerticalDivider(thickness: 2),
-          Container(
+    return MenuBar(style: menuStyle(context), children: [
+      generalIsDevMode
+          ? Container(
               height: 48,
-              child: CheckboxMenuButton(
-                value: showLogo,
-                onChanged: (bool? value) {
-                  showLogo = value!;
-                  setState(() {});
-                },
-                child: const Text("显示品牌图标"),
-              )),
-        ]);
+              child: MenuItemButton(
+                onPressed: _importImage,
+                child: const Text("导入图片"),
+              ),
+            )
+          : Container(),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: importLineJson,
+          child: const Text("导入线路"),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: importPattern,
+          child: const Text("导入纹理"),
+        ),
+      ),
+      const VerticalDivider(thickness: 2),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportAllImage,
+          child: const Text("导出全部图"),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportDynamicImage,
+          child: const Text("导出当前站全部图"),
+        ),
+      ),
+      const VerticalDivider(),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportMainImage,
+          child: const Text("导出主线路图"),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportPassingImage,
+          child: const Text("导出下一站图"),
+        ),
+      ),
+      Container(
+        padding: const EdgeInsets.only(top: 14),
+        child: const Text("导出分辨率"),
+      ),
+      DropdownButton(
+        items: LCD.resolutionList(),
+        onChanged: (value) {
+          setState(() {
+            exportWidthValue = value!;
+          });
+        },
+        value: exportWidthValue,
+      ),
+      const VerticalDivider(thickness: 2),
+      Container(
+          height: 48,
+          child: CheckboxMenuButton(
+            value: showLogo,
+            onChanged: (bool? value) {
+              showLogo = value!;
+              setState(() {});
+            },
+            child: const Text("显示品牌图标"),
+          )),
+    ]);
   }
 
   //显示线路
@@ -1087,18 +1086,26 @@ class RunningLinearRouteState extends State<RunningLinearRoute> with LCD, ImageM
 
   //导出主线路图
   Future<void> exportMainImage() async {
-    String fileName =
-        "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png";
-    await exportImage(context, stationList, _mainImageKey, fileName, false,
-        exportWidthValue: exportWidthValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png";
+      await exportImage(context, stationList, _mainImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   //导出下一站图
   Future<void> exportPassingImage() async {
-    String fileName =
-        "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png";
-    await exportImage(context, stationList, _passingImageKey, fileName, false,
-        exportWidthValue: exportWidthValue);
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png";
+      await exportImage(context, stationList, _passingImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
   }
 
   void nextStation() {

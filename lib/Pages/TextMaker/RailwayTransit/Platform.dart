@@ -264,6 +264,7 @@ class _PlatformState extends State<Platform> with TextMaker {
                 ),
               ),
             ),
+            const SizedBox(height: 20.0),
           ],
         ),
       ),

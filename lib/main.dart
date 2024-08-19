@@ -5,9 +5,6 @@ import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
-import 'Pages/ImageMaker/RailwayTransit/Roots.dart';
-import 'Pages/ImageMaker/RailwayTransit/SettingPage.dart';
-import 'Pages/ImageMaker/RoadSign/Roots.dart';
 import 'Pages/ImageMaker/Roots.dart';
 import 'Pages/SettingPage.dart';
 import 'Util.dart';
