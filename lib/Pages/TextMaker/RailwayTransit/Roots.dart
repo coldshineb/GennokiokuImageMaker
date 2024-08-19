@@ -3,6 +3,8 @@ import 'package:main/Pages/TextMaker/RailwayTransit/Arrival.dart';
 import 'package:main/Pages/TextMaker/RailwayTransit/Departure.dart';
 import 'package:main/Pages/TextMaker/RailwayTransit/Platform.dart';
 
+import 'Rule.dart';
+
 class RailwayTransitRoot extends StatefulWidget {
   const RailwayTransitRoot({super.key});
 
@@ -35,6 +37,11 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                     labelType: NavigationRailLabelType.all,
                     destinations: const <NavigationRailDestination>[
                       NavigationRailDestination(
+                        icon: Icon(Icons.rule),
+                        selectedIcon: Icon(Icons.rule),
+                        label: Text('规范', style: TextStyle(fontSize: 15)),
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.train_outlined),
                         selectedIcon: Icon(Icons.train),
                         label: Text('站台', style: TextStyle(fontSize: 15)),
@@ -43,7 +50,8 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         icon: Icon(Icons.flight_takeoff),
                         selectedIcon: Icon(Icons.flight_takeoff),
                         label: Text('出发', style: TextStyle(fontSize: 15)),
-                      ),NavigationRailDestination(
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.flight_land),
                         selectedIcon: Icon(Icons.flight_land),
                         label: Text('到站', style: TextStyle(fontSize: 15)),
@@ -58,7 +66,12 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
           Expanded(
               child: IndexedStack(
                   index: _selectedIndex,
-                  children: const <Widget>[Platform(), Departure(),Arrival()])),
+                  children: const <Widget>[
+                Rule(),
+                Platform(),
+                Departure(),
+                Arrival()
+              ])),
         ],
       ),
     );
