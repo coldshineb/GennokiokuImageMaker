@@ -713,6 +713,126 @@ class _DepartureState extends State<Departure> {
               ),
             ),
             const SizedBox(height: 20),
+            Card(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '出发',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    const Text(
+                      '环线 一般站',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，虹尚路。\nThis train is running in inner ring, the next station is 虹尚 road.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，虹尚路。This train is running in inner ring, the next station is 虹尚 road.'));
+                                ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              margin: EdgeInsets.all(10.0),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text("已复制到剪贴板"),
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.pink[50]
+                                    : Util.darkColorScheme().onSecondary),
+                          ),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '出发',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    const Text(
+                      '环线 换乘站',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘23号线。\nThis train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 23.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                '欢迎乘坐原忆轨道交通南城环线。本次列车内环运行。下一站，谷海牙堂，可换乘23号线。This train is running in inner ring, the next station is 谷海牙堂, you can transfer to line 23.'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              margin: EdgeInsets.all(10.0),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text("已复制到剪贴板"),
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.pink[50]
+                                    : Util.darkColorScheme().onSecondary),
+                          ),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
