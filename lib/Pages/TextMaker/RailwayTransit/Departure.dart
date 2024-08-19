@@ -371,8 +371,7 @@ class _DepartureState extends State<Departure> {
                           flex: 2,
                           child: TextField(
                             enabled: isPartRouteTransfer,
-                            controller:
-                                commonTransferPartTerminusController,
+                            controller: commonTransferPartTerminusController,
                             decoration: const InputDecoration(
                               labelText: '小交终点站（中）',
                             ),
@@ -388,8 +387,7 @@ class _DepartureState extends State<Departure> {
                           flex: 2,
                           child: TextField(
                             enabled: isPartRouteTransfer,
-                            controller:
-                                commonTransferPartTerminusENController,
+                            controller: commonTransferPartTerminusENController,
                             decoration: const InputDecoration(
                               labelText: '小交终点站（英）',
                             ),
@@ -473,7 +471,7 @@ class _DepartureState extends State<Departure> {
                               String transferLineEN = splitTransferLineEN(
                                   commonTransferTransferLineENController);
                               commonTransferResultController.text =
-                                  '欢迎乘坐原忆轨道交通${commonTransferLineController.text}。本次列车开往${commonTransferTerminusController.text}方向。${isPartRouteTransfer ? "终点站，${commonTransferTerminusController.text}。" : ""}下一站，${commonTransferNextController.text}，可换乘${commonTransferTransferLineController.text}。\nThis train is bound for ${commonTransferTerminusENController.text},${isPartRouteTransfer ? " the terminus is ${commonTransferTerminusENController.text}," : ""} the next station is ${commonTransferNextENController.text}, you can transfer to $transferLineEN.';
+                                  '欢迎乘坐原忆轨道交通${commonTransferLineController.text}。本次列车开往${commonTransferTerminusController.text}方向。${isPartRouteTransfer ? "终点站，${commonTransferPartTerminusController.text}。" : ""}下一站，${commonTransferNextController.text}，可换乘${commonTransferTransferLineController.text}。\nThis train is bound for ${commonTransferTerminusENController.text},${isPartRouteTransfer ? " the terminus is ${commonTransferPartTerminusENController.text}," : ""} the next station is ${commonTransferNextENController.text}, you can transfer to $transferLineEN.';
                               Clipboard.setData(
                                 ClipboardData(
                                   text: commonTransferResultController.text,
@@ -516,6 +514,200 @@ class _DepartureState extends State<Departure> {
                         )
                       ],
                     )
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '出发',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    const Text(
+                      '非环线 一般终点站',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    const Text("常规线路",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '欢迎乘坐原忆轨道交通4号线。本次列车开往红糖西城方向。下一站，终点站，红糖西城，请全体乘客带齐行李物品，做好下车准备。\nThis train is bound for 红糖西 city, the next station is the terminus, 红糖西 city, please take all your belongings and get ready to exit.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '欢迎乘坐原忆轨道交通4号线。本次列车开往红糖西城方向。下一站，终点站，红糖西城，请全体乘客带齐行李物品，做好下车准备。This train is bound for 红糖西 city, the next station is the terminus, 红糖西 city, please take all your belongings and get ready to exit.'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              margin: EdgeInsets.all(10.0),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text("已复制到剪贴板"),
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.pink[50]
+                                    : Util.darkColorScheme().onSecondary),
+                          ),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10.0),
+                    const Text("小交线路",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '欢迎乘坐原忆轨道交通18号线。本次列车开往洋红小镇方向。终点站，舫城寨。下一站，终点站，舫城寨，请全体乘客带齐行李物品，做好下车准备。\nThis train is bound for 洋红小镇, the terminus is 舫城寨, the next station is the terminus, 舫城寨, please take all your belongings and get ready to exit.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '欢迎乘坐原忆轨道交通18号线。本次列车开往洋红小镇方向。终点站，舫城寨。下一站，终点站，舫城寨，请全体乘客带齐行李物品，做好下车准备。This train is bound for 洋红小镇, the terminus is 舫城寨, the next station is the terminus, 舫城寨, please take all your belongings and get ready to exit.'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              margin: EdgeInsets.all(10.0),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text("已复制到剪贴板"),
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.pink[50]
+                                    : Util.darkColorScheme().onSecondary),
+                          ),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '出发',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    const Text(
+                      '非环线 换乘终点站',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    const Text("常规线路",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '欢迎乘坐原忆轨道交通16号线。本次列车开往黄川枢纽中心方向。下一站，终点站，黄川枢纽中心，可换乘17号线，请全体乘客带齐行李物品，做好下车准备。\nThis train is bound for 黄川 hub, the next station is the terminus, 黄川 hub, you can transfer to line 17, please take all your belongings and get ready to exit.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '欢迎乘坐原忆轨道交通16号线。本次列车开往黄川枢纽中心方向。下一站，终点站，黄川枢纽中心，可换乘17号线，请全体乘客带齐行李物品，做好下车准备。This train is bound for 黄川 hub, the next station is the terminus, 黄川 hub, you can transfer to line 17, please take all your belongings and get ready to exit.'));
+                                ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              margin: EdgeInsets.all(10.0),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text("已复制到剪贴板"),
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.pink[50]
+                                    : Util.darkColorScheme().onSecondary),
+                          ),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10.0),
+                    const Text("小交线路",
+                        style: TextStyle(fontSize: 18.0, color: Colors.grey)),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '欢迎乘坐原忆轨道交通3号线。本次列车开往草风佳地方向。终点站，嘉橙体育中心。下一站，终点站，嘉橙体育中心，可换乘21号线，请全体乘客带齐行李物品，做好下车准备。\nThis train is bound for 草风佳地, the terminus is 嘉橙体育中心, the next station is the terminus, 嘉橙体育中心, you can transfer to line 21, please take all your belongings and get ready to exit.',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                                text:
+                                    '欢迎乘坐原忆轨道交通3号线。本次列车开往草风佳地方向。终点站，嘉橙体育中心。下一站，终点站，嘉橙体育中心，可换乘21号线，请全体乘客带齐行李物品，做好下车准备。This train is bound for 草风佳地, the terminus is 嘉橙体育中心, the next station is the terminus, 嘉橙体育中心, you can transfer to line 21, please take all your belongings and get ready to exit.'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              margin: EdgeInsets.all(10.0),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text("已复制到剪贴板"),
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.pink[50]
+                                    : Util.darkColorScheme().onSecondary),
+                          ),
+                          child: const Text('复制'),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
