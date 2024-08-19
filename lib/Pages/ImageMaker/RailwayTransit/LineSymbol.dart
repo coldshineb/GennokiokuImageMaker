@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-import '../../Parent/ImageMaker/ImageMaker.dart';
-import '../../Preference.dart';
-import '../../Util.dart';
-import '../../Util/Widgets.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../Preference.dart';
+import '../../../Util.dart';
+import '../../../Util/Widgets.dart';
 
 class LineSymbolRoot extends StatelessWidget {
   const LineSymbolRoot({super.key});

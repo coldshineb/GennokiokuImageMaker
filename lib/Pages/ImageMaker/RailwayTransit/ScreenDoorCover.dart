@@ -9,13 +9,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:main/Object/Station.dart';
 import 'package:main/Util/CustomRegExp.dart';
-import '../../../Object/Line.dart';
-import '../../Parent/ImageMaker/ImageMaker.dart';
-import '../../../Util.dart';
-import '../../../Util/CustomColors.dart';
-import '../../../Util/CustomPainter.dart';
-import '../../../Util/Widgets.dart';
-import '../../Preference.dart';
+import '../../../../Object/Line.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../Util.dart';
+import '../../../../Util/CustomColors.dart';
+import '../../../../Util/CustomPainter.dart';
+import '../../../../Util/Widgets.dart';
+import '../../../Preference.dart';
 
 class ScreenDoorCoverRoot extends StatelessWidget {
   const ScreenDoorCoverRoot({super.key});
@@ -1471,6 +1471,8 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
               exportHeightValue: exportHeightValue);
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          margin: const EdgeInsets.all(10.0),
+          behavior: SnackBarBehavior.floating,
           content: Text("图片已成功保存至: $path"),
         ));
       }

@@ -1,23 +1,23 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
+// ignore_for_file: sized_box_for_whitespace
 
 import 'dart:convert';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:main/Object/Station.dart';
+import 'package:main/Util/CustomRegExp.dart';
+import '../../../../Object/Line.dart';
+import '../../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
+import '../../../../Preference.dart';
+import '../../../../Util.dart';
+import '../../../../Util/CustomColors.dart';
+import '../../../../Util/CustomPainter.dart';
+import '../../../../Util/Widgets.dart';
+import '../../../../main.dart';
 
-import '../../../Object/Line.dart';
-import '../../../Parent/ImageMaker/ImageMaker.dart';
-import '../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
-import '../../../Preference.dart';
-import '../../../Util.dart';
-import '../../../Util/CustomColors.dart';
-import '../../../Util/Widgets.dart';
-
-class ArrivalStationInfoRoot extends StatelessWidget {
-  const ArrivalStationInfoRoot({super.key});
+class ArrivalLinearRouteRoot extends StatelessWidget {
+  const ArrivalLinearRouteRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +29,19 @@ class ArrivalStationInfoRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: const ArrivalStationInfo(),
+      home: const ArrivalLinearRoute(),
     );
   }
 }
 
-class ArrivalStationInfo extends StatefulWidget {
-  const ArrivalStationInfo({super.key});
+class ArrivalLinearRoute extends StatefulWidget {
+  const ArrivalLinearRoute({super.key});
 
   @override
-  ArrivalStationInfoState createState() => ArrivalStationInfoState();
+  ArrivalLinearRouteState createState() => ArrivalLinearRouteState();
 }
 
-class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageMaker {
+class ArrivalLinearRouteState extends State<ArrivalLinearRoute> with LCD, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 1715.2;
@@ -64,12 +64,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
   String lineNumber = "";
   String lineNumberEN = "";
 
-  //线路颜色，默认透明，导入文件时赋值
+  //线路颜色和颜色变体，默认透明，导入文件时赋值
   Color lineColor = Colors.transparent;
-  Color carriageColor = Util.hexToColor("595757");
-
-  int? carriages;
-  int? currentCarriage;
+  Color lineVariantColor = Colors.transparent;
 
   //站名下拉菜单默认值，设空，导入文件时赋值
   String? currentStationListValue;
@@ -79,28 +76,28 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
   int? currentStationListIndex;
   int? terminusListIndex;
 
-  //运行方向，用于处理已到站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
-  int trainDirectionValue = 1;
-
   //是否显示原忆轨道交通品牌图标
   bool showLogo = true;
-
-  //是否显示出入口编号
-  bool showEntrance = true;
 
   //默认导出宽度
   int exportWidthValue = 2560;
 
-  late Map<String, dynamic> jsonData;
+  //线路线条宽度
+  int lineLength = 1470;
 
   //设置项
   late bool generalIsDevMode;
   late bool generalIsScaleEnabled;
+  late bool railwayTransitLcdIsRouteColorSameAsLineColor;
 
   //获取设置项
   void getSetting() {
     generalIsDevMode = Preference.generalIsDevMode;
     generalIsScaleEnabled = Preference.generalIsScaleEnabled;
+    railwayTransitLcdIsRouteColorSameAsLineColor = HomeState.sharedPreferences
+            ?.getBool(
+                PreferenceKey.railwayTransitLcdIsRouteColorSameAsLineColor) ??
+        DefaultPreference.railwayTransitLcdIsRouteColorSameAsLineColor;
   }
 
   @override
@@ -119,36 +116,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                 MenuBar(style: menuStyle(context), children: [
                   Container(
                     padding: const EdgeInsets.only(top: 14, left: 7),
-                    child: const Text("运行方向"),
-                  ),
-                  Container(
-                    height: 48,
-                    child: RadioMenuButton(
-                        value: 0,
-                        groupValue: trainDirectionValue,
-                        onChanged: (v) {
-                          setState(() {
-                            trainDirectionValue = v!;
-                          });
-                        },
-                        child: const Text("向左行")),
-                  ),
-                  Container(
-                    height: 48,
-                    child: RadioMenuButton(
-                        value: 1,
-                        groupValue: trainDirectionValue,
-                        onChanged: (v) {
-                          setState(() {
-                            trainDirectionValue = v!;
-                          });
-                        },
-                        child: const Text("向右行")),
-                  )
-                ]),
-                MenuBar(style: menuStyle(context), children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 14, left: 7),
                     child: const Text("当前站"),
                   ),
                   DropdownButton(
@@ -159,16 +126,10 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                     items: showStationList(stationList),
                     onChanged: (value) {
                       try {
-                        int indexWhere = stationList.indexWhere(
-                            (element) => element.stationNameCN == value);
-                        indexWhere;
-                        if (indexWhere == 2) {
-                          trainDirectionValue = 0;
-                        } else if (indexWhere == stationList.length - 3) {
-                          trainDirectionValue = 1;
-                        }
-                        currentStationListIndex =
-                            indexWhere; //根据选择的站名，找到站名集合中对应的索引
+                        currentStationListIndex = stationList.indexWhere(
+                            (element) =>
+                                element.stationNameCN ==
+                                value); //根据选择的站名，找到站名集合中对应的索引
                         currentStationListValue = value;
                         setState(() {});
                       } catch (e) {
@@ -189,15 +150,8 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                     items: showStationList(stationList),
                     onChanged: (value) {
                       try {
-                        int indexWhere = stationList.indexWhere(
+                        terminusListIndex = stationList.indexWhere(
                             (element) => element.stationNameCN == value);
-                        indexWhere;
-                        if (indexWhere == 2) {
-                          trainDirectionValue = 0;
-                        } else if (indexWhere == stationList.length - 3) {
-                          trainDirectionValue = 1;
-                        }
-                        terminusListIndex = indexWhere;
                         terminusListValue = value;
                         setState(() {});
                       } catch (e) {
@@ -218,6 +172,27 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                     child: MenuItemButton(
                       onPressed: nextStation,
                       child: const Text("下一站"),
+                    ),
+                  ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: () {
+                        setState(() {
+                          if (stationList.isNotEmpty) {
+                            stationList = stationList.reversed.toList();
+                            transferLineList =
+                                transferLineList.reversed.toList();
+                            currentStationListIndex = stationList.length -
+                                1 -
+                                currentStationListIndex!; //反转站点索引
+                            terminusListIndex = stationList.length -
+                                1 -
+                                terminusListIndex!; //反转站点索引
+                          }
+                        });
+                      },
+                      child: const Text("反转站点"),
                     ),
                   ),
                 ])
@@ -248,14 +223,13 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                     stationList.clear();
                     transferLineList.clear();
                     lineColor = Colors.transparent;
+                    lineVariantColor = Colors.transparent;
                     currentStationListIndex = null;
                     terminusListIndex = null;
                     currentStationListValue = null;
                     terminusListValue = null;
                     lineNumber = "";
                     lineNumberEN = "";
-                    carriages = null;
-                    currentCarriage = null;
                     setState(() {});
                   },
                   tooltip: '重置',
@@ -386,13 +360,24 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                                 fontWeight: Util.railwayTransitLcdIsBoldFont,
                                 color: Colors.black),
                           )),
-                      arrivalStationInfoBody(),
-                      carriage(),
-                      hereMark(),
-                      directionMarkLeft(),
-                      directionMarkRight(),
-                      transferFrame(),
-                      transferIcon(),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 165, 0, 0),
+                        child: showStationName(),
+                      ),
+                      Container(
+                        width: imageWidth,
+                        height: imageHeight,
+                        padding: const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
+                        child: showTransferIcon(),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(60, 195, 0, 0),
+                        child: showRouteLine(),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
+                        child: showRouteIcon(),
+                      ),
                     ],
                   ),
                 ),
@@ -400,229 +385,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
             ],
           )),
     );
-  }
-
-  Container transferFrame() {
-    Container container = Container();
-    if (stationList.isNotEmpty &&
-        transferLineList[currentStationListIndex!].isNotEmpty) {
-      String colorStr = jsonData['lineColor'];
-      colorStr = colorStr.replaceAll('#', '');
-      String s =
-          Util.arrivalStationInfoTransfer.replaceAll("lineColor", colorStr);
-      container = Container(
-        padding: const EdgeInsets.only(left: 1348, top: 80),
-        child: SvgPicture.string(height: 206, width: 206, s),
-      );
-    }
-    return container;
-  }
-
-  //显示换乘线路图标
-  Container transferIcon() {
-    List<Container> tempList = [];
-    if (currentStationListIndex != null) {
-      List<Line> value = transferLineList[currentStationListIndex!];
-      if (value.isNotEmpty) {
-        switch (value.length) {
-          case 1:
-            tempList.add(Container(
-              padding: const EdgeInsets.only(top: 60),
-              child: transferIconWidget(value, 0),
-            ));
-            break;
-          case 2:
-            tempList.add(Container(
-              padding: const EdgeInsets.only(top: 30),
-              child: transferIconWidget(value, 0),
-            ));
-            tempList.add(Container(
-              padding: const EdgeInsets.only(top: 100),
-              child: transferIconWidget(value, 1),
-            ));
-            break;
-          case 3:
-            tempList.add(Container(
-              padding: const EdgeInsets.only(top: 0),
-              child: transferIconWidget(value, 0),
-            ));
-            tempList.add(Container(
-              padding: const EdgeInsets.only(top: 60),
-              child: transferIconWidget(value, 1),
-            ));
-            tempList.add(Container(
-              padding: const EdgeInsets.only(top: 120),
-              child: transferIconWidget(value, 2),
-            ));
-            break;
-          default:
-        }
-      }
-    }
-    return Container(
-      padding: const EdgeInsets.only(left: 1535, top: 98),
-      child: Stack(
-        children: tempList,
-      ),
-    );
-  }
-
-  Transform transferIconWidget(List<Line> value, int index) {
-    return Transform.scale(
-      scale: 1.27,
-      child: Widgets.lineNumberIcon(Util.hexToColor(value[index].lineColor),
-          value[index].lineNumber, value[index].lineNumberEN),
-    );
-  }
-
-  Container directionMarkLeft() {
-    Container container = Container();
-    if (stationList.isNotEmpty) {
-      switch (trainDirectionValue) {
-        case 0:
-          container = Container(
-            padding: const EdgeInsets.only(left: 380, top: 251.5),
-            child: SvgPicture.asset(
-                height: 22,
-                width: 22,
-                "assets/image/arrivalStationInfoDirectionToLeft.svg"),
-          );
-          break;
-        case 1:
-          container = Container(
-            padding: const EdgeInsets.only(left: 380, top: 251.5),
-            child: SvgPicture.asset(
-                height: 22,
-                width: 22,
-                "assets/image/arrivalStationInfoDirectionToRight.svg"),
-          );
-          break;
-        default:
-      }
-    }
-    return container;
-  }
-
-  Container directionMarkRight() {
-    Container container = Container();
-    if (stationList.isNotEmpty) {
-      switch (trainDirectionValue) {
-        case 0:
-          container = Container(
-            padding: const EdgeInsets.only(left: 1186, top: 251.5),
-            child: SvgPicture.asset(
-                height: 22,
-                width: 22,
-                "assets/image/arrivalStationInfoDirectionToLeft.svg"),
-          );
-          break;
-        case 1:
-          container = Container(
-            padding: const EdgeInsets.only(left: 1186, top: 251.5),
-            child: SvgPicture.asset(
-                height: 22,
-                width: 22,
-                "assets/image/arrivalStationInfoDirectionToRight.svg"),
-          );
-          break;
-
-        default:
-      }
-    }
-    return container;
-  }
-
-  Container carriage() {
-    List<Container> tempList = [];
-    if (carriages != null) {
-      for (int i = 1; i < carriages! + 1; i++) {
-        tempList.add(Container(
-          alignment: Alignment.center,
-          height: 61,
-          width: (722 - 4 * (carriages! - 1)) / carriages!,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0), color: carriageColor),
-          child: Transform.translate(
-            offset: const Offset(0, -4),
-            child: Text(
-              "$i",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 43,
-              ),
-            ),
-          ),
-        ));
-        tempList.add(Container(
-          width: 4,
-        ));
-      }
-      tempList
-          .replaceRange(2 * currentCarriage! - 2, 2 * currentCarriage! - 1, [
-        Container(
-          alignment: Alignment.center,
-          height: 61,
-          width: (722 - 4 * (carriages! - 1)) / carriages!,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0), color: lineColor),
-          child: Transform.translate(
-            offset: const Offset(0, -4),
-            child: Text(
-              "$currentCarriage",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 43,
-              ),
-            ),
-          ),
-        )
-      ]);
-    }
-    return Container(
-        padding: const EdgeInsets.only(left: 460, top: 184),
-        child: Row(children: tempList));
-  }
-
-  Container hereMark() {
-    Container container = Container();
-    if (carriages != null) {
-      container = Container(
-          padding: EdgeInsets.only(
-              left: 457.5 + //初始位置
-                  (726 / carriages! - 4) / 2 - //加上图标的一半宽度
-                  71 / 2 + //减去当前车厢标识的一半宽度，前三步计算出首个当前车厢标识的位置
-                  726 / carriages! * (currentCarriage! - 1), //加上图标的宽度
-              top: 251.5),
-          child: SvgPicture.asset(
-            "assets/image/arrivalStationInfoHere.svg",
-            height: 71,
-            width: 71,
-          ));
-    }
-    return container;
-  }
-
-  Container arrivalStationInfoBody() {
-    Container container = Container();
-    if (lineColor != Colors.transparent) {
-      String bodyToShow = showEntrance
-          ? Util.arrivalStationInfoBody
-          : Util.arrivalStationInfoBodyWithoutEntrance;
-      String colorStr = jsonData['lineColor'];
-      colorStr = colorStr.replaceAll('#', '');
-      String s = lineColor.computeLuminance() > 0.5
-          ? bodyToShow.replaceAll("fontColor", "000000")
-          : bodyToShow.replaceAll("fontColor", "ffffff");
-      s = s.replaceAll("lineColor", colorStr);
-      container = Container(
-          padding: const EdgeInsets.fromLTRB(330, 66, 0, 0),
-          height: 300,
-          width: 1323,
-          child: SvgPicture.string(s));
-      return container;
-    } else {
-      return container;
-    }
   }
 
   Container backgroundPattern() {
@@ -693,16 +455,6 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
       Container(
           height: 48,
           child: CheckboxMenuButton(
-            value: showEntrance,
-            onChanged: (bool? value) {
-              showEntrance = value!;
-              setState(() {});
-            },
-            child: const Text("显示出入口编号"),
-          )),
-      Container(
-          height: 48,
-          child: CheckboxMenuButton(
             value: showLogo,
             onChanged: (bool? value) {
               showLogo = value!;
@@ -711,6 +463,292 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
             child: const Text("显示品牌图标"),
           )),
     ]);
+  }
+
+  //显示线路
+  Stack showRouteLine() {
+    List<Container> lineList = [];
+    Color routeLineColor =
+        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
+    //显示整条线，默认为已过站
+    for (int i = 0; i < stationList.length - 1; i++) {
+      lineList.add((routeLine(
+          i,
+          Util.hexToColor(
+              CustomColors.railwayTransitLCDPassedStationVariant))));
+    }
+    //根据选择的当前站和终点站，替换已过站为未过站
+    if (currentStationListIndex != null && terminusListIndex != null) {
+      List<Container> replaceList = [];
+      //非空判断
+      //当前站在终点站左侧
+      if (currentStationListIndex! < terminusListIndex!) {
+        //当前站不为起始站
+        if (currentStationListIndex != 0) {
+          for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
+            //nextStationListIndex-1：当前站前的线条
+            replaceList.add(routeLine(i, routeLineColor));
+          }
+          //替换原集合
+          lineList.replaceRange(
+              currentStationListIndex!, terminusListIndex!, replaceList);
+        } else
+        //当前站为起始站
+        {
+          for (int i = currentStationListIndex!; i < terminusListIndex!; i++) {
+            replaceList.add(routeLine(i, routeLineColor));
+          }
+          lineList.replaceRange(
+              currentStationListIndex!, terminusListIndex!, replaceList);
+        }
+      }
+      //当前站在终点站右侧
+      else if (currentStationListIndex! > terminusListIndex!) {
+        //当前站不为终点站
+        if (currentStationListIndex != stationList.length - 1) {
+          for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
+            replaceList.add(routeLine(i, routeLineColor));
+          }
+          lineList.replaceRange(
+              terminusListIndex!, currentStationListIndex!, replaceList);
+        } else
+        //当前站为终点站
+        {
+          for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
+            replaceList.add(routeLine(i, routeLineColor));
+          }
+          lineList.replaceRange(
+              terminusListIndex!, currentStationListIndex!, replaceList);
+        }
+      }
+    }
+    return Stack(
+      children: lineList,
+    );
+  }
+
+  //线路
+  Container routeLine(int i, Color color) {
+    return Container(
+      padding:
+          EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
+      //间隔
+      height: 15,
+      child: Container(
+        width: (lineLength / (stationList.length - 1)), //每个站与站之间线条的宽度
+        color: color,
+      ),
+    );
+  }
+
+  //显示站点图标  与 showRouteLine 类似
+  Stack showRouteIcon() {
+    List<Container> iconList = [];
+    Color routeIconColor =
+        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
+    Color? routeIconVariantColor = railwayTransitLcdIsRouteColorSameAsLineColor
+        ? lineVariantColor
+        : Colors.green[300];
+    for (int i = 0; i < stationList.length; i++) {
+      iconList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+          child: CustomPaint(
+            painter: LCDStationIconSmallPainter(
+                lineColor: Util.hexToColor(
+                    CustomColors.railwayTransitLCDPassedStation),
+                lineVariantColor: Util.hexToColor(
+                    CustomColors.railwayTransitLCDPassedStationVariant),
+                shadow: true),
+          )));
+    }
+    if (currentStationListIndex != null && terminusListIndex != null) {
+      if (currentStationListIndex! <= terminusListIndex!) {
+        List<Container> replaceList = [];
+        for (int i = currentStationListIndex! + 1;
+            i < terminusListIndex! + 1;
+            i++) {
+          replaceList.add(Container(
+              padding: EdgeInsets.fromLTRB(
+                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+              child: CustomPaint(
+                painter: LCDStationIconSmallPainter(
+                    lineColor: routeIconColor,
+                    lineVariantColor: routeIconVariantColor,
+                    shadow: true),
+              )));
+        }
+        iconList.replaceRange(
+            currentStationListIndex! + 1, terminusListIndex! + 1, replaceList);
+      } else if (currentStationListIndex! > terminusListIndex!) {
+        List<Container> replaceList = [];
+        for (int i = terminusListIndex!; i < currentStationListIndex!; i++) {
+          replaceList.add(Container(
+              padding: EdgeInsets.fromLTRB(
+                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+              child: CustomPaint(
+                painter: LCDStationIconSmallPainter(
+                    lineColor: routeIconColor,
+                    lineVariantColor: routeIconVariantColor,
+                    shadow: true),
+              )));
+        }
+        iconList.replaceRange(
+            terminusListIndex!, currentStationListIndex!, replaceList);
+      }
+    }
+    return Stack(
+      children: iconList,
+    );
+  }
+
+  //显示正在过站图标
+  Stack showPassingRouteIcon() {
+    List<Container> tempList = [];
+    if (currentStationListIndex != null) {
+      tempList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10 +
+                  (lineLength / (stationList.length - 1)) *
+                      currentStationListIndex!,
+              0,
+              0,
+              0),
+          child: CustomPaint(
+              painter: LCDStationIconSmallPainter(
+                  lineColor: Util.hexToColor(
+                      CustomColors.railwayTransitLCDPassingStation),
+                  lineVariantColor: Util.hexToColor(
+                      CustomColors.railwayTransitLCDPassingStationVariant),
+                  shadow: false))));
+    }
+    return Stack(
+      children: tempList,
+    );
+  }
+
+  //显示换乘线路图标
+  Stack showTransferIcon() {
+    List<Positioned> iconList = [];
+
+    //遍历获取每站的换乘信息列表
+    for (int i = 0; i < transferLineList.length; i++) {
+      List<Line> value = transferLineList[i];
+      if (value.isNotEmpty) {
+        //遍历获取每站的换乘信息列表中具体的换乘线路信息
+        for (int j = 0; j < value.length; j++) {
+          Line transferLine = value[j];
+
+          if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextOneDigit(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.twoDigits
+              .hasMatch(transferLine.lineNumberEN)) {
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextTwoDigits(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.twoDigits
+              .hasMatch(transferLine.lineNumberEN)) {
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextTwoDigits(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.oneDigitOneCharacter
+              .hasMatch(transferLine.lineNumberEN)) {
+            iconList.add(Positioned(
+                left: (lineLength / (stationList.length - 1)) * i,
+                top: 35.5 * j,
+                child: Stack(
+                  children: [
+                    Widgets.transferLineIcon(transferLine),
+                    Widgets.transferLineTextOneDigitOneCharacter(transferLine)
+                  ],
+                )));
+          } else if (CustomRegExp.twoCharacters
+              .hasMatch(transferLine.lineNumberEN)) {
+            {
+              iconList.add(Positioned(
+                  left: (lineLength / (stationList.length - 1)) * i,
+                  top: 35.5 * j,
+                  child: Stack(
+                    children: [
+                      Widgets.transferLineIcon(transferLine),
+                      Widgets.transferLineTextTwoCharacters(transferLine)
+                    ],
+                  )));
+            }
+          }
+        }
+      }
+    }
+    return Stack(
+      children: iconList,
+    );
+  }
+
+  //显示站名
+  Stack showStationName() {
+    List<Container> tempList = [];
+    double count = 0;
+    for (Station value in stationList) {
+      tempList.add(Container(
+        padding: EdgeInsets.fromLTRB(
+            (lineLength / (stationList.length - 1)) * count, 0, 0, 0),
+        child: Container(
+          //逆时针45度
+          transform: Matrix4.rotationZ(-0.75),
+          child: Text(
+            value.stationNameCN,
+            style: TextStyle(
+              fontWeight: Util.railwayTransitLcdIsBoldFont,
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ));
+      tempList.add(Container(
+        padding: EdgeInsets.fromLTRB(
+            //英文站名做适当偏移
+            15 + (lineLength / (stationList.length - 1)) * count,
+            10,
+            0,
+            0),
+        child: Container(
+          transform: Matrix4.rotationZ(-0.75),
+          child: Text(
+            value.stationNameEN,
+            style: TextStyle(
+              fontWeight: Util.railwayTransitLcdIsBoldFont,
+              fontSize: 12,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ));
+      count++;
+    }
+    return Stack(
+      children: tempList,
+    );
   }
 
   //导入背景图片，图片样式复刻已完成，此功能此后只做开发用途
@@ -750,6 +788,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
   @override
   void importLineJson() async {
     List<dynamic> stationsFromJson = [];
+    Map<String, dynamic> jsonData;
 
     // 选择 JSON 文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -768,14 +807,9 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
         jsonData = json.decode(jsonString);
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
-
-        int carriagesFromJson = int.parse(jsonData['carriages']);
-        int currentCarriageFromJson = int.parse(jsonData['currentCarriage']);
-
-        if (currentCarriageFromJson > carriagesFromJson ||
-            currentCarriageFromJson < 1) {
-          alertDialog(context, "错误", "当前车厢不在车厢总数范围内");
-        } else {
+        // 站点不能少于 2 或大于 maxStation
+        if (stationsFromJson.length >= 2 &&
+            stationsFromJson.length <= Util.railwayTransitLcdMaxStation) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -786,9 +820,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
           lineNumber = jsonData['lineNumber'];
           lineNumberEN = jsonData['lineNumberEN'];
           lineColor = Util.hexToColor(jsonData['lineColor']);
-          carriages = carriagesFromJson;
-          currentCarriage = currentCarriageFromJson;
-
+          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
@@ -800,7 +832,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
               //读取换乘信息并转为换乘线路列表
               List<dynamic> transfers = item['transfer'];
               transferLines = transfers.map((transfer) {
-                return Line(transfer['lineNumber'],
+                return Line("",
                     lineNumberEN: transfer['lineNumberEN'],
                     lineColor: transfer['lineColor']);
               }).toList();
@@ -821,6 +853,11 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
           terminusListIndex = stationList.length - 1;
           // 刷新页面状态
           setState(() {});
+        } else if (stationsFromJson.length < 2) {
+          alertDialog(context, "错误", "站点数量不能小于 2");
+        } else if (stationsFromJson.length > Util.railwayTransitLcdMaxStation) {
+          alertDialog(context, "错误",
+              "直线型线路图站点数量不能大于 ${Util.railwayTransitLcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');
@@ -846,14 +883,14 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                 context,
                 stationList,
                 _mainImageKey,
-                "$path${Util.pathSlash}已到站 站点信息图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path${Util.pathSlash}已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 true,
                 exportWidthValue: exportWidthValue);
             await exportImage(
                 context,
                 stationList,
                 _mainImageKey,
-                "$path${Util.pathSlash}已到站 站点信息图 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path${Util.pathSlash}已到站 ${currentStationListIndex! + 1} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 true,
                 exportWidthValue: exportWidthValue);
           }
@@ -865,19 +902,21 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
                 context,
                 stationList,
                 _mainImageKey,
-                "$path${Util.pathSlash}已到站 站点信息图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path${Util.pathSlash}已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 true,
                 exportWidthValue: exportWidthValue);
             await exportImage(
                 context,
                 stationList,
                 _mainImageKey,
-                "$path${Util.pathSlash}已到站 站点信息图 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+                "$path${Util.pathSlash}已到站 ${stationList.length - currentStationListIndex!} ${stationList[currentStationListIndex!].stationNameCN}, $terminusListValue方向.png",
                 true,
                 exportWidthValue: exportWidthValue);
           }
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          margin: const EdgeInsets.all(10.0),
+          behavior: SnackBarBehavior.floating,
           content: Text("图片已成功保存至: $path"),
         ));
       }
@@ -889,7 +928,7 @@ class ArrivalStationInfoState extends State<ArrivalStationInfo> with LCD, ImageM
   //导出主线路图
   Future<void> exportMainImage() async {
     String fileName =
-        "已到站 站点信息图 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
+        "已到站 ${currentStationListIndex! + 1} $currentStationListValue, $terminusListValue方向.png";
     await exportImage(context, stationList, _mainImageKey, fileName, false,
         exportWidthValue: exportWidthValue);
   }

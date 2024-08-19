@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Util/CustomColors.dart';
 
-import '../../../../Util.dart';
-import '../../../Preference.dart';
-import '../../Object/Station.dart';
-import '../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../../Util.dart';
+import '../../../../Preference.dart';
+import '../../../Object/Station.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
 
 class PlatformLevelSideNameRoot extends StatelessWidget {
   const PlatformLevelSideNameRoot({super.key});
@@ -345,6 +345,8 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
               exportWidthValue: exportWidthValue);
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          margin: const EdgeInsets.all(10.0),
+          behavior: SnackBarBehavior.floating,
           content: Text("图片已成功保存至: $path"),
         ));
       }

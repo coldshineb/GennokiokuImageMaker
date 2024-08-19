@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:main/Object/Station.dart';
 
-import '../../../Parent/ImageMaker/ImageMaker.dart';
-import '../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
-import '../../../Preference.dart';
-import '../../../Util.dart';
-import '../../../Util/CustomColors.dart';
-import '../../../Util/CustomPainter.dart';
-import '../../../main.dart';
+import '../../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
+import '../../../../Preference.dart';
+import '../../../../Util.dart';
+import '../../../../Util/CustomColors.dart';
+import '../../../../Util/CustomPainter.dart';
+import '../../../../main.dart';
 
 class ArrivalFiveStationsRoot extends StatelessWidget {
   const ArrivalFiveStationsRoot({super.key});
@@ -1992,6 +1992,8 @@ class ArrivalFiveStationsState extends State<ArrivalFiveStations> with LCD, Imag
           }
         }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          margin: const EdgeInsets.all(10.0),
+          behavior: SnackBarBehavior.floating,
           content: Text("图片已成功保存至: $path"),
         ));
       }

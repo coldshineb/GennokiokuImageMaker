@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../Util.dart';
-import '../../../../Util/CustomColors.dart';
-import '../../Parent/ImageMaker/ImageMaker.dart';
-import '../../../Preference.dart';
+import '../../../../../Util.dart';
+import '../../../../../Util/CustomColors.dart';
+import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../Preference.dart';
 
 class OperationDirectionRoot extends StatelessWidget {
   const OperationDirectionRoot({super.key});
@@ -157,6 +157,8 @@ class OperationDirectionState extends State<OperationDirection>
                                     } catch (e) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
+                                          margin: const EdgeInsets.all(10.0),
+                                          behavior: SnackBarBehavior.floating,
                                               content: Text("颜色格式错误 $e")));
                                     }
                                     Navigator.of(context).pop();

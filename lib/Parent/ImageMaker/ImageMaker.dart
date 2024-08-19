@@ -86,6 +86,8 @@ mixin class ImageMaker {
       return path;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        margin: EdgeInsets.all(10.0),
+        behavior: SnackBarBehavior.floating,
         content: Text("取消导出"),
       ));
       return null;
@@ -119,6 +121,8 @@ mixin class ImageMaker {
             await imgFile.writeAsBytes(imageBytes);
           }
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            margin: const EdgeInsets.all(10.0),
+            behavior: SnackBarBehavior.floating,
             content: Text("图片已成功保存至: $path"),
           ));
         }
@@ -138,6 +142,8 @@ mixin class ImageMaker {
   //无线路信息 snackbar
   void noStationsSnackbar(context) {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      margin: EdgeInsets.all(10.0),
+      behavior: SnackBarBehavior.floating,
       content: Text("无线路信息"),
     ));
   }

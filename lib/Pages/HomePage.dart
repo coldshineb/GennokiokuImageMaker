@@ -32,7 +32,7 @@ class HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
-                '欢迎使用 Gennokioku 原忆图片生成器',
+                '欢迎使用 Gennokioku 原忆工具箱',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
               const Text(
-                '批量生成原忆中使用的轨道交通 LCD 图片、设施告示牌、灯箱图片等资源',
+                '批量生成原忆中使用的轨道交通 LCD 图片、设施告示牌、灯箱图片等资源；提供轨道交通场景下的广播文本规范。',
                 style: TextStyle(
                   fontSize: 14.0,
                 ),

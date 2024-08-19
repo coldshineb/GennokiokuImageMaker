@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/RailwayTransit/ScreenDoorCover.dart';
+import 'package:main/Pages/ImageMaker/RailwayTransit/ScreenDoorCover.dart';
 
 // 站点小图标
 class LCDStationIconSmallPainter extends CustomPainter {

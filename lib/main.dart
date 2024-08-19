@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:main/Pages/TextMaker/Roots.dart';
 import 'package:main/Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';
-import 'Pages/RailwayTransit/Roots.dart';
-import 'Pages/RailwayTransit/SettingPage.dart';
-import 'Pages/RoadSign/Roots.dart';
+import 'Pages/ImageMaker/RailwayTransit/Roots.dart';
+import 'Pages/ImageMaker/RailwayTransit/SettingPage.dart';
+import 'Pages/ImageMaker/RoadSign/Roots.dart';
+import 'Pages/ImageMaker/Roots.dart';
 import 'Pages/SettingPage.dart';
 import 'Util.dart';
 import 'Util/CustomScrollBehavior.dart';
@@ -22,7 +24,7 @@ void main() async {
               ? ThemeMode.light
               : ThemeMode.system; //设置主题
   runApp(MaterialApp(
-      title: 'Gennokioku 原忆图片生成器',
+      title: 'Gennokioku 原忆工具箱',
       theme: Util.themeData(),
       darkTheme: Util.darkThemeData(),
       themeMode: Preference.themeMode,
@@ -73,7 +75,7 @@ class HomeState extends State<Home> {
                   ? Colors.pink[50]
                   : Util.darkColorScheme().surface,
               centerTitle: false,
-              title: const Text('Gennokioku 原忆图片生成器'),
+              title: const Text('Gennokioku 原忆工具箱'),
             )
           : null,
       body: FutureBuilder(
@@ -110,15 +112,15 @@ class HomeState extends State<Home> {
                                       style: TextStyle(fontSize: 15)),
                                 ),
                                 NavigationRailDestination(
-                                  icon: Icon(Icons.train_outlined),
-                                  selectedIcon: Icon(Icons.train),
-                                  label: Text('轨道交通',
+                                  icon: Icon(Icons.image_outlined),
+                                  selectedIcon: Icon(Icons.image),
+                                  label: Text('图片生成',
                                       style: TextStyle(fontSize: 15)),
                                 ),
                                 NavigationRailDestination(
-                                  icon: Icon(Icons.signpost_outlined),
-                                  selectedIcon: Icon(Icons.signpost),
-                                  label: Text('路牌',
+                                  icon: Icon(Icons.text_snippet_outlined),
+                                  selectedIcon: Icon(Icons.text_snippet),
+                                  label: Text('文本生成',
                                       style: TextStyle(fontSize: 15)),
                                 ),
                                 NavigationRailDestination(
@@ -137,8 +139,8 @@ class HomeState extends State<Home> {
                   index: _selectedIndex,
                   children: const <Widget>[
                     HomePage(),
-                    RailwayTransitRoot(),
-                    RoadSignRoot(),
+                    ImageMakerRoot(),
+                    TextMakerRoot(),
                     GeneralSettingPage(),
                   ],
                 )),
