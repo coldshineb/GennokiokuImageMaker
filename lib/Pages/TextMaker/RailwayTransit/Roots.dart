@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/TextMaker/RailwayTransit/Roots.dart';
+import 'package:main/Pages/TextMaker/RailwayTransit/Departure.dart';
+import 'package:main/Pages/TextMaker/RailwayTransit/Platform.dart';
 
-class TextMakerRoot extends StatefulWidget {
-  const TextMakerRoot({super.key});
+class RailwayTransitRoot extends StatefulWidget {
+  const RailwayTransitRoot({super.key});
 
   @override
-  State<TextMakerRoot> createState() => _TextMakerRootState();
+  State<RailwayTransitRoot> createState() => _RailwayTransitRootState();
 }
 
-class _TextMakerRootState extends State<TextMakerRoot> {
+class _RailwayTransitRootState extends State<RailwayTransitRoot> {
   int _selectedIndex = 0;
   double groupAlignment = -1.0;
 
@@ -35,12 +36,12 @@ class _TextMakerRootState extends State<TextMakerRoot> {
                       NavigationRailDestination(
                         icon: Icon(Icons.train_outlined),
                         selectedIcon: Icon(Icons.train),
-                        label: Text('轨道交通', style: TextStyle(fontSize: 15)),
+                        label: Text('站台', style: TextStyle(fontSize: 15)),
                       ),
                       NavigationRailDestination(
-                        icon: Icon(Icons.question_mark),
-                        selectedIcon: Icon(Icons.question_mark),
-                        label: Text('其他功能', style: TextStyle(fontSize: 15)),
+                        icon: Icon(Icons.flight_takeoff),
+                        selectedIcon: Icon(Icons.flight_takeoff),
+                        label: Text('出发', style: TextStyle(fontSize: 15)),
                       ),
                     ],
                   ),
@@ -52,10 +53,7 @@ class _TextMakerRootState extends State<TextMakerRoot> {
           Expanded(
               child: IndexedStack(
                   index: _selectedIndex,
-                  children: const <Widget>[
-                    RailwayTransitRoot(),
-                    Placeholder()
-                  ])),
+                  children: const <Widget>[Platform(), Departure()])),
         ],
       ),
     );

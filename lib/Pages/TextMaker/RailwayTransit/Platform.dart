@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../Util.dart';
+import '../../../Util.dart';
 
-class BroadcastText extends StatefulWidget {
-  const BroadcastText({super.key});
+class Platform extends StatefulWidget {
+  const Platform({super.key});
 
   @override
-  State<BroadcastText> createState() => _BroadcastTextState();
+  State<Platform> createState() => _PlatformState();
 }
 
-class _BroadcastTextState extends State<BroadcastText> {
+class _PlatformState extends State<Platform> {
   TextEditingController commonStationController = TextEditingController();
   TextEditingController commonStationENController = TextEditingController();
   TextEditingController commonResultController = TextEditingController();
