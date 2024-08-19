@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../Util.dart';
+import '../../../Parent/TextMaker/TextMaker.dart';
 
 class Platform extends StatefulWidget {
   const Platform({super.key});
@@ -10,7 +10,7 @@ class Platform extends StatefulWidget {
   State<Platform> createState() => _PlatformState();
 }
 
-class _PlatformState extends State<Platform> {
+class _PlatformState extends State<Platform> with TextMaker {
   TextEditingController commonStationController = TextEditingController();
   TextEditingController commonStationENController = TextEditingController();
   TextEditingController commonResultController = TextEditingController();
@@ -105,20 +105,9 @@ class _PlatformState extends State<Platform> {
                                   text: commonResultController.text,
                                 ),
                               );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                margin: EdgeInsets.all(10.0),
-                                behavior: SnackBarBehavior.floating,
-                                content: Text("已生成并复制到剪贴板"),
-                              ));
+                              copiedSnackbar(context);
                             },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                  Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.pink[50]
-                                      : Util.darkColorScheme().onSecondary),
-                            ),
+                            style: buttonStyle(context),
                             child: const Text('生成'),
                           ),
                         ),
@@ -245,20 +234,9 @@ class _PlatformState extends State<Platform> {
                                   text: loopInnerResultController.text,
                                 ),
                               );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                margin: EdgeInsets.all(10.0),
-                                behavior: SnackBarBehavior.floating,
-                                content: Text("已生成并复制到剪贴板"),
-                              ));
+                              copiedSnackbar(context);
                             },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                  Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.pink[50]
-                                      : Util.darkColorScheme().onSecondary),
-                            ),
+                            style: buttonStyle(context),
                             child: const Text('生成'),
                           ),
                         ),

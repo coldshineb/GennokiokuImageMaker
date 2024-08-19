@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../Util.dart';
+import '../../../Parent/TextMaker/TextMaker.dart';
 
 class Departure extends StatefulWidget {
   const Departure({super.key});
@@ -10,7 +10,7 @@ class Departure extends StatefulWidget {
   State<Departure> createState() => _DepartureState();
 }
 
-class _DepartureState extends State<Departure> {
+class _DepartureState extends State<Departure> with TextMaker{
   TextEditingController commonLineController = TextEditingController();
   TextEditingController commonTerminusController = TextEditingController();
   TextEditingController commonTerminusENController = TextEditingController();
@@ -224,20 +224,9 @@ class _DepartureState extends State<Departure> {
                                   text: commonResultController.text,
                                 ),
                               );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                margin: EdgeInsets.all(10.0),
-                                behavior: SnackBarBehavior.floating,
-                                content: Text("已生成并复制到剪贴板"),
-                              ));
+                              copiedSnackbar(context);
                             },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                  Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.pink[50]
-                                      : Util.darkColorScheme().onSecondary),
-                            ),
+                            style: buttonStyle(context),
                             child: const Text('生成'),
                           ),
                         ),
@@ -477,20 +466,9 @@ class _DepartureState extends State<Departure> {
                                   text: commonTransferResultController.text,
                                 ),
                               );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                margin: EdgeInsets.all(10.0),
-                                behavior: SnackBarBehavior.floating,
-                                content: Text("已生成并复制到剪贴板"),
-                              ));
+                              copiedSnackbar(context);
                             },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                  Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.pink[50]
-                                      : Util.darkColorScheme().onSecondary),
-                            ),
+                            style: buttonStyle(context),
                             child: const Text('生成'),
                           ),
                         ),
@@ -566,12 +544,7 @@ class _DepartureState extends State<Departure> {
                               content: Text("已复制到剪贴板"),
                             ));
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -601,12 +574,7 @@ class _DepartureState extends State<Departure> {
                               content: Text("已复制到剪贴板"),
                             ));
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -663,12 +631,7 @@ class _DepartureState extends State<Departure> {
                               content: Text("已复制到剪贴板"),
                             ));
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -698,12 +661,7 @@ class _DepartureState extends State<Departure> {
                               content: Text("已复制到剪贴板"),
                             ));
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -758,12 +716,7 @@ class _DepartureState extends State<Departure> {
                               content: Text("已复制到剪贴板"),
                             ));
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -818,12 +771,7 @@ class _DepartureState extends State<Departure> {
                               content: Text("已复制到剪贴板"),
                             ));
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],

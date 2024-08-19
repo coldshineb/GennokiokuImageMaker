@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../Util.dart';
+import '../../../Parent/TextMaker/TextMaker.dart';
 
 class Arrival extends StatefulWidget {
   const Arrival({super.key});
@@ -10,7 +10,7 @@ class Arrival extends StatefulWidget {
   State<Arrival> createState() => _ArrivalState();
 }
 
-class _ArrivalState extends State<Arrival> {
+class _ArrivalState extends State<Arrival> with TextMaker {
   TextEditingController commonLineController = TextEditingController();
   TextEditingController commonTerminusController = TextEditingController();
   TextEditingController commonTerminusENController = TextEditingController();
@@ -90,19 +90,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '守护商城站到了。请从列车运行方向的左侧车门下车，注意列车与站台之间的空隙。We are now at calicy mall station, please get ready to exit on the left, mind the step between the train and the platform.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -125,19 +115,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '常春公园站到了。下车时请注意列车与站台之间的空隙。We are now at 常春公园 station, please mind the step between the train and the platform.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -160,19 +140,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '终点站，樱花谷站到了。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙，谢谢合作。We are now at the terminus, 樱花谷 station, please take all your belongings and exit on the right, mind the step between the train and the platform.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -195,19 +165,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '终点站，樱花谷站到了。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。We are now at the terminus, 樱花谷 station, please take all your belongings and exit, mind the step between the train and the platform.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -257,19 +217,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '樱花谷北站到了，可换乘S3号线。请从列车运行方向的左侧车门下车，注意列车与站台之间的空隙。We are now at 樱花谷 north station, you can transfer to line s3, please get ready to exit on the left, mind the step between the train and the platform.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -292,19 +242,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '守护中心站到了，可换乘1号线。下车时请注意列车与站台之间的空隙。We are now at calicy center station, you can transfer to line 1, please mind the step between the train and the platform.'));
-                                ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -327,19 +267,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '终点站，樱花谷站到了，可换乘S3号线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙，谢谢合作。We are now at the terminus, 樱花谷 station, you can transfer to line s3, please take all your belongings and exit on the right, mind the step between the train and the platform.'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
@@ -362,19 +292,9 @@ class _ArrivalState extends State<Arrival> {
                             Clipboard.setData(const ClipboardData(
                                 text:
                                     '终点站，樱花谷站到了，可换乘S3号线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。We are now at the terminus, 樱花谷 station, you can transfer to line s3, please take all your belongings and exit, mind the step between the train and the platform.'));
-                                ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              margin: EdgeInsets.all(10.0),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text("已复制到剪贴板"),
-                            ));
+                            copiedSnackbar(context);
                           },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.pink[50]
-                                    : Util.darkColorScheme().onSecondary),
-                          ),
+                          style: buttonStyle(context),
                           child: const Text('复制'),
                         )
                       ],
