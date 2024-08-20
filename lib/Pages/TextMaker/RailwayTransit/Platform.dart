@@ -160,7 +160,7 @@ class _PlatformState extends State<Platform> with TextMaker {
                     ),
                     const SizedBox(height: 10.0),
                     const Text(
-                      '内环运行经赤羽站的列车即将进站，请按照地面标识指引排队候车，先下后上，注意列车与站台之间的空隙。\nThe train running in inner ring via 赤羽 station is arriving, please line up by the signs on the ground, and give a way to alighting passengers, please mind the step between the train and the platform.',
+                      '内环运行经赤羽站的列车即将进站，请按照地面标识指引排队候车，先下后上，注意列车与站台之间的空隙。\nThe train running in inner ring via 赤羽 station is arriving, please line up by the signs on the ground, and give a way to alighting passengers, please mind the gap between the train and the platform.',
                       style: TextStyle(
                         fontSize: 14.0,
                       ),
@@ -228,7 +228,7 @@ class _PlatformState extends State<Platform> with TextMaker {
                           child: ElevatedButton(
                             onPressed: () {
                               loopInnerResultController.text =
-                                  '${loopDirection == 1 ? "内" : "外"}环运行经${loopInnerStationController.text}站的列车即将进站，请按照地面标识指引排队候车，先下后上，注意列车与站台之间的空隙。\nThe train running in ${loopDirection == 1 ? "inner" : "outer"} ring via ${loopInnerStationENController.text} station is arriving, please line up by the signs on the ground, and give a way to alighting passengers, please mind the step between the train and the platform.';
+                                  '${loopDirection == 1 ? "内" : "外"}环运行经${loopInnerStationController.text}站的列车即将进站，请按照地面标识指引排队候车，先下后上，注意列车与站台之间的空隙。\nThe train running in ${loopDirection == 1 ? "inner" : "outer"} ring via ${loopInnerStationENController.text} station is arriving, please line up by the signs on the ground, and give a way to alighting passengers, please mind the gap between the train and the platform.';
                               Clipboard.setData(
                                 ClipboardData(
                                   text: loopInnerResultController.text,
