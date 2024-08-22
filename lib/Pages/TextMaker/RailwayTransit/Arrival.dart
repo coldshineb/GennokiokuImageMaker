@@ -325,7 +325,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       children: [
                         const Expanded(
                           child: Text(
-                            '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit on the right, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
+                            '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit on the right, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
@@ -335,7 +335,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                           onPressed: () {
                             Clipboard.setData(const ClipboardData(
                                 text:
-                                '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit on the right, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
+                                '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品，从列车运行方向的右侧车门下车，注意列车与站台之间的空隙。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit on the right, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
                             copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
@@ -350,7 +350,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                       children: [
                         const Expanded(
                           child: Text(
-                            '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
+                            '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。\nWe are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.',
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
@@ -360,7 +360,7 @@ class _ArrivalState extends State<Arrival> with TextMaker {
                           onPressed: () {
                             Clipboard.setData(const ClipboardData(
                                 text:
-                                '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙，谢谢合作。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
+                                '终点站，青玉口站到了，可换乘环山北线、环山南线。请全体乘客带齐行李物品下车，注意列车与站台之间的空隙。前往红糖西城方向的乘客，请下车，等待下一趟列车，谢谢合作。We are now at the terminus, 青玉口 station, you can transfer to line MN, line MS, please take all your belongings and exit, mind the gap between the train and the platform. Passengers wishing to go to 红糖西 city, please disembark and wait for the next train.'));
                             copiedSnackbar(context);
                           },
                           style: buttonStyle(context),
