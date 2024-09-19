@@ -25,15 +25,15 @@ jobs:
       - run: flutter build windows
       - name: Zip build files
         run: |
-          Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath GennokiokuImageMaker-windows-${{ github.run_number }}.zip
+          Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath GennokiokuToolbox-windows-${{ github.run_number }}.zip
         shell: pwsh
 
       - name: Upload Artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./GennokiokuImageMaker-windows-${{ github.run_number }}.zip
-          name: GennokiokuImageMaker-windows
+          path: ./GennokiokuToolbox-windows-${{ github.run_number }}.zip
+          name: GennokiokuToolbox-windows
 
   build-android:
     runs-on: ubuntu-latest
@@ -47,14 +47,14 @@ jobs:
           flutter-version: 3.24.2
       - run: flutter pub get
       - run: flutter build apk
-      - run: mv ./build/app/outputs/apk/release/app-release.apk ./GennokiokuImageMaker-android-${{ github.run_number }}.apk
+      - run: mv ./build/app/outputs/apk/release/app-release.apk ./GennokiokuToolbox-android-${{ github.run_number }}.apk
 
       - name: Upload Artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./GennokiokuImageMaker-android-${{ github.run_number }}.apk
-          name: GennokiokuImageMaker-android
+          path: ./GennokiokuToolbox-android-${{ github.run_number }}.apk
+          name: GennokiokuToolbox-android
 
   build-linux:
     runs-on: ubuntu-latest
@@ -73,12 +73,12 @@ jobs:
       - name: Zip build files
         run: |
           cd ./build/linux/x64/release/bundle/
-          zip -r GennokiokuImageMaker-linux-${{ github.run_number }}.zip ./*
-          mv GennokiokuImageMaker-linux-${{ github.run_number }}.zip ../../../../../
+          zip -r GennokiokuToolbox-linux-${{ github.run_number }}.zip ./*
+          mv GennokiokuToolbox-linux-${{ github.run_number }}.zip ../../../../../
 
       - name: Upload Artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./GennokiokuImageMaker-linux-${{ github.run_number }}.zip
-          name: GennokiokuImageMaker-linux
+          path: ./GennokiokuToolbox-linux-${{ github.run_number }}.zip
+          name: GennokiokuToolbox-linux
