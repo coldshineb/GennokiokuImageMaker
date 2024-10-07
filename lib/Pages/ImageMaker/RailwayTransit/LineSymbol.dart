@@ -179,6 +179,7 @@ class LineSymbolState extends State<LineSymbol> with ImageMaker {
           Container(
               padding: const EdgeInsets.only(right: 15),
               child: FloatingActionButton(
+                heroTag: null,
                 onPressed: () {
                   //重置所有变量
                   lineNumber = defaultLineNumber;
@@ -193,6 +194,7 @@ class LineSymbolState extends State<LineSymbol> with ImageMaker {
                 child: const Icon(Icons.refresh),
               )),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               setState(() {});
             },

@@ -4,15 +4,15 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:main/Object/Station.dart';
-import 'package:main/Preference.dart';
-import 'package:main/Util/CustomRegExp.dart';
 import '../../../../Object/Line.dart';
+import '../../../../Object/Station.dart';
 import '../../../../Parent/ImageMaker/ImageMaker.dart';
 import '../../../../Parent/ImageMaker/RailwayTransit/LCD.dart';
+import '../../../../Preference.dart';
 import '../../../../Util.dart';
 import '../../../../Util/CustomColors.dart';
 import '../../../../Util/CustomPainter.dart';
+import '../../../../Util/CustomRegExp.dart';
 import '../../../../Util/Widgets.dart';
 import '../../../../main.dart';
 
@@ -257,6 +257,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute>
             Container(
                 padding: const EdgeInsets.only(right: 15),
                 child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () {
                     //重置所有变量
                     _imageBytes = null;
@@ -277,6 +278,7 @@ class RunningLinearRouteState extends State<RunningLinearRoute>
                   child: const Icon(Icons.refresh),
                 )),
             FloatingActionButton(
+              heroTag: null,
               onPressed: () {
                 setState(() {});
               },

@@ -6,14 +6,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:main/Object/EntranceCover.dart';
-import 'package:main/Util/CustomRegExp.dart';
 
 import '../../../../../Util.dart';
+import '../../../../Object/EntranceCover.dart';
 import '../../../../Object/Line.dart';
 import '../../../../Parent/ImageMaker/ImageMaker.dart';
 import '../../../../Parent/ImageMaker/RailwayTransit/StationEntrance.dart';
 import '../../../../Preference.dart';
+import '../../../../Util/CustomRegExp.dart';
 
 class StationEntranceSideNameRoot extends StatelessWidget {
   const StationEntranceSideNameRoot({super.key});
@@ -142,6 +142,7 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
             Container(
                 padding: const EdgeInsets.only(right: 15),
                 child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () {
                     //重置所有变量
                     _imageBytes = null;
@@ -156,6 +157,7 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
                   child: const Icon(Icons.refresh),
                 )),
             FloatingActionButton(
+              heroTag: null,
               onPressed: () {
                 setState(() {});
               },

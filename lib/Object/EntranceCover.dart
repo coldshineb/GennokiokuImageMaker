@@ -1,6 +1,6 @@
-import 'package:main/Object/Station.dart';
 
 import 'Line.dart';
+import 'Station.dart';
 
 class EntranceCover extends Station {
   final String entranceNumber;

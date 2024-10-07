@@ -255,6 +255,7 @@ class OperationDirectionState extends State<OperationDirection>
           Container(
               padding: const EdgeInsets.only(right: 15),
               child: FloatingActionButton(
+                heroTag: null,
                 onPressed: () {
                   //重置所有变量
                   _imageBytes = null;
@@ -285,6 +286,7 @@ class OperationDirectionState extends State<OperationDirection>
                 child: const Icon(Icons.refresh),
               )),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               setState(() {});
             },

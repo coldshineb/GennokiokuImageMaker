@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:main/Object/EntranceCover.dart';
+
+import '../../../Object/EntranceCover.dart';
+
 
 mixin class StationEntrance {
   //显示下一站、当前站和终点站下拉菜单内容

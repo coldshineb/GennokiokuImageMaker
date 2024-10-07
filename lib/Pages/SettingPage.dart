@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:main/Preference.dart';
-import 'package:main/main.dart';
 
 import '../Parent/SettingPage.dart';
+import '../Preference.dart';
 import '../Util.dart';
+import '../main.dart';
 
 class GeneralSettingPageRoot extends StatelessWidget {
   const GeneralSettingPageRoot({super.key});
@@ -203,7 +203,50 @@ class GeneralSettingPageState extends State<GeneralSettingPage>
                       HomeState.sharedPreferences
                           ?.setBool(PreferenceKey.generalIsDevMode, value);
                     });
-                  })
+                  }),
+              const SizedBox(height: 10.0),
+              createHeading('其它信息'),
+              const SizedBox(height: 10.0),
+              Material(
+                color: settingPageMaterialColor(context),
+                borderRadius: settingPageBorderRadius(),
+                child: InkWell(
+                  borderRadius: settingPageBorderRadius(),
+                  onTap: () {
+                    showLicensePage(context: context);
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: settingPageBorderRadius(),
+                      ),
+                      padding: settingPageEdgeInsets(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  padding: const EdgeInsets.only(top: 8.0)),
+                              const Text(
+                                '开源许可',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              Container(
+                                  padding: const EdgeInsets.only(top: 8.0))
+                            ],
+                          )),
+                          Container(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: const Icon(Icons.arrow_forward),
+                          )
+                        ],
+                      )),
+                ),
+              ),
             ],
           ),
         ),

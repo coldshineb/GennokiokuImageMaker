@@ -1,17 +1,16 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:main/Util/CustomColors.dart';
 
 import '../../../../../Util.dart';
 import '../../../../Preference.dart';
 import '../../../Object/Station.dart';
 import '../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../Util/CustomColors.dart';
 
 class PlatformLevelSideNameRoot extends StatelessWidget {
   const PlatformLevelSideNameRoot({super.key});
@@ -140,6 +139,7 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
             Container(
                 padding: const EdgeInsets.only(right: 15),
                 child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () {
                     //重置所有变量
                     _imageBytes = null;
@@ -152,6 +152,7 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
                   child: const Icon(Icons.refresh),
                 )),
             FloatingActionButton(
+              heroTag: null,
               onPressed: () {
                 setState(() {});
               },

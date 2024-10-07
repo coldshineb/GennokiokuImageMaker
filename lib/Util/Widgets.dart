@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:main/Util/CustomRegExp.dart';
+import '/Util/CustomRegExp.dart';
 
 import '../Object/Line.dart';
 import '../Util.dart';

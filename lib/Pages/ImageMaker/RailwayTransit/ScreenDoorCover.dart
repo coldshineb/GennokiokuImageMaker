@@ -7,15 +7,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:main/Object/Station.dart';
-import 'package:main/Util/CustomRegExp.dart';
 import '../../../../Object/Line.dart';
+import '../../../Object/Station.dart';
 import '../../../Parent/ImageMaker/ImageMaker.dart';
 import '../../../../Util.dart';
 import '../../../../Util/CustomColors.dart';
 import '../../../../Util/CustomPainter.dart';
 import '../../../../Util/Widgets.dart';
 import '../../../Preference.dart';
+import '../../../Util/CustomRegExp.dart';
 
 class ScreenDoorCoverRoot extends StatelessWidget {
   const ScreenDoorCoverRoot({super.key});
@@ -226,6 +226,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
           Container(
               padding: const EdgeInsets.only(right: 15),
               child: FloatingActionButton(
+                heroTag: null,
                 onPressed: () {
                   //重置所有变量
                   _imageBytes = null;
@@ -242,6 +243,7 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
                 child: const Icon(Icons.refresh),
               )),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               setState(() {});
             },

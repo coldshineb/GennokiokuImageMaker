@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/TextMaker/RailwayTransit/Arrival.dart';
-import 'package:main/Pages/TextMaker/RailwayTransit/Departure.dart';
-import 'package:main/Pages/TextMaker/RailwayTransit/Platform.dart';
 
+import 'Arrival.dart';
+import 'Departure.dart';
+import 'Platform.dart';
 import 'Rule.dart';
 
 class RailwayTransitRoot extends StatefulWidget {

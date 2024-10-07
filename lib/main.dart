@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:main/Pages/TextMaker/Roots.dart';
-import 'package:main/Preference.dart';
+import 'Pages/TextMaker/Roots.dart';
+import 'Preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Pages/HomePage.dart';

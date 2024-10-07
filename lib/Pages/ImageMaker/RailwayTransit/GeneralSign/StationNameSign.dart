@@ -5,12 +5,12 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:main/Util/CustomColors.dart';
 
 import '../../../../../../Util.dart';
 import '../../../../../Preference.dart';
 import '../../../../Object/Station.dart';
 import '../../../../Parent/ImageMaker/ImageMaker.dart';
+import '../../../../Util/CustomColors.dart';
 
 class StationNameSignRoot extends StatelessWidget {
   const StationNameSignRoot({super.key});
@@ -145,6 +145,7 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
             Container(
                 padding: const EdgeInsets.only(right: 15),
                 child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () {
                     //重置所有变量
                     _imageBytes = null;
@@ -157,6 +158,7 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
                   child: const Icon(Icons.refresh),
                 )),
             FloatingActionButton(
+              heroTag: null,
               onPressed: () {
                 setState(() {});
               },

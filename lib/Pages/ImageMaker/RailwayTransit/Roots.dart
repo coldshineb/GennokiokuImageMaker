@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:main/Pages/ImageMaker/RailwayTransit/GeneralSign/StationNameSign.dart';
-import 'package:main/Pages/ImageMaker/RailwayTransit/LineSymbol.dart';
-import 'package:main/Pages/ImageMaker/RailwayTransit/OperationDirection.dart';
-import 'package:main/Pages/ImageMaker/RailwayTransit/PlatformLevelSideName.dart';
 
+import 'GeneralSign/StationNameSign.dart';
 import 'LCD/ArrivalFiveStations.dart';
 import 'LCD/ArrivalLinearRoute.dart';
 import 'LCD/ArrivalStationInfo.dart';
 import 'LCD/RunningLinearRoute.dart';
+import 'LineSymbol.dart';
+import 'OperationDirection.dart';
+import 'PlatformLevelSideName.dart';
 import 'ScreenDoorCover.dart';
 import 'SettingPage.dart';
 import 'StationEntrance/StationEntranceCover.dart';

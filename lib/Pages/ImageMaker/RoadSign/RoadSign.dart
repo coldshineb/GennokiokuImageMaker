@@ -119,6 +119,7 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
           Container(
               padding: const EdgeInsets.only(right: 15),
               child: FloatingActionButton(
+                heroTag: null,
                 onPressed: () {
                   //重置所有变量
                   roadNameController.clear();
@@ -133,6 +134,7 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
           Container(
             padding: const EdgeInsets.only(right: 15),
             child: FloatingActionButton(
+              heroTag: null,
               onPressed: () {
                 setState(() {});
               },
@@ -141,6 +143,7 @@ class RoadSignState extends State<RoadSign> with RoadSignParent.RoadSign {
             ),
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               exportMainImage();
             },

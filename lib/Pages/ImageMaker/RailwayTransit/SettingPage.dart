@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:main/Preference.dart';
-import 'package:main/main.dart';
 
 import '../../../Parent/SettingPage.dart';
+import '../../../Preference.dart';
 import '../../../Util.dart';
+import '../../../main.dart';
 
 class GeneralSettingPageRoot extends StatelessWidget {
   const GeneralSettingPageRoot({super.key});
