@@ -16,4 +16,4 @@ jobs:
           flutter-version: 3.24.2
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
-          baseHref: /GennokiokuImageMaker/
+          baseHref: /
