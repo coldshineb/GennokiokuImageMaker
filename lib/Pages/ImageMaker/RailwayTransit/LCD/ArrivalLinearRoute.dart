@@ -281,88 +281,17 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute>
                       gennokiokuRailwayTransitLogoWidget(showLogo),
                       lineNumberIconWidget(lineColor, lineNumber, lineNumberEN),
                       Container(
-                          padding: const EdgeInsets.fromLTRB(452.5, 8, 0, 0),
-                          child: Text(
+                        height: imageHeight,
+                        width: imageWidth,
+                        child: topLabels(
                             "当前站",
-                            style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(446.5, 41, 0, 0),
-                          child: Text(
                             "Current station",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(1111.5, 8, 0, 0),
-                          child: Text(
                             "终点站",
-                            style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(1124.5, 41, 0, 0),
-                          child: Text(
                             "Terminus",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(549, 8, 0, 0),
-                          child: Text(
-                            currentStationListIndex == null
-                                ? ""
-                                : stationList[currentStationListIndex!]
-                                    .stationNameCN,
-                            //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
-                            style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(1210.5, 8, 0, 0),
-                          child: Text(
-                            terminusListIndex == null
-                                ? ""
-                                : stationList[terminusListIndex!].stationNameCN,
-                            style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(549.5, 41, 0, 0),
-                          child: Text(
-                            currentStationListIndex == null
-                                ? ""
-                                : stationList[currentStationListIndex!]
-                                    .stationNameEN,
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(1210.5, 41, 0, 0),
-                          child: Text(
-                            terminusListIndex == null
-                                ? ""
-                                : stationList[terminusListIndex!].stationNameEN,
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: Util.railwayTransitLcdIsBoldFont,
-                                color: Colors.black),
-                          )),
+                            currentStationListIndex,
+                            terminusListIndex,
+                            stationList),
+                      ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(50, 165, 0, 0),
                         child: showStationName(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../Object/Station.dart';
+import '../../../Util.dart';
 import '../../../Util/Widgets.dart';
 
 mixin class LCD {
@@ -47,6 +48,118 @@ mixin class LCD {
     );
   }
 
+  //顶部标签
+  Stack topLabels(
+      String leftLabelCN,
+      String leftLabelEN,
+      String rightLabelCN,
+      String rightLabelEN,
+      int? leftStationListIndex,
+      int? rightStationListIndex,
+      List<Station> stationList) {
+    return Stack(
+      children: [
+        Positioned(
+            left: 0,
+            top: 8,
+            right: 723,
+            child: Text(
+              textAlign: TextAlign.center,
+              leftLabelCN,
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 0,
+            top: 41,
+            right: 723,
+            child: Text(
+              textAlign: TextAlign.center,
+              leftLabelEN,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 592,
+            top: 8,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              rightLabelCN,
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 592,
+            top: 41,
+            right: 0,
+            child: Text(
+              textAlign: TextAlign.center,
+              rightLabelEN,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 551,
+            top: 8,
+            child: Text(
+              leftStationListIndex == null
+                  ? ""
+                  : stationList[leftStationListIndex!].stationNameCN,
+              //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 1210.5,
+            top: 8,
+            child: Text(
+              rightStationListIndex == null
+                  ? ""
+                  : stationList[rightStationListIndex!].stationNameCN,
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 551.5,
+            top: 41,
+            child: Text(
+              leftStationListIndex == null
+                  ? ""
+                  : stationList[leftStationListIndex!].stationNameEN,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            )),
+        Positioned(
+            left: 1210.5,
+            top: 41,
+            child: Text(
+              rightStationListIndex == null
+                  ? ""
+                  : stationList[rightStationListIndex!].stationNameEN,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: Util.railwayTransitLcdIsBoldFont,
+                  color: Colors.black),
+            ))
+      ],
+    );
+  }
+
   //导入线路文件
   void importLineJson() async {}
 
@@ -55,5 +168,4 @@ mixin class LCD {
 
   //导出全部图
   void exportAllImage() async {}
-
 }
