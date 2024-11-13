@@ -104,14 +104,23 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
                     value: stationListValue,
                   ),
                   Container(
-                    height: 48,
-                    child: MenuItemButton(
-                        onPressed: previousStation, child: const Text("上一个")),
-                  ),
+                      height: 48,
+                      child: MenuItemButton(
+                          onPressed: previousStation,
+                          child: const Row(children: [
+                            Icon(Icons.arrow_back),
+                            SizedBox(width: 5),
+                            Text("上一个")
+                          ]))),
                   Container(
                     height: 48,
                     child: MenuItemButton(
-                        onPressed: nextStation, child: const Text("下一个")),
+                        onPressed: nextStation,
+                        child: const Row(children: [
+                          Icon(Icons.arrow_forward),
+                          SizedBox(width: 5),
+                          Text("下一个")
+                        ])),
                   ),
                   Container(
                     height: 48,
@@ -121,9 +130,15 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
                           isReversed = !isReversed;
                         });
                       },
-                      child: const Text("反转颜色"),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.invert_colors),
+                          const SizedBox(width: 5),
+                          Text("反转颜色"),
+                        ],
+                      ),
                     ),
-                  ),
+                  )
                 ])
               ],
             ),
@@ -251,23 +266,11 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      Container(
-        height: 48,
-        child: MenuItemButton(
-            onPressed: importLineJson, child: const Text("导入站名")),
-      ),
+      importLineJsonMenuItemButton(importLineJson),
       const VerticalDivider(thickness: 2),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-            onPressed: exportAllImage, child: const Text("导出全部图")),
-      ),
+      exportAllImageMenuItemButton(exportAllImage),
       const VerticalDivider(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-            onPressed: exportMainImage, child: const Text("导出当前图")),
-      ),
+      exportMainImageMenuItemButton(exportMainImage),
       Container(
           padding: const EdgeInsets.only(top: 14), child: const Text("导出分辨率")),
       DropdownButton(

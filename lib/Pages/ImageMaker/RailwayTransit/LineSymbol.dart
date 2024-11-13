@@ -74,7 +74,13 @@ class LineSymbolState extends State<LineSymbol> with ImageMaker {
                 Container(
                   height: 48,
                   child: MenuItemButton(
-                      child: const Text("设置线路"),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.settings_outlined),
+                          const SizedBox(width: 5),
+                          const Text("设置线路"),
+                        ],
+                      ),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -234,7 +240,13 @@ class LineSymbolState extends State<LineSymbol> with ImageMaker {
       Container(
         height: 48,
         child: MenuItemButton(
-            onPressed: exportMainImage, child: const Text("导出图片")),
+          onPressed: exportMainImage,
+          child: const Row(children: [
+            Icon(Icons.save_outlined),
+            SizedBox(width: 5),
+            Text("导出图片")
+          ]),
+        ),
       ),
       Container(
           padding: const EdgeInsets.only(top: 14), child: const Text("导出高度")),

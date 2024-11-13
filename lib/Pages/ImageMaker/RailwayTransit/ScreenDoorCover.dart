@@ -145,18 +145,17 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
                   value: currentStationListValue,
                 ),
                 Container(
-                  height: 48,
-                  child: MenuItemButton(
-                    onPressed: previousStation,
-                    child: const Text("上一站"),
-                  ),
-                ),
+                    height: 48,
+                    child: MenuItemButton(
+                        onPressed: previousStation,
+                        child: const Row(
+                            children: [Icon(Icons.arrow_back), SizedBox(width: 5),Text("上一站")]))),
                 Container(
                   height: 48,
                   child: MenuItemButton(
-                    onPressed: nextStation,
-                    child: const Text("下一站"),
-                  ),
+                      onPressed: nextStation,
+                      child: const Row(
+                          children: [Icon(Icons.arrow_forward), SizedBox(width: 5),Text("下一站")])),
                 ),
                 Container(
                   height: 48,
@@ -172,7 +171,9 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
                         }
                       });
                     },
-                    child: const Text("反转站点"),
+                    child: const Row(
+                      children: [Icon(Icons.swap_horiz), SizedBox(width: 5),Text("反转站点")],
+                    ),
                   ),
                 ),
               ]),
@@ -584,30 +585,10 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      generalIsDevMode
-          ? Container(
-              height: 48,
-              child: MenuItemButton(
-                onPressed: _importImage,
-                child: const Text("导入图片"),
-              ),
-            )
-          : Container(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: importLineJson,
-          child: const Text("导入线路"),
-        ),
-      ),
+      generalIsDevMode ? importImageMenuItemButton(_importImage) : Container(),
+      importLineJsonMenuItemButton(importLineJson),
       const VerticalDivider(thickness: 2),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportAllImage,
-          child: const Text("导出全部图"),
-        ),
-      ),
+      exportAllImageMenuItemButton(exportAllImage),
       Container(
           height: 48,
           child: CheckboxMenuButton(
@@ -618,49 +599,13 @@ class ScreenDoorCoverState extends State<ScreenDoorCover> with ImageMaker {
             },
             child: const Text("使用站名作为导出子文件夹名"),
           )),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportThisStationImage,
-          child: const Text("导出当前站全部图"),
-        ),
-      ),
+      exportThisStationImageMenuItemButton(exportThisStationImage),
       const VerticalDivider(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportRouteUpImage,
-          child: const Text("导出上行主线路图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportRouteDownImage,
-          child: const Text("导出下行主线路图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportStationImage,
-          child: const Text("导出站名图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDirectionUpImage,
-          child: const Text("导出上行运行方向图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDirectionDownImage,
-          child: const Text("导出下行运行方向图"),
-        ),
-      ),
+      exportRouteUpImageMenuItemButton(exportRouteUpImage),
+      exportRouteDownImageMenuItemButton(exportRouteDownImage),
+      exportStationImageMenuItemButton(exportStationImage),
+      exportDirectionUpImageMenuItemButton(exportDirectionUpImage),
+      exportDirectionDownImageMenuItemButton(exportDirectionDownImage),
     ]);
   }
 

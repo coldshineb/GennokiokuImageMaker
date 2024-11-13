@@ -114,12 +114,22 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
                   Container(
                     height: 48,
                     child: MenuItemButton(
-                        onPressed: previousStation, child: const Text("上一个")),
+                        onPressed: previousStation,
+                        child: Row(children: [
+                          Icon(Icons.arrow_back),
+                          SizedBox(width: 5),
+                          Text("上一个")
+                        ])),
                   ),
                   Container(
                     height: 48,
                     child: MenuItemButton(
-                        onPressed: nextStation, child: const Text("下一个")),
+                        onPressed: nextStation,
+                        child: Row(children: [
+                          Icon(Icons.arrow_forward),
+                          SizedBox(width: 5),
+                          Text("下一个")
+                        ])),
                   ),
                 ])
               ],
@@ -495,30 +505,12 @@ class StationEntranceSideNameState extends State<StationEntranceSideName>
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      generalIsDevMode
-          ? Container(
-              height: 48,
-              child: MenuItemButton(
-                  onPressed: _importImage, child: const Text("导入图片")),
-            )
-          : Container(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-            onPressed: importLineJson, child: const Text("导入站名")),
-      ),
+      generalIsDevMode ? importImageMenuItemButton(_importImage) : Container(),
+      importLineJsonMenuItemButton(importLineJson),
       const VerticalDivider(thickness: 2),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-            onPressed: exportAllImage, child: const Text("导出全部图")),
-      ),
+      exportAllImageMenuItemButton(exportAllImage),
       const VerticalDivider(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-            onPressed: exportMainImage, child: const Text("导出当前图")),
-      ),
+      exportMainImageMenuItemButton(exportMainImage),
       Container(
           padding: const EdgeInsets.only(top: 14), child: const Text("导出分辨率")),
       DropdownButton(
