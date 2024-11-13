@@ -113,7 +113,7 @@ mixin class LCD {
             child: Text(
               leftStationListIndex == null
                   ? ""
-                  : stationList[leftStationListIndex!].stationNameCN,
+                  : stationList[leftStationListIndex].stationNameCN,
               //默认时索引为空，不显示站名；不为空时根据索引对应站名显示
               style: TextStyle(
                   fontSize: 28,
@@ -126,7 +126,7 @@ mixin class LCD {
             child: Text(
               rightStationListIndex == null
                   ? ""
-                  : stationList[rightStationListIndex!].stationNameCN,
+                  : stationList[rightStationListIndex].stationNameCN,
               style: TextStyle(
                   fontSize: 28,
                   fontWeight: Util.railwayTransitLcdIsBoldFont,
@@ -138,7 +138,7 @@ mixin class LCD {
             child: Text(
               leftStationListIndex == null
                   ? ""
-                  : stationList[leftStationListIndex!].stationNameEN,
+                  : stationList[leftStationListIndex].stationNameEN,
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: Util.railwayTransitLcdIsBoldFont,
@@ -150,7 +150,7 @@ mixin class LCD {
             child: Text(
               rightStationListIndex == null
                   ? ""
-                  : stationList[rightStationListIndex!].stationNameEN,
+                  : stationList[rightStationListIndex].stationNameEN,
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: Util.railwayTransitLcdIsBoldFont,
