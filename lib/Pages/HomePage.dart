@@ -95,7 +95,7 @@ class HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text(
+              Text(
                 Util.copyright,
                 style: TextStyle(
                   fontSize: 14.0,
