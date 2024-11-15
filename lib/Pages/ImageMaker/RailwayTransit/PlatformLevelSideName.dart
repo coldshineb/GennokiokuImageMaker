@@ -251,7 +251,7 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      importLineJsonMenuItemButton(importLineJson),
+      importStationJsonMenuItemButton(importStationJson),
       const VerticalDivider(thickness: 2),
       exportAllImageMenuItemButton(exportAllImage),
       const VerticalDivider(),
@@ -271,7 +271,7 @@ class PlatformLevelSideNameState extends State<PlatformLevelSideName>
   }
 
   //导入线路文件
-  void importLineJson() async {
+  void importStationJson() async {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
 

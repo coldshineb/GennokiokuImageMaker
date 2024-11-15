@@ -163,6 +163,15 @@ mixin class ImageMaker {
       height: 48,
       child: MenuItemButton(
           onPressed: importLineJson,
+          child: const Row(children: [Icon(Icons.code), SizedBox(width: 5),Text("导入线路")])),
+    );
+  }
+
+  Container importStationJsonMenuItemButton(VoidCallback importStationJson) {
+    return Container(
+      height: 48,
+      child: MenuItemButton(
+          onPressed: importStationJson,
           child: const Row(children: [Icon(Icons.code), SizedBox(width: 5),Text("导入站名")])),
     );
   }

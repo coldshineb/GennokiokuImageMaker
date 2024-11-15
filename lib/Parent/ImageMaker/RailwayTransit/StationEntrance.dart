@@ -21,7 +21,7 @@ mixin class StationEntrance {
   }
 
   //导入线路文件
-  void importLineJson() async {}
+  void importStationJson() async {}
 
   //导入纹理
   void importPattern() async {}

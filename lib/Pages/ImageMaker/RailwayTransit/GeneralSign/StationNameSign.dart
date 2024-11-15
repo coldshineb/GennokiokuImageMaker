@@ -266,7 +266,7 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      importLineJsonMenuItemButton(importLineJson),
+      importStationJsonMenuItemButton(importStationJson),
       const VerticalDivider(thickness: 2),
       exportAllImageMenuItemButton(exportAllImage),
       const VerticalDivider(),
@@ -286,7 +286,7 @@ class StationNameSignState extends State<StationNameSign> with ImageMaker {
   }
 
   //导入线路文件
-  void importLineJson() async {
+  void importStationJson() async {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
 

@@ -563,7 +563,7 @@ class StationEntranceCoverState extends State<StationEntranceCover>
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
       generalIsDevMode ? importImageMenuItemButton(_importImage) : Container(),
-      importLineJsonMenuItemButton(importLineJson),
+      importStationJsonMenuItemButton(importStationJson),
       const VerticalDivider(thickness: 2),
       exportAllImageMenuItemButton(exportAllImage),
       const VerticalDivider(),
@@ -611,7 +611,7 @@ class StationEntranceCoverState extends State<StationEntranceCover>
 
   //导入线路文件
   @override
-  void importLineJson() async {
+  void importStationJson() async {
     List<dynamic> stationsFromJson = [];
     Map<String, dynamic> jsonData;
 
