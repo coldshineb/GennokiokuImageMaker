@@ -46,7 +46,7 @@ class BaseState extends State<Base>
     with LEDRouteMap, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
-  static const double imageWidth = 1715.2;
+  static const double imageWidth = 2572.8;
 
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
@@ -86,10 +86,10 @@ class BaseState extends State<Base>
   bool showLogo = true;
 
   //默认导出宽度
-  int exportWidthValue = 2560;
+  int exportWidthValue = 3840;
 
   //线路线条宽度
-  int lineLength = 1470;
+  int lineLength = 2320;
 
   //设置项
   late bool generalIsDevMode;
@@ -322,18 +322,6 @@ class BaseState extends State<Base>
                       gennokiokuRailwayTransitLogoWidget(showLogo),
                       lineNumberIconWidget(lineColor, lineNumber, lineNumberEN),
                       Container(
-                        height: imageHeight,
-                        width: imageWidth,
-                        child: topLabels(
-                            "下一站",
-                            "Next station",
-                            "终点站",
-                            "Terminus",
-                            nextStationListIndex,
-                            terminusListIndex,
-                            stationList),
-                      ),
-                      Container(
                         padding: const EdgeInsets.fromLTRB(50, 165, 0, 0),
                         child: showStationName(),
                       ),
@@ -449,7 +437,7 @@ class BaseState extends State<Base>
         child: const Text("导出分辨率"),
       ),
       DropdownButton(
-        items: LCD.resolutionList(),
+        items: LEDRouteMap.resolutionList(),
         onChanged: (value) {
           setState(() {
             exportWidthValue = value!;
@@ -613,57 +601,15 @@ class BaseState extends State<Base>
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
-    Color routeIconColor =
-        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
-    Color? routeIconVariantColor = railwayTransitLcdIsRouteColorSameAsLineColor
-        ? lineVariantColor
-        : Colors.green[300];
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: LCDStationIconSmallPainter(
-                lineColor: Util.hexToColor(
-                    CustomColors.railwayTransitLCDPassedStation),
-                lineVariantColor: Util.hexToColor(
-                    CustomColors.railwayTransitLCDPassedStationVariant),
-                shadow: true),
+            painter: LEDRouteMapStationIconPainter(Colors.green, lineColor, 12),
           )));
     }
-    if (nextStationListIndex != null && terminusListIndex != null) {
-      if (nextStationListIndex! <= terminusListIndex!) {
-        List<Container> replaceList = [];
-        for (int i = nextStationListIndex!; i < terminusListIndex! + 1; i++) {
-          replaceList.add(Container(
-              padding: EdgeInsets.fromLTRB(
-                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
-              child: CustomPaint(
-                painter: LCDStationIconSmallPainter(
-                    lineColor: routeIconColor,
-                    lineVariantColor: routeIconVariantColor,
-                    shadow: true),
-              )));
-        }
-        iconList.replaceRange(
-            nextStationListIndex!, terminusListIndex! + 1, replaceList);
-      } else if (nextStationListIndex! > terminusListIndex!) {
-        List<Container> replaceList = [];
-        for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
-          replaceList.add(Container(
-              padding: EdgeInsets.fromLTRB(
-                  10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
-              child: CustomPaint(
-                painter: LCDStationIconSmallPainter(
-                    lineColor: routeIconColor,
-                    lineVariantColor: routeIconVariantColor,
-                    shadow: true),
-              )));
-        }
-        iconList.replaceRange(
-            terminusListIndex!, nextStationListIndex! + 1, replaceList);
-      }
-    }
+
     return Stack(
       children: iconList,
     );

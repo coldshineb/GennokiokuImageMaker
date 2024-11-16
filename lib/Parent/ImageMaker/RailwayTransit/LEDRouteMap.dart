@@ -25,16 +25,8 @@ mixin class LEDRouteMap {
   static List<DropdownMenuItem> resolutionList() {
     return [
       const DropdownMenuItem(
-        value: 2560,
-        child: Text("2560*500"),
-      ),
-      const DropdownMenuItem(
-        value: 5120,
-        child: Text("5120*1000"),
-      ),
-      const DropdownMenuItem(
-        value: 10240,
-        child: Text("10240*2000"),
+        value: 3840,
+        child: Text("3840*500"),
       )
     ];
   }

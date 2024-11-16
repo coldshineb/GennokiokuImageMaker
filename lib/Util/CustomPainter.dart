@@ -221,3 +221,37 @@ class ScreenDoorCoverRouteLineClipper extends CustomClipper<Path> {
     return false;
   }
 }
+
+// LED 线路图站点图标
+class LEDRouteMapStationIconPainter extends CustomPainter {
+  final Color fillColor;
+  final Color strokeColor;
+  final double radius;
+
+  LEDRouteMapStationIconPainter(this.fillColor, this.strokeColor, this.radius);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint fillPaint = Paint()
+      ..color = fillColor
+      ..style = PaintingStyle.fill;
+
+    final Paint strokePaint = Paint()
+      ..color = strokeColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    final Offset center = Offset(size.width / 2, size.height / 2);
+
+    // Draw the filled circle
+    canvas.drawCircle(center, radius, fillPaint);
+
+    // Draw the circle border
+    canvas.drawCircle(center, radius, strokePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
