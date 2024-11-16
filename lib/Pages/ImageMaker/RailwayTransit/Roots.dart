@@ -5,6 +5,7 @@ import 'LCD/ArrivalFiveStations.dart';
 import 'LCD/ArrivalLinearRoute.dart';
 import 'LCD/ArrivalStationInfo.dart';
 import 'LCD/RunningLinearRoute.dart';
+import 'LEDRouteMap/Base.dart';
 import 'LineSymbol.dart';
 import 'OperationDirection.dart';
 import 'PlatformLevelSideName.dart';
@@ -53,6 +54,10 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                       NavigationRailDestination(
                         icon: Icon(Icons.signpost_outlined),
                         selectedIcon: Icon(Icons.signpost),
+                        label: Text('LED 线路图', style: TextStyle(fontSize: 15)),
+                      ),NavigationRailDestination(
+                        icon: Icon(Icons.signpost_outlined),
+                        selectedIcon: Icon(Icons.signpost),
                         label: Text('出入口图片', style: TextStyle(fontSize: 15)),
                       ),
                       NavigationRailDestination(
@@ -96,6 +101,7 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
               child:
                   IndexedStack(index: _selectedIndex, children: const <Widget>[
             LCDRoot(),
+            LEDRouteMapRoot(),
             StationEntranceRoot(),
             PlatformLevelSideName(),
             ScreenDoorCover(),
@@ -190,6 +196,68 @@ class _LCDRootState extends State<LCDRoot> {
               ArrivalLinearRoute(),
             ],
           )),
+        ],
+      ),
+    );
+  }
+}
+
+//LED 线路图三级导航
+class LEDRouteMapRoot extends StatefulWidget {
+  const LEDRouteMapRoot({super.key});
+
+  @override
+  State<LEDRouteMapRoot> createState() => _LEDRouteMapRootState();
+}
+
+class _LEDRouteMapRootState extends State<LEDRouteMapRoot> {
+  int _selectedIndex = 0;
+  double groupAlignment = -1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: <Widget>[
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: NavigationRail(
+                      extended: true,
+                      selectedIndex: _selectedIndex,
+                      groupAlignment: groupAlignment,
+                      onDestinationSelected: (int index) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                      destinations: const <NavigationRailDestination>[
+                        NavigationRailDestination(
+                          icon: Icon(Icons.signpost_outlined),
+                          selectedIcon: Icon(Icons.signpost),
+                          label: Text('主体', style: TextStyle(fontSize: 15)),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.signpost_outlined),
+                          selectedIcon: Icon(Icons.signpost),
+                          label: Text('出入口侧方站名', style: TextStyle(fontSize: 15)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          }),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(
+              child: IndexedStack(
+                index: _selectedIndex,
+                children: const <Widget>[
+                  Base(),
+                  Placeholder()
+                ],
+              )),
         ],
       ),
     );
