@@ -172,6 +172,21 @@ class LEDRouteMapState extends State<LEDRouteMap>
                     },
                     value: iconsBetween,
                   ),
+                  Container(
+                    height: 48,
+                    child: MenuItemButton(
+                      onPressed: () {
+                        setState(() {
+                          if (stationList.isNotEmpty) {
+                            stationList = stationList.reversed.toList();
+                            transferLineList =
+                                transferLineList.reversed.toList();
+                          }
+                        });
+                      },
+                      child: const Text("反转站点"),
+                    ),
+                  ),
                 ])
               ],
             ),
