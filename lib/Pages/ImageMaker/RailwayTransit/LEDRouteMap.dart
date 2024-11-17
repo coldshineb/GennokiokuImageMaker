@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../Object/Line.dart';
 import '../../../Object/Station.dart';
 import '../../../Parent/ImageMaker/ImageMaker.dart';
@@ -53,6 +54,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
   final GlobalKey _passingImageKey = GlobalKey();
   final GlobalKey _directionImageKey = GlobalKey();
   final GlobalKey _passedImageKey = GlobalKey();
+  final GlobalKey _passedFullImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
@@ -78,6 +80,9 @@ class LEDRouteMapState extends State<LEDRouteMap>
 
   //是否显示原忆轨道交通品牌图标
   bool showLogo = true;
+
+  //是否显示背景色
+  bool showBackground = false;
 
   //默认导出宽度
   int exportWidthValue = 3840;
@@ -233,8 +238,10 @@ class LEDRouteMapState extends State<LEDRouteMap>
               RepaintBoundary(
                 key: _mainImageKey,
                 child: Container(
-                  color:
-                      Util.hexToColor(CustomColors.railwayTransitLCDBackground),
+                  color: showBackground
+                      ? Util.hexToColor(
+                          CustomColors.railwayTransitLCDBackground)
+                      : Colors.transparent,
                   child: Stack(
                     children: [
                       const SizedBox(
@@ -267,8 +274,16 @@ class LEDRouteMapState extends State<LEDRouteMap>
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
-                        child: showRouteIcon(),
+                        child: showRouteIcon(passing: true),
                       ),
+                      Positioned(
+                          right: 200,
+                          bottom: 40,
+                          child: SvgPicture.asset(
+                            "assets/image/ledDirection.svg",
+                            height: 20,
+                            width: 20,
+                          ))
                     ],
                   ),
                 ),
@@ -325,6 +340,25 @@ class LEDRouteMapState extends State<LEDRouteMap>
                       Container(
                         padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
                         child: showPassedStationIcon(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              //已过站图（全程）
+              RepaintBoundary(
+                key: _passedFullImageKey,
+                child: Container(
+                  color: Colors.transparent,
+                  child: Stack(
+                    children: [
+                      const SizedBox(
+                        width: imageWidth,
+                        height: imageHeight,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
+                        child: showRouteIcon(passedFull: true),
                       ),
                     ],
                   ),
@@ -392,6 +426,20 @@ class LEDRouteMapState extends State<LEDRouteMap>
         ),
       ),
       Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportPassedImage,
+          child: const Text("导出已过站图"),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportPassedFullImage,
+          child: const Text("导出已过站（全程）图"),
+        ),
+      ),
+      Container(
         padding: const EdgeInsets.only(top: 14),
         child: const Text("导出分辨率"),
       ),
@@ -415,6 +463,16 @@ class LEDRouteMapState extends State<LEDRouteMap>
             },
             child: const Text("显示品牌图标"),
           )),
+      Container(
+          height: 48,
+          child: CheckboxMenuButton(
+            value: showBackground,
+            onChanged: (bool? value) {
+              showBackground = value!;
+              setState(() {});
+            },
+            child: const Text("显示背景色"),
+          )),
     ]);
   }
 
@@ -433,21 +491,25 @@ class LEDRouteMapState extends State<LEDRouteMap>
   }
 
   //显示站点图标
-  Stack showRouteIcon({bool direction = false}) {
+  Stack showRouteIcon(
+      {bool direction = false, bool passedFull = false, bool passing = false}) {
     List<Container> iconList = [];
+    Color iconColor = direction
+        ? Colors.grey
+        : passedFull
+            ? Colors.red
+            : passing
+                ? Util.hexToColor(
+                    CustomColors.railwayTransitLEDRouteMapNotPassingStation)
+                : Util.hexToColor(
+                    CustomColors.railwayTransitLEDRouteMapNotPassingStation);
+
     for (int i = 0; i < 4 * (stationList.length - 1); i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (4 * (stationList.length - 1))) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: LEDRouteMapStationIconPainter(
-                direction
-                    ? Colors.grey
-                    : Util.hexToColor(CustomColors
-                        .railwayTransitLEDRouteMapNotPassingStation),
-                lineColor,
-                5,
-                1),
+            painter: LEDRouteMapStationIconPainter(iconColor, lineColor, 5, 1),
           )));
     }
     for (int i = 0; i < stationList.length; i++) {
@@ -455,14 +517,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: LEDRouteMapStationIconPainter(
-                direction
-                    ? Colors.grey
-                    : Util.hexToColor(CustomColors
-                        .railwayTransitLEDRouteMapNotPassingStation),
-                lineColor,
-                8,
-                2),
+            painter: LEDRouteMapStationIconPainter(iconColor, lineColor, 8, 2),
           )));
     }
     return Stack(
@@ -495,21 +550,28 @@ class LEDRouteMapState extends State<LEDRouteMap>
   //显示已过站图标
   Stack showPassedStationIcon() {
     List<Container> iconList = [];
-    for (int i = 0; i < 4 * (nextStationListIndex! - 1); i++) {
-      iconList.add(Container(
-          padding: EdgeInsets.fromLTRB(
-              10 + (lineLength / (4 * (stationList.length - 1))) * i, 0, 0, 0),
-          child: CustomPaint(
-            painter: LEDRouteMapStationIconPainter(Colors.red, lineColor, 5, 1),
-          )));
-    }
-    for (int i = 0; i < nextStationListIndex!; i++) {
-      iconList.add(Container(
-          padding: EdgeInsets.fromLTRB(
-              10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
-          child: CustomPaint(
-            painter: LEDRouteMapStationIconPainter(Colors.red, lineColor, 8, 2),
-          )));
+    if (nextStationListIndex != null) {
+      for (int i = 0; i < 4 * (nextStationListIndex! - 1); i++) {
+        iconList.add(Container(
+            padding: EdgeInsets.fromLTRB(
+                10 + (lineLength / (4 * (stationList.length - 1))) * i,
+                0,
+                0,
+                0),
+            child: CustomPaint(
+              painter:
+                  LEDRouteMapStationIconPainter(Colors.red, lineColor, 5, 1),
+            )));
+      }
+      for (int i = 0; i < nextStationListIndex!; i++) {
+        iconList.add(Container(
+            padding: EdgeInsets.fromLTRB(
+                10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
+            child: CustomPaint(
+              painter:
+                  LEDRouteMapStationIconPainter(Colors.red, lineColor, 8, 2),
+            )));
+      }
     }
     return Stack(
       children: iconList,
@@ -690,8 +752,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
         // 将站点保存到临时集合中
         stationsFromJson = jsonData['stations'];
         // 站点不能少于 2 或大于 maxStation
-        if (stationsFromJson.length >= 2 &&
-            stationsFromJson.length <= railwayTransitLcdMaxStation) {
+        if (stationsFromJson.length >= 2) {
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
@@ -734,9 +795,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
           setState(() {});
         } else if (stationsFromJson.length < 2) {
           alertDialog(context, "错误", "站点数量不能小于 2");
-        } else if (stationsFromJson.length > railwayTransitLcdMaxStation) {
-          alertDialog(context, "错误",
-              "直线型线路图站点数量不能大于 ${railwayTransitLcdMaxStation}，请使用 U 形线路图");
         }
       } catch (e) {
         print('读取文件失败: $e');
@@ -751,12 +809,18 @@ class LEDRouteMapState extends State<LEDRouteMap>
     if (stationList.isNotEmpty) {
       String? path = await FilePicker.platform.getDirectoryPath();
       if (path != null) {
-        for (int i = 0; i < stationList.length + 1; i++) {
+        await exportImage(context, stationList, _mainImageKey,
+            "$path${Util.pathSlash}线路图.png", true,
+            exportWidthValue: exportWidthValue);
+        await exportImage(context, stationList, _directionImageKey,
+            "$path${Util.pathSlash}方向指示.png", true,
+            exportWidthValue: exportWidthValue);
+        await exportImage(context, stationList, _passedFullImageKey,
+            "$path${Util.pathSlash}已过站 全程.png", true,
+            exportWidthValue: exportWidthValue);
+        for (int i = 0; i < stationList.length; i++) {
           nextStationListIndex = i;
           setState(() {});
-          //图片导出有bug，第一轮循环的第一张图不会被刷新状态，因此复制了一遍导出来变相解决bug，实际效果不变
-          //断点调试时发现setState后状态并不会立即刷新，而是在第一个exportImage执行后才刷新，因此第一张图不会被刷新状态
-          //另一个发现：在断点importImage时发现，setState执行完后不会立即刷新，而是在后面的代码执行完后才刷新
           await exportImage(
               context,
               stationList,
@@ -774,8 +838,8 @@ class LEDRouteMapState extends State<LEDRouteMap>
           await exportImage(
               context,
               stationList,
-              _mainImageKey,
-              "$path${Util.pathSlash}运行中 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}, $terminusListValue方向.png",
+              _passedImageKey,
+              "$path${Util.pathSlash}已过站 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}.png",
               true,
               exportWidthValue: exportWidthValue);
         }
@@ -794,7 +858,9 @@ class LEDRouteMapState extends State<LEDRouteMap>
   Future<void> exportDynamicImage() async {
     if (stationList.isNotEmpty) {
       await exportMainImage();
+      await exportDirectionImage();
       await exportPassingImage();
+      await exportPassedImage();
     } else {
       noStationsSnackbar(context);
     }
@@ -829,6 +895,30 @@ class LEDRouteMapState extends State<LEDRouteMap>
       String fileName =
           "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png";
       await exportImage(context, stationList, _passingImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
+  }
+
+  //导出已过站图
+  Future<void> exportPassedImage() async {
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "已过站 ${nextStationListIndex! + 1} $nextStationListValue.png";
+      await exportImage(context, stationList, _passedImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
+  }
+
+  //导出已过站（全程）图
+  Future<void> exportPassedFullImage() async {
+    if (stationList.isNotEmpty) {
+      String fileName = "已过站 全程.png";
+      await exportImage(
+          context, stationList, _passedFullImageKey, fileName, false,
           exportWidthValue: exportWidthValue);
     } else {
       noStationsSnackbar(context);
