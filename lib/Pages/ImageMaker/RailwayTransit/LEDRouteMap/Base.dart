@@ -50,12 +50,10 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
   //用于识别组件的 key
   final GlobalKey _mainImageKey = GlobalKey();
   final GlobalKey _passingImageKey = GlobalKey();
+  final GlobalKey _passedImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
-
-  //背景纹理
-  Uint8List? pattern;
 
   //站名集合
   List<Station> stationList = [];
@@ -68,7 +66,6 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
 
   //线路颜色和颜色变体，默认透明，导入文件时赋值
   Color lineColor = Colors.transparent;
-  Color lineVariantColor = Colors.transparent;
 
   //站名下拉菜单默认值，设空，导入文件时赋值
   String? nextStationListValue;
@@ -77,9 +74,6 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
   //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
   int? nextStationListIndex;
   int? terminusListIndex;
-
-  //运行方向，用于处理下一站与终点站为中间某一站时的线条显示，0为向左行，1为向右行
-  int trainDirectionValue = 1;
 
   //是否显示原忆轨道交通品牌图标
   bool showLogo = true;
@@ -120,40 +114,6 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 importAndExportMenubar(),
-                MenuBar(style: menuStyle(context), children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 14, left: 7),
-                    child: const Text("小交线路设置："),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 14),
-                    child: const Text("运行方向"),
-                  ),
-                  Container(
-                    height: 48,
-                    child: RadioMenuButton(
-                        value: 0,
-                        groupValue: trainDirectionValue,
-                        onChanged: (v) {
-                          setState(() {
-                            trainDirectionValue = v!;
-                          });
-                        },
-                        child: const Text("向左行")),
-                  ),
-                  Container(
-                    height: 48,
-                    child: RadioMenuButton(
-                        value: 1,
-                        groupValue: trainDirectionValue,
-                        onChanged: (v) {
-                          setState(() {
-                            trainDirectionValue = v!;
-                          });
-                        },
-                        child: const Text("向右行")),
-                  )
-                ]),
                 MenuBar(style: menuStyle(context), children: [
                   Container(
                     padding: const EdgeInsets.only(top: 14, left: 7),
@@ -261,11 +221,9 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
                   onPressed: () {
                     //重置所有变量
                     _imageBytes = null;
-                    pattern = null;
                     stationList.clear();
                     transferLineList.clear();
                     lineColor = Colors.transparent;
-                    lineVariantColor = Colors.transparent;
                     nextStationListIndex = null;
                     terminusListIndex = null;
                     nextStationListValue = null;
@@ -317,7 +275,6 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
                               ),
                             )
                           : const SizedBox(),
-                      backgroundPattern(),
                       gennokiokuRailwayTransitLogoWidget(showLogo),
                       lineNumberIconWidget(lineColor, lineNumber, lineNumberEN),
                       Container(
@@ -327,7 +284,7 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
                       Container(
                         width: imageWidth,
                         height: imageHeight,
-                        padding: const EdgeInsets.fromLTRB(43, 221.5, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(43, 207, 0, 0),
                         child: showTransferIcon(),
                       ),
                       Container(
@@ -337,6 +294,25 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
                       Container(
                         padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
                         child: showRouteIcon(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              //方向指示图
+              RepaintBoundary(
+                key: _passedImageKey,
+                child: Container(
+                  color: Colors.transparent,
+                  child: Stack(
+                    children: [
+                      const SizedBox(
+                        width: imageWidth,
+                        height: imageHeight,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
+                        child: showRouteIcon(passed: true),
                       ),
                     ],
                   ),
@@ -364,15 +340,6 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
             ],
           )),
     );
-  }
-
-  Container backgroundPattern() {
-    return pattern != null
-        ? Container(
-            height: imageHeight,
-            width: imageWidth,
-            child: Image.memory(pattern!, repeat: ImageRepeat.repeat))
-        : Container();
   }
 
   @override
@@ -415,6 +382,13 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
         child: MenuItemButton(
           onPressed: exportMainImage,
           child: const Text("导出主线路图"),
+        ),
+      ),
+      Container(
+        height: 48,
+        child: MenuItemButton(
+          onPressed: exportDirectionImage,
+          child: const Text("导出方向指示图"),
         ),
       ),
       Container(
@@ -465,8 +439,8 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
     );
   }
 
-  //显示站点图标  与 showRouteLine 类似
-  Stack showRouteIcon() {
+  //显示站点图标
+  Stack showRouteIcon({bool passed = false}) {
     List<Container> iconList = [];
     for (int i = 0; i < 4 * (stationList.length - 1); i++) {
       iconList.add(Container(
@@ -474,8 +448,10 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
               10 + (lineLength / (4 * (stationList.length - 1))) * i, 0, 0, 0),
           child: CustomPaint(
             painter: LEDRouteMapStationIconPainter(
-                Util.hexToColor(
-                    CustomColors.railwayTransitLEDRouteMapNotPassingStation),
+                passed
+                    ? Colors.grey
+                    : Util.hexToColor(CustomColors
+                        .railwayTransitLEDRouteMapNotPassingStation),
                 lineColor,
                 5,
                 1),
@@ -487,8 +463,10 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter: LEDRouteMapStationIconPainter(
-                Util.hexToColor(
-                    CustomColors.railwayTransitLEDRouteMapNotPassingStation),
+                passed
+                    ? Colors.grey
+                    : Util.hexToColor(CustomColors
+                        .railwayTransitLEDRouteMapNotPassingStation),
                 lineColor,
                 8,
                 2),
@@ -512,12 +490,9 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
               0,
               0),
           child: CustomPaint(
-              painter: LCDStationIconSmallPainter(
-                  lineColor: Util.hexToColor(
-                      CustomColors.railwayTransitLCDPassingStation),
-                  lineVariantColor: Util.hexToColor(
-                      CustomColors.railwayTransitLCDPassingStationVariant),
-                  shadow: false))));
+            painter:
+                LEDRouteMapStationIconPainter(Colors.orange, lineColor, 8, 2),
+          )));
     }
     return Stack(
       children: tempList,
@@ -539,58 +514,68 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
           if (CustomRegExp.oneDigit.hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
                 left: (lineLength / (stationList.length - 1)) * i,
-                top: 35.5 * j,
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextOneDigit(transferLine)
-                  ],
-                )));
+                top: 22.0 * j,
+                child: Transform.scale(
+                    scale: 20/34,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine),
+                        Widgets.transferLineTextTwoDigits(transferLine),
+                      ],
+                    ))));
           } else if (CustomRegExp.twoDigits
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
                 left: (lineLength / (stationList.length - 1)) * i,
-                top: 35.5 * j,
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextTwoDigits(transferLine)
-                  ],
-                )));
+                top: 22.0 * j,
+                child: Transform.scale(
+                    scale: 20/34,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine),
+                        Widgets.transferLineTextTwoDigits(transferLine),
+                      ],
+                    ))));
           } else if (CustomRegExp.twoDigits
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
                 left: (lineLength / (stationList.length - 1)) * i,
-                top: 35.5 * j,
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextTwoDigits(transferLine)
-                  ],
-                )));
+                top: 22.0 * j,
+                child: Transform.scale(
+                    scale: 20/34,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine),
+                        Widgets.transferLineTextTwoDigits(transferLine),
+                      ],
+                    ))));
           } else if (CustomRegExp.oneDigitOneCharacter
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
                 left: (lineLength / (stationList.length - 1)) * i,
-                top: 35.5 * j,
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextOneDigitOneCharacter(transferLine)
-                  ],
-                )));
+                top: 22.0 * j,
+                child: Transform.scale(
+                    scale: 20/34,
+                    child: Stack(
+                      children: [
+                        Widgets.transferLineIcon(transferLine),
+                        Widgets.transferLineTextTwoDigits(transferLine),
+                      ],
+                    ))));
           } else if (CustomRegExp.twoCharacters
               .hasMatch(transferLine.lineNumberEN)) {
             {
               iconList.add(Positioned(
                   left: (lineLength / (stationList.length - 1)) * i,
-                  top: 35.5 * j,
-                  child: Stack(
-                    children: [
-                      Widgets.transferLineIcon(transferLine),
-                      Widgets.transferLineTextTwoCharacters(transferLine)
-                    ],
-                  )));
+                  top: 22.0 * j,
+                  child: Transform.scale(
+                      scale: 20/34,
+                      child: Stack(
+                        children: [
+                          Widgets.transferLineIcon(transferLine),
+                          Widgets.transferLineTextTwoDigits(transferLine),
+                        ],
+                      ))));
             }
           }
         }
@@ -696,11 +681,10 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
           nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
           terminusListIndex = 0;
 
-          // 设置线路颜色和颜色变体
+          // 设置线路颜色
           lineNumber = jsonData['lineNumber'];
           lineNumberEN = jsonData['lineNumberEN'];
           lineColor = Util.hexToColor(jsonData['lineColor']);
-          lineVariantColor = Util.hexToColor(jsonData['lineVariantColor']);
           // 遍历临时集合，获取站点信息，保存到 stations 集合中
 
           for (dynamic item in stationsFromJson) {
@@ -833,8 +817,20 @@ class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
   Future<void> exportMainImage() async {
     if (stationList.isNotEmpty) {
       String fileName =
-          "运行中 ${nextStationListIndex! + 1} $nextStationListValue, $terminusListValue方向.png";
+          "线路图.png";
       await exportImage(context, stationList, _mainImageKey, fileName, false,
+          exportWidthValue: exportWidthValue);
+    } else {
+      noStationsSnackbar(context);
+    }
+  }
+
+  //导出方向指示图
+  Future<void> exportDirectionImage() async {
+    if (stationList.isNotEmpty) {
+      String fileName =
+          "方向指示.png";
+      await exportImage(context, stationList, _passedImageKey, fileName, false,
           exportWidthValue: exportWidthValue);
     } else {
       noStationsSnackbar(context);
