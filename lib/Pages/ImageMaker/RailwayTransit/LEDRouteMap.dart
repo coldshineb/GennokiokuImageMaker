@@ -76,6 +76,9 @@ class LEDRouteMapState extends State<LEDRouteMap>
   //是否显示背景色
   bool showBackground = false;
 
+  //间隔点数
+  int iconsBetween = 3;
+
   //默认导出宽度
   int exportWidthValue = 3840;
 
@@ -109,7 +112,68 @@ class LEDRouteMapState extends State<LEDRouteMap>
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [importAndExportMenubar()],
+              children: [
+                importAndExportMenubar(),
+                MenuBar(style: menuStyle(context), children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 14, left: 7),
+                    child: const Text("间隔点数"),
+                  ),
+                  DropdownButton(
+                    items: [
+                      DropdownMenuItem(
+                        value: 1,
+                        child: const Text("1"),
+                      ),
+                      DropdownMenuItem(
+                        value: 2,
+                        child: const Text("2"),
+                      ),
+                      DropdownMenuItem(
+                        value: 3,
+                        child: const Text("3（默认）"),
+                      ),
+                      DropdownMenuItem(
+                        value: 4,
+                        child: const Text("4"),
+                      ),
+                      DropdownMenuItem(
+                        value: 5,
+                        child: const Text("5"),
+                      ),
+                      DropdownMenuItem(
+                        value: 6,
+                        child: const Text("6"),
+                      ),
+                      DropdownMenuItem(
+                        value: 7,
+                        child: const Text("7"),
+                      ),
+                      DropdownMenuItem(
+                        value: 8,
+                        child: const Text("8"),
+                      ),
+                      DropdownMenuItem(
+                        value: 9,
+                        child: const Text("9"),
+                      ),
+                      DropdownMenuItem(
+                        value: 10,
+                        child: const Text("10"),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      try {
+                        iconsBetween = value as int;
+                        setState(() {});
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    value: iconsBetween,
+                  ),
+                ])
+              ],
             ),
             Expanded(
               child: generalIsScaleEnabled
@@ -138,6 +202,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
                     lineColor = Colors.transparent;
                     lineNumber = "";
                     lineNumberEN = "";
+                    iconsBetween = 3;
                     setState(() {});
                   },
                   tooltip: '重置',
@@ -282,59 +347,15 @@ class LEDRouteMapState extends State<LEDRouteMap>
   @override
   MenuBar importAndExportMenubar() {
     return MenuBar(style: menuStyle(context), children: [
-      generalIsDevMode
-          ? Container(
-              height: 48,
-              child: MenuItemButton(
-                onPressed: _importImage,
-                child: const Text("导入图片"),
-              ),
-            )
-          : Container(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: importLineJson,
-          child: const Text("导入线路"),
-        ),
-      ),
+      generalIsDevMode ? importImageMenuItemButton(_importImage) : Container(),
+      importLineJsonMenuItemButton(importLineJson),
       const VerticalDivider(thickness: 2),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportAllImage,
-          child: const Text("导出全部图"),
-        ),
-      ),
+      exportAllImageMenuItemButton(exportAllImage),
       const VerticalDivider(),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportMainImage,
-          child: const Text("导出主线路图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDirectionImage,
-          child: const Text("导出方向指示图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportPassingImage,
-          child: const Text("导出下一站图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportPassedImage,
-          child: const Text("导出已过站图"),
-        ),
-      ),
+      exportMenuItemButton(exportMainImage, "导出主线路图"),
+      exportMenuItemButton(exportDirectionImage, "导出方向指示图"),
+      exportMenuItemButton(exportPassingImage, "导出下一站图"),
+      exportMenuItemButton(exportPassedImage, "导出已过站图"),
       Container(
         padding: const EdgeInsets.only(top: 14),
         child: const Text("导出分辨率"),
@@ -402,10 +423,16 @@ class LEDRouteMapState extends State<LEDRouteMap>
                 : Util.hexToColor(
                     CustomColors.railwayTransitLEDRouteMapNotPassingStation);
 
-    for (int i = 0; i < 4 * (stationList.length - 1); i++) {
+    for (int i = 0; i < (iconsBetween + 1) * (stationList.length - 1); i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 + (lineLength / (4 * (stationList.length - 1))) * i, 0, 0, 0),
+              10 +
+                  (lineLength /
+                          ((iconsBetween + 1) * (stationList.length - 1))) *
+                      i,
+              0,
+              0,
+              0),
           child: CustomPaint(
             painter: LEDRouteMapStationIconPainter(iconColor, lineColor, 5, 1),
           )));

@@ -8,7 +8,7 @@ import 'main.dart';
 class Util {
   static int currentYear =
       DateTime.now().month > 10 ? DateTime.now().year + 1 : DateTime.now().year;
-  static const String appVersion = '1.5.1';
+  static const String appVersion = '1.6';
   static String copyright =
       '版权所有 © Calicy LLC 2022-$currentYear Gennokioku 原忆 2022-$currentYear Coldshine 2020-$currentYear，由 Flutter 强力驱动';
 
