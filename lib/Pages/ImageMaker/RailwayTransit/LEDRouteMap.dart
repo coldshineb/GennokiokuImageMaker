@@ -54,7 +54,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
   final GlobalKey _passingImageKey = GlobalKey();
   final GlobalKey _directionImageKey = GlobalKey();
   final GlobalKey _passedImageKey = GlobalKey();
-  final GlobalKey _passedFullImageKey = GlobalKey();
 
   //背景图片字节数据
   Uint8List? _imageBytes;
@@ -70,13 +69,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
 
   //线路颜色和颜色变体，默认透明，导入文件时赋值
   Color lineColor = Colors.transparent;
-
-  //站名下拉菜单默认值，设空，导入文件时赋值
-  String? nextStationListValue;
-  String? terminusListValue;
-
-  //站名下拉菜单默认索引，用于找到下拉菜单选择的站名所对应的英文站名，设空，下拉选择站名时赋值
-  int? nextStationListIndex;
 
   //是否显示原忆轨道交通品牌图标
   bool showLogo = true;
@@ -118,65 +110,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                importAndExportMenubar(),
-                MenuBar(style: menuStyle(context), children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 14, left: 7),
-                    child: const Text("下一站"),
-                  ),
-                  DropdownButton(
-                    disabledHint: const Text(
-                      "下一站",
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ), //设置空时的提示文字
-                    items: showStationList(stationList),
-                    onChanged: (value) {
-                      try {
-                        nextStationListIndex = stationList.indexWhere(
-                            (element) =>
-                                element.stationNameCN ==
-                                value); //根据选择的站名，找到站名集合中对应的索引
-                        nextStationListValue = value;
-                        setState(() {});
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    value: nextStationListValue,
-                  ),
-                  Container(
-                    height: 48,
-                    child: MenuItemButton(
-                      onPressed: previousStation,
-                      child: const Text("上一站"),
-                    ),
-                  ),
-                  Container(
-                    height: 48,
-                    child: MenuItemButton(
-                      onPressed: nextStation,
-                      child: const Text("下一站"),
-                    ),
-                  ),
-                  Container(
-                    height: 48,
-                    child: MenuItemButton(
-                      onPressed: () {
-                        setState(() {
-                          if (stationList.isNotEmpty) {
-                            stationList = stationList.reversed.toList();
-                            transferLineList =
-                                transferLineList.reversed.toList();
-                            nextStationListIndex = stationList.length -
-                                1 -
-                                nextStationListIndex!; //反转站点索引
-                          }
-                        });
-                      },
-                      child: const Text("反转站点"),
-                    ),
-                  ),
-                ])
+                importAndExportMenubar()
               ],
             ),
             Expanded(
@@ -204,9 +138,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
                     stationList.clear();
                     transferLineList.clear();
                     lineColor = Colors.transparent;
-                    nextStationListIndex = null;
-                    nextStationListValue = null;
-                    terminusListValue = null;
                     lineNumber = "";
                     lineNumberEN = "";
                     setState(() {});
@@ -339,25 +270,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
-                        child: showPassedStationIcon(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              //已过站图（全程）
-              RepaintBoundary(
-                key: _passedFullImageKey,
-                child: Container(
-                  color: Colors.transparent,
-                  child: Stack(
-                    children: [
-                      const SizedBox(
-                        width: imageWidth,
-                        height: imageHeight,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(50, 202.5, 0, 0),
                         child: showRouteIcon(passedFull: true),
                       ),
                     ],
@@ -396,13 +308,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
           child: const Text("导出全部图"),
         ),
       ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportDynamicImage,
-          child: const Text("导出当前站全部图"),
-        ),
-      ),
       const VerticalDivider(),
       Container(
         height: 48,
@@ -430,13 +335,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
         child: MenuItemButton(
           onPressed: exportPassedImage,
           child: const Text("导出已过站图"),
-        ),
-      ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: exportPassedFullImage,
-          child: const Text("导出已过站（全程）图"),
         ),
       ),
       Container(
@@ -528,15 +426,10 @@ class LEDRouteMapState extends State<LEDRouteMap>
   //显示正在过站图标
   Stack showPassingRouteIcon() {
     List<Container> tempList = [];
-    if (nextStationListIndex != null) {
+    for (int i = 0; i < stationList.length; i++) {
       tempList.add(Container(
           padding: EdgeInsets.fromLTRB(
-              10 +
-                  (lineLength / (stationList.length - 1)) *
-                      nextStationListIndex!,
-              0,
-              0,
-              0),
+              10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
             painter:
                 LEDRouteMapStationIconPainter(Colors.orange, lineColor, 8, 2),
@@ -544,37 +437,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
     }
     return Stack(
       children: tempList,
-    );
-  }
-
-  //显示已过站图标
-  Stack showPassedStationIcon() {
-    List<Container> iconList = [];
-    if (nextStationListIndex != null) {
-      for (int i = 0; i < 4 * (nextStationListIndex! - 1); i++) {
-        iconList.add(Container(
-            padding: EdgeInsets.fromLTRB(
-                10 + (lineLength / (4 * (stationList.length - 1))) * i,
-                0,
-                0,
-                0),
-            child: CustomPaint(
-              painter:
-                  LEDRouteMapStationIconPainter(Colors.red, lineColor, 5, 1),
-            )));
-      }
-      for (int i = 0; i < nextStationListIndex!; i++) {
-        iconList.add(Container(
-            padding: EdgeInsets.fromLTRB(
-                10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
-            child: CustomPaint(
-              painter:
-                  LEDRouteMapStationIconPainter(Colors.red, lineColor, 8, 2),
-            )));
-      }
-    }
-    return Stack(
-      children: iconList,
     );
   }
 
@@ -756,7 +618,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
           //清空或重置可能空或导致显示异常的变量，只有文件格式验证无误后才清空
           stationList.clear();
           transferLineList.clear();
-          nextStationListIndex = 0; //会导致显示的是前一个索引对应的站点
 
           // 设置线路颜色
           lineNumber = jsonData['lineNumber'];
@@ -788,9 +649,6 @@ class LEDRouteMapState extends State<LEDRouteMap>
             stationList.add(station);
           }
 
-          //文件成功导入后将下拉菜单默认值设为第一站
-          nextStationListValue = stationList[0].stationNameCN;
-          terminusListValue = stationList[stationList.length - 1].stationNameCN;
           // 刷新页面状态
           setState(() {});
         } else if (stationsFromJson.length < 2) {
@@ -815,52 +673,18 @@ class LEDRouteMapState extends State<LEDRouteMap>
         await exportImage(context, stationList, _directionImageKey,
             "$path${Util.pathSlash}方向指示.png", true,
             exportWidthValue: exportWidthValue);
-        await exportImage(context, stationList, _passedFullImageKey,
-            "$path${Util.pathSlash}已过站 全程.png", true,
+        await exportImage(context, stationList, _passingImageKey,
+            "$path${Util.pathSlash}下一站.png", true,
             exportWidthValue: exportWidthValue);
-        for (int i = 0; i < stationList.length; i++) {
-          nextStationListIndex = i;
-          setState(() {});
-          await exportImage(
-              context,
-              stationList,
-              _passingImageKey,
-              "$path${Util.pathSlash}下一站 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}.png",
-              true,
-              exportWidthValue: exportWidthValue);
-          await exportImage(
-              context,
-              stationList,
-              _passingImageKey,
-              "$path${Util.pathSlash}下一站 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}.png",
-              true,
-              exportWidthValue: exportWidthValue);
-          await exportImage(
-              context,
-              stationList,
-              _passedImageKey,
-              "$path${Util.pathSlash}已过站 ${nextStationListIndex! + 1} ${stationList[nextStationListIndex!].stationNameCN}.png",
-              true,
-              exportWidthValue: exportWidthValue);
-        }
+        await exportImage(context, stationList, _passedImageKey,
+            "$path${Util.pathSlash}已过站.png", true,
+            exportWidthValue: exportWidthValue);
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         margin: const EdgeInsets.all(10.0),
         behavior: SnackBarBehavior.floating,
         content: Text("图片已成功保存至: $path"),
       ));
-    } else {
-      noStationsSnackbar(context);
-    }
-  }
-
-  //导出当前站全部图
-  Future<void> exportDynamicImage() async {
-    if (stationList.isNotEmpty) {
-      await exportMainImage();
-      await exportDirectionImage();
-      await exportPassingImage();
-      await exportPassedImage();
     } else {
       noStationsSnackbar(context);
     }
@@ -893,7 +717,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
   Future<void> exportPassingImage() async {
     if (stationList.isNotEmpty) {
       String fileName =
-          "下一站 ${nextStationListIndex! + 1} $nextStationListValue.png";
+          "下一站.png";
       await exportImage(context, stationList, _passingImageKey, fileName, false,
           exportWidthValue: exportWidthValue);
     } else {
@@ -904,47 +728,12 @@ class LEDRouteMapState extends State<LEDRouteMap>
   //导出已过站图
   Future<void> exportPassedImage() async {
     if (stationList.isNotEmpty) {
-      String fileName =
-          "已过站 ${nextStationListIndex! + 1} $nextStationListValue.png";
-      await exportImage(context, stationList, _passedImageKey, fileName, false,
-          exportWidthValue: exportWidthValue);
-    } else {
-      noStationsSnackbar(context);
-    }
-  }
-
-  //导出已过站（全程）图
-  Future<void> exportPassedFullImage() async {
-    if (stationList.isNotEmpty) {
-      String fileName = "已过站 全程.png";
+      String fileName = "已过站.png";
       await exportImage(
-          context, stationList, _passedFullImageKey, fileName, false,
+          context, stationList, _passedImageKey, fileName, false,
           exportWidthValue: exportWidthValue);
     } else {
       noStationsSnackbar(context);
-    }
-  }
-
-  void nextStation() {
-    if (nextStationListIndex == stationList.length - 1 ||
-        nextStationListIndex == null) {
-      return;
-    } else {
-      setState(() {
-        nextStationListIndex = nextStationListIndex! + 1;
-        nextStationListValue = stationList[nextStationListIndex!].stationNameCN;
-      });
-    }
-  }
-
-  void previousStation() {
-    if (nextStationListIndex == 0 || nextStationListIndex == null) {
-      return;
-    } else {
-      setState(() {
-        nextStationListIndex = nextStationListIndex! - 1;
-        nextStationListValue = stationList[nextStationListIndex!].stationNameCN;
-      });
     }
   }
 }
