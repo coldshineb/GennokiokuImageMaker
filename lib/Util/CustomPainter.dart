@@ -227,8 +227,10 @@ class LEDRouteMapStationIconPainter extends CustomPainter {
   final Color fillColor;
   final Color strokeColor;
   final double radius;
+  final double strokeWidth;
 
-  LEDRouteMapStationIconPainter(this.fillColor, this.strokeColor, this.radius);
+  LEDRouteMapStationIconPainter(
+      this.fillColor, this.strokeColor, this.radius, this.strokeWidth);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -239,7 +241,7 @@ class LEDRouteMapStationIconPainter extends CustomPainter {
     final Paint strokePaint = Paint()
       ..color = strokeColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
+      ..strokeWidth = strokeWidth;
 
     final Offset center = Offset(size.width / 2, size.height / 2);
 

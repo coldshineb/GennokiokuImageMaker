@@ -42,8 +42,7 @@ class Base extends StatefulWidget {
   BaseState createState() => BaseState();
 }
 
-class BaseState extends State<Base>
-    with LEDRouteMap, ImageMaker {
+class BaseState extends State<Base> with LEDRouteMap, ImageMaker {
   //这两个值是根据整体文字大小等组件调整的，不要动，否则其他组件大小都要跟着改
   static const double imageHeight = 335;
   static const double imageWidth = 2572.8;
@@ -332,7 +331,7 @@ class BaseState extends State<Base>
                         child: showTransferIcon(),
                       ),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(60, 195, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(30, 201.5, 0, 0),
                         child: showRouteLine(),
                       ),
                       Container(
@@ -395,13 +394,6 @@ class BaseState extends State<Base>
           child: const Text("导入线路"),
         ),
       ),
-      Container(
-        height: 48,
-        child: MenuItemButton(
-          onPressed: importPattern,
-          child: const Text("导入纹理"),
-        ),
-      ),
       const VerticalDivider(thickness: 2),
       Container(
         height: 48,
@@ -461,155 +453,47 @@ class BaseState extends State<Base>
 
   //显示线路
   Stack showRouteLine() {
-    List<Container> lineList = [];
-    Color routeLineColor =
-        railwayTransitLcdIsRouteColorSameAsLineColor ? lineColor : Colors.green;
-    //显示整条线，默认为已过站
-    for (int i = 0; i < stationList.length - 1; i++) {
-      lineList.add((routeLine(
-          i,
-          Util.hexToColor(
-              CustomColors.railwayTransitLCDPassedStationVariant))));
-    }
-    //根据选择的下一站和终点站，替换已过站为未过站
-    if (nextStationListIndex != null && terminusListIndex != null) {
-      List<Container> replaceList = [];
-      //非空判断
-      //下一站在终点站左侧
-      if (nextStationListIndex! < terminusListIndex!) {
-        //下一站不为起始站
-        if (nextStationListIndex != 0) {
-          for (int i = nextStationListIndex! - 1; i < terminusListIndex!; i++) {
-            //nextStationListIndex-1：下一站前的线条
-            replaceList.add(routeLine(i, routeLineColor));
-          }
-          //替换原集合
-          lineList.replaceRange(
-              nextStationListIndex! - 1, terminusListIndex!, replaceList);
-        } else
-        //下一站为起始站
-        {
-          for (int i = nextStationListIndex!; i < terminusListIndex!; i++) {
-            replaceList.add(routeLine(i, routeLineColor));
-          }
-          lineList.replaceRange(
-              nextStationListIndex!, terminusListIndex!, replaceList);
-        }
-      }
-      //下一站在终点站右侧
-      else if (nextStationListIndex! > terminusListIndex!) {
-        //下一站不为终点站
-        if (nextStationListIndex != stationList.length - 1) {
-          for (int i = terminusListIndex!; i < nextStationListIndex! + 1; i++) {
-            replaceList.add(routeLine(i, routeLineColor));
-          }
-          lineList.replaceRange(
-              terminusListIndex!, nextStationListIndex! + 1, replaceList);
-        } else
-        //下一站为终点站
-        {
-          for (int i = terminusListIndex!; i < nextStationListIndex!; i++) {
-            replaceList.add(routeLine(i, routeLineColor));
-          }
-          lineList.replaceRange(
-              terminusListIndex!, nextStationListIndex!, replaceList);
-        }
-      } else {
-        //下一站为首站
-
-        if (nextStationListIndex == 0) {
-          replaceList.add(Container(
-            //最左侧，不用间隔
-            height: 15,
-            child: Container(
-              width: (lineLength / (stationList.length - 1)),
-              color: routeLineColor,
-            ),
-          ));
-          lineList.replaceRange(0, 1, replaceList);
-        }
-        //下一站为尾站
-        else if (nextStationListIndex == stationList.length - 1) {
-          replaceList.add(Container(
-            padding: EdgeInsets.only(
-                left: (lineLength / (stationList.length - 1)) *
-                    (stationList.length - 2)),
-            //最右侧
-            height: 15,
-            child: Container(
-              width: (lineLength / (stationList.length - 1)),
-              color: routeLineColor,
-            ),
-          ));
-          lineList.replaceRange(
-              stationList.length - 2, stationList.length - 1, replaceList);
-        }
-        //下一站与终点站相同，但不为首尾站
-        else {
-          //向左行
-          if (trainDirectionValue == 0) {
-            replaceList.add(Container(
-              padding: EdgeInsets.only(
-                  left: (lineLength / (stationList.length - 1)) *
-                      nextStationListIndex!),
-              height: 15,
-              child: Container(
-                width: (lineLength / (stationList.length - 1)),
-                color: routeLineColor,
-              ),
-            ));
-            lineList.replaceRange(
-                nextStationListIndex!, nextStationListIndex! + 1, replaceList);
-          }
-          //向右行
-          else {
-            replaceList.add(Container(
-              padding: EdgeInsets.only(
-                  left: (lineLength / (stationList.length - 1)) *
-                      (nextStationListIndex! - 1)),
-              height: 15,
-              child: Container(
-                width: (lineLength / (stationList.length - 1)),
-                color: routeLineColor,
-              ),
-            ));
-            lineList.replaceRange(
-                nextStationListIndex! - 1, nextStationListIndex!, replaceList);
-          }
-        }
-      }
-    }
     return Stack(
-      children: lineList,
-    );
-  }
-
-  //线路
-  Container routeLine(int i, Color color) {
-    return Container(
-      padding:
-          EdgeInsets.only(left: (lineLength / (stationList.length - 1)) * i),
-      //间隔
-      height: 15,
-      child: Container(
-        width: (lineLength / (stationList.length - 1)), //每个站与站之间线条的宽度
-        color: color,
-      ),
+      children: [
+        Positioned(
+            child: Container(
+          width: lineLength + 60,
+          height: 2,
+          color: lineColor,
+        ))
+      ],
     );
   }
 
   //显示站点图标  与 showRouteLine 类似
   Stack showRouteIcon() {
     List<Container> iconList = [];
+    for (int i = 0; i < 4 * (stationList.length - 1); i++) {
+      iconList.add(Container(
+          padding: EdgeInsets.fromLTRB(
+              10 + (lineLength / (4 * (stationList.length - 1))) * i, 0, 0, 0),
+          child: CustomPaint(
+            painter: LEDRouteMapStationIconPainter(
+                Util.hexToColor(
+                    CustomColors.railwayTransitLEDRouteMapNotPassingStation),
+                lineColor,
+                5,
+                1),
+          )));
+    }
     for (int i = 0; i < stationList.length; i++) {
       iconList.add(Container(
           padding: EdgeInsets.fromLTRB(
               10 + (lineLength / (stationList.length - 1)) * i, 0, 0, 0),
           child: CustomPaint(
-            painter: LEDRouteMapStationIconPainter(Colors.green, lineColor, 12),
+            painter: LEDRouteMapStationIconPainter(
+                Util.hexToColor(
+                    CustomColors.railwayTransitLEDRouteMapNotPassingStation),
+                lineColor,
+                8,
+                2),
           )));
     }
-
     return Stack(
       children: iconList,
     );
@@ -731,10 +615,10 @@ class BaseState extends State<Base>
           child: Text(
             value.stationNameCN,
             style: TextStyle(
-              fontWeight: Util.railwayTransitLcdIsBoldFont,
-              fontSize: 14,
-              color: Colors.black,
-            ),
+                fontWeight: Util.railwayTransitLcdIsBoldFont,
+                fontSize: 14,
+                color: Colors.black,
+                letterSpacing: 4),
           ),
         ),
       ));
@@ -859,23 +743,6 @@ class BaseState extends State<Base>
         print('读取文件失败: $e');
         alertDialog(context, "错误", "选择的文件格式错误，或文件内容格式未遵循规范");
       }
-    }
-  }
-
-  //导入纹理
-  @override
-  void importPattern() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      withData: true,
-      allowedExtensions: ['png'],
-      dialogTitle: '选择纹理图片文件',
-    );
-    if (result != null) {
-      Uint8List? bytes = result.files.single.bytes;
-      setState(() {
-        pattern = bytes;
-      });
     }
   }
 

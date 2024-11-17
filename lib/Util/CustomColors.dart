@@ -9,4 +9,5 @@ class CustomColors {
   static const String railwayTransitScreenDoorCoverStationName = "002A34"; //屏蔽门盖板站名颜色
   static const String railwayTransitLCDPassingStation = "E8E85B"; //下一站颜色
   static const String railwayTransitLCDPassingStationVariant = "F5BD57"; //下一站颜色变体
+  static const String railwayTransitLEDRouteMapNotPassingStation = "2ea738";//LED线路图未过站颜色
 }

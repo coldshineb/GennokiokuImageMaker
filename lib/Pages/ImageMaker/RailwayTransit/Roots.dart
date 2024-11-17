@@ -52,8 +52,8 @@ class _RailwayTransitRootState extends State<RailwayTransitRoot> {
                         label: Text('LCD 显示屏', style: TextStyle(fontSize: 15)),
                       ),
                       NavigationRailDestination(
-                        icon: Icon(Icons.signpost_outlined),
-                        selectedIcon: Icon(Icons.signpost),
+                        icon: Icon(Icons.splitscreen_outlined),
+                        selectedIcon: Icon(Icons.splitscreen),
                         label: Text('LED 线路图', style: TextStyle(fontSize: 15)),
                       ),NavigationRailDestination(
                         icon: Icon(Icons.signpost_outlined),
