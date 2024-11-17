@@ -109,9 +109,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                importAndExportMenubar()
-              ],
+              children: [importAndExportMenubar()],
             ),
             Expanded(
               child: generalIsScaleEnabled
@@ -393,9 +391,11 @@ class LEDRouteMapState extends State<LEDRouteMap>
       {bool direction = false, bool passedFull = false, bool passing = false}) {
     List<Container> iconList = [];
     Color iconColor = direction
-        ? Colors.grey
+        ? Util.hexToColor(
+            CustomColors.railwayTransitLEDRouteMapDirectionStation)
         : passedFull
-            ? Colors.red
+            ? Util.hexToColor(
+                CustomColors.railwayTransitLEDRouteMapPassedStation)
             : passing
                 ? Util.hexToColor(
                     CustomColors.railwayTransitLEDRouteMapNotPassingStation)
@@ -716,8 +716,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
   //导出下一站图
   Future<void> exportPassingImage() async {
     if (stationList.isNotEmpty) {
-      String fileName =
-          "下一站.png";
+      String fileName = "下一站.png";
       await exportImage(context, stationList, _passingImageKey, fileName, false,
           exportWidthValue: exportWidthValue);
     } else {
@@ -729,8 +728,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
   Future<void> exportPassedImage() async {
     if (stationList.isNotEmpty) {
       String fileName = "已过站.png";
-      await exportImage(
-          context, stationList, _passedImageKey, fileName, false,
+      await exportImage(context, stationList, _passedImageKey, fileName, false,
           exportWidthValue: exportWidthValue);
     } else {
       noStationsSnackbar(context);

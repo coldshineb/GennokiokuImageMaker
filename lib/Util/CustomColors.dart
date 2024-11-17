@@ -10,4 +10,6 @@ class CustomColors {
   static const String railwayTransitLCDPassingStation = "E8E85B"; //下一站颜色
   static const String railwayTransitLCDPassingStationVariant = "F5BD57"; //下一站颜色变体
   static const String railwayTransitLEDRouteMapNotPassingStation = "2ea738";//LED线路图未过站颜色
+  static const String railwayTransitLEDRouteMapPassedStation = "d90412";//LED线路图已过站颜色
+  static const String railwayTransitLEDRouteMapDirectionStation = "595757";//LED线路图方向颜色
 }
