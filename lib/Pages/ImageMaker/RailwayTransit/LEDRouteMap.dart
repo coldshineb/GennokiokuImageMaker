@@ -184,7 +184,13 @@ class LEDRouteMapState extends State<LEDRouteMap>
                           }
                         });
                       },
-                      child: const Text("反转站点"),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.swap_horiz),
+                          SizedBox(width: 5),
+                          Text("反转站点")
+                        ],
+                      ),
                     ),
                   ),
                 ])
