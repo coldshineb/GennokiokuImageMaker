@@ -509,20 +509,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
                     child: Stack(
                       children: [
                         Widgets.transferLineIcon(transferLine),
-                        Widgets.transferLineTextTwoDigits(transferLine),
-                      ],
-                    ))));
-          } else if (CustomRegExp.twoDigits
-              .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Positioned(
-                left: (lineLength / (stationList.length - 1)) * i,
-                top: 22.0 * j,
-                child: Transform.scale(
-                    scale: 20 / 34,
-                    child: Stack(
-                      children: [
-                        Widgets.transferLineIcon(transferLine),
-                        Widgets.transferLineTextTwoDigits(transferLine),
+                        Widgets.transferLineTextOneDigit(transferLine),
                       ],
                     ))));
           } else if (CustomRegExp.twoDigits
@@ -548,7 +535,8 @@ class LEDRouteMapState extends State<LEDRouteMap>
                     child: Stack(
                       children: [
                         Widgets.transferLineIcon(transferLine),
-                        Widgets.transferLineTextTwoDigits(transferLine),
+                        Widgets.transferLineTextOneDigitOneCharacter(
+                            transferLine),
                       ],
                     ))));
           } else if (CustomRegExp.twoCharacters
@@ -562,7 +550,7 @@ class LEDRouteMapState extends State<LEDRouteMap>
                       child: Stack(
                         children: [
                           Widgets.transferLineIcon(transferLine),
-                          Widgets.transferLineTextTwoDigits(transferLine),
+                          Widgets.transferLineTextTwoCharacters(transferLine),
                         ],
                       ))));
             }

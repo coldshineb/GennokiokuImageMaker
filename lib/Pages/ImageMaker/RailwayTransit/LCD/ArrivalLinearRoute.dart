@@ -592,17 +592,6 @@ class ArrivalLinearRouteState extends State<ArrivalLinearRoute>
                     Widgets.transferLineTextTwoDigits(transferLine)
                   ],
                 )));
-          } else if (CustomRegExp.twoDigits
-              .hasMatch(transferLine.lineNumberEN)) {
-            iconList.add(Positioned(
-                left: (lineLength / (stationList.length - 1)) * i,
-                top: 35.5 * j,
-                child: Stack(
-                  children: [
-                    Widgets.transferLineIcon(transferLine),
-                    Widgets.transferLineTextTwoDigits(transferLine)
-                  ],
-                )));
           } else if (CustomRegExp.oneDigitOneCharacter
               .hasMatch(transferLine.lineNumberEN)) {
             iconList.add(Positioned(
